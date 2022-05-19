@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>来自L77星云</title>
+  
+  <subtitle>学而不思则罔 思而不学则殆</subtitle>
+  <link href="https://froml77.cn/atom.xml" rel="self"/>
+  
+  <link href="https://froml77.cn/"/>
+  <updated>2022-05-19T02:46:53.614Z</updated>
+  <id>https://froml77.cn/</id>
+  
+  <author>
+    <name>L77</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>目标检测总结</title>
+    <link href="https://froml77.cn/2022/05/19/mu-biao-jian-ce-zong-shu/"/>
+    <id>https://froml77.cn/2022/05/19/mu-biao-jian-ce-zong-shu/</id>
+    <published>2022-05-19T02:22:22.000Z</published>
+    <updated>2022-05-19T02:46:53.614Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;&lt;font</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="知识整理" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/"/>
+    
+    
+    <category term="深度学习" scheme="https://froml77.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="计算机视觉" scheme="https://froml77.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/"/>
+    
+    <category term="目标检测" scheme="https://froml77.cn/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>matery 的主题设置</title>
+    <link href="https://froml77.cn/2022/04/28/theme-setting/"/>
+    <id>https://froml77.cn/2022/04/28/theme-setting/</id>
+    <published>2022-04-28T12:05:04.000Z</published>
+    <updated>2022-05-18T13:27:19.497Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;spades-开篇&quot;&gt;&lt;a href=&quot;#spades-开篇&quot; class=&quot;headerlink&quot; title=&quot; ♠ 开篇&quot;&gt;&lt;/a&gt;&lt;font color=&quot;#A8FF24&quot;&gt; ♠ 开篇&lt;/font&gt;&lt;/h3&gt;&lt;p&gt;虽然之前用 CSDN</summary>
+        
+      
+    
+    
+    
+    <category term="教程" scheme="https://froml77.cn/categories/%E6%95%99%E7%A8%8B/"/>
+    
+    
+    <category term="博客主题" scheme="https://froml77.cn/tags/%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98/"/>
+    
+    <category term="Hexo" scheme="https://froml77.cn/tags/Hexo/"/>
+    
+  </entry>
+  
+</feed>
