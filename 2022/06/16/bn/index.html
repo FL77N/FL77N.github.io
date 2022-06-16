@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="matery 的主题设置, 来自L77星云">
-    <meta name="description" content="基于 Hexo 的个人博客部署">
+    <meta name="keywords" content="Batch Normalization 的种种, 来自L77星云">
+    <meta name="description" content="关于常见 BN 层的介绍">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -30,7 +30,7 @@
 
     
 
-    <title>matery 的主题设置 | 来自L77星云</title>
+    <title>Batch Normalization 的种种 | 来自L77星云</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -292,12 +292,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">matery 的主题设置</h1>
+                    <h1 class="description center-align post-title">Batch Normalization 的种种</h1>
                 </div>
             </div>
         </div>
@@ -319,12 +319,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98/">
-                                <span class="chip bg-color">博客主题</span>
+                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">深度学习</span>
                             </a>
                         
-                            <a href="/tags/Hexo/">
-                                <span class="chip bg-color">Hexo</span>
+                            <a href="/tags/BN/">
+                                <span class="chip bg-color">BN</span>
                             </a>
                         
                     </div>
@@ -335,8 +335,12 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E6%95%99%E7%A8%8B/" class="post-category">
-                                教程
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                算法
+                            </a>
+                        
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
+                                知识整理
                             </a>
                         
                     </div>
@@ -348,7 +352,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-04-28
+                    2022-06-16
                 </div>
                 
 
@@ -357,14 +361,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.8k
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    16 分
+                    4 分
                 </div>
                 
 
@@ -387,416 +391,57 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="spades-开篇"><a href="#spades-开篇" class="headerlink" title=" ♠ 开篇"></a><font color="#A8FF24"> ♠ 开篇</font></h3><p>虽然之前用 CSDN 和博客园写过博客，但这算是我第一个真正的个人博客。感觉 matery 这个主题做的十分优美，因此选择了它作为主题部署。第一篇博文做一个记录。</p>
-<h2 id="clubs-博客搭建过程"><a href="#clubs-博客搭建过程" class="headerlink" title="♣博客搭建过程"></a><font color="#CA8EFF">♣博客搭建过程</font></h2><p>在搭建博客之前，需要先安装分布式版本控制工具 Git，之后我们可以直接用它来执行安装的命令。由于这个不是本次的重点，大家可以自行上网搜索安装教程。然后需要一个 Github 账号，我们最终需要将其部署到 Github 上去，然后需要去搜索如何将 Github 与本地连接。</p>
-<center><img src="1.png" height="60%" width="60%"></center>
-
-<p>新建一个 repository，必须以红框的格式命名 xxx.github.io（其中 xxx 为你的 Github 用户名）。</p>
-<center><img src="./2.png" height="60%" width="60%"></center>
-
-<p>然后点击该 repository 的 setting，里面有一个 Pages。选择红框中的某一分支作为你部署博客的代码，然后再选择一个主题（choose a theme）。</p>
-<h3 id="Hexo-博客框架的安装"><a href="#Hexo-博客框架的安装" class="headerlink" title="Hexo 博客框架的安装"></a>Hexo 博客框架的安装</h3><ul>
-<li><p>Hexo 与 Node.js 版本对应问题可以查看<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">官网</a></p>
-</li>
-<li><p>首先是安装 Node.js：这里直接去官网里面下载，不过要注意它和 Hexo 的版本，我这里的 node 是 12.20.0。安装的过程就是一录 next 就行。</p>
-</li>
-<li><p>然后就是安装 Hexo：首先需要新建一个文件夹，作为装你博客以及搭建博客源码的地方；然后在该目录下右键点击 “Git Bash Here”，这个时候会弹出一个控制台，接下来以及以后发布博客都在该控制台操作。输入 <code>npm i hexo-cli -g</code> 安装 Hexo，然后输入 <code>hexo -v</code> 验证是否安装成功。我的如下图：</p>
-<center><img src="./3.png" height="60%" width="60%"></center>
-
-<p>最后输入 <code>hexo init</code> 初始化文件夹，输入  <code>npm install</code> 安装必要的依赖。</p>
-</li>
-<li><p>这个时候需要先修改 _config.yml 中的个人信息：</p>
-<pre class="line-numbers language-none"><code class="language-none"># 这部分内容需要改成自己的信息
-title: your title
-subtitle: your subtitle
-description: your description
-keywords: your keywords
-author: your name
-language: zh-CN
-timezone:
-
-# Deployment
-# Docs: https://hexo.io/docs/deployment.html
-deploy:
-  type: git
-  repository: https://github.com/xxx/xxx.github.io
-  branch: master
-  
-# Extensions
-## Plugins: https://hexo.io/plugins/
-## Themes: https://hexo.io/themes/
-theme: matery
-
-# Pagination
-# 最好设置为 12
-per_page: 12
-pagination_dir: page
-
-index_generator:
-  path: ''
-  per_page: 12
-  order_by: -date<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+                <h1 id="spades-Batch-Normalization"><a href="#spades-Batch-Normalization" class="headerlink" title="♠ Batch Normalization"></a><font color="#9393FF">♠ Batch Normalization</font></h1><h2 id="为什么要进行BN"><a href="#为什么要进行BN" class="headerlink" title="为什么要进行BN"></a><font color="#9999cc" face="楷体" size="6">为什么要进行</font><font color="#9999cc" face="Times" size="6">BN</font></h2><p>  防止深度神经网络，每一层得参数更新会导致上层的输入数据发生变化，通过层层叠加，高层的输入分布变化会十分剧烈，这就使得高层需要不断去重新适应底层的参数更新。为了训好模型，我们需要非常谨慎地去设定学习率、初始化权重、以及尽可能细致的参数更新策略。</p>
+<center><img src=".\2.png"></center>
 
 
+<p>  另外对一些激活函数具有饱和区，比如 sigmoid 函数的输入较大和较小，此时的梯度很小，这会导致权重更新十分缓慢。又比如下图的 tanh 函数：</p>
+<center><img src=".\1.png"></center>
 
-</li>
-</ul>
-<ul>
-<li><p>最后在控制台里面输入 <code>npm i hexo-deployer-git</code> 这样就直接将网页用 <code>hexo -d</code> 推上个人博客网站了。</p>
-</li>
-<li><p>图片的显示问题解决为：将 hexo 的 config 文件中 <code>post_asset_folder</code>  的值设置为 <code>true</code> ，所使用路径为 <code>./xxx.png</code>。</p>
-</li>
-<li><p>Hexo 的升级：</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install -g npm-check           # 检查之前安装的插件，都有哪些是可以升级的 
-npm install -g npm-upgrade         # 升级系统中的插件
-npm-check
-npm-upgrade
-
-# 更新 hexo 及所有插件
-npm update
-
-# 确认 hexo 已经更新
-hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>  如果输入的数值没有 BN 那么数据可能在两侧的比较多，有了 BN 会将其映射至中间区域，可见其梯度较大，能更快收敛。其实这也防止了梯度消失。<br>由于其不再由一个样本来影响结果，每个样本都会收到一个 batch 里面的其他数据影响，实际上也是进行了正则化，防止过拟合。</p>
+<h2 id="常见的几种BN"><a href="#常见的几种BN" class="headerlink" title="常见的几种BN"></a><font color="#9999cc" face="楷体" size="6">常见的几种</font><font color="#9999cc" face="Times" size="6">BN</font></h2><center><img src=".\3.png"></center>
 
 
+<h3 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h3><p>公式如下：<br>$$<br>\begin{aligned}<br>\mu_i &amp;\leftarrow \frac{1}{NHW}\sum x_i \\\<br>\sigma_i^2 &amp;\leftarrow \frac{1}{NHW}\sum (x_i - u_i)^2 \\\<br>\hat{x}_i &amp;\leftarrow \frac{x_i - u_i}{\sqrt{\sigma_i^2 + \epsilon}} \\\<br>y_i &amp;\leftarrow \gamma \hat{x}_i + \beta = BN(x)<br>\end{aligned}<br>$$<br>不妨拿一个 shape 为 [N, C, H, W] tensor 的为例（即 batch = N），计算一个 batch 内各个 tensor 相同的通道的均值和方差，伪代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	u <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 参与计算的数据为这个通道的所有数据，数据量为 N * H * W</span>
+	sig_s <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
+	<span class="token builtin">input</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span> <span class="token operator">/</span> sqrt<span class="token punctuation">(</span>sig_S <span class="token operator">+</span> e<span class="token punctuation">)</span>
+	
+<span class="token builtin">input</span> <span class="token operator">=</span> gamma <span class="token operator">*</span> <span class="token builtin">input</span> <span class="token operator">+</span> beta <span class="token comment"># gamma with shape [1, C, 1, 1]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其缺点也容易看出来就是 batch-size 太小统计就无意义了，等于只统计了 batch 里面的一个 tensor 的一个通道的数据。</p>
+<h3 id="Layer-Normalization"><a href="#Layer-Normalization" class="headerlink" title="Layer Normalization"></a>Layer Normalization</h3><p>公式如下：<br>$$<br>\begin{aligned}<br>\mu_i &amp;\leftarrow \frac{1}{CHW}\sum x_i \\\<br>\sigma_i^2 &amp;\leftarrow \frac{1}{CHW}\sum (x_i - u_i)^2 \\\<br>\hat{x}_i &amp;\leftarrow \frac{x_i - u_i}{\sqrt{\sigma_i^2 + \epsilon}} \\\<br>y_i &amp;\leftarrow \gamma \hat{x}_i + \beta = LN(x)<br>\end{aligned}<br>$$<br>LN 不对 batch 的数值进行依赖，非常适用 RNN 网络加速，对于 RNN 来说，sequence 的长度不一致，换句话说 RNN 的深度不固定，不同的 time-step 需要保存不同的 statics 特征，可能存在一个特殊 sequence 比其长很多，这对统计 batch 的 BN 很不友好，LN 可以很好解决这个问题，伪代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	u <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 参与计算的数据为这个输入的所有数据，数据量为 C * H * W</span>
+	sig_s <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
+	<span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span> <span class="token operator">/</span> sqrt<span class="token punctuation">(</span>sig_S <span class="token operator">+</span> e<span class="token punctuation">)</span>
+	
+<span class="token builtin">input</span> <span class="token operator">=</span> gamma <span class="token operator">*</span> <span class="token builtin">input</span> <span class="token operator">+</span> beta <span class="token comment"># gamma with shape [N, 1, 1, 1]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其实很简单就是统计一个样本的所有信息。</p>
+<h3 id="Instance-Normalization"><a href="#Instance-Normalization" class="headerlink" title="Instance Normalization"></a>Instance Normalization</h3><p>公式如下：<br>$$<br>\begin{aligned}<br>\mu_{ij} &amp;\leftarrow \frac{1}{HW}\sum x_{ij} \\\<br>\sigma_{ij}^2 &amp;\leftarrow \frac{1}{HW}\sum (x_{ij} - u_{ij})^2 \\\<br>\hat{x}_{ij} &amp;\leftarrow \frac{x_{ij} - u_{ij}}{\sqrt{\sigma_{ij}^2 + \epsilon}} \\\<br>y_{ij} &amp;\leftarrow \gamma \hat{x}_{ij} + \beta = IN(x)<br>\end{aligned}<br>$$<br>其伪代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		u <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 参与计算的数据为这个通道的所有数据，数据量为 H * W</span>
+		sig_s <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
+		<span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span> <span class="token operator">/</span> sqrt<span class="token punctuation">(</span>sig_S <span class="token operator">+</span> e<span class="token punctuation">)</span>
+		
+<span class="token builtin">input</span> <span class="token operator">=</span> gamma <span class="token operator">*</span> <span class="token builtin">input</span> <span class="token operator">+</span> beta <span class="token comment"># gamma with shape [N, C, 1, 1]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>IN 是对每个图像的每个通道进行归一化，其实有点像 BN 的 batch 为 1 的时候，常常用于图像的风格转换。</p>
+<h3 id="Group-Normalization"><a href="#Group-Normalization" class="headerlink" title="Group Normalization"></a>Group Normalization</h3><p>公式如下：<br>$$<br>\begin{aligned}<br>\mu_{ij} &amp;\leftarrow \frac{1}{(C // G)HW}\sum x_{ij} \\\<br>\sigma_{ij}^2 &amp;\leftarrow \frac{1}{(C // G)HW}\sum (x_{ij} - u_{ij})^2 \\\<br>\hat{x}_{ij} &amp;\leftarrow \frac{x_{ij} - u_{ij}}{\sqrt{\sigma_{ij}^2 + \epsilon}} \\\<br>y_{ij} &amp;\leftarrow \gamma \hat{x}_{ij} + \beta = GN(x)<br>\end{aligned}<br>$$<br>其伪代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">N<span class="token punctuation">,</span> C<span class="token punctuation">,</span> H<span class="token punctuation">,</span> W <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">.</span>shape
+<span class="token keyword">assert</span> C <span class="token operator">%</span> G <span class="token operator">==</span> <span class="token number">0</span>
+<span class="token builtin">input</span> <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span>N<span class="token punctuation">,</span> G<span class="token punctuation">,</span> C <span class="token operator">//</span> G<span class="token punctuation">,</span> H<span class="token punctuation">,</span> W<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>N<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>G<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		u <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 参与计算的数据为这个组的所有数据，数据量为 C // G * H * W</span>
+		sig_s <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
+		<span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span> <span class="token operator">/</span> sqrt<span class="token punctuation">(</span>sig_S <span class="token operator">+</span> e<span class="token punctuation">)</span>
 
-</li>
-</ul>
-<h3 id="主题的设置"><a href="#主题的设置" class="headerlink" title="主题的设置"></a>主题的设置</h3><p>在上面的 hexo config 文件也看到，会将 theme 设置为 matery。其实<a target="_blank" rel="noopener" href="https://github.com/blinkfox/hexo-theme-matery">原 repository</a> 里面的文档已经很详细了，issue 里面也有很多同学问的问题可以帮忙解决一些，也有中文文档。先将其下载下来然后将放到 hexo 目录下的 themes 文件夹里（也就是你可以搞很多主题，以后就在 hexo config 里面换就好了），之后的事按照它的说明文档来就好了。我这里就记录一下我改动过的地方分别在什么文件里面（大部分用浏览器的开发者模式也能找得到位置）。其中所有在 matery.css 中的修改都可以直接加在 my.css 中，文章末尾有我的修改。</p>
-<ul>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">subtitle 字体的大小</font></p>
-<p>在 \themes\matery\source\css 文件夹中的 matery.css</p>
-<pre class="line-numbers language-none"><code class="language-none">.bg-cover .title {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1.85em;
-    margin-bottom: 20px;
-    position: relative;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token builtin">input</span> <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span>N<span class="token punctuation">,</span> C<span class="token punctuation">,</span> H<span class="token punctuation">,</span> W<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token builtin">input</span> <span class="token operator">=</span> gamma <span class="token operator">*</span> <span class="token builtin">input</span> <span class="token operator">+</span> beta <span class="token comment"># gamma with shape [1, C, 1, 1]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>修改 font-size 对应的值就能调整大小</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">导航栏的颜色变化</font></p>
-<center><img src="./4.png" height="80%" width="80%"></center>
+<p>完结 🍗🍗🍗</p>
 
-<p>在 \themes\matery\source\css 文件夹中的 matery.css</p>
-<pre class="line-numbers language-none"><code class="language-none">.bg-color {
-    background-image: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
-    opacity: 0.8;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>#bf30ac 和 #0f9d58 是左右端的颜色，opacity 是不透明度。</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">banner 背景色的变换</font></p>
-<p>在 \themes\matery\source\css 文件夹中的 matery.css</p>
-<pre class="line-numbers language-none"><code class="language-none">.bg-cover:after {
-    -webkit-animation: rainbow 60s infinite;
-    animation: rainbow 60s infinite;
-}
-
-@-webkit-keyframes rainbow {
-
-}
-
-@keyframes rainbow {
-    
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这里把内容删去，调节里面的颜色就好了。</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">底部的设置</font></p>
-<center><img src="./5.png" height="100%" width="100%"></center>
-
-<p>在 \themes\matery\layout\_partial 文件夹中的 footer.ejs 可修改运行时间，人数统计的初始值。</p>
-<p>关于底部进度条在 \themes\matery\source\css 文件夹中的 matery.css</p>
-<pre class="line-numbers language-none"><code class="language-none">.progress-bar {
-    height: 4px;
-    position: fixed;
-    bottom: 0;
-    z-index: 300;
-    background: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
-    opacity: 0.8;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">背景图的每日一换</font></p>
-<p>在 \themes\matery\layout\_partial 文件夹中的 bg-cover-content.ejs</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">修改鼠标指到网页标签出现的字</font></p>
-<p>在 \themes\matery\layout 文件夹中的 layout.ejs 添加</p>
-<pre class="line-numbers language-none"><code class="language-none">&lt;script type="text/javascript"&gt; var OriginTitile = document.title, st; document.addEventListener("visibilitychange", function () { document.hidden ? (document.title = "来自L77星云！", clearTimeout(st)) : (document.title = "来自L77的流星雨🌈", st = setTimeout(function () { document.title = OriginTitile }, 3e3)) })
-&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">增加文章目录的滚动条</font></p>
-<p>  在 \themes\Matery\layout\_partial 文件夹中的 post-detail-toc.ejs 增加如下代码：</p>
-  <pre class="line-numbers language-none"><code class="language-none">#toc-content {
-	height: calc(100vh - 250px);
-    overflow: scroll;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">Font Awesome</font></p>
-<p>  直接访问<a target="_blank" rel="noopener" href="https://fontawesome.com/">官网</a>，注意只能用免费的</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">不蒜子计数初始值纠正</font></p>
-  <pre class="line-numbers language-none"><code class="language-none">&lt;!-- 不蒜子计数初始值纠正 --&gt;
-&lt;script&gt;
-    $(document).ready(function () {
-
-        var int = setInterval(fixCount, 50);
-        var pvcountOffset = 1;
-        var uvcountOffset = 1;
-
-        function fixCount() {
-            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") {
-                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset);
-                clearInterval(int);
-            }
-            if ($("#busuanzi_container_site_pv").css("display") != "none") {
-                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
-                clearInterval(int);
-            }
-        }
-    });
-&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">关于公式显示的问题</font></p>
-<p>  出现的问题的原因都是因为转义问题。网上的解决方案很多，有建议用 <code>hexo-renderer-kramed</code> 替代 <code>hexo-renderer-marked</code> 再进行相应的修改的，但是这样做就可能导致代码无法高亮显示。另外，使用较低版本的 hexo 还有讲英文括号转为 “$” 从而显示为公式的问题，建议 5.0.0 以上。而且最好不要安装较高版本的 <code>hexo-renderer-marked</code> ，这里使用</p>
-  <pre class="line-numbers language-none"><code class="language-none">npm uninstall hexo-renderer-marked --save
-npm install hexo-renderer-marked@2.0.0 --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>  并将 node_modules\marked\lib\marked.js 中的</p>
-  <pre class="line-numbers language-none"><code class="language-none">escape: /^\\([!"#$%&amp;'()*+,\-./:;&lt;=&gt;?@\[\]\\^_`{|}~])/,
-改成
-escape: /^\\([!"#$&amp;'()*+,\-./:;&lt;=&gt;?@\[\]^_`|~])/,
-
-em 处改为：
-em:/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
-
-inline._escapes = /\\([!"#$%&amp;'()*+,\-./:;&lt;=&gt;?@\[\]\\^_`{|}~])/g;
-改成
-inline._escapes = /\\([!"#$&amp;'()*+,\-./:;&lt;=&gt;?@\[\]^_`|~])/g;
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>  另外在书写的时候星号前要加 <code>\</code> ，换行使用四条斜线，如果连续出现了花括号一定要加上空格，这样基本能正常显示公式。</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">评论的添加</font></p>
-<p>  需要去 Github 申请一个<a target="_blank" rel="noopener" href="https://github.com/settings/applications/new">应用</a>，其中：</p>
-  <pre class="line-numbers language-none"><code class="language-none">Application name # 随便填
-Homepage URL # 填自己的博客地址
-Application description # 随便填
-Authorization callback URL # 填自己的博客地址
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>  将注册的结果填到主题的 config 文件里</p>
-  <pre class="line-numbers language-none"><code class="language-none">gitalk: 
-	enable: true 
-	owner: github用户名 
-	repo: github用户名.github.io 
-	oauth: 
-		clientId: 可在注册结果中查询 
-		clientSecret: 可在注册结果中查询 
-	admin: 你的github用户名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>  Valine 评论的开启可以百度 hexo valine 或者参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/jiunian_2761/article/details/97388997">这篇博客</a>注册LeanClound，获取APP ID 和 APP Key。最好选择华东节点。</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">文章的 Front-matter 预设</font></p>
-<p>  对 <code>/scaffolds/post.md</code> 进行修改，方便之后写文章：</p>
-  <pre class="line-numbers language-none"><code class="language-none">title: {{ title }}
-date: {{ date }}
-top: false
-cover: false
-password:
-toc: true
-mathjax: false
-summary:
-categories:
-tags:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
-<p>另外在编辑文件的时候使用 UTF-8 编码，不然可能出现乱码。这就是我修改的大部分内容了，接下来就是如何写文章了。</p>
-<h3 id="写文章"><a href="#写文章" class="headerlink" title="写文章"></a>写文章</h3><p>首先在 hexo 的目录下，右键 Git Bash Here 打开控制台，输入 <code>hexo n post "first blog"</code> 然后可以看到在 \source\_posts 文件夹下多一个 first-blog.md，图片放到 first-blog 文件夹里，博客就从这里开始。</p>
-<p>写完后，先清理之前的数据，输入 <code>hexo clean</code>。然后 <code>hexo g</code> 生成新的网页，同时可以用 <code>hexo s</code> 查看新生成的网页效果。</p>
-<p>最后转到文件夹 \public 重新打开控制台，这个文件夹才是我们要部署上去的，使用 <code>hexo d</code> 推到 github。</p>
-<p>这时可以去你的个人博客看效果啦 🍨🍨🍨</p>
-<h2 id="spades-博客收录过程"><a href="#spades-博客收录过程" class="headerlink" title="♠博客收录过程"></a><font color="#FF7575">♠博客收录过程</font></h2><h3 id="注册自定义域名"><a href="#注册自定义域名" class="headerlink" title="注册自定义域名"></a>注册自定义域名</h3><p>首先，我们想要 Google 或者 Baidu 需要去各类云（阿里云、百度云、华为云等）注册一个自定义域名（就是你自己取的名字的域名，一般几十块一年），因为 Github 的 Pages 不允许它们爬东西的。你在该云买了域名后，它有个域名解析，然后如下添加两条解析记录：</p>
-<center><img src="./6.png" height="100%" width="100%"></center>
-
-<p>添加解析之后，别人搜索你的自定义域名就可以直接转过来了。最后需要去 Github 上添加你的自定义域名，然后勾选 Enforce HTTPS 让浏览器不报警。</p>
-<center><img src="./7.png" height="100%" width="100%"></center>
-
-<p>打开博客的 \source 目录，新建一个 CNAME 文件（具体方式，就是先建一个命名为 CNAME 的 txt 文件，然后再删除后缀）。然后用打开 txt 的方式打开，在里面写上你的域名。最后 <code>hexo g</code> 生成，然后在 \public 文件夹<code>hexo d</code>上传到 github。</p>
-<h3 id="添加百度、谷歌收录"><a href="#添加百度、谷歌收录" class="headerlink" title="添加百度、谷歌收录"></a>添加百度、谷歌收录</h3><p>想要别人能在百度或谷歌能搜索到你的博客，首先得你的个人博客网站被它们收录。接下来，我分别介绍一下流程。</p>
-<p><font face="宋体" size="5" color="#2894FF">百度收录过程</font></p>
-<p>首先需要访问<a target="_blank" rel="noopener" href="https://ziyuan.baidu.com/">百度搜索资源官网</a>（使用你的百度云盘登录即可），登录之后在最上面一行选择【用户中心】中的【站点管理】，然后就能看到可以提交链接的界面了（协议头最好选择 https）。</p>
-<p>接着它会让你验证网站的所有权（证明网站是你的）如下图：</p>
-<center><img src="./10.png" height="80%" width="80%"></center>
-
-<p>我试过第三种方式，弄了很久没有成功，最后我选择使用第一种方式，下载它给的文件后放到主题目录 \source 文件夹，然后重新部署完成验证。</p>
-<p>然后需要设置向百度自动推送自己网站的方式（就是你每更新一次就向它提交一次最新的版本）。先在 hexo 博客目录安装 <code>npm install hexo-baidu-url-submit --save</code> ，接着在博客的 _config.yml 中添加如下代码：</p>
-  <pre class="line-numbers language-none"><code class="language-none">baidu_url_submit:
-  count: 100             # 提交最新的多少个链接
-  host: www.yoursite.com # 在百度搜索资源官网中添加的域名
-  token: your_token      # 秘钥
-  path: baidu_urls.txt   # 文本文档的地址， 新链接会保存在此文本文档里<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>在百度搜索资源官网首页中普通收录的入口，可以看到如下界面，其中密钥就是token等号后面的：</p>
-<center><img src="./11.png" height="80%" width="80%"></center>
-
-<p>接续在博客的 _config.yml 中进行如下修改：</p>
-<pre class="line-numbers language-none"><code class="language-none"># URL
-url: https://www.yoursite.com
-root: /
-permalink: :year/:month/:day/:title/
-
-# Deployment
-## Docs: https://hexo.io/docs/deployment.html
-deploy:
-- type: git
-  repository: https://github.com/FL77N/FL77N.github.io
-  branch: master
-- type: baidu_url_submitter                         # 这是新加的主动推送
-
-Plugins:
-- hexo-generator-baidu-sitemap
-- hexo-generator-sitemap
-
-baidusitemap:
-    path: baidusitemap.xml
-sitemap:
-    path: sitemap.xml<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>重新部署一遍，可以看到推送成功的标志：</p>
-<center><img src="./12.png" height="60%" width="60%"></center>
-
-<p><font face="宋体" size="5" color="#2894FF">谷歌收录过程</font></p>
-<p>谷歌是采用 sitemap 的方式。在经历上述操作后，我们需要先使用以下命令生成网站地图：</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install hexo-generator-sitemap --save       # 谷歌的
-npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>同样先来到现在谷歌中搜索 google search console 来到谷歌站长平台。同样先验证网站所有权：</p>
-<center><img src="./13.png" height="80%" width="80%"></center>
-
-<p>我选择的左边的方式，这里可能你需要先删除之前 CNAME 的一条域名解析，等验证完所有权后再加回来。</p>
-<p>谷歌的收录提交 sitemap 就好了，如下：</p>
-<center><img src="./14.png" height="80%" width="80%"></center>
-
-<p>不过我最开始一直无法获取，可能是有点慢，过一天就好了。如果过了一天也不行，再搜一下是不是其他问题。</p>
-<p>至此，基于 Hexo 的个人博客部署差不多完结 🌸🌸🌸</p>
-<p><font face="楷体" size="5" color="pink">附修改</font></p>
-<pre class="line-numbers language-none"><code class="language-none">/* Here is your custom css styles. */
-@media only screen and (max-width: 601px) {
-    .bg-cover .title {
-        font-size: 1rem;
-    }
-}
-
-.bg-cover .title {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1.85em;
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.bg-color {
-    background-image: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
-    opacity: 0.8;
-}
-
-.bg-cover:after {
-    -webkit-animation: rainbow 60s infinite;
-    animation: rainbow 60s infinite;
-}
-
-@-webkit-keyframes rainbow {
-    0%,
-    100% {
-        background: rgba(0,242,96, 0.75);
-        background: linear-gradient(45deg, rgba(0,242,96, 0.75) 0%, rgba(5,117,230, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(0,242,96, 0.75) 0%, rgba(5,117,230, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(0,242,96, 0.75) 0%, rgba(15,117,230, 0.65) 100%);
-    }
-    16% {
-        background: rgba(255,110,127, 0.75);
-        background: linear-gradient(45deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-    }
-    32% {
-        background: rgba(28,146,210, 0.75);
-        background: linear-gradient(45deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-    }
-    48% {
-        background: rgba(0,4,40, 0.75);
-        background: linear-gradient(45deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-    }
-    64% {
-        background: rgba(255,75,31, 0.75);
-        background: linear-gradient(45deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0, 0.65) 100%);
-    }
-    80% {
-        background: rgba(252,0,255, 0.75);
-        background: linear-gradient(45deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-    }
-}
-
-@keyframes rainbow {
-    0%,
-    100% {
-        background: rgba(0,242,96, 0.75);
-        background: linear-gradient(45deg, rgba(0,242,96, 0.75) 0%, rgba(5,117,230, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(0,242,96, 0.75) 0%, rgba(5,117,230, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(0,242,96, 0.75) 0%, rgba(15,117,230, 0.65) 100%);
-    }
-    16% {
-        background: rgba(255,110,127, 0.75);
-        background: linear-gradient(45deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-    }
-    32% {
-        background: rgba(28,146,210, 0.75);
-        background: linear-gradient(45deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-    }
-    48% {
-        background: rgba(0,4,40, 0.75);
-        background: linear-gradient(45deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-    }
-    64% {
-        background: rgba(255,75,31, 0.75);
-        background: linear-gradient(45deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0, 0.65) 100%);
-    }
-    80% {
-        background: rgba(252,0,255, 0.75);
-        background: linear-gradient(45deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-    }
-}
-
-.progress-bar {
-    height: 4px;
-    position: fixed;
-    bottom: 0;
-    z-index: 300;
-    background: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
-    opacity: 0.8;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -822,7 +467,7 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://froml77.cn/2022/04/28/theme-setting/">https://froml77.cn/2022/04/28/theme-setting/</a>
+                    <a href="https://froml77.cn/2022/06/16/bn/">https://froml77.cn/2022/06/16/bn/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -860,12 +505,12 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98/">
-                                    <span class="chip bg-color">博客主题</span>
+                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">深度学习</span>
                                 </a>
                             
-                                <a href="/tags/Hexo/">
-                                    <span class="chip bg-color">Hexo</span>
+                                <a href="/tags/BN/">
+                                    <span class="chip bg-color">BN</span>
                                 </a>
                             
                         </div>
@@ -910,7 +555,7 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
         repo: 'FL77N.github.io',
         owner: 'fl77n',
         admin: "fl77n",
-        id: '2022-04-28T20-05-04',
+        id: '2022-06-16T09-58-06',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1206,29 +851,30 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/05/19/mu-biao-jian-ce-zong-shu/">
+                <a href="/2022/06/16/bn/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="目标检测总结">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="Batch Normalization 的种种">
                         
-                        <span class="card-title">目标检测总结</span>
+                        <span class="card-title">Batch Normalization 的种种</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Object Detection Summary
+                            关于常见 BN 层的介绍
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-05-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-16
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1245,6 +891,7 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1252,12 +899,8 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
                         <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">
-                        <span class="chip bg-color">计算机视觉</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
-                        <span class="chip bg-color">目标检测</span>
+                    <a href="/tags/BN/">
+                        <span class="chip bg-color">BN</span>
                     </a>
                     
                 </div>
@@ -1268,50 +911,49 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/04/28/theme-setting/">
+                <a href="/2022/06/05/bian-xian-ji-fen-qiu-dao/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="matery 的主题设置">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="变限积分求导的种种">
                         
-                        <span class="card-title">matery 的主题设置</span>
+                        <span class="card-title">变限积分求导的种种</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            基于 Hexo 的个人博客部署
+                            变限积分求导的介绍
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-04-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-05
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%99%E7%A8%8B/" class="post-category">
-                                    教程
+                            <a href="/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
+                                    知识整理
+                                </a>
+                            
+                            <a href="/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/%E6%95%B0%E5%AD%A6/" class="post-category">
+                                    数学
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98/">
-                        <span class="chip bg-color">博客主题</span>
-                    </a>
-                    
-                    <a href="/tags/Hexo/">
-                        <span class="chip bg-color">Hexo</span>
+                    <a href="/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/">
+                        <span class="chip bg-color">微积分</span>
                     </a>
                     
                 </div>
