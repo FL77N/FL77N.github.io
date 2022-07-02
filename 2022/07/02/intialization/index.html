@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="变限积分求导的种种, 来自L77星云">
-    <meta name="description" content="变限积分求导的介绍">
+    <meta name="keywords" content="深度学习初始化的种种, 来自L77星云">
+    <meta name="description" content="深度学习权重初始化的推导">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -30,7 +30,7 @@
 
     
 
-    <title>变限积分求导的种种 | 来自L77星云</title>
+    <title>深度学习初始化的种种 | 来自L77星云</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -297,7 +297,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">变限积分求导的种种</h1>
+                    <h1 class="description center-align post-title">深度学习初始化的种种</h1>
                 </div>
             </div>
         </div>
@@ -319,8 +319,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/">
-                                <span class="chip bg-color">微积分</span>
+                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">深度学习</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/">
+                                <span class="chip bg-color">权重初始化</span>
                             </a>
                         
                     </div>
@@ -331,12 +335,12 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
-                                知识整理
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                算法
                             </a>
                         
-                            <a href="/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/%E6%95%B0%E5%AD%A6/" class="post-category">
-                                数学
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
+                                知识整理
                             </a>
                         
                     </div>
@@ -348,7 +352,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-06-05
+                    2022-07-02
                 </div>
                 
 
@@ -357,14 +361,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.9k
+                    3.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    14 分
                 </div>
                 
 
@@ -387,41 +391,90 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="变上限积分求导的理解"><a href="#变上限积分求导的理解" class="headerlink" title="变上限积分求导的理解"></a><font face="微软雅黑" color="#AE58A4">变上限积分求导的理解</font></h2><p>  假设 $F(x)$ 是 $f(x)$ 的一个原函数，即 $F^{\prime}(x) = f(x)$。那么对 $f(x)$ 积分，有：<br>$$<br>\begin{aligned}<br>\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\<br>\end{aligned}<br>$$<br>其中 $C$ 是常数，可以将其表示为 $-F(a)$。如果 $f(x)$ 在 $[a, x]$ 上连续，我们对其进行积分：<br>$$<br>\begin{aligned}<br>\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\<br>\end{aligned}<br>$$<br>因此，其中我们称 $\int_{a}^{x}f(t)dt$ 为 $f(x)$ 的变上限积的定积分，也算是 $f(x)$ 的一个原函数。同时我们也可以得到牛顿-莱布尼茨 (Newton-Leibniz) 公式：<br>$$<br>\int_{a}^{x=b} f(t)dt = F(b) - F(a)<br>$$<br>以上严谨的推导需要通过积分中值配合导数的定义来进行求证，这里暂时省略一段。对于变上限积分求导有：<br>$$<br>\frac{d\int_{a}^{x} f(t) dt}{dx} = \frac{d(F(x) - F(a))}{dx} = F^{\prime}(x) = f(x)<br>$$<br>对于更一般的情况，当上下限是关于 $x$ 的可导函数时：<br>$$<br>\begin{aligned}<br>\frac{d\int_{\phi(x)}^{\psi(x)} f(t)dt}{dx} &amp;= \frac{dF(\psi(x)) - F(\phi(x))}{dx} \\\<br>&amp;= F^{\prime}(\psi(x))\psi^{\prime}(x) - F^{\prime}(\phi(x))\phi^{\prime}(x) \\\<br>&amp;=f(\psi(x))\psi^{\prime}(x) - f(\phi(x))\phi^{\prime}(x)<br>\end{aligned}<br>$$<br>因此对变上下限积分求导有下式：<br>$$<br>\frac{d\int_{\phi(x)}^{\psi(x)} f(t)dt}{dx} =f(\psi(x))\psi^{\prime}(x) - f(\phi(x))\phi^{\prime}(x)<br>$$</p>
-<h2 id="应用示例展示"><a href="#应用示例展示" class="headerlink" title="应用示例展示"></a><font face="微软雅黑" color="#AE58A4">应用示例展示</font></h2><p>  介绍完理论知识，这里进行举例进行应用。其中涉及到变上限积分时，换元操作易出现错误以及被积函数包含积分上限变量的情况。</p>
-<p><font size="5" face="华文细黑" color="#FF7575">♣ 换元易错示例：</font></p>
+                <h1 id="🎁-权重初始化"><a href="#🎁-权重初始化" class="headerlink" title="🎁 权重初始化"></a>🎁 权重初始化</h1><h2 id="初始化的作用"><a href="#初始化的作用" class="headerlink" title="初始化的作用"></a><font color="#66B3FF">初始化的作用</font></h2><p>  在深度学习中，神经网络的权重初始化方法（weight initialization）对模型的收敛速度和性能有着至关重要的影响。模型的训练，简而言之，就是对权重参数 W 的不停迭代更新，以期达到更好的性能。而随着网络深度（层数）的增加，训练中极易出现梯度消失或者梯度爆炸等问题。</p>
+<p><font face="华文细黑" color="#FF60AF" size="5">初始化需要避免的情况</font><br>  首先，我们不能让权重的梯度为 0，很显然权重梯度为 0，权重将不再更新。然而又知道有些激活函数是有饱和区的。简而言之，在这个区值的梯度基本为 0，很难进行梯度更新。参数初始化需要注意：</p>
 <ul>
-<li><p><font color="#5CADAD">问题：</font><br>$$<br>\frac{d}{dx}\int_{0}^{x^2}\cos(t^2)dt<br>$$</p>
-</li>
-<li><p><font color="#FF8000">常规解法：</font><br>$$<br>\frac{d}{dx}\int_{0}^{x^2}\cos(t^{2})dt=2x\cdot \cos(x^4)<br>$$</p>
-</li>
-<li><p><font color="##5CADAD">学妹的错误解法：</font><br>$$<br>\frac{1}{2}\frac{d}{dx}\int_{0}^{x^2}\cos(t^{2})d(t^2)=x\cdot \cos(x^4)<br>$$</p>
-</li>
-<li><p>学妹的问题在于没有进行上限的变换以及积分变量的换元替换，因此容易出现失误（不熟悉时不建议这么做），咱们按步骤来：</p>
-<ul>
-<li><p>先进行积分变量的替换，令 $a = t^2$，有 $da =d(t^2) \rightarrow da = 2tdt \rightarrow \frac{da}{2t} = dt$</p>
-</li>
-<li><p>然后进行积分上下限的计算，当 $t=0$ 时，$a=0$；当 $t=x^2$ 时，$a=x^4$。带入有：<br>$$<br>\begin{aligned}<br>&amp;\frac{d}{dx}\int_{0}^{x^4}\cos a\frac{da}{2t} \\\<br>&amp;\because a = t^2 \Rightarrow t = \sqrt{a} \\\<br>&amp;\Rightarrow \frac{d}{dx}\int_{0}^{x^4}\frac{\cos a}{2\sqrt{a}}da \\\<br>&amp;\Rightarrow \frac{\cos(x^4)}{2\sqrt{x^4}}dx^4 = 2x\cdot \cos(x^4)<br>\end{aligned}<br>$$</p>
-</li>
+<li>各层激活值不会出现饱和现象</li>
+<li>各层激活值不为0</li>
 </ul>
-</li>
-</ul>
-<p><font size="5" face="华文细黑" color="#FF7575">♠ 被积函数包含积分上限变量示例：</font></p>
-<p>  本示例借用一个学长探究 Newton-Leibniz 公式与 Navier-Stokes 方程关系时，示范容易出现变上限积分求导时犯的错误，学长本身的推导没有错，只是觉得可以用来提醒其他同学：</p>
-<ul>
-<li><p><font color="#5CADAD">问题：</font></p>
-<p>求变上限积分 $\int_{a(t)}^{b(t)} f(x, t)dx$ 的导数</p>
-<p>将 N-S 方程 $\frac{\partial \rho}{\partial t}+ \frac{\partial (\rho \mu)}{\partial t} = 0$ 与上式进行联系</p>
-</li>
-<li><p><font color="#FF8000">解答：</font></p>
-<p>我们将上述式子具象化，使用一维流动假设进行联系，假设下述是一根无限长的水管，在 $t$ 时刻有一滴水（橙色部分），其密度与时间和空间的函数为： $\rho(x, t)$ ，如下图所示，水滴的边界为 $a(t)$ 和 $b(t)$ 。经过时间 $\Delta t$ ，水滴位置变为  $a(t+\Delta t)$ 和 $b(t+\Delta t)$ ，密度变为 $\rho(x, t+\Delta t)$（蓝色部分）。</p>
-<center><img src="./1.png" height="75%" width="75%"></center>
+<p><font face="华文细黑" color="#FF60AF" size="5">全零初始化是否可行</font><br>  在线性回归，logistics 回归的时候，基本上都是把参数初始化为 0，我们的模型也能够很好的工作（可初始化为0的模型）。然后在神经网络中，把 W 初始化为 0 是不可以的。这是因为如果把 W 初始化 0，那么在前向传播过程中，每一层的神经元学到的东西都是一样的（激活值均为 0），而在 bp 的时候，不同维度的参数会得到相同的更新，因为他们的 gradient 相同，称之为“对称失效”。<br>  以上的话可以简单认为在神经网络的全零初始化会使参数更新一致，然后由于参数的值也都一样，所以一层的所有参数退化为一个。然后没有隐藏层或者逻辑回归时，可以将其全零初始化。</p>
+<h2 id="各类初始化"><a href="#各类初始化" class="headerlink" title="各类初始化"></a><font color="#66B3FF">各类初始化</font></h2><p><font face="华文细黑" color="#FF60AF" size="5">标准随机初始化</font><br>  这里常用的有正态分布、均匀分布等。它们的参数均值都在 0 的附近，然后有正有负，一般会把参数设置为接近 0 的很小的随机数。随机初始化也有缺点：当神经网络的层数增多时，会发现越往后面的层的激活函数（使用 tanh ）的输出值几乎都接近于 0：</p>
+<center><img src="./1.png" height="50%" width="50%"></center>
 
-<p>在这迅速变化的世界，我们应该找寻不变的真理。这里的真理就是质量守恒定律，水滴不可能跑着跑着质量还减少了吧，搁这儿减肥呢？因此水滴的质量可以由 $m(t)=\int_{a(t)}^{b(t)}\rho(x,t)dx$ 求得，由质量守恒定律，即质量对时间的导数为 0，有：<br>$$<br>\frac{dm}{dt} = \frac{d}{dt}\int_{a(t)}^{b(t)}\rho(x,t)dx = 0<br>$$<br>这里是不是很眼熟了，不就是变上限积分求导吗？桥豆麻袋，被积函数含有上限变量 $t$ ，还能使用其之前的方法直接求导吗？我们举个例子试试：</p>
-<p><font color="#5B5B5B" face="楷体" size="4">题目：</font><br>$$<br>\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt<br>$$<br><font color="#5B5B5B" face="楷体" size="4">解法一：直接对变上限积分直接求导</font><br>$$<br>\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt=2x\cdot x \cdot x^4 = 2x^6<br>$$<br><font color="#5B5B5B" face="楷体" size="4">解法二：先积分后求导，因为 $x$ 不是积分变量，因此我们可以直接将其提到积分号的外面</font><br>$$<br>\begin{aligned}<br>\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt&amp;=\frac{d}{dx}x\int_{0}^{x^2} t^{2}dt \\\<br>&amp;=\frac{d}{dx}x\cdot \frac{1}{3}t^3 \Bigg|^{x^2}_{0} = \frac{7x^6}{3}<br>\end{aligned}<br>$$<br><font color="#5B5B5B" face="楷体" size="4">解法三：将 $x$ 放到积分号外面，对里面的使用变上限积分求导</font><br>$$<br>\begin{aligned}<br>\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt&amp;=\frac{d}{dx}x \cdot\int_{0}^{x^2} t^{2}dt \\\<br>&amp;=\int_{0}^{x^2} t^{2}dt + x \cdot 2x \cdot (x^2)^2 = \frac{7x^6}{3}<br>\end{aligned}<br>$$<br>显然解法二和解法三是正确的。圆规正转，由上可知我们不能直接对 $\rho(x,t)$ 使用变上限积分求导。可是我们无法直接先积分后求导，也无法将 $t$ 分出来。所以只能采取最原始的办法，即使用导数定义的方式来求解了：<br>$$<br>\frac{dm}{dt} = \lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{a(t+\Delta t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx-\int_{a(t)}^{b(t)}\rho(x,t)dx\Bigg)<br>$$<br>我们可以看到上述分母既有积分上下限的变化，也有被积函数的变化。前者是空间的变化，后者是时间的变化。因此我们得把时空分离开来：<br>$$<br>\begin{aligned}<br>\frac{dm}{dt} = \lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{b(t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx&amp;+\int_{a(t+\Delta t)}^{a(t)}\rho(x,t+\Delta t)dx \\\\ + \int_{a(t)}^{b(t)}\rho(x,t+\Delta t)dx &amp;-\int_{a(t)}^{b(t)}\rho(x,t)dx\Bigg)<br>\end{aligned}<br>$$<br>上式前面两项是左右边界的变化（空间的变化），因为被积函数保持一致。后面两项则是密度场随时间的变化。前两项分别是积分上限和下限变化，因此使用变限积分求导：<br>$$<br>\begin{aligned}<br>\lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\int_{b(t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx &amp;= \rho(b(t),t)\frac{db(t)}{dt}=\rho(b(t),t)\mu(b(t),t) \\\<br>\lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\int_{a(t+\Delta t)}^{a(t)}\rho(x,t+\Delta t)dx &amp;= \rho(a(t),t)\Big(-\frac{da(t)}{dt}\Big)=\rho(b(t),t)\mu(a(t),t)<br>\end{aligned}<br>$$<br>其中 $\mu(x,t)$ 为速度场。使用牛顿-莱布尼兹公式将其合并：<br>$$<br>\rho(b(t),t)\frac{db(t)}{dt}-\rho(a(t),t)\frac{da(t)}{dt} =\int_{a(t)}^{b(t)}\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x}dx<br>$$<br>后两项积分上下限一致，可见是对密度函数的求导，易得：<br>$$<br>\lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{a(t)}^{b(t)}\rho(x,t+\Delta t)-\rho(x,t)dx\Bigg)=\int_{a(t)}^{b(t)}\frac{\partial \rho(x,t)}{\partial t}dx<br>$$<br>将上述两个结果整理得到最后求导结果：<br>$$<br>\frac{dm}{dt} = \int_{a(t)}^{b(t)}\Bigg(\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x}+\frac{\partial \rho(x,t)}{\partial t} \Bigg)dx = 0<br>$$<br>对于任意成立的 $a(t)$ 和 $b(t)$ 位置，有：<br>$$<br>\frac{\partial \rho(x,t)}{\partial t}+\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x} = 0<br>$$<br>这便是一维的流动连续性方程，对于动量、动量矩、能量积分，便可得到完整的 NS 方程。</p>
-<p>🌸🌸🌸 这段故事完结 🌈🌈🌈</p>
-</li>
+<p>  总结来说，一般的随机初始化存在后层网络激活函数的输出值趋近于 0 的问题，且网络输出数据分布的方差会受每层神经元个数的影响（随之改变）。虽然上诉的输出数据均值都接近于 0，但是由于方差的改变导致最后整个输出数据也接近于 0。针对这些问题，Glorot 等人提出在初始化的同时加上对方差大小的规范化。这样不仅获得了更快的收敛速度，而且维持了输入输出数据分布方差的一致性，也避免了后面层的激活函数的输出值趋向于 0 的问题。</p>
+<p><font face="Times" color="#ADADAD" size="5">Glorot</font><font face="楷体" color="#ADADAD" size="5">条件</font><br>优秀的初始化应该保证以下两个条件：</p>
+<ul>
+<li>各个层的激活值 h（输出值） 的方差要保持一致，即 $\forall (i,j): Var(h^{i}) = Var(h^{j})$</li>
+<li>各个层对状态 z 的梯度的方差要保持一致，即 $\forall (i,j): Var(\frac{\partial Cost}{\partial z^{i} }) = Var(\frac{\partial Cost}{\partial z^{j} })$</li>
 </ul>
+<p><font face="楷体" color="#6C6C6C">其实是一个保证前向时数据基本分布不变，一个保证反向时数据基本分布不变</font></p>
+<p><font color="#ADADAD">关于方差的三个事实</font></p>
+<p>既然要保持上面的两个方差在各个网络层中不改变，那也就是它实际上是会改变的，关于为什么会改变的公式推导，后面详细说明，这里直接引入三个基本的客观事实（两有关一无关）：</p>
+<ul>
+<li>各个层激活值 h（输出值）的方差与网络的层数有关；</li>
+<li>关于状态 z 的梯度的方差与网络的层数有关；</li>
+<li>各个层权重参数W的梯度的方差与层数无关；<br>可参见论文《Understanding the difficulty of training deep feedforward neural networks》</li>
+</ul>
+<p><font color="#ADADAD">初始化的几点要求</font></p>
+<ul>
+<li>参数不能全部初始化为 0，也不能全部初始化同一个值；</li>
+<li>最好保证参数初始化的均值为 0，正负交错，正负参数大致上数量相等；</li>
+<li>初始化参数不能太大或者是太小，参数太小会导致特征在每层间逐渐缩小而难以产生作用，参数太大会导致数据在逐层间传递时逐渐放大而导致梯度消失发散，不能训练；</li>
+</ul>
+<p><font face="华文细黑" color="#FF60AF" size="5">Xavier 初始化</font><br>  其认为各层的激活值和状态梯度的方差在传播过程中的方差应该保持一致。即：</p>
+<p>$$<br>\begin{aligned}<br>\forall (i, j),Var(x^{i}) &amp;= Var(x^{j}) \\\<br>\forall (i, j),Var\Big(\frac{\partial Cost}{\partial y^{i} }\Big) &amp;= Var \Big(\frac{\partial Cost}{\partial y^{j} }\Big)<br>\end{aligned}<br>$$</p>
+<p>这两个条件也称为 Glorot 条件。首先给出关于状态得梯度和关于权重的梯度及部分推导：</p>
+<p>$$<br>\begin{aligned}<br>\pmb{x}^{i+1} &amp;= f(\pmb{y}^i)  \\\<br>\pmb{y}^{i+1} &amp;= \pmb{W}^{i+1} \times \pmb{x}^{i+1}  \\\<br>\frac{\partial Cost}{\partial y^{i}_{k}} &amp;= \frac{\partial Cost}{\partial \pmb{y}^{i+1}}\frac{\partial \pmb{y}^{i+1}}{\partial \pmb{x}^{i+1}} \frac{\partial \pmb{x}^{i+1}}{\partial f(\pmb{y}^{i})} \frac{\partial f(\pmb{y}^i)}{\partial \pmb{y}^{i}} \frac{\partial \pmb{y}^{i}}{\partial y^{i}_{k}} \\\<br>\frac{\partial Cost}{\partial w^{i}_{l,k}} &amp;= \frac{\partial Cost}{\partial y^{i}_{k}} \frac{\partial y^{i}_{k}}{\partial w^i_{l,k}}<br>\end{aligned}<br>$$</p>
+<p>  首先 $y^{i}_{k}$ 代表第 $i$ 层的，输出的第 $k$ 个（目前先假设输入输出都是一维向量，且输入的方差一致），$f(x)$ 是激活函数，另外做如下假设：</p>
+<ul>
+<li>激活函数对称：便于假设每层的输入均值为 0 （加上每层权重均值为 0，输入均值也就为 0） </li>
+<li>$f^{\prime}(0) = 1$</li>
+<li>初始时，状态值都落在线性区域有 $f(y^{i}_{k}) = y^{i}_{k},f^{\prime}(y^{i}_{k}) = 1$<br>将上式进行简化：</li>
+</ul>
+<p>$$<br>\begin{aligned}<br>\frac{\partial Cost}{\partial y^i_k} &amp;= \frac{\partial Cost}{\partial \pmb{y}^{i+1}}\frac{\partial \pmb{y}^{i+1}}{\partial \pmb{x}^{i+1}} \frac{\partial \pmb{x}^{i+1}}{\partial f(\pmb{y}^i)} \frac{\partial f(\pmb{y}^i)}{\partial \pmb{y}^i} \frac{\partial \pmb{y}^i}{\partial y^i_k} \\\<br>&amp;= \frac{\partial Cost}{\partial \pmb{y}^{i+1}} (\pmb{W}^{i+1})^{\top} \cdot 1 \cdot f^{\prime}(\pmb{y}^i) \cdot \pmb{e}^i_k \\\<br>&amp;= \frac{\partial Cost}{\partial \pmb{y}^{i+1}} (\pmb{W}^{i+1})^{\top} \cdot 1 \cdot 1 \cdot \pmb{e}^i_k \\\<br>&amp; = \frac{\partial Cost}{\partial \pmb{y}^{i+1}} (\pmb{W}^{i+1})^{\top}_{.,k} \\\<br>\frac{\partial Cost}{\partial w^i_{k,l}} &amp;= \frac{\partial Cost}{\partial y^i_k} \frac{\partial y^i_k}{\partial w^i_{k,l}} \\\<br>&amp;= \frac{\partial Cost}{\partial y^i_k} x^i_l<br>\end{aligned}<br>$$</p>
+<p>  首先推导一下每层的输入与上一层的输入方差的关系（注意我们是在一定假设下的，独立分布的两个变量积的方差等于这两个变量方差的积。同一层的输入各个元素的方差是相同的，权重各个元素的方差是相同的）：</p>
+<p>$$<br>\begin{aligned}<br>Var(x^i_k) &amp;= Var(f(y^{i-1}_k)) \\\<br>&amp;= Var(y^{i-1}_k) \\\<br>&amp;= Var(\pmb{W}^{i-1}_{k,.} \times \pmb{x}^{i-1}) \\\<br>&amp;= Var(\sum_{l=1}^{n_{i-1}} W^{i-1}_{k,l} x^{i-1}_{l}) \\\<br>&amp;= \sum_{l=1}^{n_{i-1}} Var(W^{i-1}_{k,l})Var(x^{i-1}_{l}) \\\<br>&amp;= n_{i-1}Var(W^{i-1}_{k,l})Var(x^{i-1}_{l})<br>\end{aligned}<br>$$</p>
+<p>由于数值之间都是独立同分布，根据上式可以推导出 </p>
+<p>$$<br>Var(x^{i+1}) = n_{i}Var(W^{i})Var(x^{i})<br>$$</p>
+<p>由之前推导的梯度公式，我们同样可以来推导相邻层梯度的方差（注意反向传播就是看这层的输出元素个数了，即 $n_{i+1}$：</p>
+<p>$$<br>\begin{aligned}<br>Var \Big(\frac{\partial Cost}{\partial y^i_k}\Big) &amp; = Var \Big(\frac{\partial Cost}{\partial \pmb{y}^{i+1}} (\pmb{W}^{i+1})^{\top}_{.,k}\Big)\\\<br>&amp;=Var \Big(\sum_{l=1}^{n_{i+1}}\frac{\partial Cost}{\partial y^{i+1}_l}(W^{i+1})^{\top}_{l,k}  \Big) \\\<br>&amp;=\sum_{l=1}^{n_{i+1}}Var \Big(\frac{\partial Cost}{\partial y^{i+1}_l}\Big)Var\Big((W^{i+1})^{\top}_{l,k}  \Big) \\\<br>&amp;=n_{i+1} Var\Big(\frac{\partial Cost}{\partial y^{i+1}_l}\Big)Var\Big((W^{i+1})^{\top}_{l,k}  \Big) \\\<br>\Rightarrow Var \Big(\frac{\partial Cost}{\partial y^i}\Big) &amp; = n_{i+1} Var\Big(\frac{\partial Cost}{\partial y^{i+1}}\Big)Var\Big(W^{i+1}  \Big)<br>\end{aligned}<br>$$</p>
+<p>对于一个 d 层的网络，则有：</p>
+<p>$$<br>\begin{aligned}<br>Var(x^{i}) &amp;=Var(x^0)\prod_{j=1}^{i-1}n_jVar(W^{j}) \\\<br>Var \Big(\frac{\partial Cost}{\partial y^{i}}\Big) &amp; = Var\Big(\frac{\partial Cost}{\partial y^{d}}\Big)\prod_{j = i}^{d}n_{i} Var\Big(W^{i+1}\Big)<br>\end{aligned}<br>$$</p>
+<p>综上要想满足各层的激活值和状态梯度的方差有：</p>
+<p>$$<br>\begin{aligned}<br>\forall i,  1 &amp;=n_iVar(W^{i+1}) \\\<br>\forall i,  1 &amp;=n_{i+1}Var(W^{i+1})<br>\end{aligned}<br>$$</p>
+<p>将上两式相加有：</p>
+<p>$$<br>Var(W^{i+1}) = \frac{2}{n_i + n_{i+1}}<br>$$</p>
+<p><font face="华文细黑" color="#FF60AF" size="5">Kaiming 初始化</font><br>  首先，我们来设定一些假设，并且复习几个公式。假设：</p>
+<p>$$<br>\begin{aligned}<br>E[W] &amp;= 0 \\\<br>E[X] &amp;= 0 \\\<br>E[\Delta Y] &amp;= 0<br>\end{aligned}<br>$$</p>
+<p>几个独立随机变量之和的方差等于各变量的方差之和</p>
+<p>$$<br>Var(X_1 + \cdots + X_n) = Var(X_1) + \cdots + Var(X_n)<br>$$</p>
+<p>如果为同分布的话，结果变为 $nVar(X)$。方差与期望之间的关系：</p>
+<p>$$<br>Var(X) = E(X^2) - (EX)^2<br>$$</p>
+<p>两个独立变量乘积的方差，且各自期望为 0，协方差为 0</p>
+<p>$$<br>\begin{aligned}<br>Var(XY) &amp;= E(X^2Y^2) - E(XY)^2 \\\<br>&amp;= E(X^2)E(Y^2) - E(X)^2E(Y)^2 \\\<br>&amp;= (Var(X) + E(X)^2)(Var(Y) + E(Y)^2) \\\<br>&amp; = Var(X)Var(Y)<br>\end{aligned}<br>$$</p>
+<p>kaiming 初始化只包含卷积和 ReLU 函数，对于卷积，可以把卷积核当作全连接层的权重，然而每做一次卷积只是更换了一次“全连接层”的输入。</p>
+<p>🎄 <font face="华文细黑" color="#FF60AF" size="4">前向传播</font><br>因此在前向传播时，可以简化为</p>
+<p>$$<br>Y_l = W_lX_l + B_l<br>$$</p>
+<p>其中，$Y_{li}$ 代表第 $l$ 层中第 $i$ 位置的输出，并使用 $Y_{l}$ 指第 $l$ 层中所有位置的输出。假设某一位置的输入 $X_{li}$ 的 shape 为 $n_{in} = k \times k \times c_{in}$，输出通道为 $c_{out}$。对于某一个位置而言，$W_{li}$ 有 shape $c_{out} \times n_{in}$。很容易知道，对于某个位置的有 $ c_{out}$ 个输出，因此对于某个位置的某一个输出有：</p>
+<p>$$<br>y_l = \sum^{n_{in}}_{i=0} w_{li}x_{li}<br>$$</p>
+<p>由于输入各值是同分布，权重也如此，因此有：</p>
+<p>$$<br>Var(y) = n_{in}Var(wx)<br>$$</p>
+<p>由于 x 是上一层 relu 得到，期望不再为 0，但权重的期望是为 0 的。可得：</p>
+<p>$$<br>\begin{aligned}<br>Var(w_lx_l) &amp;= E((w_lx_l)^2) - E(w_l)^2E(x_l)^2 \\\<br>Var(w_lx_l) &amp;= E(w_l^2)E(x_l^2) \\\<br>Var(w_lx_l) &amp;= Var(w_l^2)E(x_l^2) \\\<br>\Rightarrow Var(y_l) &amp;= n_{in}Var(w_l)E(x_l^2)<br>\end{aligned}<br>$$</p>
+<p>根据网络得知 $x_l = f(y_{l-1})$，其中 $f$ 代表 ReLU 函数，有：</p>
+<p>$$<br>\begin{aligned}<br>E(x^2_l) = E(f^2(y_{l-1})) &amp;= \int^{+\infty}_{-\infty} p(y_{l-1})f^2(y_{l-1}) dy_{l-1} \\\<br>\because \quad &amp;y_{l-1} \in (-\infty, 0), f(y_{l-1}) = 0 \\\<br>&amp;y_{l-1} \in (0, +\infty), f(y_{l-1}) = y_{l-1} \\\<br>&amp; = \int^{+\infty}_{0} p(y_{l-1})(y_{l-1})^2 dy_{l-1}  \\\<br>\Rightarrow E(x^2_l) &amp;= \frac{1}{2} \int^{+\infty}_{-\infty} p(y_{l-1})(y_{l-1})^2 dy_{l-1} \\\<br>&amp; = \frac{1}{2} E(y_{l-1}^2)<br>\end{aligned}<br>$$</p>
+<p>因为权重是在 0 周围均匀分布的，且均值为 0，所以易得 $E(y) = 0$。则可以得到 $Var(y_{l-1}) = E(y_{l-1}^2)$。带入则有：</p>
+<p>$$<br>Var(y_l) = \frac{1}{2} n_{in}Var(w_l)Var(y_{l-1})<br>$$</p>
+<p>要想满足前后的方差相等，则有：</p>
+<p>$$<br>Var(w_l)= \frac{2}{n_{in}}<br>$$</p>
+<p>🎄 <font face="华文细黑" color="#FF60AF" size="4">反向传播</font><br>首先文章中的 $\Delta$ 作者应该想表达的是梯度，而不是差分的意思，同理易得其公式为</p>
+<p>$$<br>\begin{aligned}<br>Y_l &amp;= W_lX_l + B_l \\\<br>\because \quad \frac{\partial Loss}{\partial X_l} &amp;= \frac{\partial Loss}{\partial Y_l}\frac{\partial Y_l}{\partial X_l} \\\<br>\frac{\partial Loss}{\partial X_l} &amp;= \frac{\partial Loss}{\partial Y_l} W_l^{\top} \\\<br>\Rightarrow \Delta X_l &amp;= W_l^{\top} \Delta Y_l<br>\end{aligned}<br>$$</p>
+<p>由于 $E(\Delta Y_l) = 0$，然后权重也是期望为 0，那易得 $\Delta X_l$ 的期望也是为 0。接下来就是推导 $\Delta X_{l+1}$ 与 $\Delta Y_l$ 的关系。首先有：</p>
+<p>$$<br>\begin{aligned}<br>X_{l+1} &amp;= f(Y_l) \\\<br>\frac{\partial Loss}{\partial Y_{l}} &amp;= \frac{\partial Loss}{\partial X_{l+1}}\frac{\partial X_{l+1}}{\partial Y_{l}} \\\<br>\frac{\partial Loss}{\partial Y_{l}} &amp;= \frac{\partial Loss}{\partial X_{l+1}}\frac{\partial f(Y_l)}{\partial Y_{l}} \\\<br>\frac{\partial Loss}{\partial Y_{l}} &amp;= \frac{\partial Loss}{\partial X_{l+1}} f^{\prime}(Y_l) \\\<br>\Rightarrow \Delta Y_l &amp;= f^{\prime}(Y_l) \Delta X_{l+1}<br>\end{aligned}<br>$$</p>
+<p>这里考虑的 ReLU 函数的导数一半为 0，一半为 1。假设各占一半，于是有：</p>
+<p>$$<br>\begin{aligned}<br>E(\Delta Y_l) &amp;= \frac{1}{2} \Delta X_{l+1} = 0 \\\<br>Var(\Delta Y_l) &amp;= E((\Delta Y_l)^2) \\\<br>&amp;= E((f^{\prime}(Y_l) \Delta X_{l+1})^2) \\\<br>&amp;= \frac{1}{2}E((0 \times \Delta X_{l+1})^2) + \frac{1}{2}E((1 \times \Delta X_{l+1})^2) \\\<br>&amp;= \frac{1}{2}Var(\Delta X_{l+1})<br>\end{aligned}<br>$$</p>
+<p>同样一个位置的 $\Delta x_{li}$ 依然是由 $n_{out} = k \times k \times c_{in} $ 个 $\Delta y_{lj}, j = 1,2, \dots, n_{out}$ 与相应权重相乘相加而成的。这样则有：</p>
+<p>$$<br>\begin{aligned}<br>Var(\Delta x_{l+1}) &amp;= n_{out}Var(w_l)Var(\Delta y_{l}) \\\<br>&amp;= \frac{1}{2} n_{out}Var(w_l)Var(\Delta x_{l}) \\\<br>\Rightarrow Var(w_l) &amp;= \frac{2}{n_{out}}<br>\end{aligned}<br>$$<br>🍉🍉🍉 完结 </p>
 
                 
             </div>
@@ -448,7 +501,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://froml77.cn/2022/06/05/bian-xian-ji-fen-qiu-dao/">https://froml77.cn/2022/06/05/bian-xian-ji-fen-qiu-dao/</a>
+                    <a href="https://froml77.cn/2022/07/02/intialization/">https://froml77.cn/2022/07/02/intialization/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -486,8 +539,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/">
-                                    <span class="chip bg-color">微积分</span>
+                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">深度学习</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/">
+                                    <span class="chip bg-color">权重初始化</span>
                                 </a>
                             
                         </div>
@@ -532,7 +589,7 @@
         repo: 'FL77N.github.io',
         owner: 'fl77n',
         admin: "fl77n",
-        id: '2022-06-05T09-29-33',
+        id: '2022-07-02T20-20-44',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -828,9 +885,68 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2022/07/02/intialization/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="深度学习初始化的种种">
+                        
+                        <span class="card-title">深度学习初始化的种种</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            深度学习权重初始化的推导
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-07-02
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
+                                </a>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
+                                    知识整理
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">深度学习</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/">
+                        <span class="chip bg-color">权重初始化</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2022/06/16/bn/">
                     <div class="card-image">
@@ -848,9 +964,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-06-16
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-16
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -876,67 +992,6 @@
                     
                     <a href="/tags/BN/">
                         <span class="chip bg-color">BN</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2022/05/19/mu-biao-jian-ce-zong-shu/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="目标检测总结">
-                        
-                        <span class="card-title">目标检测总结</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            Object Detection Summary
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-19
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
-                                </a>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
-                                    知识整理
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
-                        <span class="chip bg-color">深度学习</span>
-                    </a>
-                    
-                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">
-                        <span class="chip bg-color">计算机视觉</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
-                        <span class="chip bg-color">目标检测</span>
                     </a>
                     
                 </div>
