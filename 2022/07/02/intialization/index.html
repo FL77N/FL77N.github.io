@@ -1,0 +1,1396 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="深度学习初始化的种种, 来自L77星云">
+    <meta name="description" content="深度学习权重初始化的推导">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id="></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', '');
+</script>
+
+
+    
+
+    <title>深度学习初始化的种种 | 来自L77星云</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 6.2.0"><link rel="alternate" href="/atom.xml" title="来自L77星云" type="application/atom+xml">
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">来自L77星云</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">来自L77星云</div>
+        <div class="logo-desc">
+            
+            Never really desperate, only the lost of the soul.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/FL77N" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/FL77N" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">深度学习初始化的种种</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="container content">
+
+    
+    <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">深度学习</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/">
+                                <span class="chip bg-color">权重初始化</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                算法
+                            </a>
+                        
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
+                                知识整理
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-07-02
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.3k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    14 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="🎁-权重初始化"><a href="#🎁-权重初始化" class="headerlink" title="🎁 权重初始化"></a>🎁 权重初始化</h1><h2 id="初始化的作用"><a href="#初始化的作用" class="headerlink" title="初始化的作用"></a><font color="#66B3FF">初始化的作用</font></h2><p>  在深度学习中，神经网络的权重初始化方法（weight initialization）对模型的收敛速度和性能有着至关重要的影响。模型的训练，简而言之，就是对权重参数 W 的不停迭代更新，以期达到更好的性能。而随着网络深度（层数）的增加，训练中极易出现梯度消失或者梯度爆炸等问题。</p>
+<p><font face="华文细黑" color="#FF60AF" size="5">初始化需要避免的情况</font><br>  首先，我们不能让权重的梯度为 0，很显然权重梯度为 0，权重将不再更新。然而又知道有些激活函数是有饱和区的。简而言之，在这个区值的梯度基本为 0，很难进行梯度更新。参数初始化需要注意：</p>
+<ul>
+<li>各层激活值不会出现饱和现象</li>
+<li>各层激活值不为0</li>
+</ul>
+<p><font face="华文细黑" color="#FF60AF" size="5">全零初始化是否可行</font><br>  在线性回归，logistics 回归的时候，基本上都是把参数初始化为 0，我们的模型也能够很好的工作（可初始化为0的模型）。然后在神经网络中，把 W 初始化为 0 是不可以的。这是因为如果把 W 初始化 0，那么在前向传播过程中，每一层的神经元学到的东西都是一样的（激活值均为 0），而在 bp 的时候，不同维度的参数会得到相同的更新，因为他们的 gradient 相同，称之为“对称失效”。<br>  以上的话可以简单认为在神经网络的全零初始化会使参数更新一致，然后由于参数的值也都一样，所以一层的所有参数退化为一个。然后没有隐藏层或者逻辑回归时，可以将其全零初始化。</p>
+<h2 id="各类初始化"><a href="#各类初始化" class="headerlink" title="各类初始化"></a><font color="#66B3FF">各类初始化</font></h2><p><font face="华文细黑" color="#FF60AF" size="5">标准随机初始化</font><br>  这里常用的有正态分布、均匀分布等。它们的参数均值都在 0 的附近，然后有正有负，一般会把参数设置为接近 0 的很小的随机数。随机初始化也有缺点：当神经网络的层数增多时，会发现越往后面的层的激活函数（使用 tanh ）的输出值几乎都接近于 0：</p>
+<center><img src="./1.png" height="50%" width="50%"></center>
+
+<p>  总结来说，一般的随机初始化存在后层网络激活函数的输出值趋近于 0 的问题，且网络输出数据分布的方差会受每层神经元个数的影响（随之改变）。虽然上诉的输出数据均值都接近于 0，但是由于方差的改变导致最后整个输出数据也接近于 0。针对这些问题，Glorot 等人提出在初始化的同时加上对方差大小的规范化。这样不仅获得了更快的收敛速度，而且维持了输入输出数据分布方差的一致性，也避免了后面层的激活函数的输出值趋向于 0 的问题。</p>
+<p><font face="Times" color="#ADADAD" size="5">Glorot</font><font face="楷体" color="#ADADAD" size="5">条件</font><br>优秀的初始化应该保证以下两个条件：</p>
+<ul>
+<li>各个层的激活值 h（输出值） 的方差要保持一致，即 $\forall (i,j): Var(h^{i}) = Var(h^{j})$</li>
+<li>各个层对状态 z 的梯度的方差要保持一致，即 $\forall (i,j): Var(\frac{\partial Cost}{\partial z^{i} }) = Var(\frac{\partial Cost}{\partial z^{j} })$</li>
+</ul>
+<p><font face="楷体" color="#6C6C6C">其实是一个保证前向时数据基本分布不变，一个保证反向时数据基本分布不变</font></p>
+<p><font color="#ADADAD">关于方差的三个事实</font></p>
+<p>既然要保持上面的两个方差在各个网络层中不改变，那也就是它实际上是会改变的，关于为什么会改变的公式推导，后面详细说明，这里直接引入三个基本的客观事实（两有关一无关）：</p>
+<ul>
+<li>各个层激活值 h（输出值）的方差与网络的层数有关；</li>
+<li>关于状态 z 的梯度的方差与网络的层数有关；</li>
+<li>各个层权重参数W的梯度的方差与层数无关；<br>可参见论文《Understanding the difficulty of training deep feedforward neural networks》</li>
+</ul>
+<p><font color="#ADADAD">初始化的几点要求</font></p>
+<ul>
+<li>参数不能全部初始化为 0，也不能全部初始化同一个值；</li>
+<li>最好保证参数初始化的均值为 0，正负交错，正负参数大致上数量相等；</li>
+<li>初始化参数不能太大或者是太小，参数太小会导致特征在每层间逐渐缩小而难以产生作用，参数太大会导致数据在逐层间传递时逐渐放大而导致梯度消失发散，不能训练；</li>
+</ul>
+<p><font face="华文细黑" color="#FF60AF" size="5">Xavier 初始化</font><br>  其认为各层的激活值和状态梯度的方差在传播过程中的方差应该保持一致。即：</p>
+<p>$$<br>\begin{aligned}<br>\forall (i, j),Var(x^{i}) &amp;= Var(x^{j}) \\\<br>\forall (i, j),Var\Big(\frac{\partial Cost}{\partial y^{i} }\Big) &amp;= Var \Big(\frac{\partial Cost}{\partial y^{j} }\Big)<br>\end{aligned}<br>$$</p>
+<p>这两个条件也称为 Glorot 条件。首先给出关于状态得梯度和关于权重的梯度及部分推导：</p>
+<p>$$<br>\begin{aligned}<br>\pmb{x}^{i+1} &amp;= f(\pmb{y}^i)  \\\<br>\pmb{y}^{i+1} &amp;= \pmb{W}^{i+1} \times \pmb{x}^{i+1}  \\\<br>\frac{\partial Cost}{\partial y^{i}_{k}} &amp;= \frac{\partial Cost}{\partial \pmb{y}^{i+1}}\frac{\partial \pmb{y}^{i+1}}{\partial \pmb{x}^{i+1}} \frac{\partial \pmb{x}^{i+1}}{\partial f(\pmb{y}^{i})} \frac{\partial f(\pmb{y}^i)}{\partial \pmb{y}^{i}} \frac{\partial \pmb{y}^{i}}{\partial y^{i}_{k}} \\\<br>\frac{\partial Cost}{\partial w^{i}_{l,k}} &amp;= \frac{\partial Cost}{\partial y^{i}_{k}} \frac{\partial y^{i}_{k}}{\partial w^i_{l,k}}<br>\end{aligned}<br>$$</p>
+<p>  首先 $y^{i}_{k}$ 代表第 $i$ 层的，输出的第 $k$ 个（目前先假设输入输出都是一维向量，且输入的方差一致），$f(x)$ 是激活函数，另外做如下假设：</p>
+<ul>
+<li>激活函数对称：便于假设每层的输入均值为 0 （加上每层权重均值为 0，输入均值也就为 0） </li>
+<li>$f^{\prime}(0) = 1$</li>
+<li>初始时，状态值都落在线性区域有 $f(y^{i}_{k}) = y^{i}_{k},f^{\prime}(y^{i}_{k}) = 1$<br>将上式进行简化：</li>
+</ul>
+<p>$$<br>\begin{aligned}<br>\frac{\partial Cost}{\partial y^i_k} &amp;= \frac{\partial Cost}{\partial \pmb{y}^{i+1}}\frac{\partial \pmb{y}^{i+1}}{\partial \pmb{x}^{i+1}} \frac{\partial \pmb{x}^{i+1}}{\partial f(\pmb{y}^i)} \frac{\partial f(\pmb{y}^i)}{\partial \pmb{y}^i} \frac{\partial \pmb{y}^i}{\partial y^i_k} \\\<br>&amp;= \frac{\partial Cost}{\partial \pmb{y}^{i+1}} (\pmb{W}^{i+1})^{\top} \cdot 1 \cdot f^{\prime}(\pmb{y}^i) \cdot \pmb{e}^i_k \\\<br>&amp;= \frac{\partial Cost}{\partial \pmb{y}^{i+1}} (\pmb{W}^{i+1})^{\top} \cdot 1 \cdot 1 \cdot \pmb{e}^i_k \\\<br>&amp; = \frac{\partial Cost}{\partial \pmb{y}^{i+1}} (\pmb{W}^{i+1})^{\top}_{.,k} \\\<br>\frac{\partial Cost}{\partial w^i_{k,l}} &amp;= \frac{\partial Cost}{\partial y^i_k} \frac{\partial y^i_k}{\partial w^i_{k,l}} \\\<br>&amp;= \frac{\partial Cost}{\partial y^i_k} x^i_l<br>\end{aligned}<br>$$</p>
+<p>  首先推导一下每层的输入与上一层的输入方差的关系（注意我们是在一定假设下的，独立分布的两个变量积的方差等于这两个变量方差的积。同一层的输入各个元素的方差是相同的，权重各个元素的方差是相同的）：</p>
+<p>$$<br>\begin{aligned}<br>Var(x^i_k) &amp;= Var(f(y^{i-1}_k)) \\\<br>&amp;= Var(y^{i-1}_k) \\\<br>&amp;= Var(\pmb{W}^{i-1}_{k,.} \times \pmb{x}^{i-1}) \\\<br>&amp;= Var(\sum_{l=1}^{n_{i-1}} W^{i-1}_{k,l} x^{i-1}_{l}) \\\<br>&amp;= \sum_{l=1}^{n_{i-1}} Var(W^{i-1}_{k,l})Var(x^{i-1}_{l}) \\\<br>&amp;= n_{i-1}Var(W^{i-1}_{k,l})Var(x^{i-1}_{l})<br>\end{aligned}<br>$$</p>
+<p>由于数值之间都是独立同分布，根据上式可以推导出 </p>
+<p>$$<br>Var(x^{i+1}) = n_{i}Var(W^{i})Var(x^{i})<br>$$</p>
+<p>由之前推导的梯度公式，我们同样可以来推导相邻层梯度的方差（注意反向传播就是看这层的输出元素个数了，即 $n_{i+1}$：</p>
+<p>$$<br>\begin{aligned}<br>Var \Big(\frac{\partial Cost}{\partial y^i_k}\Big) &amp; = Var \Big(\frac{\partial Cost}{\partial \pmb{y}^{i+1}} (\pmb{W}^{i+1})^{\top}_{.,k}\Big)\\\<br>&amp;=Var \Big(\sum_{l=1}^{n_{i+1}}\frac{\partial Cost}{\partial y^{i+1}_l}(W^{i+1})^{\top}_{l,k}  \Big) \\\<br>&amp;=\sum_{l=1}^{n_{i+1}}Var \Big(\frac{\partial Cost}{\partial y^{i+1}_l}\Big)Var\Big((W^{i+1})^{\top}_{l,k}  \Big) \\\<br>&amp;=n_{i+1} Var\Big(\frac{\partial Cost}{\partial y^{i+1}_l}\Big)Var\Big((W^{i+1})^{\top}_{l,k}  \Big) \\\<br>\Rightarrow Var \Big(\frac{\partial Cost}{\partial y^i}\Big) &amp; = n_{i+1} Var\Big(\frac{\partial Cost}{\partial y^{i+1}}\Big)Var\Big(W^{i+1}  \Big)<br>\end{aligned}<br>$$</p>
+<p>对于一个 d 层的网络，则有：</p>
+<p>$$<br>\begin{aligned}<br>Var(x^{i}) &amp;=Var(x^0)\prod_{j=1}^{i-1}n_jVar(W^{j}) \\\<br>Var \Big(\frac{\partial Cost}{\partial y^{i}}\Big) &amp; = Var\Big(\frac{\partial Cost}{\partial y^{d}}\Big)\prod_{j = i}^{d}n_{i} Var\Big(W^{i+1}\Big)<br>\end{aligned}<br>$$</p>
+<p>综上要想满足各层的激活值和状态梯度的方差有：</p>
+<p>$$<br>\begin{aligned}<br>\forall i,  1 &amp;=n_iVar(W^{i+1}) \\\<br>\forall i,  1 &amp;=n_{i+1}Var(W^{i+1})<br>\end{aligned}<br>$$</p>
+<p>将上两式相加有：</p>
+<p>$$<br>Var(W^{i+1}) = \frac{2}{n_i + n_{i+1}}<br>$$</p>
+<p><font face="华文细黑" color="#FF60AF" size="5">Kaiming 初始化</font><br>  首先，我们来设定一些假设，并且复习几个公式。假设：</p>
+<p>$$<br>\begin{aligned}<br>E[W] &amp;= 0 \\\<br>E[X] &amp;= 0 \\\<br>E[\Delta Y] &amp;= 0<br>\end{aligned}<br>$$</p>
+<p>几个独立随机变量之和的方差等于各变量的方差之和</p>
+<p>$$<br>Var(X_1 + \cdots + X_n) = Var(X_1) + \cdots + Var(X_n)<br>$$</p>
+<p>如果为同分布的话，结果变为 $nVar(X)$。方差与期望之间的关系：</p>
+<p>$$<br>Var(X) = E(X^2) - (EX)^2<br>$$</p>
+<p>两个独立变量乘积的方差，且各自期望为 0，协方差为 0</p>
+<p>$$<br>\begin{aligned}<br>Var(XY) &amp;= E(X^2Y^2) - E(XY)^2 \\\<br>&amp;= E(X^2)E(Y^2) - E(X)^2E(Y)^2 \\\<br>&amp;= (Var(X) + E(X)^2)(Var(Y) + E(Y)^2) \\\<br>&amp; = Var(X)Var(Y)<br>\end{aligned}<br>$$</p>
+<p>kaiming 初始化只包含卷积和 ReLU 函数，对于卷积，可以把卷积核当作全连接层的权重，然而每做一次卷积只是更换了一次“全连接层”的输入。</p>
+<p>🎄 <font face="华文细黑" color="#FF60AF" size="4">前向传播</font><br>因此在前向传播时，可以简化为</p>
+<p>$$<br>Y_l = W_lX_l + B_l<br>$$</p>
+<p>其中，$Y_{li}$ 代表第 $l$ 层中第 $i$ 位置的输出，并使用 $Y_{l}$ 指第 $l$ 层中所有位置的输出。假设某一位置的输入 $X_{li}$ 的 shape 为 $n_{in} = k \times k \times c_{in}$，输出通道为 $c_{out}$。对于某一个位置而言，$W_{li}$ 有 shape $c_{out} \times n_{in}$。很容易知道，对于某个位置的有 $ c_{out}$ 个输出，因此对于某个位置的某一个输出有：</p>
+<p>$$<br>y_l = \sum^{n_{in}}_{i=0} w_{li}x_{li}<br>$$</p>
+<p>由于输入各值是同分布，权重也如此，因此有：</p>
+<p>$$<br>Var(y) = n_{in}Var(wx)<br>$$</p>
+<p>由于 x 是上一层 relu 得到，期望不再为 0，但权重的期望是为 0 的。可得：</p>
+<p>$$<br>\begin{aligned}<br>Var(w_lx_l) &amp;= E((w_lx_l)^2) - E(w_l)^2E(x_l)^2 \\\<br>Var(w_lx_l) &amp;= E(w_l^2)E(x_l^2) \\\<br>Var(w_lx_l) &amp;= Var(w_l^2)E(x_l^2) \\\<br>\Rightarrow Var(y_l) &amp;= n_{in}Var(w_l)E(x_l^2)<br>\end{aligned}<br>$$</p>
+<p>根据网络得知 $x_l = f(y_{l-1})$，其中 $f$ 代表 ReLU 函数，有：</p>
+<p>$$<br>\begin{aligned}<br>E(x^2_l) = E(f^2(y_{l-1})) &amp;= \int^{+\infty}_{-\infty} p(y_{l-1})f^2(y_{l-1}) dy_{l-1} \\\<br>\because \quad &amp;y_{l-1} \in (-\infty, 0), f(y_{l-1}) = 0 \\\<br>&amp;y_{l-1} \in (0, +\infty), f(y_{l-1}) = y_{l-1} \\\<br>&amp; = \int^{+\infty}_{0} p(y_{l-1})(y_{l-1})^2 dy_{l-1}  \\\<br>\Rightarrow E(x^2_l) &amp;= \frac{1}{2} \int^{+\infty}_{-\infty} p(y_{l-1})(y_{l-1})^2 dy_{l-1} \\\<br>&amp; = \frac{1}{2} E(y_{l-1}^2)<br>\end{aligned}<br>$$</p>
+<p>因为权重是在 0 周围均匀分布的，且均值为 0，所以易得 $E(y) = 0$。则可以得到 $Var(y_{l-1}) = E(y_{l-1}^2)$。带入则有：</p>
+<p>$$<br>Var(y_l) = \frac{1}{2} n_{in}Var(w_l)Var(y_{l-1})<br>$$</p>
+<p>要想满足前后的方差相等，则有：</p>
+<p>$$<br>Var(w_l)= \frac{2}{n_{in}}<br>$$</p>
+<p>🎄 <font face="华文细黑" color="#FF60AF" size="4">反向传播</font><br>首先文章中的 $\Delta$ 作者应该想表达的是梯度，而不是差分的意思，同理易得其公式为</p>
+<p>$$<br>\begin{aligned}<br>Y_l &amp;= W_lX_l + B_l \\\<br>\because \quad \frac{\partial Loss}{\partial X_l} &amp;= \frac{\partial Loss}{\partial Y_l}\frac{\partial Y_l}{\partial X_l} \\\<br>\frac{\partial Loss}{\partial X_l} &amp;= \frac{\partial Loss}{\partial Y_l} W_l^{\top} \\\<br>\Rightarrow \Delta X_l &amp;= W_l^{\top} \Delta Y_l<br>\end{aligned}<br>$$</p>
+<p>由于 $E(\Delta Y_l) = 0$，然后权重也是期望为 0，那易得 $\Delta X_l$ 的期望也是为 0。接下来就是推导 $\Delta X_{l+1}$ 与 $\Delta Y_l$ 的关系。首先有：</p>
+<p>$$<br>\begin{aligned}<br>X_{l+1} &amp;= f(Y_l) \\\<br>\frac{\partial Loss}{\partial Y_{l}} &amp;= \frac{\partial Loss}{\partial X_{l+1}}\frac{\partial X_{l+1}}{\partial Y_{l}} \\\<br>\frac{\partial Loss}{\partial Y_{l}} &amp;= \frac{\partial Loss}{\partial X_{l+1}}\frac{\partial f(Y_l)}{\partial Y_{l}} \\\<br>\frac{\partial Loss}{\partial Y_{l}} &amp;= \frac{\partial Loss}{\partial X_{l+1}} f^{\prime}(Y_l) \\\<br>\Rightarrow \Delta Y_l &amp;= f^{\prime}(Y_l) \Delta X_{l+1}<br>\end{aligned}<br>$$</p>
+<p>这里考虑的 ReLU 函数的导数一半为 0，一半为 1。假设各占一半，于是有：</p>
+<p>$$<br>\begin{aligned}<br>E(\Delta Y_l) &amp;= \frac{1}{2} \Delta X_{l+1} = 0 \\\<br>Var(\Delta Y_l) &amp;= E((\Delta Y_l)^2) \\\<br>&amp;= E((f^{\prime}(Y_l) \Delta X_{l+1})^2) \\\<br>&amp;= \frac{1}{2}E((0 \times \Delta X_{l+1})^2) + \frac{1}{2}E((1 \times \Delta X_{l+1})^2) \\\<br>&amp;= \frac{1}{2}Var(\Delta X_{l+1})<br>\end{aligned}<br>$$</p>
+<p>同样一个位置的 $\Delta x_{li}$ 依然是由 $n_{out} = k \times k \times c_{in} $ 个 $\Delta y_{lj}, j = 1,2, \dots, n_{out}$ 与相应权重相乘相加而成的。这样则有：</p>
+<p>$$<br>\begin{aligned}<br>Var(\Delta x_{l+1}) &amp;= n_{out}Var(w_l)Var(\Delta y_{l}) \\\<br>&amp;= \frac{1}{2} n_{out}Var(w_l)Var(\Delta x_{l}) \\\<br>\Rightarrow Var(w_l) &amp;= \frac{2}{n_{out}}<br>\end{aligned}<br>$$<br>🍉🍉🍉 完结 </p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">L77</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://froml77.cn/2022/07/02/intialization/">https://froml77.cn/2022/07/02/intialization/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">L77</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">深度学习</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/">
+                                    <span class="chip bg-color">权重初始化</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'dc2473423694b17769c9',
+        clientSecret: 'b858dbcd978fb45c29661bfb1f583c8426eed724',
+        repo: 'FL77N.github.io',
+        owner: 'fl77n',
+        admin: "fl77n",
+        id: '2022-07-02T20-20-44',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'JTiuwNOoXPEYM7Nk9a10VfTb-gzGzoHsz',
+        appKey: 'JLSigYl5wnNgsdCEMHBUosRf',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'false' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: '如果你没有GitHub账号，还可以在这里评论啦！'
+    });
+</script>
+
+<!--酷Q推送-->
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/07/02/yangyufan/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="焖洋芋饭">
+                        
+                        <span class="card-title">焖洋芋饭</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            kong 洋芋饭的制作过程
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-07-02
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%83%B9%E9%A5%AA/" class="post-category">
+                                    烹饪
+                                </a>
+                            
+                            <a href="/categories/%E7%83%B9%E9%A5%AA/%E6%95%99%E7%A8%8B/" class="post-category">
+                                    教程
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E9%A5%AD/">
+                        <span class="chip bg-color">饭</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%84%96/">
+                        <span class="chip bg-color">焖</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%A5%96%E4%BC%A0%E7%BB%9D%E6%8A%80/">
+                        <span class="chip bg-color">祖传绝技</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/06/16/bn/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="Batch Normalization 的种种">
+                        
+                        <span class="card-title">Batch Normalization 的种种</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            关于常见 BN 层的介绍
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-16
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
+                                </a>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
+                                    知识整理
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">深度学习</span>
+                    </a>
+                    
+                    <a href="/tags/BN/">
+                        <span class="chip bg-color">BN</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 来自L77星云<br />'
+            + '文章作者: L77<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            &copy;
+            
+                <span id="year">2022</span>
+             FL77N. 版权所有
+
+            
+            &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+            <span class="white-color">28.1k</span>
+            
+
+            <br>
+            <i class="fa-brands fa-battle-net"></i>
+            <span id="sitetime"></span>
+
+            
+            
+            <br>
+            
+            <span id="busuanzi_container_site_pv" style='display:none'>
+                <i class="fa-solid fa-battery-quarter"></i>
+                本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv" style='display:none'>
+                人次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+            </span>
+            
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/FL77N" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2959807018" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2959807018" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+    <a href="https://www.zhihu.com/people/FromL77" class="tooltipped" target="_blank" data-tooltip="关注我的知乎: https://www.zhihu.com/people/FromL77" data-position="top" data-delay="50">
+        <i class="fab fa-zhihu1">知</i>
+    </a>
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+<!-- 不蒜子计数初始值纠正 -->
+<script>
+    $(document).ready(function () {
+
+        var int = setInterval(fixCount, 50);
+        var pvcountOffset = 120;
+        var uvcountOffset = 30;
+
+        function fixCount() {
+            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") {
+                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset);
+                clearInterval(int);
+            }
+            if ($("#busuanzi_container_site_pv").css("display") != "none") {
+                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据
+                clearInterval(int);
+            }
+        }
+    });
+</script>
+
+<script language=javascript>
+    function siteTime() {
+        window.setTimeout("siteTime()", 1000);
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
+        var days = hours * 24;
+        var years = days * 365;
+        var today = new Date();
+        var todayYear = today.getFullYear();
+        var todayMonth = today.getMonth() + 1;
+        var todayDate = today.getDate();
+        var todayHour = today.getHours();
+        var todayMinute = today.getMinutes();
+        var todaySecond = today.getSeconds();
+        /* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+        year - 作为date对象的年份，为4位年份值
+        month - 0-11之间的整数，做为date对象的月份
+        day - 1-31之间的整数，做为date对象的天数
+        hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+        minutes - 0-59之间的整数，做为date对象的分钟数
+        seconds - 0-59之间的整数，做为date对象的秒数
+        microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+        var t1 = Date.UTC(2022, 04, 27, 00, 00, 00); //北京时间2018-2-13 00:00:00
+        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+        var diff = t2 - t1;
+        var diffYears = Math.floor(diff / years);
+        var diffDays = Math.floor((diff / days) - diffYears * 365);
+        var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+        var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) / minutes);
+        var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours - diffMinutes * minutes) / seconds);
+        document.getElementById("sitetime").innerHTML = "本站已运行 " + diffYears + " 年 " + diffDays + " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+    }/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
+    siteTime();
+</script>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+    
+    <script type="text/javascript"> var OriginTitile = document.title, st; document.addEventListener("visibilitychange", function () { document.hidden ? (document.title = "来自L77星云！", clearTimeout(st)) : (document.title = "来自L77的流星雨🌈", st = setTimeout(function () { document.title = OriginTitile }, 3e3)) })
+    </script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/star.js"><\/script>');
+            }
+        </script>
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

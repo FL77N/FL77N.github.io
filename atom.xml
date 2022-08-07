@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>来自L77星云</title>
+  
+  <subtitle>学而不思则罔 思而不学则殆</subtitle>
+  <link href="https://froml77.cn/atom.xml" rel="self"/>
+  
+  <link href="https://froml77.cn/"/>
+  <updated>2022-08-07T13:43:29.724Z</updated>
+  <id>https://froml77.cn/</id>
+  
+  <author>
+    <name>L77</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Rank &amp; Sort Loss 解读</title>
+    <link href="https://froml77.cn/2022/08/07/rank-sort-loss/"/>
+    <id>https://froml77.cn/2022/08/07/rank-sort-loss/</id>
+    <published>2022-08-07T12:39:56.000Z</published>
+    <updated>2022-08-07T13:43:29.724Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;hearts-第一印象&quot;&gt;&lt;a href=&quot;#hearts-第一印象&quot; class=&quot;headerlink&quot; title=&quot;♥ 第一印象&quot;&gt;&lt;/a&gt;&lt;font color=&quot;green&quot; face=&quot;华文细黑&quot;&gt;♥ 第一印象&lt;/font&gt;&lt;/h1&gt;&lt;p&gt;Rank</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="论文解读" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/"/>
+    
+    
+    <category term="深度学习" scheme="https://froml77.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="计算机视觉" scheme="https://froml77.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/"/>
+    
+    <category term="目标检测" scheme="https://froml77.cn/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>三线肉和白菜豆腐汤</title>
+    <link href="https://froml77.cn/2022/08/06/san-xian-rou-he-dou-fu-tang/"/>
+    <id>https://froml77.cn/2022/08/06/san-xian-rou-he-dou-fu-tang/</id>
+    <published>2022-08-06T13:36:01.000Z</published>
+    <updated>2022-08-07T13:36:54.441Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;ice-cream-最终效果&quot;&gt;&lt;a href=&quot;#ice-cream-最终效果&quot; class=&quot;headerlink&quot; title=&quot;:ice_cream: 最终效果&quot;&gt;&lt;/a&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="烹饪" scheme="https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/"/>
+    
+    <category term="教程" scheme="https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/%E6%95%99%E7%A8%8B/"/>
+    
+    
+    <category term="炒" scheme="https://froml77.cn/tags/%E7%82%92/"/>
+    
+    <category term="煮" scheme="https://froml77.cn/tags/%E7%85%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>焖洋芋饭</title>
+    <link href="https://froml77.cn/2022/07/02/yangyufan/"/>
+    <id>https://froml77.cn/2022/07/02/yangyufan/</id>
+    <published>2022-07-02T14:18:30.000Z</published>
+    <updated>2022-07-31T14:38:56.931Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;🍚-kong-洋芋饭效果图&quot;&gt;&lt;a href=&quot;#🍚-kong-洋芋饭效果图&quot; class=&quot;headerlink&quot; title=&quot;🍚 kong 洋芋饭效果图&quot;&gt;&lt;/a&gt;🍚 &lt;font color=&quot;#FF5151&quot;&gt;kong</summary>
+        
+      
+    
+    
+    
+    <category term="烹饪" scheme="https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/"/>
+    
+    <category term="教程" scheme="https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/%E6%95%99%E7%A8%8B/"/>
+    
+    
+    <category term="饭" scheme="https://froml77.cn/tags/%E9%A5%AD/"/>
+    
+    <category term="焖" scheme="https://froml77.cn/tags/%E7%84%96/"/>
+    
+    <category term="祖传绝技" scheme="https://froml77.cn/tags/%E7%A5%96%E4%BC%A0%E7%BB%9D%E6%8A%80/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深度学习初始化的种种</title>
+    <link href="https://froml77.cn/2022/07/02/intialization/"/>
+    <id>https://froml77.cn/2022/07/02/intialization/</id>
+    <published>2022-07-02T12:20:44.000Z</published>
+    <updated>2022-07-02T14:02:14.281Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;🎁-权重初始化&quot;&gt;&lt;a href=&quot;#🎁-权重初始化&quot; class=&quot;headerlink&quot; title=&quot;🎁 权重初始化&quot;&gt;&lt;/a&gt;🎁 权重初始化&lt;/h1&gt;&lt;h2 id=&quot;初始化的作用&quot;&gt;&lt;a href=&quot;#初始化的作用&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="知识整理" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/"/>
+    
+    
+    <category term="深度学习" scheme="https://froml77.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="权重初始化" scheme="https://froml77.cn/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Batch Normalization 的种种</title>
+    <link href="https://froml77.cn/2022/06/16/bn/"/>
+    <id>https://froml77.cn/2022/06/16/bn/</id>
+    <published>2022-06-16T01:58:06.000Z</published>
+    <updated>2022-06-16T03:01:02.285Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;spades-Batch-Normalization&quot;&gt;&lt;a href=&quot;#spades-Batch-Normalization&quot; class=&quot;headerlink&quot; title=&quot;♠ Batch Normalization&quot;&gt;&lt;/a&gt;&lt;font</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="知识整理" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/"/>
+    
+    
+    <category term="深度学习" scheme="https://froml77.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="BN" scheme="https://froml77.cn/tags/BN/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>变限积分求导的种种</title>
+    <link href="https://froml77.cn/2022/06/05/bian-xian-ji-fen-qiu-dao/"/>
+    <id>https://froml77.cn/2022/06/05/bian-xian-ji-fen-qiu-dao/</id>
+    <published>2022-06-05T01:29:33.000Z</published>
+    <updated>2022-07-02T13:00:20.627Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;变上限积分求导的理解&quot;&gt;&lt;a href=&quot;#变上限积分求导的理解&quot; class=&quot;headerlink&quot; title=&quot;变上限积分求导的理解&quot;&gt;&lt;/a&gt;&lt;font face=&quot;微软雅黑&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="知识整理" scheme="https://froml77.cn/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/"/>
+    
+    <category term="数学" scheme="https://froml77.cn/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/%E6%95%B0%E5%AD%A6/"/>
+    
+    
+    <category term="微积分" scheme="https://froml77.cn/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>目标检测总结</title>
+    <link href="https://froml77.cn/2022/05/19/mu-biao-jian-ce-zong-shu/"/>
+    <id>https://froml77.cn/2022/05/19/mu-biao-jian-ce-zong-shu/</id>
+    <published>2022-05-19T02:22:22.000Z</published>
+    <updated>2022-05-19T02:46:53.614Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;&lt;font</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="知识整理" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/"/>
+    
+    
+    <category term="深度学习" scheme="https://froml77.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="计算机视觉" scheme="https://froml77.cn/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/"/>
+    
+    <category term="目标检测" scheme="https://froml77.cn/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>matery 的主题设置</title>
+    <link href="https://froml77.cn/2022/04/28/theme-setting/"/>
+    <id>https://froml77.cn/2022/04/28/theme-setting/</id>
+    <published>2022-04-28T12:05:04.000Z</published>
+    <updated>2022-05-19T07:20:36.171Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h3 id=&quot;spades-开篇&quot;&gt;&lt;a href=&quot;#spades-开篇&quot; class=&quot;headerlink&quot; title=&quot; ♠ 开篇&quot;&gt;&lt;/a&gt;&lt;font color=&quot;#A8FF24&quot;&gt; ♠ 开篇&lt;/font&gt;&lt;/h3&gt;&lt;p&gt;虽然之前用 CSDN</summary>
+        
+      
+    
+    
+    
+    <category term="教程" scheme="https://froml77.cn/categories/%E6%95%99%E7%A8%8B/"/>
+    
+    
+    <category term="博客主题" scheme="https://froml77.cn/tags/%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98/"/>
+    
+    <category term="Hexo" scheme="https://froml77.cn/tags/Hexo/"/>
+    
+  </entry>
+  
+</feed>
