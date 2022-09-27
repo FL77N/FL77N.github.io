@@ -6,7 +6,7 @@
   <link href="https://froml77.cn/atom.xml" rel="self"/>
   
   <link href="https://froml77.cn/"/>
-  <updated>2022-08-07T13:43:29.724Z</updated>
+  <updated>2022-09-27T14:47:41.127Z</updated>
   <id>https://froml77.cn/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>cuda 学习 -- （一）</title>
+    <link href="https://froml77.cn/2022/09/14/cuda1/"/>
+    <id>https://froml77.cn/2022/09/14/cuda1/</id>
+    <published>2022-09-14T13:13:02.000Z</published>
+    <updated>2022-09-27T14:47:41.127Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;矩阵相加&quot;&gt;&lt;a href=&quot;#矩阵相加&quot; class=&quot;headerlink&quot; title=&quot;矩阵相加&quot;&gt;&lt;/a&gt;矩阵相加&lt;/h2&gt;&lt;h3 id=&quot;流程&quot;&gt;&lt;a href=&quot;#流程&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="编程" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+    <category term="cuda" scheme="https://froml77.cn/tags/cuda/"/>
+    
+  </entry>
   
   <entry>
     <title>Rank &amp; Sort Loss 解读</title>

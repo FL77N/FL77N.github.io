@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Batch Normalization 的种种, 来自L77星云">
-    <meta name="description" content="关于常见 BN 层的介绍">
+    <meta name="keywords" content="cuda 学习 -- （一）, 来自L77星云">
+    <meta name="description" content="Rank &amp; Sort Loss 论文解读及核心代码解读">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -30,7 +30,7 @@
 
     
 
-    <title>Batch Normalization 的种种 | 来自L77星云</title>
+    <title>cuda 学习 -- （一） | 来自L77星云</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -292,12 +292,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Batch Normalization 的种种</h1>
+                    <h1 class="description center-align post-title">cuda 学习 -- （一）</h1>
                 </div>
             </div>
         </div>
@@ -319,12 +319,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
-                                <span class="chip bg-color">深度学习</span>
-                            </a>
-                        
-                            <a href="/tags/BN/">
-                                <span class="chip bg-color">BN</span>
+                            <a href="/tags/cuda/">
+                                <span class="chip bg-color">cuda</span>
                             </a>
                         
                     </div>
@@ -339,8 +335,8 @@
                                 算法
                             </a>
                         
-                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
-                                知识整理
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/" class="post-category">
+                                编程
                             </a>
                         
                     </div>
@@ -352,7 +348,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-06-16
+                    2022-09-14
                 </div>
                 
 
@@ -361,14 +357,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    658
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    3 分
                 </div>
                 
 
@@ -391,56 +387,143 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="spades-Batch-Normalization"><a href="#spades-Batch-Normalization" class="headerlink" title="♠ Batch Normalization"></a><font color="#9393FF">♠ Batch Normalization</font></h1><h2 id="为什么要进行BN"><a href="#为什么要进行BN" class="headerlink" title="为什么要进行BN"></a><font color="#9999cc" face="楷体" size="6">为什么要进行</font><font color="#9999cc" face="Times" size="6">BN</font></h2><p>  防止深度神经网络，每一层得参数更新会导致上层的输入数据发生变化，通过层层叠加，高层的输入分布变化会十分剧烈，这就使得高层需要不断去重新适应底层的参数更新。为了训好模型，我们需要非常谨慎地去设定学习率、初始化权重、以及尽可能细致的参数更新策略。</p>
-<center><img src=".\2.png" height="70%" width="70%"></center>
+                <h2 id="矩阵相加"><a href="#矩阵相加" class="headerlink" title="矩阵相加"></a>矩阵相加</h2><h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
+<li>memory allco</li>
+</ul>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cudaMalloc((void**) &amp;d_a, sizeof(float) * (M * N));<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p>M 和 N 分别是矩阵的行和列</p>
+<ul>
+<li>copy data</li>
+</ul>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cudaMemcpy(d_a, h_a, sizeof(float) * (M * N), cudaMemcpyHostToDevice);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>  另外对一些激活函数具有饱和区，比如 sigmoid 函数的输入较大和较小，此时的梯度很小，这会导致权重更新十分缓慢。又比如下图的 tanh 函数：</p>
-<center><img src=".\1.png" height="55%" width="55%"></center>
+<p>把 cpu 上的数据拷贝到 gpu 上来</p>
+<ul>
+<li>kernel function</li>
+</ul>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">__global__ void m_add(float *c, float *a, float *b, int m, int n){
+    // get ind
+    const int block_ind = blockIdx.x;
+    const int thread_ind = threadIdx.x;
+    const int step = blockDim.x * gridDim.x;
+    int curr_ind = block_ind * blockDim.x + thread_ind;
 
-<p>  如果输入的数值没有 BN 那么数据可能在两侧的比较多，有了 BN 会将其映射至中间区域，可见其梯度较大，能更快收敛。其实这也防止了梯度消失。由于其不再由一个样本来影响结果，每个样本都会收到一个 batch 里面的其他数据影响，实际上也是进行了正则化，防止过拟合。</p>
-<h2 id="常见的几种BN"><a href="#常见的几种BN" class="headerlink" title="常见的几种BN"></a><font color="#9999cc" face="楷体" size="6">常见的几种</font><font color="#9999cc" face="Times" size="6">BN</font></h2><center><img src=".\3.png"></center>
+    while (curr_ind &lt; m * n) {
+        c[curr_ind] = a[curr_ind] + b[curr_ind];
+        curr_ind += step;
+    }
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p>kernel function 必须要有关键字 <code>__global__</code> 需要计算的是 step，就是并行计算一次，下标需要跨越多少来更换，它等于 每个 block 的有多少线程即 <code>blockDim.x</code> 和每个 grid 有多少即 <code>gridDim.x</code> 。这里的示范是只有一个维度的并行，矩阵可以 x， y 两个维度</p>
+<ul>
+<li>copy results back to CPU</li>
+</ul>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cudaMemcpy(h_o, d_o, sizeof(float) * (M * N), cudaMemcpyDeviceToHost);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h3 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="Batch Normalization"></a>Batch Normalization</h3><p>公式如下：<br>$$<br>\begin{aligned}<br>\mu_i &amp;\leftarrow \frac{1}{NHW}\sum x_i \\\<br>\sigma_i^2 &amp;\leftarrow \frac{1}{NHW}\sum (x_i - u_i)^2 \\\<br>\hat{x}_i &amp;\leftarrow \frac{x_i - u_i}{\sqrt{\sigma_i^2 + \epsilon}} \\\<br>y_i &amp;\leftarrow \gamma \hat{x}_i + \beta = BN(x)<br>\end{aligned}<br>$$<br>不妨拿一个 shape 为 [N, C, H, W] tensor 的为例（即 batch = N），计算一个 batch 内各个 tensor 相同的通道的均值和方差，伪代码如下：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-	u <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 参与计算的数据为这个通道的所有数据，数据量为 N * H * W</span>
-	sig_s <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
-	<span class="token builtin">input</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span> <span class="token operator">/</span> sqrt<span class="token punctuation">(</span>sig_S <span class="token operator">+</span> e<span class="token punctuation">)</span>
-	
-<span class="token builtin">input</span> <span class="token operator">=</span> gamma <span class="token operator">*</span> <span class="token builtin">input</span> <span class="token operator">+</span> beta <span class="token comment"># gamma with shape [1, C, 1, 1]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>其缺点也容易看出来就是 batch-size 太小统计就无意义了，等于只统计了 batch 里面的一个 tensor 的一个通道的数据。</p>
-<h3 id="Layer-Normalization"><a href="#Layer-Normalization" class="headerlink" title="Layer Normalization"></a>Layer Normalization</h3><p>公式如下：<br>$$<br>\begin{aligned}<br>\mu_i &amp;\leftarrow \frac{1}{CHW}\sum x_i \\\<br>\sigma_i^2 &amp;\leftarrow \frac{1}{CHW}\sum (x_i - u_i)^2 \\\<br>\hat{x}_i &amp;\leftarrow \frac{x_i - u_i}{\sqrt{\sigma_i^2 + \epsilon}} \\\<br>y_i &amp;\leftarrow \gamma \hat{x}_i + \beta = LN(x)<br>\end{aligned}<br>$$<br>LN 不对 batch 的数值进行依赖，非常适用 RNN 网络加速，对于 RNN 来说，sequence 的长度不一致，换句话说 RNN 的深度不固定，不同的 time-step 需要保存不同的 statics 特征，可能存在一个特殊 sequence 比其长很多，这对统计 batch 的 BN 很不友好，LN 可以很好解决这个问题，伪代码如下：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-	u <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 参与计算的数据为这个输入的所有数据，数据量为 C * H * W</span>
-	sig_s <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
-	<span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span> <span class="token operator">/</span> sqrt<span class="token punctuation">(</span>sig_S <span class="token operator">+</span> e<span class="token punctuation">)</span>
-	
-<span class="token builtin">input</span> <span class="token operator">=</span> gamma <span class="token operator">*</span> <span class="token builtin">input</span> <span class="token operator">+</span> beta <span class="token comment"># gamma with shape [N, 1, 1, 1]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>其实很简单就是统计一个样本的所有信息。</p>
-<h3 id="Instance-Normalization"><a href="#Instance-Normalization" class="headerlink" title="Instance Normalization"></a>Instance Normalization</h3><p>公式如下：<br>$$<br>\begin{aligned}<br>\mu_{ij} &amp;\leftarrow \frac{1}{HW}\sum x_{ij} \\\<br>\sigma_{ij}^2 &amp;\leftarrow \frac{1}{HW}\sum (x_{ij} - u_{ij})^2 \\\<br>\hat{x}_{ij} &amp;\leftarrow \frac{x_{ij} - u_{ij}}{\sqrt{\sigma_{ij}^2 + \epsilon}} \\\<br>y_{ij} &amp;\leftarrow \gamma \hat{x}_{ij} + \beta = IN(x)<br>\end{aligned}<br>$$<br>其伪代码如下：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-	<span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-		u <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 参与计算的数据为这个通道的所有数据，数据量为 H * W</span>
-		sig_s <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
-		<span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span> <span class="token operator">/</span> sqrt<span class="token punctuation">(</span>sig_S <span class="token operator">+</span> e<span class="token punctuation">)</span>
-		
-<span class="token builtin">input</span> <span class="token operator">=</span> gamma <span class="token operator">*</span> <span class="token builtin">input</span> <span class="token operator">+</span> beta <span class="token comment"># gamma with shape [N, C, 1, 1]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>IN 是对每个图像的每个通道进行归一化，其实有点像 BN 的 batch 为 1 的时候，常常用于图像的风格转换。</p>
-<h3 id="Group-Normalization"><a href="#Group-Normalization" class="headerlink" title="Group Normalization"></a>Group Normalization</h3><p>公式如下：<br>$$<br>\begin{aligned}<br>\mu_{ij} &amp;\leftarrow \frac{1}{(C // G)HW}\sum x_{ij} \\\<br>\sigma_{ij}^2 &amp;\leftarrow \frac{1}{(C // G)HW}\sum (x_{ij} - u_{ij})^2 \\\<br>\hat{x}_{ij} &amp;\leftarrow \frac{x_{ij} - u_{ij}}{\sqrt{\sigma_{ij}^2 + \epsilon}} \\\<br>y_{ij} &amp;\leftarrow \gamma \hat{x}_{ij} + \beta = GN(x)<br>\end{aligned}<br>$$<br>其伪代码如下：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">N<span class="token punctuation">,</span> C<span class="token punctuation">,</span> H<span class="token punctuation">,</span> W <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">.</span>shape
-<span class="token keyword">assert</span> C <span class="token operator">%</span> G <span class="token operator">==</span> <span class="token number">0</span>
-<span class="token builtin">input</span> <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span>N<span class="token punctuation">,</span> G<span class="token punctuation">,</span> C <span class="token operator">//</span> G<span class="token punctuation">,</span> H<span class="token punctuation">,</span> W<span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>N<span class="token punctuation">)</span><span class="token punctuation">:</span>
-	<span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>G<span class="token punctuation">)</span><span class="token punctuation">:</span>
-		u <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token comment"># 参与计算的数据为这个组的所有数据，数据量为 C // G * H * W</span>
-		sig_s <span class="token operator">=</span> mean<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span><span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span>
-		<span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span> <span class="token operator">-</span> u<span class="token punctuation">)</span> <span class="token operator">/</span> sqrt<span class="token punctuation">(</span>sig_S <span class="token operator">+</span> e<span class="token punctuation">)</span>
+<p>将计算结果拷回 cpu 中</p>
+<ul>
+<li>free memory</li>
+</ul>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cudaFree(d_a);
+cudaFree(d_b);
+cudaFree(d_o);
+free(h_a);
+free(h_b);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<span class="token builtin">input</span> <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token punctuation">[</span>N<span class="token punctuation">,</span> C<span class="token punctuation">,</span> H<span class="token punctuation">,</span> W<span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token builtin">input</span> <span class="token operator">=</span> gamma <span class="token operator">*</span> <span class="token builtin">input</span> <span class="token operator">+</span> beta <span class="token comment"># gamma with shape [1, C, 1, 1]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最后 <code>nvcc add.cu -o add.o</code> 生成可执行文件</p>
+<h3 id="Some-API"><a href="#Some-API" class="headerlink" title="Some API"></a>Some API</h3><ul>
+<li><p>cudaEvent_t</p>
+<p>可以理解为一个数据类型 – 指针类型的变量</p>
+</li>
+<li><p>cudaEventCreate(cudaEvent_t *event)</p>
+<p>创建 event 变量</p>
+</li>
+<li><p>cudaEventRecord(cudaEvent_t event, cudaStream_t stream __dv(0))</p>
+<p>记录 event 事件，对同一个 event，可以调用多次 cudaEventRecord(), 最新调用的值覆盖之前的旧值</p>
+</li>
+<li><p>cudaEventSynchronize(cudaEvent_t event)</p>
+<p>用于 event 事件的同步，在调用此函数之后保证 event 已经结束</p>
+</li>
+<li><p>cudaEventElapsedTime(float *ms, cudaEvent_t start, cudaEvent_t end) </p>
+<p>统计start和end 2个event之间的时间间隔, 单位毫秒(ms)，此函数的时间分辨率为0.5us</p>
+</li>
+<li><p>cudaEventDestroy(cudaEvent_t event)</p>
+</li>
+</ul>
+<h3 id="二维的矩阵相加示例"><a href="#二维的矩阵相加示例" class="headerlink" title="二维的矩阵相加示例"></a>二维的矩阵相加示例</h3><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;
 
-<p>完结 🍗🍗🍗</p>
+#define M 2000
+#define N 1000
+
+using namespace std;
+
+__global__ void m_add(float c[][N], float a[][N], float b[][N], int m, int n){
+    // get ind
+    int x_i = threadIdx.x + blockIdx.x;
+    int y_i = threadIdx.y + blockIdx.y;
+
+    if (x_i &lt; m &amp;&amp; y_i &lt; n) {
+        c[x_i][y_i] = a[x_i][y_i] + b[x_i][y_i];
+    }
+}
+
+int main() {
+    float (*h_a)[N] = new float[M][N];
+    float (*h_b)[N] = new float[M][N];
+    float (*h_o)[N] = new float[M][N];
+    float (*d_a)[N], (*d_b)[N], (*d_o)[N];
+
+    // define timer
+    cudaEvent_t start, stop;
+
+    // initialize data
+    for (int i = 0; i &lt; M; ++i) {
+        for (int j = 0; j &lt; N; ++j) {
+            h_a[i][j] = i + j + 2.232f;
+            h_b[i][j] = i + 2 * j;
+        }
+    }
+
+    // GPU memory allco
+    cudaMalloc((void**) &amp;d_a, sizeof(float) * (M * N));
+    cudaMalloc((void**) &amp;d_b, sizeof(float) * (M * N));
+    cudaMalloc((void**) &amp;d_o, sizeof(float) * (M * N));
+
+    // copy from CPU to GPU
+    cudaMemcpy(d_a, h_a, sizeof(float) * (M * N), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_b, h_b, sizeof(float) * (M * N), cudaMemcpyHostToDevice);
+
+    cudaEventCreate(&amp;start);
+    cudaEventCreate(&amp;stop);
+    cudaEventRecord(start, 0);
+    // cuda add
+    dim3 block_num(M, N);
+    m_add&lt;&lt;&lt;block_num, 1&gt;&gt;&gt;(d_o, d_a, d_b, M, N);
+
+    // copy results back to CPU
+    cudaMemcpy(h_o, d_o, sizeof(float) * (M * N), cudaMemcpyDeviceToHost);
+
+    cudaEventRecord(stop, 0);
+    cudaEventSynchronize(stop);
+    float elapsedTime;
+    cudaEventElapsedTime(&amp;elapsedTime, start, stop);
+
+    cout &lt;&lt; "The kernel function is during: " &lt;&lt; elapsedTime &lt;&lt; endl;
+
+    cout &lt;&lt; "The final number (M * N): " &lt;&lt; h_o[234][21];
+    // free GPU mem
+    cudaFree(d_a);
+    cudaFree(d_b);
+    cudaFree(d_o);
+    free(h_a);
+    free(h_b);
+
+    return 0;
+
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>只是demo，待重新整理~</p>
 
                 
             </div>
@@ -467,7 +550,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://froml77.cn/2022/06/16/bn/">https://froml77.cn/2022/06/16/bn/</a>
+                    <a href="https://froml77.cn/2022/09/14/cuda1/">https://froml77.cn/2022/09/14/cuda1/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -505,12 +588,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
-                                    <span class="chip bg-color">深度学习</span>
-                                </a>
-                            
-                                <a href="/tags/BN/">
-                                    <span class="chip bg-color">BN</span>
+                                <a href="/tags/cuda/">
+                                    <span class="chip bg-color">cuda</span>
                                 </a>
                             
                         </div>
@@ -555,7 +634,7 @@
         repo: 'FL77N.github.io',
         owner: 'fl77n',
         admin: "fl77n",
-        id: '2022-06-16T09-58-06',
+        id: '2022-09-14T21-13-02',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -851,29 +930,30 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/07/02/intialization/">
+                <a href="/2022/09/14/cuda1/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="深度学习初始化的种种">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="cuda 学习 -- （一）">
                         
-                        <span class="card-title">深度学习初始化的种种</span>
+                        <span class="card-title">cuda 学习 -- （一）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            深度学习权重初始化的推导
+                            Rank & Sort Loss 论文解读及核心代码解读
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-07-02
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-14
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -882,23 +962,20 @@
                                     算法
                                 </a>
                             
-                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
-                                    知识整理
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/" class="post-category">
+                                    编程
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
-                        <span class="chip bg-color">深度学习</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/">
-                        <span class="chip bg-color">权重初始化</span>
+                    <a href="/tags/cuda/">
+                        <span class="chip bg-color">cuda</span>
                     </a>
                     
                 </div>
@@ -912,35 +989,35 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/06/05/bian-xian-ji-fen-qiu-dao/">
+                <a href="/2022/08/07/rank-sort-loss/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="变限积分求导的种种">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Rank &amp; Sort Loss 解读">
                         
-                        <span class="card-title">变限积分求导的种种</span>
+                        <span class="card-title">Rank &amp; Sort Loss 解读</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            变限积分求导的介绍
+                            Rank & Sort Loss 论文解读及核心代码解读
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-05
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-07
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
-                                    知识整理
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
                                 </a>
                             
-                            <a href="/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/%E6%95%B0%E5%AD%A6/" class="post-category">
-                                    数学
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" class="post-category">
+                                    论文解读
                                 </a>
                             
                             
@@ -950,8 +1027,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/">
-                        <span class="chip bg-color">微积分</span>
+                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">深度学习</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">
+                        <span class="chip bg-color">计算机视觉</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
+                        <span class="chip bg-color">目标检测</span>
                     </a>
                     
                 </div>
@@ -1025,13 +1110,6 @@
 
 </main>
 
-
-<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
-    });
-</script>
 
 
 
