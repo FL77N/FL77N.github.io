@@ -6,7 +6,7 @@
   <link href="https://froml77.cn/atom.xml" rel="self"/>
   
   <link href="https://froml77.cn/"/>
-  <updated>2022-09-27T14:47:41.127Z</updated>
+  <updated>2022-09-27T15:31:59.195Z</updated>
   <id>https://froml77.cn/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>diary-22-09-26</title>
+    <link href="https://froml77.cn/2022/09/27/diary-22-09-26/"/>
+    <id>https://froml77.cn/2022/09/27/diary-22-09-26/</id>
+    <published>2022-09-27T14:53:24.000Z</published>
+    <updated>2022-09-27T15:31:59.195Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;center&gt;&lt;img src=&quot;./1.png&quot; height=&quot;60%&quot; width=&quot;60%&quot;&gt;&lt;/center&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;📌 &lt;font face=&quot;华文细黑&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="杂记" scheme="https://froml77.cn/categories/%E6%9D%82%E8%AE%B0/"/>
+    
+    
+    <category term="日记" scheme="https://froml77.cn/tags/%E6%97%A5%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>cuda 学习 -- （一）</title>
