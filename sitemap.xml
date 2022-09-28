@@ -164,6 +164,13 @@
 
   
   <url>
+    <loc>https://froml77.cn/tags/cuda/</loc>
+    <lastmod>2022-09-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://froml77.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2022-09-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -178,21 +185,14 @@
   </url>
   
   <url>
-    <loc>https://froml77.cn/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/</loc>
-    <lastmod>2022-09-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://froml77.cn/tags/cuda/</loc>
-    <lastmod>2022-09-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://froml77.cn/tags/%E6%97%A5%E8%AE%B0/</loc>
+    <lastmod>2022-09-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://froml77.cn/tags/%E6%9D%83%E9%87%8D%E5%88%9D%E5%A7%8B%E5%8C%96/</loc>
     <lastmod>2022-09-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -220,6 +220,13 @@
   </url>
   
   <url>
+    <loc>https://froml77.cn/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/</loc>
+    <lastmod>2022-09-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://froml77.cn/tags/%E7%82%92/</loc>
     <lastmod>2022-09-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -228,13 +235,6 @@
   
   <url>
     <loc>https://froml77.cn/tags/%E7%85%AE/</loc>
-    <lastmod>2022-09-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://froml77.cn/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/</loc>
     <lastmod>2022-09-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -306,6 +306,13 @@
   </url>
   
   <url>
+    <loc>https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/%E6%95%99%E7%A8%8B/</loc>
+    <lastmod>2022-09-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://froml77.cn/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/</loc>
     <lastmod>2022-09-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -314,13 +321,6 @@
   
   <url>
     <loc>https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/</loc>
-    <lastmod>2022-09-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2022-09-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
