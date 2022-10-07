@@ -182,6 +182,13 @@
 
   
   <url>
+    <loc>https://froml77.cn/tags/cuda/</loc>
+    <lastmod>2022-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://froml77.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2022-10-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -190,13 +197,6 @@
   
   <url>
     <loc>https://froml77.cn/tags/BN/</loc>
-    <lastmod>2022-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://froml77.cn/tags/cuda/</loc>
     <lastmod>2022-10-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -238,6 +238,13 @@
   </url>
   
   <url>
+    <loc>https://froml77.cn/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/</loc>
+    <lastmod>2022-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://froml77.cn/tags/%E7%82%92/</loc>
     <lastmod>2022-10-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -246,13 +253,6 @@
   
   <url>
     <loc>https://froml77.cn/tags/%E7%85%AE/</loc>
-    <lastmod>2022-10-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://froml77.cn/tags/%E5%BE%AE%E7%A7%AF%E5%88%86/</loc>
     <lastmod>2022-10-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -352,14 +352,14 @@
   </url>
   
   <url>
-    <loc>https://froml77.cn/categories/%E6%95%99%E7%A8%8B/</loc>
+    <loc>https://froml77.cn/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/%E6%95%B0%E5%AD%A6/</loc>
     <lastmod>2022-10-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://froml77.cn/categories/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/%E6%95%B0%E5%AD%A6/</loc>
+    <loc>https://froml77.cn/categories/%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2022-10-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
