@@ -6,7 +6,7 @@
   <link href="https://froml77.cn/atom.xml" rel="self"/>
   
   <link href="https://froml77.cn/"/>
-  <updated>2022-10-07T14:46:33.799Z</updated>
+  <updated>2022-10-23T14:20:04.784Z</updated>
   <id>https://froml77.cn/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>cuda 编程（入门版）</title>
+    <link href="https://froml77.cn/2022/10/23/cuda1/"/>
+    <id>https://froml77.cn/2022/10/23/cuda1/</id>
+    <published>2022-10-23T13:13:02.000Z</published>
+    <updated>2022-10-23T14:20:04.784Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;矩阵相加&quot;&gt;&lt;a href=&quot;#矩阵相加&quot; class=&quot;headerlink&quot; title=&quot;矩阵相加&quot;&gt;&lt;/a&gt;矩阵相加&lt;/h2&gt;&lt;p&gt;这一节主要记录一些 cuda 编程的常规流程，并介绍一些术语&lt;/p&gt;
+&lt;h3 id=&quot;流程&quot;&gt;&lt;a href=&quot;#流程&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="编程" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+    <category term="cuda" scheme="https://froml77.cn/tags/cuda/"/>
+    
+  </entry>
   
   <entry>
     <title>番茄炒鸡蛋</title>
@@ -95,33 +123,6 @@
     
     
     <category term="日记" scheme="https://froml77.cn/tags/%E6%97%A5%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>cuda 学习 -- （一）</title>
-    <link href="https://froml77.cn/2022/09/14/cuda1/"/>
-    <id>https://froml77.cn/2022/09/14/cuda1/</id>
-    <published>2022-09-14T13:13:02.000Z</published>
-    <updated>2022-09-28T13:07:07.485Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;矩阵相加&quot;&gt;&lt;a href=&quot;#矩阵相加&quot; class=&quot;headerlink&quot; title=&quot;矩阵相加&quot;&gt;&lt;/a&gt;矩阵相加&lt;/h2&gt;&lt;h3 id=&quot;流程&quot;&gt;&lt;a href=&quot;#流程&quot; class=&quot;headerlink&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="编程" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-    <category term="cuda" scheme="https://froml77.cn/tags/cuda/"/>
     
   </entry>
   
