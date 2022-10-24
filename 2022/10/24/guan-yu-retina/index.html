@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="cuda 编程（入门版）, 来自L77星云">
-    <meta name="description" content="cuda 学习记录">
+    <meta name="keywords" content="diary-22-10-22, 来自L77星云">
+    <meta name="description" content="关于 retina">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -30,7 +30,7 @@
 
     
 
-    <title>cuda 编程（入门版） | 来自L77星云</title>
+    <title>diary-22-10-22 | 来自L77星云</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -292,12 +292,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">cuda 编程（入门版）</h1>
+                    <h1 class="description center-align post-title">diary-22-10-22</h1>
                 </div>
             </div>
         </div>
@@ -307,10 +307,104 @@
 
 
 
-<main class="container content">
+<main class="post-container content">
 
     
-    <!-- 文章内容详情 -->
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
@@ -319,8 +413,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/cuda/">
-                                <span class="chip bg-color">cuda</span>
+                            <a href="/tags/%E6%97%A5%E8%AE%B0/">
+                                <span class="chip bg-color">日记</span>
                             </a>
                         
                     </div>
@@ -331,12 +425,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                算法
-                            </a>
-                        
-                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/" class="post-category">
-                                编程
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                杂记
                             </a>
                         
                     </div>
@@ -348,7 +438,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-10-23
+                    2022-10-24
                 </div>
                 
 
@@ -357,14 +447,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.8k
+                    120
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    1 分
                 </div>
                 
 
@@ -387,350 +477,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="矩阵相加"><a href="#矩阵相加" class="headerlink" title="矩阵相加"></a>矩阵相加</h2><p>这一节主要记录一些 cuda 编程的常规流程，并介绍一些术语</p>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
-<li>memory alloc  用于在 gpu 上开辟空间</li>
-</ul>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cudaMalloc((void**) &amp;d_o, sizeof(float) * (M * N));
-cudaMalloc((void**) &amp;d_a, sizeof(float) * (M * N));
-cudaMalloc((void**) &amp;d_b, sizeof(float) * (M * N));<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+                <center><img src="./1.jpg" height="60%" width="60%"></center>
 
-<p>其中 M 和 N 分别是矩阵的行和列</p>
-<ul>
-<li>copy data</li>
-</ul>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cudaMemcpy(d_o, h_o, sizeof(float) * (M * N), cudaMemcpyHostToDevice);
-cudaMemcpy(d_a, h_a, sizeof(float) * (M * N), cudaMemcpyHostToDevice);
-cudaMemcpy(d_b, h_b, sizeof(float) * (M * N), cudaMemcpyHostToDevice);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>📌 <font face="华文细黑" color="pink">这是我滴猫猫的介绍</font></p>
+</blockquote>
+<p>没错上图的猫咪🐱叫做 retina，其名字取于著名一阶段目标检测人工智能算法 RetinaNet。</p>
+<p>中文名： <font color="#5CADAD" face="华文细黑" size="4">嘟 der</font></p>
+<p>🎎 性别：<font color="#5CADAD" face="华文细黑" size="4">弟弟</font></p>
+<p>🎂 生日： <font color="#5CADAD" face="华文细黑" size="4">2022 年 08 月 06 日</font></p>
+<p>第二针疫苗： <font color="#5CADAD" face="华文细黑" size="4">2022 年 10 月 20 日</font></p>
+<center><img src="./2.jpg" height="60%" width="60%"></center>
 
-<p>把 cpu 上的数据拷贝到 gpu 上来</p>
-<ul>
-<li>kernel function</li>
-</ul>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">__global__ void m_add(float *c, float *a, float *b, int m, int n){
-    // get ind
-    const int block_ind = blockIdx.x;
-    const int thread_ind = threadIdx.x;
-    const int step = blockDim.x * gridDim.x;
-    int curr_ind = block_ind * blockDim.x + thread_ind;
-
-    while (curr_ind &lt; m * n) {
-        c[curr_ind] = a[curr_ind] + b[curr_ind];
-        curr_ind += step;
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>kernel function 必须要有关键字 <code>__global__</code> 需要计算的是 step，就是并行计算一次，下标需要跨越多少来更换，它等于 每个 block 的有多少线程即 <code>blockDim.x</code> 和每个 grid 有多少即 <code>gridDim.x</code> 。这里的示范是只有一个维度的并行，矩阵可以 x， y 两个维度</p>
-<ul>
-<li>copy results back to CPU</li>
-</ul>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cudaMemcpy(h_o, d_o, sizeof(float) * (M * N), cudaMemcpyDeviceToHost);
-cudaMemcpy(h_a, d_a, sizeof(float) * (M * N), cudaMemcpyDeviceToHost);
-cudaMemcpy(h_b, d_b, sizeof(float) * (M * N), cudaMemcpyDeviceToHost);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>将计算结果拷回 cpu 中</p>
-<ul>
-<li>free memory</li>
-</ul>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">cudaFree(d_a);
-cudaFree(d_b);
-cudaFree(d_o);
-free(h_a);
-free(h_b);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>最后 <code>nvcc add.cu -o add.o</code> 生成可执行文件</p>
-<h3 id="Some-API"><a href="#Some-API" class="headerlink" title="Some API"></a>Some API</h3><ul>
-<li><p>cudaEvent_t</p>
-<p>可以理解为一个数据类型 – 指针类型的变量</p>
-</li>
-<li><p>cudaEventCreate(cudaEvent_t *event)</p>
-<p>创建 event 变量</p>
-</li>
-<li><p>cudaEventRecord(cudaEvent_t event, cudaStream_t stream __dv(0))</p>
-<p>记录 event 事件，对同一个 event，可以调用多次 cudaEventRecord(), 最新调用的值覆盖之前的旧值</p>
-</li>
-<li><p>cudaEventSynchronize(cudaEvent_t event)</p>
-<p>用于 event 事件的同步，在调用此函数之后保证 event 已经结束</p>
-</li>
-<li><p>cudaEventElapsedTime(float *ms, cudaEvent_t start, cudaEvent_t end) </p>
-<p>统计start和end 2个event之间的时间间隔, 单位毫秒(ms)，此函数的时间分辨率为0.5us</p>
-</li>
-<li><p>cudaEventDestroy(cudaEvent_t event)</p>
-</li>
-</ul>
-<h3 id="二维的矩阵相加示例"><a href="#二维的矩阵相加示例" class="headerlink" title="二维的矩阵相加示例"></a>二维的矩阵相加示例</h3><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">#include &lt;iostream&gt;
-
-#define M 2000
-#define N 1000
-
-using namespace std;
-
-__global__ void m_add(float c[][N], float a[][N], float b[][N], int m, int n){
-    // get ind
-    int x_i = threadIdx.x + blockIdx.x;
-    int y_i = threadIdx.y + blockIdx.y;
-
-    if (x_i &lt; m &amp;&amp; y_i &lt; n) {
-        c[x_i][y_i] = a[x_i][y_i] + b[x_i][y_i];
-    }
-}
-
-int main() {
-    float (*h_a)[N] = new float[M][N];
-    float (*h_b)[N] = new float[M][N];
-    float (*h_o)[N] = new float[M][N];
-    float (*d_a)[N], (*d_b)[N], (*d_o)[N];
-
-    // define timer
-    cudaEvent_t start, stop;
-
-    // initialize data
-    for (int i = 0; i &lt; M; ++i) {
-        for (int j = 0; j &lt; N; ++j) {
-            h_a[i][j] = i + j + 2.232f;
-            h_b[i][j] = i + 2 * j;
-        }
-    }
-
-    // GPU memory allco
-    cudaMalloc((void**) &amp;d_a, sizeof(float) * (M * N));
-    cudaMalloc((void**) &amp;d_b, sizeof(float) * (M * N));
-    cudaMalloc((void**) &amp;d_o, sizeof(float) * (M * N));
-
-    // copy from CPU to GPU
-    cudaMemcpy(d_a, h_a, sizeof(float) * (M * N), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_b, h_b, sizeof(float) * (M * N), cudaMemcpyHostToDevice);
-
-    cudaEventCreate(&amp;start);
-    cudaEventCreate(&amp;stop);
-    cudaEventRecord(start, 0);
-    // cuda add
-    dim3 block_num(M, N);
-    m_add&lt;&lt;&lt;block_num, 1&gt;&gt;&gt;(d_o, d_a, d_b, M, N);
-
-    // copy results back to CPU
-    cudaMemcpy(h_o, d_o, sizeof(float) * (M * N), cudaMemcpyDeviceToHost);
-
-    cudaEventRecord(stop, 0);
-    cudaEventSynchronize(stop);
-    float elapsedTime;
-    cudaEventElapsedTime(&amp;elapsedTime, start, stop);
-
-    cout &lt;&lt; "The kernel function is during: " &lt;&lt; elapsedTime &lt;&lt; endl;
-
-    cout &lt;&lt; "The final number (M * N): " &lt;&lt; h_o[234][21];
-    // free GPU mem
-    cudaFree(d_a);
-    cudaFree(d_b);
-    cudaFree(d_o);
-    free(h_a);
-    free(h_b);
-
-    return 0;
-
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="向量内积"><a href="#向量内积" class="headerlink" title="向量内积"></a>向量内积</h2><p>向量内积分为两步：点对点相乘，然后所有元素求和。这节内容的重点不是讲点对点相乘，因为其实这个和相加一样的。主要讲第二步求和，也叫做归约。</p>
-<h3 id="不同的向量内积计算方式"><a href="#不同的向量内积计算方式" class="headerlink" title="不同的向量内积计算方式"></a>不同的向量内积计算方式</h3><ul>
-<li>分散归约</li>
-</ul>
-<center><img src="./1.png" height="50%" width="50%"></center>
-
-<p>如上图，是分散归约的示意图，也就是每轮求和，都与自己旁边的线程进行相加，最后归约到 0 线程，代码如下：</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">__global__ void  vector_dot_product(float *c, float *a, float *b, int n){
-    // alloc shared momery for effictive computing
-    __shared__ float tmp_arr[thread_num];
-    const int t_idx = threadIdx.x;
-    const int b_dim = blockDim.x;
-    int tid = t_idx;
-    double temp = 0.0;
-    
-    while(tid&lt;n) {
-        temp += a[tid] * b[tid];
-	tid += b_dim;
-    }
-    tmp_arr[t_idx] = temp;
-
-    // wait all threads for temp
-    __syncthreads();
-    int i = 2, j = 1;
-    while(i &lt;= thread_num) {
-        if ((t_idx % i) == 0) {
-	    tmp_arr[t_idx] += tmp_arr[t_idx + j];
-	}
-	__syncthreads();
-	i *= 2;
-	j *= 2;
-    }
-    if (t_idx == 0) c[0] = tmp_arr[0];
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>分散归约存在缺陷：访问相邻两个单元，违背了访存对齐原则；需要多个 warp 性能损失；可能引发 bank conflict。__syncthreads(); 也就是等待同一个 block 的线程都完成此操作。</p>
-<ul>
-<li>低线程归约</li>
-</ul>
-<center><img src="./2.png" height="50%" width="50%"></center>
-
-<p>如图，顾名思义就是将后面的线程全部归约到前面的线程中来，每次减少一半。代码如下：</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">__global__ void  vector_dot_product(float *c, float *a, float *b, int n){
-    // alloc shared momery for effictive computing
-    __shared__ float tmp_arr[thread_num];
-    const int t_idx = threadIdx.x;
-    const int b_dim = blockDim.x;
-    int tid = t_idx;
-    double temp = 0.0;
-
-    while(tid&lt;n) {
-        temp += a[tid] * b[tid];
-        tid += b_dim;
-    }
-    tmp_arr[t_idx] = temp;
-
-    // wait all threads for temp
-    __syncthreads();
-    int i = thread_num / 2;
-    while(i != 0) {
-        if (t_idx &lt; i) {
-            tmp_arr[t_idx] += tmp_arr[t_idx + i];
-        }
-        __syncthreads();
-       i /= 2;
-    }
-    if (t_idx == 0) c[0] = tmp_arr[0];
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ul>
-<li>cpu 进行二次归约</li>
-</ul>
-<p>以上都是单个 block 多线程的计算，显然如果开多个 block，以上只是计算了每个 block 的结果，还要对各个 block 的结果进行二次归约。首先在 gpu 上计算各个 block 的结果</p>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">__global__ void  vector_dot_product(float *c, float *a, float *b, int n){
-	    // alloc shared momery for effictive computing
-    __shared__ float tmp_arr[thread_num];
-    const int t_idx = threadIdx.x;
-    const int b_idx = blockIdx.x;
-    const int step = blockDim.x * gridDim.x;
-    int tid = t_idx + b_idx * blockDim.x;
-    double temp = 0.0;
-
-    while(tid&lt;n) {
-        temp += a[tid] * b[tid];
-        tid += step;
-    }
-    tmp_arr[t_idx] = temp;
-
-    // wait all threads for temp
-    __syncthreads();
-    int i = thread_num / 2;
-    while(i != 0) {
-        if (t_idx&lt;i) {
-            tmp_arr[t_idx] += tmp_arr[t_idx + i];
-        }
-        __syncthreads();
-	i /= 2;
-    }
-    if (t_idx == 0) c[b_idx] = tmp_arr[0];
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>然后在 cpu 上对各个 block 的结果进行归约</p>
-<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">if (cpu_sum) {
-        float temp = 0;
-	for (int i = 0; i &lt; block_num; ++i) {
-            temp += h_o[i];
-    }
-	h_o[0] = temp;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<ul>
-<li>基于原子操作的向量内积</li>
-</ul>
-<p>原子操作 (ATOM) 可以保证线程互斥地访问全局存储或共享存储上的某一数据，因此可以用它来进行简化两次归约，但要注意原子操作结果是直接写回存储，返回值是旧值。</p>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">__global__ void vector_dot_product(float *c, float *a, float *b, int n) {
-    if ((threadIdx.x == 0) &amp;&amp; (blockIdx.x == 0)) {
-        c[0] = 0.0;
-    }
-    __shared__ float tmp[thread_num];
-    const int tidx = threadIdx.x;
-    const int bidx = blockIdx.x;
-    const int t_n = blockDim.x * gridDim.x;
-    int tid = bidx * blockDim.x + tidx;
-    double temp = 0.0;
-    while (tid &lt; n) {
-        temp += a[tid] * b[tid];
-	tid += t_n;
-    }
-    tmp[tidx] = temp;
-
-    __syncthreads();
-    int i = blockDim.x / 2;
-    while(i != 0) {
-        if (tidx &lt; i) {
-	        tmp[tidx] += tmp[tidx + i];
-		}
-		__syncthreads();
-		i /= 2;
-    }
-
-    if (tidx == 0) {
-        atomicAdd(c, tmp[0]);
-    }
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>其实就是最后一步不一样，前面是低线程归约的内容</p>
-<ul>
-<li>计数法实现多 block 向量内积</li>
-</ul>
-<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">__device__ void vector_dot(float *t, volatile float *tmp) {
-    const int tidx = threadIdx.x;
-    int i = blockDim.x / 2;
-    while (i != 0) {
-        if (tidx &lt; i) {
-	    tmp[tidx] += tmp[tidx + i];
-	}
-	__syncthreads();
-	i /= 2;
-
-	if (tidx == 0) t[0] = tmp[0];
-    }
-}
-
-__device__ unsigned int lockcount = 0;
-
-__global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n) {
-    __shared__ float tmp[thread_num];
-    const int tidx = threadIdx.x;
-    const int bidx = blockIdx.x;
-    const int t_n = blockDim.x * gridDim.x;
-    int tid = bidx * blockDim.x + tidx;
-    double temp = 0.0;
-    while (tid &lt; n) {
-        temp += a[tid] * b[tid];
-	tid += t_n;
-    }
-    tmp[tidx] = temp;
-
-    __syncthreads();
-
-    vector_dot(&amp;t[bidx], tmp);
-
-    __shared__ bool lock;
-    __threadfence();
-    if (tidx == 0) {
-        unsigned int lockiii = atomicAdd(&amp;lockcount, 1);
-	lock = (lockcount==gridDim.x);
-    }
-    __syncthreads();
-    if(lock) {
-	// block_num must less than thread_num
-        tmp[tidx] = t[tidx];
-	__syncthreads();
-	vector_dot(c, tmp);
-//	lockcount=0;
-    }
-}
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>计数法先对每个 block 完成归约过程，保存在中间结果 t 中，然后使用语句 __threadfence(); 后接上原子操作实现栅栏同步，直到最后一个 block 抵达栅栏，读取 t 中的数据完成归约，这里注意，开的 block 必须小于线程数才行，不然 <code>tmp[tidx] = t[tidx];</code> 会复制不完全。</p>
-<p><em>待续</em></p>
+<p>🔮 <font color="5151A2" size="4" face="楷体">目前就是比较粘人，回到家后就会一直叫（也可能是白天没有怎么陪他），但是撸它过后，它就不叫了。运动能力也强，喜欢在家跑酷</font></p>
 
                 
             </div>
@@ -757,7 +516,7 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://froml77.cn/2022/10/23/cuda1/">https://froml77.cn/2022/10/23/cuda1/</a>
+                    <a href="https://froml77.cn/2022/10/24/guan-yu-retina/">https://froml77.cn/2022/10/24/guan-yu-retina/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -795,8 +554,8 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/cuda/">
-                                    <span class="chip bg-color">cuda</span>
+                                <a href="/tags/%E6%97%A5%E8%AE%B0/">
+                                    <span class="chip bg-color">日记</span>
                                 </a>
                             
                         </div>
@@ -841,7 +600,7 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
         repo: 'FL77N.github.io',
         owner: 'fl77n',
         admin: "fl77n",
-        id: '2022-10-23T21-13-02',
+        id: '2022-10-24T22-15-50',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1137,9 +896,10 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/10/24/guan-yu-retina/">
                     <div class="card-image">
@@ -1157,9 +917,9 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-10-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-24
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1172,6 +932,7 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1190,35 +951,35 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/10/07/fan-qie-chao-ji-dan/">
+                <a href="/2022/10/23/cuda1/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="番茄炒鸡蛋">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="cuda 编程（入门版）">
                         
-                        <span class="card-title">番茄炒鸡蛋</span>
+                        <span class="card-title">cuda 编程（入门版）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            番茄炒鸡蛋的制作过程
+                            cuda 学习记录
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-07
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-23
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%83%B9%E9%A5%AA/" class="post-category">
-                                    烹饪
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
                                 </a>
                             
-                            <a href="/categories/%E7%83%B9%E9%A5%AA/%E6%95%99%E7%A8%8B/" class="post-category">
-                                    教程
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/" class="post-category">
+                                    编程
                                 </a>
                             
                             
@@ -1228,8 +989,8 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%82%92/">
-                        <span class="chip bg-color">炒</span>
+                    <a href="/tags/cuda/">
+                        <span class="chip bg-color">cuda</span>
                     </a>
                     
                 </div>
@@ -1298,6 +1059,87 @@ __global__ void vector_dot_product(float *c, float *a, float *b, float *t, int n
 
 <script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
 
     
 
