@@ -6,7 +6,7 @@
   <link href="https://froml77.cn/atom.xml" rel="self"/>
   
   <link href="https://froml77.cn/"/>
-  <updated>2022-10-24T14:41:05.693Z</updated>
+  <updated>2022-10-30T03:55:07.261Z</updated>
   <id>https://froml77.cn/</id>
   
   <author>
@@ -17,11 +17,40 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>关于深度学习优化器的种种</title>
+    <link href="https://froml77.cn/2022/10/30/you-hua-qi/"/>
+    <id>https://froml77.cn/2022/10/30/you-hua-qi/</id>
+    <published>2022-10-30T03:51:54.000Z</published>
+    <updated>2022-10-30T03:55:07.261Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;深度学习优化器&quot;&gt;&lt;a href=&quot;#深度学习优化器&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="知识整理" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/"/>
+    
+    
+    <category term="深度学习" scheme="https://froml77.cn/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="BN" scheme="https://froml77.cn/tags/BN/"/>
+    
+  </entry>
+  
+  <entry>
     <title>diary-22-10-22</title>
     <link href="https://froml77.cn/2022/10/24/guan-yu-retina/"/>
     <id>https://froml77.cn/2022/10/24/guan-yu-retina/</id>
     <published>2022-10-24T14:15:50.000Z</published>
-    <updated>2022-10-24T14:41:05.693Z</updated>
+    <updated>2022-10-30T03:49:36.301Z</updated>
     
     
       
@@ -49,7 +78,7 @@
     <link href="https://froml77.cn/2022/10/23/cuda1/"/>
     <id>https://froml77.cn/2022/10/23/cuda1/</id>
     <published>2022-10-23T13:13:02.000Z</published>
-    <updated>2022-10-23T14:20:04.784Z</updated>
+    <updated>2022-10-30T03:48:56.528Z</updated>
     
     
       

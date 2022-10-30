@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="matery 的主题设置, 来自L77星云">
-    <meta name="description" content="基于 Hexo 的个人博客部署">
+    <meta name="keywords" content="关于深度学习优化器的种种, 来自L77星云">
+    <meta name="description" content="关于常见优化器的介绍">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -30,7 +30,7 @@
 
     
 
-    <title>matery 的主题设置 | 来自L77星云</title>
+    <title>关于深度学习优化器的种种 | 来自L77星云</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -292,12 +292,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">matery 的主题设置</h1>
+                    <h1 class="description center-align post-title">关于深度学习优化器的种种</h1>
                 </div>
             </div>
         </div>
@@ -307,10 +307,104 @@
 
 
 
-<main class="container content">
+<main class="post-container content">
 
     
-    <!-- 文章内容详情 -->
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
 <div id="artDetail">
     <div class="card">
         <div class="card-content article-info">
@@ -319,12 +413,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98/">
-                                <span class="chip bg-color">博客主题</span>
+                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">深度学习</span>
                             </a>
                         
-                            <a href="/tags/Hexo/">
-                                <span class="chip bg-color">Hexo</span>
+                            <a href="/tags/BN/">
+                                <span class="chip bg-color">BN</span>
                             </a>
                         
                     </div>
@@ -335,8 +429,12 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E6%95%99%E7%A8%8B/" class="post-category">
-                                教程
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                算法
+                            </a>
+                        
+                            <a href="/categories/%E7%AE%97%E6%B3%95/%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="post-category">
+                                知识整理
                             </a>
                         
                     </div>
@@ -348,7 +446,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-04-28
+                    2022-10-30
                 </div>
                 
 
@@ -357,14 +455,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.8k
+                    3.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    16 分
+                    13 分
                 </div>
                 
 
@@ -387,416 +485,62 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="spades-开篇"><a href="#spades-开篇" class="headerlink" title=" ♠ 开篇"></a><font color="#A8FF24"> ♠ 开篇</font></h3><p>虽然之前用 CSDN 和博客园写过博客，但这算是我第一个真正的个人博客。感觉 matery 这个主题做的十分优美，因此选择了它作为主题部署。第一篇博文做一个记录。</p>
-<h2 id="clubs-博客搭建过程"><a href="#clubs-博客搭建过程" class="headerlink" title="♣博客搭建过程"></a><font color="#CA8EFF">♣博客搭建过程</font></h2><p>在搭建博客之前，需要先安装分布式版本控制工具 Git，之后我们可以直接用它来执行安装的命令。由于这个不是本次的重点，大家可以自行上网搜索安装教程。然后需要一个 Github 账号，我们最终需要将其部署到 Github 上去，然后需要去搜索如何将 Github 与本地连接。</p>
-<center><img src="1.png" height="60%" width="60%"></center>
-
-<p>新建一个 repository，必须以红框的格式命名 xxx.github.io（其中 xxx 为你的 Github 用户名）。</p>
-<center><img src="./2.png" height="60%" width="60%"></center>
-
-<p>然后点击该 repository 的 setting，里面有一个 Pages。选择红框中的某一分支作为你部署博客的代码，然后再选择一个主题（choose a theme）。</p>
-<h3 id="Hexo-博客框架的安装"><a href="#Hexo-博客框架的安装" class="headerlink" title="Hexo 博客框架的安装"></a>Hexo 博客框架的安装</h3><ul>
-<li><p>Hexo 与 Node.js 版本对应问题可以查看<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">官网</a></p>
-</li>
-<li><p>首先是安装 Node.js：这里直接去官网里面下载，不过要注意它和 Hexo 的版本，我这里的 node 是 12.20.0。安装的过程就是一录 next 就行。</p>
-</li>
-<li><p>然后就是安装 Hexo：首先需要新建一个文件夹，作为装你博客以及搭建博客源码的地方；然后在该目录下右键点击 “Git Bash Here”，这个时候会弹出一个控制台，接下来以及以后发布博客都在该控制台操作。输入 <code>npm i hexo-cli -g</code> 安装 Hexo，然后输入 <code>hexo -v</code> 验证是否安装成功。我的如下图：</p>
-<center><img src="./3.png" height="60%" width="60%"></center>
-
-<p>最后输入 <code>hexo init</code> 初始化文件夹，输入  <code>npm install</code> 安装必要的依赖。</p>
-</li>
-<li><p>这个时候需要先修改 _config.yml 中的个人信息：</p>
-<pre class="line-numbers language-none"><code class="language-none"># 这部分内容需要改成自己的信息
-title: your title
-subtitle: your subtitle
-description: your description
-keywords: your keywords
-author: your name
-language: zh-CN
-timezone:
-
-# Deployment
-# Docs: https://hexo.io/docs/deployment.html
-deploy:
-  type: git
-  repository: https://github.com/xxx/xxx.github.io
-  branch: master
-  
-# Extensions
-## Plugins: https://hexo.io/plugins/
-## Themes: https://hexo.io/themes/
-theme: matery
-
-# Pagination
-# 最好设置为 12
-per_page: 12
-pagination_dir: page
-
-index_generator:
-  path: ''
-  per_page: 12
-  order_by: -date<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-</li>
-</ul>
+                <h1 id="深度学习优化器"><a href="#深度学习优化器" class="headerlink" title="深度学习优化器"></a>深度学习优化器</h1><p>深度学习中的优化器均采用了梯度下降的方式进行优化，所谓炼丹我觉得优化器可以当作灶，它控制着火量的大小、形式与时间等。</p>
+<h2 id="spades-初级的优化方式"><a href="#spades-初级的优化方式" class="headerlink" title="♠ 初级的优化方式"></a>♠ 初级的优化方式</h2><p>首先我们来一下看最初级的灶台（100 - 1000 元）</p>
+<h3 id="Batch-Gradient-Descent-BGD"><a href="#Batch-Gradient-Descent-BGD" class="headerlink" title="Batch Gradient Descent (BGD)"></a>Batch Gradient Descent (BGD)</h3><p>名字叫做批梯度下降，实际上每次迭代会使用全部的数据来更新梯度（应该是取所有数据的平均梯度），具体公式如下：<br>$$<br>\theta = \theta - \eta \cdot \nabla_{\theta} J(\theta)<br>$$<br>伪代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	grad <span class="token operator">=</span> eval_grad<span class="token punctuation">(</span>losses<span class="token punctuation">,</span> dataset<span class="token punctuation">,</span> params<span class="token punctuation">)</span>
+	params <span class="token operator">=</span> params <span class="token operator">-</span> lr <span class="token operator">*</span> grad<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>由上可知，每一个 epoch 更新一次梯度，每更新一次梯度需要使用全部数据。那么我们基本可以总结：</p>
 <ul>
-<li><p>最后在控制台里面输入 <code>npm i hexo-deployer-git</code> 这样就直接将网页用 <code>hexo -d</code> 推上个人博客网站了。</p>
+<li><font color="red">优点：</font>如果是凸优化一定能取得全局最优解，如果是非凸优化可以取得局部最优解。 </li>
+<li><font color="purple">缺点：</font>如果数据量过大会使得优化时间变长，优化变得十分缓慢，而且对 memory 也有一定要求。<h3 id="Stochastic-Gradient-Descent-SGD"><a href="#Stochastic-Gradient-Descent-SGD" class="headerlink" title="Stochastic Gradient Descent (SGD)"></a>Stochastic Gradient Descent (SGD)</h3>随机梯度下降的公式如下：<br>$$<br>\theta = \theta - \eta \cdot \nabla_{\theta}J(\theta;x^{(i)};y^{(i)})<br>$$<br>SGD 可以避免 BGD 因为大数据集而造成的冗余计算，比如 BGD 会对相似的数据进行重复计算。SGD 则是每次只选择一个样本的数据来进行更新梯度，伪代码如下：<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	random_shuffle<span class="token punctuation">(</span>dataset<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> data_i <span class="token keyword">in</span> dataset<span class="token punctuation">:</span>
+		grad <span class="token operator">=</span> eval_grad<span class="token punctuation">(</span>losses<span class="token punctuation">,</span> data_i<span class="token punctuation">,</span> params<span class="token punctuation">)</span>
+		params <span class="token operator">=</span> params <span class="token operator">-</span> lr <span class="token operator">*</span> grad<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+由上很容易知道，SGD 每次更新只用一个数据，因此其优化之路像一个喝醉酒的醉汉一样。这其实也是有利有弊的：</li>
+<li><font color="red">优点：</font><ul>
+<li>由于一次只用一个数据，因此梯度更新很快</li>
+<li>当然也可以进行在线学习（不用收齐所有数据）</li>
+<li>也会处于一个高 variance 的状态，更新时 loss 比较震荡，可能会使得其跳出局部最优点到达一个更好的局部最优。</li>
+</ul>
 </li>
-<li><p>图片的显示问题解决为：将 hexo 的 config 文件中 <code>post_asset_folder</code>  的值设置为 <code>true</code> ，所使用路径为 <code>./xxx.png</code>。</p>
+<li><font color="purple">缺点：</font><ul>
+<li>也正因为震荡，很难收敛于一个精准的极小值。<br>但实验表明，只要对学习率进行调整就可以使得 SGD 的最终收敛效果与 BGD 一致。<h3 id="Mini-Batch-Gradient-Descent"><a href="#Mini-Batch-Gradient-Descent" class="headerlink" title="Mini-Batch Gradient Descent"></a>Mini-Batch Gradient Descent</h3>小批量随机梯度下降可以看作是 SGD 和 BGD 的中间选择，每次选择数量为 n 的数据进行计算，既节约的每次更新的计算时间和成本，也减少了 SGD 的震荡，使得收敛更加快速和稳定。其公式为：<br>$$<br>\theta = \theta - \eta \cdot \nabla_{\theta}J(\theta;x^{(i:i+n)};y^{(i:i+n)})<br>$$<br>伪代码如下：<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	random_shuffle<span class="token punctuation">(</span>dataset<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> batch_data <span class="token keyword">in</span> dataset<span class="token punctuation">:</span>
+		grad <span class="token operator">=</span> eval_grad<span class="token punctuation">(</span>losses<span class="token punctuation">,</span> batch_data<span class="token punctuation">,</span> params<span class="token punctuation">)</span>
+		params <span class="token operator">=</span> params <span class="token operator">-</span> lr <span class="token operator">*</span> grad<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+这应该也是我们平时真正使用的随机梯度下降，当 n = 1 时，MiniBGD = SGD，n = len(dataset) 时 MiniBGD = BGD。<br>至此，初级灶台虽说有所改进，但是仍然存在一下问题：</li>
+</ul>
 </li>
-<li><p>Hexo 的升级：</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install -g npm-check           # 检查之前安装的插件，都有哪些是可以升级的 
-npm install -g npm-upgrade         # 升级系统中的插件
-npm-check
-npm-upgrade
-
-# 更新 hexo 及所有插件
-npm update
-
-# 确认 hexo 已经更新
-hexo -v<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
+<li>选择合适的学习率仍然是一个玄学</li>
+<li>学习率 schedule 需要预设不能自适应数据集的特点</li>
+<li>学习率针对所有参数，而并非所有参数需要同样的学习率</li>
+<li>对于非凸问题极易陷入局部最优<h2 id="clubs-进阶的优化器"><a href="#clubs-进阶的优化器" class="headerlink" title="♣ 进阶的优化器"></a>♣ 进阶的优化器</h2>再来看一下进阶的灶台（1000 - 5000元）<h3 id="Momentum"><a href="#Momentum" class="headerlink" title="Momentum"></a>Momentum</h3><center><img src=".\1.png" height="70%" width="70%"></center>
 
 </li>
 </ul>
-<h3 id="主题的设置"><a href="#主题的设置" class="headerlink" title="主题的设置"></a>主题的设置</h3><p>在上面的 hexo config 文件也看到，会将 theme 设置为 matery。其实<a target="_blank" rel="noopener" href="https://github.com/blinkfox/hexo-theme-matery">原 repository</a> 里面的文档已经很详细了，issue 里面也有很多同学问的问题可以帮忙解决一些，也有中文文档。先将其下载下来然后将放到 hexo 目录下的 themes 文件夹里（也就是你可以搞很多主题，以后就在 hexo config 里面换就好了），之后的事按照它的说明文档来就好了。我这里就记录一下我改动过的地方分别在什么文件里面（大部分用浏览器的开发者模式也能找得到位置）。其中所有在 matery.css 中的修改都可以直接加在 my.css 中，文章末尾有我的修改。</p>
-<ul>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">subtitle 字体的大小</font></p>
-<p>在 \themes\matery\source\css 文件夹中的 matery.css</p>
-<pre class="line-numbers language-none"><code class="language-none">.bg-cover .title {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1.85em;
-    margin-bottom: 20px;
-    position: relative;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看到动量这个单词，我们不妨将优化想象为物理过程。如果将优化的空间比作现实的地形，地形的最低点是我们的目的地，优化的过程想象为需要将一辆小车到最低点，而优化器负责控制驱动（加减速、方向），数据的梯度则是负责操纵优化器的司机。<br>SGD 是每次选择一个数据进行梯度更新，在”峡谷“地带时，梯度经常异号就 loss 反复震荡（如上图）。这好比这辆车每开一步就换了一个司机（数据产生的梯度），每个司机的想法都不同。特别是到局部最优的时候，由于梯度始终为 0 使得每个司机上车后都说刹车别走。<br>而 Momentum 会使 SGD 虽然每一步都要换司机，但是这个司机必须参考之前开过车所有司机的意见，当然主要参考最近几次的，这样即便在局部最优，新司机觉得应该刹车（梯度为零）但是刚下车的几位司机都认为应该向前冲，这使得小车可能冲过局部最优（避免陷入局部最优），在峡谷地形也会因为会参考几个司机的建议（其实这里<strong>近似</strong>于一个 mini-batch）而过分震荡（如上图），公式如下：<br>$$<br>\begin{aligned}<br>v_t &amp;= \gamma v_{t-1} + \eta \nabla_{\theta} J(\theta_{t-1}) \<br>\theta_t &amp;= \theta_{t-1} - v_t<br>\end{aligned}<br>$$<br>这就好像模拟将小球放在上坡，松手后，滚下坡去，它并不会在最低点直接停住，它会冲上对坡（因为有惯性，有动量）。要么冲出去；要么折回来反复，最后因为能量耗尽停在最低点。</p>
+<h3 id="Nesterov-Accelerated-Gradient"><a href="#Nesterov-Accelerated-Gradient" class="headerlink" title="Nesterov Accelerated Gradient"></a>Nesterov Accelerated Gradient</h3><p>Momentum 虽然会使考虑之前梯度与当前梯度来决定当前权重如何更新，但是它还不够聪明，它不会预测未来可能的情况。由上面最后一式我们可以知道权重是由动量项更新的 $v_t$ 来进行更新。我们来看看 NAG 是如何做的：<br>$$<br>\begin{aligned}<br>v_t &amp;= \gamma v_{t-1} + \eta \nabla_{\theta} J(\theta_{t-1} - \gamma v_{t - 1}) \<br>\theta_t &amp;= \theta_{t-1} - v_t<br>\end{aligned}<br>$$<br>式中使用 $\theta - \gamma v$ 来近似预测未来的权重，并对它求导求得未来近似的梯度，来告诉权重未来可能的变化，并进行调整（以至于不在冲坡的时候过猛）。</p>
+<h2 id="hearts-智能的优化器"><a href="#hearts-智能的优化器" class="headerlink" title="♥ 智能的优化器"></a>♥ 智能的优化器</h2><p>最后是智能的灶台（5000 - 10000 元），之前的灶台都要预先指定火的大小而且对所有食材用同样大小的火，那有没有更智能的灶台可以自己随着烹饪时间甚至自己根据食材来控制火候呢？答案是肯定有的（不然叫什么人工智能^_-)。不过在介绍这个之前，我们先来看一个指数加权平均和偏差修正两个技巧。<br><font face="宋体" size="4" color="#6A6AFF"><strong>指数加权平均 &amp; 偏差修正</strong></font><br><font face="楷体" color="#6C6C6C">公式推导如下：</font><br>$$<br>\begin{aligned}<br>v_t &amp;= \beta v_{t-1} + (1 - \beta)\theta_{t} \<br>v_{t-1} &amp;= \beta v_{t-2} + (1 - \beta)\theta_{t - 1} \<br>&amp;\dots \<br>v_{1} &amp;= \beta v_{0} + (1 - \beta)\theta_{1}<br>\end{aligned}<br>$$<br><font face="楷体" color="#6C6C6C">将上列等式由下分别迭代至上一式，并得知初始条件 $v_{0}=0$。</font><br>$$<br>v_t = (1 - \beta)\beta\theta_{t - 1} + (1 - \beta)\beta^2\theta_{t - 2} + \cdots + (1 - \beta)\beta^{n - 1}\theta_{1}<br>$$<br><font face="楷体" color="#6C6C6C">$\beta$ 一般是一个小于 1 的数，由上式可知 t 时刻的变量会由前 t - 1 个时刻的变量共同决定，但每个变量前加了一个关于 $\beta$ 的指数级系数，离 t 时刻越远的权重越小，若是 $\beta =0.9$ 第 20 个数的权重都在 0.01 左右了，后面的影响会更小。指数平均加权由此而来。其实我们很容易发现：</font><br>$$<br>v_{1} = (1 - \beta)\theta_{1}<br>$$<br><font face="楷体" color="#6C6C6C">由于最初始的变量没有多的变量可以平均，再加上 $(1 - \beta)$ 又很小，因此我们需要对初始时刻的变量进行一个修正：</font><br>$$<br>\hat{v}_{t} = \frac{v_{t}}{1 - \beta^t}<br>$$<br><font face="楷体" color="#6C6C6C">上式可以解决由于在初期没有变量可以平均的问题，使得 $ {v}_{t} = \theta_{t}$。</font></p>
+<h3 id="Adagrad"><a href="#Adagrad" class="headerlink" title="Adagrad"></a>Adagrad</h3><p>Adagrad 是一种自适应梯度的优化器，它有什么特点呢？它对不同参数使用不同的学习率，对于更新频率较低的参数施以较大的学习率，对于更新频率较高的参数用以较小的学习率。我们先来看一下公式：<br>$$<br>g_{t,i} = \nabla_{\theta_t}J(\theta_{t, i})<br>$$<br>$g_{t,i}$ 代表了第 t 步的第 i 个参数 $\theta_{t, i}$ 的梯度，梯度更新则使用下列式子：<br>$$<br>\theta_{t + 1, i} = \theta_{t, i} - \frac{\eta}{\sqrt{G_{t,ii}+\epsilon}} \cdot g_{t,i} \tag{a<em>}<br>$$<br>$G_t \in \mathbb{R}^{d \times d}$ 是一个对角矩阵，对角线上的元素 $G_{t,ii}$ 计算如下：<br>$$<br>G_{t,ii} = G_{t - 1,ii} + g_{t, i}^2 = \sum_{k = 0}^t g_{k, i}^2<br>$$<br>其实很容易发现，它就是 t 步之前所有步数关于参数 $\theta_i$ 的平方和。可以看得出，如果 $\theta_i$ 频繁更新，那么梯度肯定不为零，其平方必然大于零，(a</em>) 式中的 $G_{t,ii}$ 会随着更新次数的积累变得越来越大，分母越大，学习率变小，从而调小了  $\theta_i$ 的学习率，比较而言更新少的学习率就大一些了。其总体的公式为：<br>$$<br>\theta_{t} = \theta_{t - 1} - \frac{\eta}{\sqrt{G_{t - 1}+\epsilon}} \odot g_{t - 1}<br>$$<br>实际上，Adagrad 在优化稀疏数据的时候表现会比较好，但是其缺点也是显而易见的，由于 $G_{t,ii}$ 是一个非负数，随着步数增加很容易越累积越大，从导致学习率过早变小，学习缓慢。</p>
+<h3 id="Adadelta-amp-RMSprop"><a href="#Adadelta-amp-RMSprop" class="headerlink" title="Adadelta &amp; RMSprop"></a>Adadelta &amp; RMSprop</h3><p>对于这个问题 Adadelta &amp; RMSprop 几乎是在同一时间提出了改进方案。这里只介绍 Adadelta 改进的最终版本，首先对梯度平方的累积改为了：<br>$$<br>E[g^2]_t = \gamma E[g^2]_{t-1} + (1 - \gamma)g^2_t<br>$$<br>上式其实就是使用了指数加权平均，使得第 t 步的 $E[g^2]_t$ 只累加了离 t 较近的步数的梯度平方。每步权重更新的步长如下（并用均方根 RMS 进行表示）：<br>$$<br>\Delta \theta_t = -\frac{\eta}{\sqrt{E[g^2]_t + \epsilon}}g_t = -\frac{\eta}{RMS[g]_t}g_t<br>$$<br>同时使用了指数加权平均来计算了步长的均方根：<br>$$<br>\begin{aligned}<br>E[\Delta\theta^2]_t &amp;= \gamma E[\Delta\theta^2]_{t-1} + (1 - \gamma)\Delta\theta^2_t \<br>RMS[\Delta\theta]_t &amp;= \sqrt{E[\Delta\theta^2]_t + \epsilon}<br>\end{aligned}<br>$$<br>可能会比较疑惑计算这个干嘛呢？这里我们先讲一下牛顿法，其公式如下：<br>$$<br>x_n = x_{n-1} - \frac{f^{\prime}(x_{n-1})}{f^{\prime \prime}(x_{n-1})}<br>$$<br>可以看出来其将二阶导数的倒数作为”学习率“，所以一阶导数和二阶导数之比为步长即 $\Delta x$，即有下列推导：<br>$$<br>\begin{aligned}<br>\because \quad&amp;\Delta \theta \approx \frac{J^{\prime}(\theta)}{J^{\prime \prime}(\theta)} \<br>\therefore \quad&amp;\frac{1}{J^{\prime \prime}(\theta)} = \frac{\Delta \theta_t}{J^{\prime}(\theta)} \approx -\frac{RMS[\Delta\theta]_{t-1}}{RMS[g]_{t}}<br>\end{aligned}<br>$$<br>首先解释一下，这里没有用 $RMS[\Delta\theta]_{t}$ 是因为 $\Delta \theta_t$ 还没算出来。这里基本可以理解为使用了 $\Delta \theta_t$ 的均方根来近似 $\Delta \theta_t$ 的值，使用了 $g_t$ 的均方根来近似一阶导数的值，从而近似了二阶导数的倒数，最后 Adadelta 权重更新式子为：<br>$$<br>\theta_t = \theta_{t-1} - \frac{RMS[\Delta\theta]_{t-2}}{RMS[g]_{t-1}}g_{t-1}<br>$$<br>可见，Adadelta 甚至不需要指定学习率，RMSprop 思想大致相同，其更新公式如下：<br>$$<br>\theta_t = \theta_{t-1} - \frac{\eta}{RMS[g]_{t-1}}g_{t-1}<br>$$</p>
+<h3 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h3><p>Adaptive Moment Estimation 有点像是 Momentum 和 RMSProp 的结合体，首先对梯度，梯度的平方使用指数加权平均：<br>$$<br>\begin{aligned}<br>m_t = \beta_1 m_{t-1} + (1 - \beta_1)g_t \<br>v_t = \beta_2 v_{t-1} + (1 - \beta_2)g_t^2<br>\end{aligned}<br>$$<br>然后对其进行偏差修正：<br>$$<br>\begin{aligned}<br>\hat{m}_t = \frac{m_{t}}{1 - \beta_1^t} \<br>\hat{v}_t = \frac{v_{t}}{1 - \beta_2^t}<br>\end{aligned}<br>$$<br>最后权重的更新公式如下：<br>$$<br>\theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{\hat{v}_{t-1}}+\epsilon}\hat{m}_{t-1}<br>$$<br>原理就不过多介绍了，一般设置 $\beta_1 = 0.9, \beta_2=0.999$，Adam 被认为是泛化极好，比起其他优化器性能也更好，并且是训练神经网络的首选。</p>
+<h3 id="AdamW"><a href="#AdamW" class="headerlink" title="AdamW"></a>AdamW</h3><center><img src=".\2.png" height="70%" width="70%"></center>
+AdamW 想做的最主要是认为 Adam 没有正确使用进行权重衰减。当我们使用 L2 正则化时，会在 loss 后面添加一个权重的平方项：
+$$
+loss = loss_{orig}(\theta) + \frac{1}{2}\lambda\theta^2
+$$
+添加这个平方项的目的，是对其求导有一个权重衰减的效果，比如我们如果使用的 SGD 则权重更新的表达式为（最后一项是权重衰减）：
+$$
+\theta_t = \theta_{t-1} - \eta \cdot \nabla J(\theta_{t-1}) - \eta\lambda \theta_{t-1}
+$$
+如上图所示，当我们使用动量的时候，对 loss 再添加正则化项，然后求导获得权重衰减。其效果不再与 SGD 中的相同，因为动量会累积之前的梯度，因此当使用动量的时候，权重更新的公式为：
 
-<p>修改 font-size 对应的值就能调整大小</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">导航栏的颜色变化</font></p>
-<center><img src="./4.png" height="80%" width="80%"></center>
-
-<p>在 \themes\matery\source\css 文件夹中的 matery.css</p>
-<pre class="line-numbers language-none"><code class="language-none">.bg-color {
-    background-image: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
-    opacity: 0.8;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>#bf30ac 和 #0f9d58 是左右端的颜色，opacity 是不透明度。</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">banner 背景色的变换</font></p>
-<p>在 \themes\matery\source\css 文件夹中的 matery.css</p>
-<pre class="line-numbers language-none"><code class="language-none">.bg-cover:after {
-    -webkit-animation: rainbow 60s infinite;
-    animation: rainbow 60s infinite;
-}
-
-@-webkit-keyframes rainbow {
-
-}
-
-@keyframes rainbow {
-    
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这里把内容删去，调节里面的颜色就好了。</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">底部的设置</font></p>
-<center><img src="./5.png" height="100%" width="100%"></center>
-
-<p>在 \themes\matery\layout\_partial 文件夹中的 footer.ejs 可修改运行时间，人数统计的初始值。</p>
-<p>关于底部进度条在 \themes\matery\source\css 文件夹中的 matery.css</p>
-<pre class="line-numbers language-none"><code class="language-none">.progress-bar {
-    height: 4px;
-    position: fixed;
-    bottom: 0;
-    z-index: 300;
-    background: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
-    opacity: 0.8;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">背景图的每日一换</font></p>
-<p>在 \themes\matery\layout\_partial 文件夹中的 bg-cover-content.ejs</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">修改鼠标指到网页标签出现的字</font></p>
-<p>在 \themes\matery\layout 文件夹中的 layout.ejs 添加</p>
-<pre class="line-numbers language-none"><code class="language-none">&lt;script type="text/javascript"&gt; var OriginTitile = document.title, st; document.addEventListener("visibilitychange", function () { document.hidden ? (document.title = "来自L77星云！", clearTimeout(st)) : (document.title = "来自L77的流星雨🌈", st = setTimeout(function () { document.title = OriginTitile }, 3e3)) })
-&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">增加文章目录的滚动条</font></p>
-<p>  在 \themes\Matery\layout\_partial 文件夹中的 post-detail-toc.ejs 增加如下代码：</p>
-  <pre class="line-numbers language-none"><code class="language-none">#toc-content {
-	height: calc(100vh - 250px);
-    overflow: scroll;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">Font Awesome</font></p>
-<p>  直接访问<a target="_blank" rel="noopener" href="https://fontawesome.com/">官网</a>，注意只能用免费的</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">不蒜子计数初始值纠正</font></p>
-  <pre class="line-numbers language-none"><code class="language-none">&lt;!-- 不蒜子计数初始值纠正 --&gt;
-&lt;script&gt;
-    $(document).ready(function () {
-
-        var int = setInterval(fixCount, 50);
-        var pvcountOffset = 1;
-        var uvcountOffset = 1;
-
-        function fixCount() {
-            if (document.getElementById("busuanzi_container_site_pv").style.display != "none") {
-                $("#busuanzi_value_site_pv").html(parseInt($("#busuanzi_value_site_pv").html()) + pvcountOffset);
-                clearInterval(int);
-            }
-            if ($("#busuanzi_container_site_pv").css("display") != "none") {
-                $("#busuanzi_value_site_uv").html(parseInt($("#busuanzi_value_site_uv").html()) + uvcountOffset); // 加上初始数据 
-                clearInterval(int);
-            }
-        }
-    });
-&lt;/script&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">关于公式显示的问题</font></p>
-<p>  出现的问题的原因都是因为转义问题。网上的解决方案很多，有建议用 <code>hexo-renderer-kramed</code> 替代 <code>hexo-renderer-marked</code> 再进行相应的修改的，但是这样做就可能导致代码无法高亮显示。另外，使用较低版本的 hexo 还有讲英文括号转为 “$” 从而显示为公式的问题，建议 5.0.0 以上。而且最好不要安装较高版本的 <code>hexo-renderer-marked</code> ，这里使用</p>
-  <pre class="line-numbers language-none"><code class="language-none">npm uninstall hexo-renderer-marked --save
-npm install hexo-renderer-marked@2.0.0 --save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>  并将 node_modules\marked\lib\marked.js 中的</p>
-  <pre class="line-numbers language-none"><code class="language-none">escape: /^\\([!"#$%&amp;'()*+,\-./:;&lt;=&gt;?@\[\]\\^_`{|}~])/,
-改成
-escape: /^\\([!"#$&amp;'()*+,\-./:;&lt;=&gt;?@\[\]^_`|~])/,
-
-em 处改为：
-em:/^\*((?:\*\*|[\s\S])+?)\*(?!\*)/,
-
-inline._escapes = /\\([!"#$%&amp;'()*+,\-./:;&lt;=&gt;?@\[\]\\^_`{|}~])/g;
-改成
-inline._escapes = /\\([!"#$&amp;'()*+,\-./:;&lt;=&gt;?@\[\]^_`|~])/g;
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>  另外在书写的时候星号前要加 <code>\</code> ，换行使用四条斜线，如果连续出现了花括号一定要加上空格，这样基本能正常显示公式。</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">评论的添加</font></p>
-<p>  需要去 Github 申请一个<a target="_blank" rel="noopener" href="https://github.com/settings/applications/new">应用</a>，其中：</p>
-  <pre class="line-numbers language-none"><code class="language-none">Application name # 随便填
-Homepage URL # 填自己的博客地址
-Application description # 随便填
-Authorization callback URL # 填自己的博客地址
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>  将注册的结果填到主题的 config 文件里</p>
-  <pre class="line-numbers language-none"><code class="language-none">gitalk: 
-	enable: true 
-	owner: github用户名 
-	repo: github用户名.github.io 
-	oauth: 
-		clientId: 可在注册结果中查询 
-		clientSecret: 可在注册结果中查询 
-	admin: 你的github用户名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>  Valine 评论的开启可以百度 hexo valine 或者参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/jiunian_2761/article/details/97388997">这篇博客</a>注册LeanClound，获取APP ID 和 APP Key。最好选择华东节点。</p>
-</li>
-<li><p><font color="#5CADAD" face="华文细黑" size="4">文章的 Front-matter 预设</font></p>
-<p>  对 <code>/scaffolds/post.md</code> 进行修改，方便之后写文章：</p>
-  <pre class="line-numbers language-none"><code class="language-none">title: {{ title }}
-date: {{ date }}
-top: false
-cover: false
-password:
-toc: true
-mathjax: false
-summary:
-categories:
-tags:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
-<p>另外在编辑文件的时候使用 UTF-8 编码，不然可能出现乱码。这就是我修改的大部分内容了，接下来就是如何写文章了。</p>
-<h3 id="写文章"><a href="#写文章" class="headerlink" title="写文章"></a>写文章</h3><p>首先在 hexo 的目录下，右键 Git Bash Here 打开控制台，输入 <code>hexo n post "first blog"</code> 然后可以看到在 \source\_posts 文件夹下多一个 first-blog.md，图片放到 first-blog 文件夹里，博客就从这里开始。</p>
-<p>写完后，先清理之前的数据，输入 <code>hexo clean</code>。然后 <code>hexo g</code> 生成新的网页，同时可以用 <code>hexo s</code> 查看新生成的网页效果。</p>
-<p>最后转到文件夹 \public 重新打开控制台，这个文件夹才是我们要部署上去的，使用 <code>hexo d</code> 推到 github。</p>
-<p>这时可以去你的个人博客看效果啦 🍨🍨🍨</p>
-<h2 id="spades-博客收录过程"><a href="#spades-博客收录过程" class="headerlink" title="♠博客收录过程"></a><font color="#FF7575">♠博客收录过程</font></h2><h3 id="注册自定义域名"><a href="#注册自定义域名" class="headerlink" title="注册自定义域名"></a>注册自定义域名</h3><p>首先，我们想要 Google 或者 Baidu 需要去各类云（阿里云、百度云、华为云等）注册一个自定义域名（就是你自己取的名字的域名，一般几十块一年），因为 Github 的 Pages 不允许它们爬东西的。你在该云买了域名后，它有个域名解析，然后如下添加两条解析记录：</p>
-<center><img src="./6.png" height="100%" width="100%"></center>
-
-<p>添加解析之后，别人搜索你的自定义域名就可以直接转过来了。最后需要去 Github 上添加你的自定义域名，然后勾选 Enforce HTTPS 让浏览器不报警。</p>
-<center><img src="./7.png" height="100%" width="100%"></center>
-
-<p>打开博客的 \source 目录，新建一个 CNAME 文件（具体方式，就是先建一个命名为 CNAME 的 txt 文件，然后再删除后缀）。然后用打开 txt 的方式打开，在里面写上你的域名。最后 <code>hexo g</code> 生成，然后在 \public 文件夹<code>hexo d</code>上传到 github。</p>
-<h3 id="添加百度、谷歌收录"><a href="#添加百度、谷歌收录" class="headerlink" title="添加百度、谷歌收录"></a>添加百度、谷歌收录</h3><p>想要别人能在百度或谷歌能搜索到你的博客，首先得你的个人博客网站被它们收录。接下来，我分别介绍一下流程。</p>
-<p><font face="宋体" size="5" color="#2894FF">百度收录过程</font></p>
-<p>首先需要访问<a target="_blank" rel="noopener" href="https://ziyuan.baidu.com/">百度搜索资源官网</a>（使用你的百度云盘登录即可），登录之后在最上面一行选择【用户中心】中的【站点管理】，然后就能看到可以提交链接的界面了（协议头最好选择 https）。</p>
-<p>接着它会让你验证网站的所有权（证明网站是你的）如下图：</p>
-<center><img src="./10.png" height="80%" width="80%"></center>
-
-<p>我试过第三种方式，弄了很久没有成功，最后我选择使用第一种方式，下载它给的文件后放到主题目录 \source 文件夹，然后重新部署完成验证。</p>
-<p>然后需要设置向百度自动推送自己网站的方式（就是你每更新一次就向它提交一次最新的版本）。先在 hexo 博客目录安装 <code>npm install hexo-baidu-url-submit --save</code> ，接着在博客的 _config.yml 中添加如下代码：</p>
-  <pre class="line-numbers language-none"><code class="language-none">baidu_url_submit:
-  count: 100             # 提交最新的多少个链接
-  host: www.yoursite.com # 在百度搜索资源官网中添加的域名
-  token: your_token      # 秘钥
-  path: baidu_urls.txt   # 文本文档的地址， 新链接会保存在此文本文档里<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>在百度搜索资源官网首页中普通收录的入口，可以看到如下界面，其中密钥就是token等号后面的：</p>
-<center><img src="./11.png" height="80%" width="80%"></center>
-
-<p>接续在博客的 _config.yml 中进行如下修改：</p>
-<pre class="line-numbers language-none"><code class="language-none"># URL
-url: https://www.yoursite.com
-root: /
-permalink: :year/:month/:day/:title/
-
-# Deployment
-## Docs: https://hexo.io/docs/deployment.html
-deploy:
-- type: git
-  repository: https://github.com/FL77N/FL77N.github.io
-  branch: master
-- type: baidu_url_submitter                         # 这是新加的主动推送
-
-Plugins:
-- hexo-generator-baidu-sitemap
-- hexo-generator-sitemap
-
-baidusitemap:
-    path: baidusitemap.xml
-sitemap:
-    path: sitemap.xml<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>重新部署一遍，可以看到推送成功的标志：</p>
-<center><img src="./12.png" height="60%" width="60%"></center>
-
-<p><font face="宋体" size="5" color="#2894FF">谷歌收录过程</font></p>
-<p>谷歌是采用 sitemap 的方式。在经历上述操作后，我们需要先使用以下命令生成网站地图：</p>
-<pre class="line-numbers language-none"><code class="language-none">npm install hexo-generator-sitemap --save       # 谷歌的
-npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>同样先来到现在谷歌中搜索 google search console 来到谷歌站长平台。同样先验证网站所有权：</p>
-<center><img src="./13.png" height="80%" width="80%"></center>
-
-<p>我选择的左边的方式，这里可能你需要先删除之前 CNAME 的一条域名解析，等验证完所有权后再加回来。</p>
-<p>谷歌的收录提交 sitemap 就好了，如下：</p>
-<center><img src="./14.png" height="80%" width="80%"></center>
-
-<p>不过我最开始一直无法获取，可能是有点慢，过一天就好了。如果过了一天也不行，再搜一下是不是其他问题。</p>
-<p>至此，基于 Hexo 的个人博客部署差不多完结 🌸🌸🌸</p>
-<p><font face="楷体" size="5" color="pink">附修改</font></p>
-<pre class="line-numbers language-none"><code class="language-none">/* Here is your custom css styles. */
-@media only screen and (max-width: 601px) {
-    .bg-cover .title {
-        font-size: 1rem;
-    }
-}
-
-.bg-cover .title {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 1.85em;
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.bg-color {
-    background-image: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
-    opacity: 0.8;
-}
-
-.bg-cover:after {
-    -webkit-animation: rainbow 60s infinite;
-    animation: rainbow 60s infinite;
-}
-
-@-webkit-keyframes rainbow {
-    0%,
-    100% {
-        background: rgba(0,242,96, 0.75);
-        background: linear-gradient(45deg, rgba(0,242,96, 0.75) 0%, rgba(5,117,230, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(0,242,96, 0.75) 0%, rgba(5,117,230, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(0,242,96, 0.75) 0%, rgba(15,117,230, 0.65) 100%);
-    }
-    16% {
-        background: rgba(255,110,127, 0.75);
-        background: linear-gradient(45deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-    }
-    32% {
-        background: rgba(28,146,210, 0.75);
-        background: linear-gradient(45deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-    }
-    48% {
-        background: rgba(0,4,40, 0.75);
-        background: linear-gradient(45deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-    }
-    64% {
-        background: rgba(255,75,31, 0.75);
-        background: linear-gradient(45deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0, 0.65) 100%);
-    }
-    80% {
-        background: rgba(252,0,255, 0.75);
-        background: linear-gradient(45deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-    }
-}
-
-@keyframes rainbow {
-    0%,
-    100% {
-        background: rgba(0,242,96, 0.75);
-        background: linear-gradient(45deg, rgba(0,242,96, 0.75) 0%, rgba(5,117,230, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(0,242,96, 0.75) 0%, rgba(5,117,230, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(0,242,96, 0.75) 0%, rgba(15,117,230, 0.65) 100%);
-    }
-    16% {
-        background: rgba(255,110,127, 0.75);
-        background: linear-gradient(45deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(255,110,127, 0.75) 0%, rgba(191,233,255, 0.65) 100%);
-    }
-    32% {
-        background: rgba(28,146,210, 0.75);
-        background: linear-gradient(45deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(28,146,210, 0.75) 0%, rgba(242,252,254, 0.65) 100%);
-    }
-    48% {
-        background: rgba(0,4,40, 0.75);
-        background: linear-gradient(45deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(0,4,40, 0.75) 0%, rgba(0,78,146, 0.65) 100%);
-    }
-    64% {
-        background: rgba(255,75,31, 0.75);
-        background: linear-gradient(45deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(255,75,31, 0.75) 0%, rgba(31,221,255, 0, 0.65) 100%);
-    }
-    80% {
-        background: rgba(252,0,255, 0.75);
-        background: linear-gradient(45deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-        background: -moz-linear-gradient(135deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-        background: -webkit-linear-gradient(135deg, rgba(252,0,255, 0.75) 0%, rgba(0,219,222, 0.65) 100%);
-    }
-}
-
-.progress-bar {
-    height: 4px;
-    position: fixed;
-    bottom: 0;
-    z-index: 300;
-    background: linear-gradient(to right, #bf30ac 0%, #0f9d58 100%);
-    opacity: 0.8;
-}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>$$<br>m_t = \beta m_{t-1} + \eta (1-\beta)\nabla_{\theta} J(\theta_{t-1}) + \eta \lambda (1-\beta)\theta_{t-1}\<br>\theta_t = \theta_{t-1} - m_t - \eta \lambda (1-\beta)\theta_{t-1}<br>$$<br>聪明的小朋友已经发现了！真正的权重衰减只是想对原本的权重简单减去 $\eta\lambda \theta_{t-1}$ ，由于要计算梯度的指数加权平均，这使得求导后的正则项多了一些系数，adam 里面统计了梯度和梯度平方的指数加权平均求导后的权重衰减更加复杂，于是应该修正如下：<br>$$<br>\theta_t = \theta_{t-1} - \frac{\eta}{\sqrt{\hat{v}_{t-1}}+\epsilon}\hat{m}_{t-1} - \eta \lambda \theta_{t-1}<br>$$<br>最后我们来看看几种优化器的效果图吧！</p>
+<center><img src=".\3.gif" height="70%" width="70%"></center>
                 
             </div>
             <hr/>
@@ -822,7 +566,7 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://froml77.cn/2022/04/28/theme-setting/">https://froml77.cn/2022/04/28/theme-setting/</a>
+                    <a href="https://froml77.cn/2022/10/30/you-hua-qi/">https://froml77.cn/2022/10/30/you-hua-qi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -860,12 +604,12 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98/">
-                                    <span class="chip bg-color">博客主题</span>
+                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">深度学习</span>
                                 </a>
                             
-                                <a href="/tags/Hexo/">
-                                    <span class="chip bg-color">Hexo</span>
+                                <a href="/tags/BN/">
+                                    <span class="chip bg-color">BN</span>
                                 </a>
                             
                         </div>
@@ -910,7 +654,7 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
         repo: 'FL77N.github.io',
         owner: 'fl77n',
         admin: "fl77n",
-        id: '2022-04-28T20-05-04',
+        id: '2022-10-30T11-51-54',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1206,29 +950,30 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2022/05/19/mu-biao-jian-ce-zong-shu/">
+                <a href="/2022/10/30/you-hua-qi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="目标检测总结">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="关于深度学习优化器的种种">
                         
-                        <span class="card-title">目标检测总结</span>
+                        <span class="card-title">关于深度学习优化器的种种</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Object Detection Summary
+                            关于常见优化器的介绍
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-05-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-30
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1245,6 +990,7 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1252,12 +998,8 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
                         <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/">
-                        <span class="chip bg-color">计算机视觉</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">
-                        <span class="chip bg-color">目标检测</span>
+                    <a href="/tags/BN/">
+                        <span class="chip bg-color">BN</span>
                     </a>
                     
                 </div>
@@ -1268,50 +1010,45 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/04/28/theme-setting/">
+                <a href="/2022/10/24/guan-yu-retina/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="matery 的主题设置">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="diary-22-10-22">
                         
-                        <span class="card-title">matery 的主题设置</span>
+                        <span class="card-title">diary-22-10-22</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            基于 Hexo 的个人博客部署
+                            关于 retina
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-04-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-24
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%99%E7%A8%8B/" class="post-category">
-                                    教程
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%8D%9A%E5%AE%A2%E4%B8%BB%E9%A2%98/">
-                        <span class="chip bg-color">博客主题</span>
-                    </a>
-                    
-                    <a href="/tags/Hexo/">
-                        <span class="chip bg-color">Hexo</span>
+                    <a href="/tags/%E6%97%A5%E8%AE%B0/">
+                        <span class="chip bg-color">日记</span>
                     </a>
                     
                 </div>
@@ -1380,6 +1117,87 @@ npm install hexo-generator-baidu-sitemap --save # 百度的<span aria-hidden="tr
 
 <script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
 
     
 
