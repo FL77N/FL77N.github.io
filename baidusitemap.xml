@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://froml77.cn/2022/10/23/cuda1/</loc>
+    <lastmod>2023-01-02</lastmod>
+  </url>
+  <url>
     <loc>https://froml77.cn/2022/10/24/guan-yu-retina/</loc>
-    <lastmod>2022-11-09</lastmod>
+    <lastmod>2022-12-25</lastmod>
   </url>
   <url>
     <loc>https://froml77.cn/2022/09/27/diary-22-09-26/</loc>
@@ -19,10 +23,6 @@
   <url>
     <loc>https://froml77.cn/2022/11/06/yolov7-hou-chu-li/</loc>
     <lastmod>2022-11-09</lastmod>
-  </url>
-  <url>
-    <loc>https://froml77.cn/2022/10/23/cuda1/</loc>
-    <lastmod>2022-10-30</lastmod>
   </url>
   <url>
     <loc>https://froml77.cn/2022/10/07/fan-qie-chao-ji-dan/</loc>

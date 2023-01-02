@@ -75,11 +75,11 @@
   </entry>
   
   <entry>
-    <title>diary-22-10-22</title>
+    <title>retina 的记事本</title>
     <link href="https://froml77.cn/2022/10/24/guan-yu-retina/"/>
     <id>https://froml77.cn/2022/10/24/guan-yu-retina/</id>
     <published>2022-10-24T14:15:50.000Z</published>
-    <updated>2022-11-09T12:04:44.626Z</updated>
+    <updated>2022-12-25T11:55:52.105Z</updated>
     
     
       
@@ -103,19 +103,18 @@
   </entry>
   
   <entry>
-    <title>cuda 编程（入门版）</title>
+    <title>CUDA 编程（入门版）</title>
     <link href="https://froml77.cn/2022/10/23/cuda1/"/>
     <id>https://froml77.cn/2022/10/23/cuda1/</id>
     <published>2022-10-23T13:13:02.000Z</published>
-    <updated>2022-10-30T03:48:56.528Z</updated>
+    <updated>2023-01-02T13:19:17.995Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;矩阵相加&quot;&gt;&lt;a href=&quot;#矩阵相加&quot; class=&quot;headerlink&quot; title=&quot;矩阵相加&quot;&gt;&lt;/a&gt;矩阵相加&lt;/h2&gt;&lt;p&gt;这一节主要记录一些 cuda 编程的常规流程，并介绍一些术语&lt;/p&gt;
-&lt;h3 id=&quot;流程&quot;&gt;&lt;a href=&quot;#流程&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;&lt;font color=&quot;#66B3FF&quot;&gt;简介&lt;/font&gt;&lt;/h2&gt;&lt;p&gt;&lt;font face=&quot;宋体&quot; size=&quot;4&quot;</summary>
         
       
     
