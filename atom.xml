@@ -6,7 +6,7 @@
   <link href="https://froml77.cn/atom.xml" rel="self"/>
   
   <link href="https://froml77.cn/"/>
-  <updated>2022-11-09T11:56:53.935Z</updated>
+  <updated>2023-02-28T12:55:56.475Z</updated>
   <id>https://froml77.cn/</id>
   
   <author>
@@ -15,6 +15,114 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>双椒鸡</title>
+    <link href="https://froml77.cn/2023/02/28/shuang-jiao-ji/"/>
+    <id>https://froml77.cn/2023/02/28/shuang-jiao-ji/</id>
+    <published>2023-02-28T12:40:36.000Z</published>
+    <updated>2023-02-28T12:55:56.475Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;🍚-双椒鸡效果图&quot;&gt;&lt;a href=&quot;#🍚-双椒鸡效果图&quot; class=&quot;headerlink&quot; title=&quot;🍚 双椒鸡效果图&quot;&gt;&lt;/a&gt;🍚 &lt;font color=&quot;#FF5151&quot;&gt;双椒鸡效果图&lt;/font&gt;&lt;/h2&gt;&lt;center&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="烹饪" scheme="https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/"/>
+    
+    <category term="教程" scheme="https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/%E6%95%99%E7%A8%8B/"/>
+    
+    
+    <category term="炒" scheme="https://froml77.cn/tags/%E7%82%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>椒盐虾</title>
+    <link href="https://froml77.cn/2023/02/26/jiao-yan-xia/"/>
+    <id>https://froml77.cn/2023/02/26/jiao-yan-xia/</id>
+    <published>2023-02-26T13:05:55.000Z</published>
+    <updated>2023-02-28T12:58:12.816Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;ice-cream-最终效果&quot;&gt;&lt;a href=&quot;#ice-cream-最终效果&quot; class=&quot;headerlink&quot; title=&quot;:ice_cream: 最终效果&quot;&gt;&lt;/a&gt;&lt;span</summary>
+        
+      
+    
+    
+    
+    <category term="烹饪" scheme="https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/"/>
+    
+    <category term="教程" scheme="https://froml77.cn/categories/%E7%83%B9%E9%A5%AA/%E6%95%99%E7%A8%8B/"/>
+    
+    
+    <category term="炒" scheme="https://froml77.cn/tags/%E7%82%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CUDA 编程（进阶版）</title>
+    <link href="https://froml77.cn/2023/02/08/cuda2/"/>
+    <id>https://froml77.cn/2023/02/08/cuda2/</id>
+    <published>2023-02-08T13:42:00.000Z</published>
+    <updated>2023-02-28T12:36:58.153Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;General-Matrix-Multiplication&quot;&gt;&lt;a href=&quot;#General-Matrix-Multiplication&quot; class=&quot;headerlink&quot; title=&quot;General Matrix</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="编程" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+    <category term="cuda" scheme="https://froml77.cn/tags/cuda/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CUDA 编程（入门版）</title>
+    <link href="https://froml77.cn/2022/12/31/cuda1/"/>
+    <id>https://froml77.cn/2022/12/31/cuda1/</id>
+    <published>2022-12-31T13:13:02.000Z</published>
+    <updated>2023-02-19T12:48:45.458Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;&lt;font color=&quot;#66B3FF&quot;&gt;简介&lt;/font&gt;&lt;/h2&gt;&lt;p&gt;&lt;font face=&quot;宋体&quot; size=&quot;4&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="编程" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/"/>
+    
+    
+    <category term="cuda" scheme="https://froml77.cn/tags/cuda/"/>
+    
+  </entry>
   
   <entry>
     <title>YoloV7 标签匹配及 loss 计算解析</title>
@@ -99,33 +207,6 @@
     
     
     <category term="日记" scheme="https://froml77.cn/tags/%E6%97%A5%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CUDA 编程（入门版）</title>
-    <link href="https://froml77.cn/2022/10/23/cuda1/"/>
-    <id>https://froml77.cn/2022/10/23/cuda1/</id>
-    <published>2022-10-23T13:13:02.000Z</published>
-    <updated>2023-01-02T13:19:17.995Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;&lt;font color=&quot;#66B3FF&quot;&gt;简介&lt;/font&gt;&lt;/h2&gt;&lt;p&gt;&lt;font face=&quot;宋体&quot; size=&quot;4&quot;</summary>
-        
-      
-    
-    
-    
-    <category term="算法" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="编程" scheme="https://froml77.cn/categories/%E7%AE%97%E6%B3%95/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-    <category term="cuda" scheme="https://froml77.cn/tags/cuda/"/>
     
   </entry>
   
@@ -247,7 +328,7 @@
     <link href="https://froml77.cn/2022/08/06/san-xian-rou-he-dou-fu-tang/"/>
     <id>https://froml77.cn/2022/08/06/san-xian-rou-he-dou-fu-tang/</id>
     <published>2022-08-06T13:36:01.000Z</published>
-    <updated>2022-08-07T13:36:54.441Z</updated>
+    <updated>2023-02-09T13:59:45.793Z</updated>
     
     
       
