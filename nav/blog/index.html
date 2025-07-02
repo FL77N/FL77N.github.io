@@ -1,0 +1,73 @@
+---
+layout: default
+title: BLOG
+# Note that this index page uses a full-width layout!
+---
+
+<h1>ARTICLES</h1>
+<ul class="content-listing">
+  {% for post in paginator.posts %}
+    <li class="index">
+      <hr class="invisible">
+      <a href="{{ post.url | prepend: site.baseurl }}">
+        <h2 class="contrast">{{ post.title }}</h2>
+      </a>
+      <br>
+      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
+        {{ post.date | date: "%B %-d, %Y" }}
+      </span>
+      <br/>
+      <div>{{ post.excerpt }}</div>
+    </li>
+  {% endfor %}
+</ul>
+
+<!-- 分页导航 -->
+<div class="pagination">
+  {% if paginator.previous_page %}
+    <a href="{{ paginator.previous_page_path }}" class="nav-btn prev"><< PREV</a>
+  {% endif %}
+
+  <!-- 页码控制区域 -->
+  <div class="page-control">
+    <span class="page-label">PAGE</span>
+    <input type="number" id="currentPage"
+           min="1" max="{{ paginator.total_pages }}"
+           value="{{ paginator.page }}" class="page-input">
+    <span class="page-label">of {{ paginator.total_pages }}&nbsp;</span>
+    <button onclick="jumpToPage()" class="nav-btn page-go">GO</button>
+  </div>
+
+  {% if paginator.next_page %}
+    <a href="{{ paginator.next_page_path }}" class="nav-btn next">NEXT >></a>
+  {% endif %}
+</div>
+
+
+<script>
+function jumpToPage() {
+  const currentPage = document.getElementById('currentPage').value;
+  const totalPages = {{ paginator.total_pages }};
+
+  // 输入验证 [[4]]
+  if (currentPage < 1 || currentPage > totalPages) {
+    alert(`请输入1到${totalPages}之间的页码`);
+    return;
+  }
+
+  // Jekyll分页路径规范 [[8]]
+  const baseUrl = '{{ site.baseurl }}';
+  const pageNumber = currentPage === '1' ? 'nav/blog/index.html' : `nav/blog/page${currentPage}/`;
+  const path = `${baseUrl}/${pageNumber}`;
+
+  window.location.href = path;
+}
+
+// 回车键事件处理 [[9]]
+document.getElementById('currentPage').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    jumpToPage();
+  }
+});
+</script>

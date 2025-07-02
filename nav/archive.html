@@ -1,0 +1,70 @@
+---
+layout: default
+title: ARCHIVE
+# Note that this index page uses a full-width layout!
+---
+<h1 style="text-align: center">ALL CATEGORIES</h1>
+<div class="archive-container">
+  {% for category in site.categories %}
+    <div class="category-group">
+      <input type="checkbox" id="category-{{ forloop.index }}" class="category-toggle">
+      <label for="category-{{ forloop.index }}" class="category-header">
+        <h2>
+          <span class="toggle-icon">♠</span>
+          <span class="category-title">{{ category[0] }}</span>
+        </h2>
+      </label>
+
+      <!-- 分类内容 -->
+      <div class="category-content">
+        {% assign posts_in_category = category[1] %}
+        {% assign tags_in_category = posts_in_category | map: 'tags' | join: ',' | split: ',' | compact | uniq %}
+        {% assign has_tagless_posts = false %}
+
+        <!-- 带标签的文章 -->
+        {% if tags_in_category.size > 0 %}
+          {% for tag in tags_in_category %}
+            <div class="tag-group">
+              <h3 id="{{ tag | slugify }}">{{ tag }}</h3>
+              <ul class="post-list">
+                {% for post in posts_in_category %}
+                  {% if post.tags contains tag %}
+                    <li>
+                      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                      <span class="post-date" style="color: #ffb6c1; font-style: inherit;">&nbsp;{{ post.date | date: "%Y-%m-%d" }}</span>
+                      <br><div>{{ post.excerpt }}</div></br>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        <!-- 无标签的文章 -->
+        {% for post in posts_in_category %}
+          {% if post.tags == nil or post.tags.size == 0 %}
+            {% assign has_tagless_posts = true %}
+          {% endif %}
+        {% endfor %}
+
+        {% if has_tagless_posts %}
+          <div class="tag-group">
+            <h3 id="untagged">未分类</h3>
+            <ul class="post-list">
+              {% for post in posts_in_category %}
+                {% if post.tags == nil or post.tags.size == 0 %}
+                  <li>
+                    <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                    <span class="post-date" style="color: #ffb6c1; font-style: inherit;">&nbsp;{{ post.date | date: "%Y-%m-%d" }}</span>
+                    <br><div>{{ post.excerpt }}</div></br>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

@@ -3,476 +3,1059 @@
 # only Main files contain this front matter, not partials.
 nav_exclude: true
 ---
-/*****************************************************************************/
-/*
-/* Tufte Jekyll blog theme
-/* Based on Tufte CSS by Dave Liepmann ( https://github.com/edwardtufte/tufte-css )
-/*
-/* The README.md will show you how to set up your site along with other goodies
-/*****************************************************************************/
 
-// Imports to create final
-
-@import "../_sass/fonts";
-@import "../_sass/settings";
 @import "../_sass/syntax-highlighting";
+@import "../_sass/settings";
 
-// Global Resets
-//
-* { margin: 0; padding: 0; }
-
-/* clearfix hack after Cederholm (group class name) */
-.group:after {
-  content: "";
-  display: table;
-  clear: both;
+@font-face {
+  font-family: ETBembo;
+  src: url("../fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.eot");
+  src: url("../fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.eot?#iefix") format("embedded-opentype"), url("../fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.woff") format("woff"), url("../fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.ttf") format("truetype"), url("../fonts/et-book/et-book-roman-line-figures/et-book-roman-line-figures.svg#etbemboromanosf") format("svg");
+  font-weight: normal;
+  font-style: normal
 }
 
-html, body { height: 100%; }
+@font-face {
+  font-family: STXIHEI;
+  src: url("../fonts/STXIHEI.TTF") format("truetype");
+  font-weight: normal;
+  font-style: line
+}
 
-// First significant deviation from CSS on tufte.css site - variable font size as browser width expands or contracts
-//html { font-size: 15px; }
+@font-face {
+  font-family: STKAITI;
+  src: url("../fonts/STKAITI.TTF") format("truetype");
+  font-weight: normal;
+  font-style: print
+}
 
-html{
-    text-align: baseline;
-    font-size: 11px;
+/* 数学公式的设置 */
+.katex {
+    font-size: 1em !important
+}
+
+.katex-display {
+    font-size: 1.4em !important
+}
+
+.mathblock,.MJXc-display {
+    font-size: 1.5rem !important;
+    clear: left
+}
+
+
+/* 个人照片的设置 */
+.profile-picture {
+    border-radius: 10%;
+    width: 60%
+}
+
+/* 代码的相关设置 */
+.highlight {
+    margin-bottom: calc($spacing-unit / 2)
+}
+
+.highlight {
+    background: #fffff8
+}
+
+.highlight .c {
+    color: #998;
+    font-style: normal
+}
+
+.highlight .err {
+    color: #a61717;
+    background-color: #e3d2d2
+}
+
+.highlight .k {
+    font-weight: bold
+}
+
+.highlight .o {
+    font-weight: bold
+}
+
+.highlight .cm {
+    color: #998;
+    font-style: normal
+}
+
+.highlight .cp {
+    color: #999;
+    font-weight: bold
+}
+
+.highlight .c1 {
+    color: #998;
+    font-style: normal
+}
+
+.highlight .cs {
+    color: #999;
+    font-weight: bold;
+    font-style: normal
+}
+
+.highlight .gd {
+    color: #000;
+    background-color: #fdd
+}
+
+.highlight .gd .x {
+    color: #000;
+    background-color: #faa
+}
+
+.highlight .ge {
+    font-style: normal
+}
+
+.highlight .gr {
+    color: #a00
+}
+
+.highlight .gh {
+    color: #999
+}
+
+.highlight .gi {
+    color: #000;
+    background-color: #dfd
+}
+
+.highlight .gi .x {
+    color: #000;
+    background-color: #afa
+}
+
+.highlight .go {
+    color: #888
+}
+
+.highlight .gp {
+    color: #555
+}
+
+.highlight .gs {
+    font-weight: bold
+}
+
+.highlight .gu {
+    color: #aaa
+}
+
+.highlight .gt {
+    color: #a00
+}
+
+.highlight .kc {
+    font-weight: bold
+}
+
+.highlight .kd {
+    font-weight: bold
+}
+
+.highlight .kp {
+    font-weight: bold
+}
+
+.highlight .kr {
+    font-weight: bold
+}
+
+.highlight .kt {
+    color: #458;
+    font-weight: bold
+}
+
+.highlight .m {
+    color: #099
+}
+
+.highlight .s {
+    color: #d14
+}
+
+.highlight .na {
+    color: teal
+}
+
+.highlight .nb {
+    color: #0086B3
+}
+
+.highlight .nc {
+    color: #458;
+    font-weight: bold
+}
+
+.highlight .no {
+    color: teal
+}
+
+.highlight .ni {
+    color: purple
+}
+
+.highlight .ne {
+    color: #900;
+    font-weight: bold
+}
+
+.highlight .nf {
+    color: #900;
+    font-weight: bold
+}
+
+.highlight .nn {
+    color: #555
+}
+
+.highlight .nt {
+    color: navy
+}
+
+.highlight .nv {
+    color: teal
+}
+
+.highlight .ow {
+    font-weight: bold
+}
+
+.highlight .w {
+    color: #bbb
+}
+
+.highlight .mf {
+    color: #099
+}
+
+.highlight .mh {
+    color: #099
+}
+
+.highlight .mi {
+    color: #099
+}
+
+.highlight .mo {
+    color: #099
+}
+
+.highlight .sb {
+    color: #d14
+}
+
+.highlight .sc {
+    color: #d14
+}
+
+.highlight .sd {
+    color: #d14
+}
+
+.highlight .s2 {
+    color: #d14
+}
+
+.highlight .se {
+    color: #d14
+}
+
+.highlight .sh {
+    color: #d14
+}
+
+.highlight .si {
+    color: #d14
+}
+
+.highlight .sx {
+    color: #d14
+}
+
+.highlight .sr {
+    color: #009926
+}
+
+.highlight .s1 {
+    color: #d14
+}
+
+.highlight .ss {
+    color: #990073
+}
+
+.highlight .bp {
+    color: #999
+}
+
+.highlight .vc {
+    color: teal
+}
+
+.highlight .vg {
+    color: teal
+}
+
+.highlight .vi {
+    color: teal
+}
+
+.highlight .il {
+    color: #099
+}
+
+*,*::before,*::after {
+    margin: 0;
+    box-sizing: border-box
+}
+
+/* html body 的设置 */
+html,body {
+    height: 100%
+}
+
+html {
+    font-size: 10px;  /* 基础大小，后面可为这个倍数来调整 */
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-
-  }
-
-@media screen and (min-width: 800px){ html{ font-size: 12px;} }
-
-@media screen and (min-width: 900px){ html{ font-size: 13px;} }
-
-@media screen and (min-width: 1000px){ html{ font-size: 14px;} }
-
-@media screen and (min-width: 1100px){ html{ font-size: 15px; } }
-
-@media screen and (min-width: 1200px){ html{ font-size: 16px; } }
-
-@media screen and (min-width: 1300px){ html{ font-size: 17px; } }
-
-// Mathjax fonts need TLC
-.mjx-math{
-  font-size: 1.3rem;
+    -moz-osx-font-smoothing: grayscale
 }
-// sets link style according to values in _settings.scss
+
+@media screen and (min-width: 800px) {
+    html {
+        font-size:11px
+    }
+}
+
+@media screen and (min-width: 900px) {
+    html {
+        font-size:12px
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    html {
+        font-size:13px
+    }
+}
+
+@media screen and (min-width: 1100px) {
+    html {
+        font-size:14px
+    }
+}
+
+body {
+    width: 100%;
+    padding-left: 10.5%;
+    max-width: calc(12.5% + 1400px);
+    margin: 0 auto;
+    font-family: "STKAITI", ETBembo, Palatino,"Palatino Linotype","Palatino LT STD","Book Antiqua", Georgia, serif;
+    background-color: #fffff8;
+    color: #111;
+    counter-reset: sidenote-counter
+}
+
+body.full-width {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0% 5%
+}
+
+// body {
+//   overflow: visible; /* 防止下拉框被挡 */
+// }
+
+/* 一级到三级标题的设置 */
+h1 {
+    font-weight: 400;
+    margin-top: 1.568rem;
+    margin-bottom: 1.568rem;
+    font-size: 2.5rem;
+    line-height: 1.184
+}
+
+h2 {
+    font-style: normal;
+    font-weight: 400;
+    margin-top: 1.866666666666667rem;
+    margin-bottom: 0;
+    font-size: 2.1rem;
+    line-height: 0.933333333333333
+}
+
+h3 {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.8rem;
+    margin-top: 2.1777777777777778rem;
+    margin-bottom: 0;
+    line-height: 1.08888888888889
+}
+
+/* p 段落、 subtitle 类、article 文章、li 列表、ol 有序列表、ul 无序列表、blockquote 引用的设置 */
+p .subtitle {
+    font-style: normal;
+    margin-top: 2.1777777777777778rem;
+    margin-bottom: 2.1777777777777778rem;
+    font-size: 1.8rem;
+    display: block;
+    line-height: 1.08888888888889;
+}
+
+p,li {
+    text-align: justify
+}
+
+p,ol,ul {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    margin: 1.4rem 0
+}
+
+p {
+    padding-right: 0;
+    vertical-align: baseline;
+    text-align: justify
+}
+
+li {
+    margin-bottom: 0.5em
+}
+
+.full-width article p {
+    width: 90%
+}
+
+h1.content-listing-header {
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    font-size: 1.8rem
+}
+
+h1.index {
+    font-family: "Gill Sans";
+    text-transform: uppercase;
+    font-size: 1.8rem;
+}
+
+li.listing hr {
+    width: 100%
+}
+
+.listing,.listing h3 {
+    display: inline-block;
+    margin: 0
+}
+
+li.listing {
+    margin: 0
+}
+
+li.listing p {
+    width: 100%
+}
+
+li.index::marker{
+    content: "♣";
+    font-size: 1.5em;
+    margin-right: 5em;
+}
+
+ol,ul {
+    padding-left: 6%
+}
+
+
+article {
+    width: 75%;
+    position: relative;
+    padding: 5rem 0;
+    margin-left: -18%; /* 向左移动5% [[5]] */
+}
+
+
+blockquote p,pre {
+    padding-right: 0 10%
+}
+
+blockquote * {
+    font-size: 1.1rem
+}
+
+blockquote p {
+    line-height: 1.75rem
+}
+
+blockquote footer {
+    text-align: right
+}
+
+figure.maincolumn {
+    margin-bottom: 3em
+}
+
+figure.maincolumn>figcaption {
+    display: block !important
+}
+
+figure.fullwidth figcaption {
+    float: left;
+    margin-right: 0%;
+    margin-left: 36%
+}
+
+img {
+    max-width: 100%
+}
+
+/* 旁注、列表的设置 */
+.sidenote,.marginnote {
+    width: 24.0625vw;
+    max-width: 336.875px;
+    margin-right: -60%;
+    float: right;
+    clear: right;
+    font-size: 1rem;
+    margin-top: 0;
+    margin-bottom: 1.4rem;
+    line-height: 1.4;
+    vertical-align: baseline;
+    position: relative;
+    text-align: start
+}
+
+.sidenote-number {
+    counter-increment: sidenote-counter
+}
+
+.sidenote-number::after,.sidenote::before {
+    font-family: ETBembo;
+    color: #a00000;
+    position: relative;
+    vertical-align: baseline
+}
+
+.sidenote-number::after {
+    content: counter(sidenote-counter);
+    font-size: 1rem;
+    top: -0.5rem;
+    left: 0.1rem
+}
+
+.sidenote::before {
+    content: counter(sidenote-counter) ". "
+}
+
+blockquote .sidenote,blockquote .marginnote {
+    margin-right: -82.35%
+}
+
+li .sidenote,li .marginnote {
+    margin-right: -63.29%
+}
+
+/* button 的设置 */
+.button-14 {
+    border-color: #adb1b8 #a2a6ac #8d9096;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    box-shadow: rgba(255,255,255,0.6) 0 1px 0 inset;
+    box-sizing: border-box;
+    color: #0f1111;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Arial,sans-serif;
+    font-size: 1.4rem;
+    height: 20px;
+    font-size: 13px;
+    outline: 0;
+    overflow: hidden;
+    padding: 0 6px;
+    margin-bottom: 3px;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    opacity: 1
+}
+
+.button-14:active {
+    border-bottom-color: #a2a6ac
+}
+
+.button-14:active:hover {
+    border-bottom-color: #a2a6ac
+}
+
+.button-14:hover {
+    border-color: #a2a6ac #979aa1 #82858a
+}
+
+.button-14:focus {
+    border-color: #a00000;
+    box-shadow: rgba(228,121,17,0.5) 0 0 3px 2px;
+    outline: 0
+}
+
+
+input.margin-toggle {
+    display: none
+}
+
+label.margin-toggle:not(.sidenote-number) {
+    display: none
+}
+
+/* 设置超链接的颜色和设置 */
 a {
-  color: $contrast-color;
-  text-decoration: none;
+    color: #a00000;
+    text-decoration: none
 }
 
-p > a, cite > a, span > a { @if $link-style == underline
-    {
-      color: $text-color;
-      text-decoration: none;
-      background: -webkit-linear-gradient($bg-color, $bg-color), -webkit-linear-gradient($bg-color, $bg-color), -webkit-linear-gradient(currentColor, currentColor);
-      background: linear-gradient($bg-color, $bg-color), linear-gradient($bg-color, $bg-color), linear-gradient(currentColor, currentColor);
-      -webkit-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-      -moz-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-      background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-      background-repeat: no-repeat, no-repeat, repeat-x;
-      text-shadow: 0.03em 0 $bg-color, -0.03em 0 $bg-color, 0 0.03em $bg-color, 0 -0.03em $bg-color, 0.06em 0 $bg-color, -0.06em 0 $bg-color, 0.09em 0 $bg-color, -0.09em 0 $bg-color, 0.12em 0 $bg-color, -0.12em 0 $bg-color, 0.15em 0 $bg-color, -0.15em 0 $bg-color;
-      background-position: 0% 93%, 100% 93%, 0% 93%; 
+p>a:link,p>a:visited {
+    color: inherit
+}
+
+p>a:link {
+    background: -webkit-linear-gradient(#fffff8, #fffff8),-webkit-linear-gradient(#fffff8, #fffff8),-webkit-linear-gradient(#333, #333);
+    background: linear-gradient(#fffff8, #fffff8),linear-gradient(#fffff8, #fffff8),linear-gradient(#333, #333);
+    -webkit-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
+    -moz-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
+    background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
+    background-repeat: no-repeat, no-repeat, repeat-x;
+    text-shadow: 0.03em 0 #fffff8, -0.03em 0 #fffff8, 0 0.03em #fffff8, 0 -0.03em #fffff8, 0.06em 0 #fffff8, -0.06em 0 #fffff8, 0.09em 0 #fffff8, -0.09em 0 #fffff8, 0.12em 0 #fffff8, -0.12em 0 #fffff8, 0.15em 0 #fffff8, -0.15em 0 #fffff8;
+    background-position: 0% 93%, 100% 93%, 0% 93%
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    p>a:link {
+        background-position-y:87%, 87%, 87%
     }
-    @else
-    {
-      color: $contrast-color;
-      text-decoration: none;
+}
+
+p>a:link::selection {
+    text-shadow: 0.03em 0 #b4d5fe, -0.03em 0 #b4d5fe, 0 0.03em #b4d5fe, 0 -0.03em #b4d5fe, 0.06em 0 #b4d5fe, -0.06em 0 #b4d5fe, 0.09em 0 #b4d5fe, -0.09em 0 #b4d5fe, 0.12em 0 #b4d5fe, -0.12em 0 #b4d5fe, 0.15em 0 #b4d5fe, -0.15em 0 #b4d5fe;
+    background: #b4d5fe
+}
+
+p>a:link::-moz-selection {
+    text-shadow: 0.03em 0 #b4d5fe, -0.03em 0 #b4d5fe, 0 0.03em #b4d5fe, 0 -0.03em #b4d5fe, 0.06em 0 #b4d5fe, -0.06em 0 #b4d5fe, 0.09em 0 #b4d5fe, -0.09em 0 #b4d5fe, 0.12em 0 #b4d5fe, -0.12em 0 #b4d5fe, 0.15em 0 #b4d5fe, -0.15em 0 #b4d5fe;
+    background: #b4d5fe
+}
+
+/* <pre> 元素表示预定义格式文本 */
+pre,code {
+    font-family: Consolas,"Liberation Mono",Menlo, Courier, monospace;
+    font-size: 1rem;
+    line-height: 1.42;
+    border-radius: 4px;
+    margin-top: 1.42rem
+}
+
+pre {
+    overflow-x: auto
+}
+
+pre.highlight {
+    background: #ffffff;
+    border: gray 1.5px solid;
+    padding: 0.5rem
+}
+
+.sans {
+    font-family: "Gill Sans","Gill Sans MT","Lato",Calibri,sans-serif;
+    letter-spacing: .03em
+}
+
+.fullwidth {
+    max-width: 90%
+}
+
+.full-width .sidenote,.full-width .sidenote-number,.full-width .marginnote {
+    display: none
+}
+
+/* 特殊文本的设置 */
+span.newthought {
+    font-variant: small-caps;
+    font-size: 1.2em;
+    letter-spacing: 0.05rem
+}
+
+/* 表格相关的设置 */
+table.booktabs {
+    width: auto;
+    margin: 0 auto;
+    border-spacing: 0px;
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333
+}
+
+th,.booktabs th {
+    border-bottom: 1px solid #333;
+    padding: 0.65ex 0.5em 0.4ex 0.5em;
+    font-weight: normal;
+    text-align: center
+}
+
+th,td {
+    font-size: 1.2rem;
+    line-height: 1.71428571
+}
+
+th,.booktabs th.cmid {
+    border-bottom: 1px solid #737373
+}
+
+.booktabs th.nocmid {
+    border-bottom: none
+}
+
+tr:first-child td,.booktabs tbody tr:first-child td {
+    padding-top: 0.65ex
+}
+
+td,.booktabs td {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    text-align: right
+}
+
+table tbody td:nth-child(1) {
+    text-align: left
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #FBF7F0
+}
+
+caption,.booktabs caption {
+    font-size: 90%;
+    text-align: left;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1ex;
+    caption-side: top
+}
+
+.booktabs tbody tr td.l {
+    text-align: left !important
+}
+
+.booktabs tbody tr td.c {
+    text-align: center !important
+}
+
+.booktabs tbody tr td.r {
+    text-align: right !important
+}
+
+.table-caption {
+    float: right;
+    clear: right;
+    margin-right: -60%;
+    width: 50%;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 1.0rem;
+    line-height: 1.96
+}
+
+@media screen and (max-width: 760px) {
+    article {
+        width: 75%
     }
-  }
 
-body { width: 87.5%;
-       margin-left: auto;
-       margin-right: auto;
-       padding-left: 12.5%;
-       font-family: $body-font;
-       background-color: $bg-color;
-       color: $text-color;
-       max-width: 1400px;
-       counter-reset: sidenote-counter; }
+    figure {
+        max-width: 90%
+    }
 
-// --------- Typography stuff -----------//
-// added rational line height and margins ala http://webtypography.net/intro/
+    figcaption,figure.fullwidth figcaption {
+        margin-right: 0%;
+        max-width: none
+    }
 
-h1 { font-weight: 400;
-     margin-top: 1.568rem;
-     margin-bottom: 1.568rem;
-     font-size: 2.5rem;
-     line-height: 0.784; }
+    blockquote p,blockquote footer {
+        padding-right: 10%
+    }
+}
 
-h2 { font-style: italic;
-     font-weight: 400;
-     margin-top: 1.866666666666667rem;
-     margin-bottom: 0;
-     font-size: 2.1rem;
-     line-height: 0.933333333333333; }
+@media (max-width: 760px) {
+    label.margin-toggle:not(.sidenote-number) {
+        display:inline;
+        color: #a00000
+    }
 
-h3 { font-style: italic;
-     font-weight: 400;
-     font-size: 1.8rem;
-     margin-top: 2.1777777777777778rem;
-     margin-bottom: 0;
-     line-height: 1.08888888888889; }
+    blockquote .sidenote,blockquote .marginnote,li .sidenote,li .marginnote,.sidenote,.marginnote {
+        width: 100%;
+        max-width: 100%;
+        display: none;
+        float: left;
+        padding: 0 5%;
+        margin: 1rem 0;
+        vertical-align: baseline
+    }
 
-// ET says a need for more than 3 levels of headings is the sign of a diseased mind
+    .margin-toggle:checked+.sidenote,.margin-toggle:checked+.marginnote {
+        display: block
+    }
 
-p .subtitle { font-style: italic;
-             margin-top: 2.1777777777777778rem;
-             margin-bottom: 2.1777777777777778rem;
-             font-size: 1.8rem;
-             display: block;
-             line-height: 1.08888888888889; }
+    label {
+        cursor: pointer
+    }
 
+    .table-caption {
+        display: block;
+        float: right;
+        clear: both;
+        width: 98%;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        margin-left: 1%;
+        margin-right: 1%;
+        vertical-align: baseline;
+        position: relative
+    }
 
-p, ol, ul { font-size: 1.4rem; }
+    div.table-wrapper,table,table.booktabs {
+        width: 85%
+    }
+}
 
-p, li { line-height: 2rem;
-        margin-top: 1.4rem;
-        padding-right: 2rem; //removed because,  why?
-        vertical-align: baseline; }
+.contrast {
+    color: #a00000
+}
 
-/* Chapter Epigraphs */
-div.epigraph { margin: 3.5636rem 0; }
+.smaller {
+    font-size: 80%
+}
 
-div.epigraph > blockquote { margin-top: 3rem;
-                            margin-bottom: 3rem;
-                             }
+/* header 导航栏的相关设置 */
+header>nav.group,body footer {
+    width: 95%;
+    padding-top: 2rem
+}
 
-div.epigraph > blockquote, div.epigraph > blockquote > p { font-style: italic; }
+/*
+nav.group a.active::before {
+    content: "\0003c"
+}
 
-div.epigraph > blockquote > footer {  font-style: normal;
-                                      width: 45%;
-                                      padding-left: 2.5%;
-                                      padding-right: 2.5%;
-                                      padding-top: 0;
-                                      margin-top: 0.4455rem;
-                                      margin-bottom: 3.1182rem }
-
-div.epigraph > blockquote > footer > cite { font-style: italic; }
-/* end chapter epigraphs styles */
-
-blockquote p, blockquote footer{  width: 45%;
-                                  padding-left: 2.5%;
-                                  padding-right: 2.5%;}
-
-blockquote footer {  font-size: 1.1rem;
-                line-height: 1.78181818;
-                margin-top: 1.78181818rem;
-                margin-bottom: 1.78181818rem;
-                text-align: right;
-                 }
-
-/* blockquote footer { width: 45%;
-                    text-align: right; }
+nav.group a.active::after {
+    content: ">"
+}
 */
 
-.sans { font-family: $sans-font;
-        letter-spacing: .03em; }
-
-pre, pre code, p code, p pre code { font-family: $code-font;  // removed .code 'class' since code is an actual html tag
-        font-size: 1.2rem;                   // also added p code, p pre code and pre selector to account for Markdown parsing
-        line-height: 1.71428571;        // of triple backticks plus rationalized line-heights and margins
-        margin-top: 1.71428571rem; }
-
-
-h1 code, h2 code, h3 code { font-size: 0.80em; } //left in for no real reason
-
-/*-- Table styling section - For Tufte-Jekyll, booktabs style is default for Markdown tables  --*/
-
-table, table.booktabs { width: auto;  //making booktabs style tables the unstyled default in case someone uses Markdown styling
-                 //margin: 0 auto;
-                 border-spacing: 0px;
-                 border-top: 2px solid $border-color;
-                 border-bottom: 2px solid $border-color; }
-
-.booktabs th, th { border-bottom: 1px solid $border-color;
-               padding: 0.65ex 0.5em 0.4ex 0.5em;
-               font-weight: normal;
-               //text-align: center; 
-               }
-
-th, td{ font-size: 1.2rem;
-        line-height: 1.71428571;  }
-
-.booktabs th.cmid, th { border-bottom: 1px solid lighten($border-color, 25%); }
-
-.booktabs th.nocmid { border-bottom: none; }
-
-.booktabs tbody tr:first-child td,  tr:first-child td { padding-top: 0.65ex; } /* add space between thead row and tbody */
-
-.booktabs td, td {  padding-left: 0.5em;
-                    padding-right: 0.5em;
-                    text-align: left; }            
-
-.booktabs caption, caption { font-size: 90%;
-                    text-align: left;
-                    width: auto;
-                    margin-left: auto;
-                    margin-right: auto;
-                    margin-top: 1ex;
-                    caption-side: top; }
-
-.booktabs tbody tr, .booktabs thead tr th.l, .booktabs td.l { text-align: left !important; }
-.booktabs tbody tr, .booktabs thead tr th.c, .booktabs td.c { text-align: center !important; }
-.booktabs tbody tr, .booktabs thead tr th.r, .booktabs td.r { text-align: right !important; }
-
-.table-caption { float:right;
-                 clear:right;
-                 margin-right: -60%;
-                 width: 50%;
-                 margin-top: 0;
-                 margin-bottom: 0;
-                 font-size: 1.0rem;
-                 line-height: 1.96; }
-/* -- End of Table Styling section --*/
-
-/* Basic Layout stuff --*/
-
-article { position: relative;
-          padding: 1
-
-          rem 0rem 2.5rem 0rem; } // reduced top and bottom padding by 50%
-
-section { padding-top: 1rem;
-          padding-bottom: 1rem; }
-
-ul,ol { width: 45%;
-     -webkit-padding-start: 5%;
-     -webkit-padding-end: 5%;
-     list-style-type: none; }
-
-//li { padding: 0.5em 0; } //vertical padding on list items screws up vertical rhythym
-
-figure, figure img.maincolumn { max-width: 55%;
-         -webkit-margin-start: 0;
-         -webkit-margin-end: 0;
-         margin-bottom: 3em; }
-
-figcaption { float: right;
-             clear: right;
-             margin-right: -50%;
-             margin-top: 0;
-             margin-bottom: 0;
-             font-size: 1.0rem;
-             line-height: 1.6;
-             vertical-align: baseline;
-             position: relative;
-             max-width: 40%; }
-
-figure.fullwidth figcaption { float: left; margin-right: 0%; margin-left: 33%; max-width: 100%; }
-
-img { max-width: 100%; }
-
-.sidenote, .marginnote { float: right;
-                         clear: right;
-                         margin-right: -60%;
-                         width: 50%;
-                         margin-top: 0;
-                         margin-bottom: 1.96rem;
-                         font-size: 1.0rem;
-                         line-height: 1.96; //changed to bring line heights into rational pattern
-                         vertical-align: baseline;
-                         position: relative; }
-
-
-li .sidenote, li .marginnote{ margin-right: -80%; } //added to allow for the fact that lists are indented and marginnotes and sidenotes push to right
-
-blockquote .sidenote, blockquote .marginnote { margin-right: -79% }
-
-.sidenote-number { counter-increment: sidenote-counter; }
-
-.sidenote-number:after, .sidenote:before { content: counter(sidenote-counter) " ";
-                                           font-family: et-bembo-roman-old-style;
-                                           color: $contrast-color; //added color
-                                           position: relative;
-                                           vertical-align: baseline; }
-
-.sidenote-number:after { content: counter(sidenote-counter);
-                         font-size: 1rem;
-                         top: -0.5rem;
-                         left: 0.1rem; }
-
-.sidenote:before { content: counter(sidenote-counter) ".\000a0"; // this is unicode for a non-breaking space
-                   color: $contrast-color;
-                   top: 0rem; } //removed superscripting for numerical reference in sidenote
-
-p, footer, div.table-wrapper,  .MJXc-display, .MathJax { width: 55%; }
-
-div.table-wrapper, table { overflow-x: auto; } //changed all overflow values to 'auto' so scroll bars appear only as needed
-
-@media screen and (max-width: 760px) { p, footer { width: 90%; }
-                                       pre code { width: 87.5%; }
-                                       ul { width: 85%; }
-                                       figure { max-width: 90%; }
-                                       figcaption, figure.fullwidth figcaption { margin-right: 0%;
-                                                                                 max-width: none; }
-                                       blockquote p, blockquote footer, div.epigraph > blockquote > footer,.MJXc-display {  width: 80%;
-                                                                          padding-left: 5%;
-                                                                          padding-right: 5%;
-                                                                        }}
-
-.marginnote code, .sidenote code { font-size: 1rem; } //more .code class removal
-
-pre { width: 52.5%; //, pre code, p pre code are both selectors in tufte.css - they have been removed here to fix alignment issues
-           padding-left: 2.5%;
-           overflow-x: auto; }
-
-.fullwidth, li.listing div{ max-width: 90%; }
-
-.full-width { .sidenote, .sidenote-number, .marginnote { display: none; } }
-
-span.newthought { font-variant: small-caps;
-                  font-size: 1.2em;
-                  letter-spacing: 0.05rem; }
-
-input.margin-toggle { display: none; }
-
-label.sidenote-number { display: inline; }
-
-label.margin-toggle:not(.sidenote-number) { display: none; }
-
-@media (max-width: 760px) { label.margin-toggle:not(.sidenote-number) { display: inline; color: $contrast-color; }
-                            .sidenote, .marginnote { display: none; }
-                            .margin-toggle:checked + .sidenote,
-                            .margin-toggle:checked + .marginnote { display: block;
-                                                                   float: left;
-                                                                   left: 1rem;
-                                                                   clear: both;
-                                                                   width: 95%;
-                                                                   margin: 1rem 2.5%;
-                                                                   vertical-align: baseline;
-                                                                   position: relative; }
-                            label { cursor: pointer; }
-                            pre, pre code, p code, p pre code { width: 90%;
-                                       padding: 0; }
-                            .table-caption { display: block;
-                                             float: right;
-                                             clear: both;
-                                             width: 98%;
-                                             margin-top: 1rem;
-                                             margin-bottom: 0.5rem;
-                                             margin-left: 1%;
-                                             margin-right: 1%;
-                                             vertical-align: baseline;
-                                             position: relative; }
-                            div.table-wrapper, table, table.booktabs { width: 85%; }
-                            div.table-wrapper { border-right: 1px solid #efefef; }
-                            img { max-width: 100%; } 
-                            figcaption.maincolumn-figure, figure.fullwidth figcaption { float:none; text-align: center;}
-                            figure.fullwidth figcaption { margin-left: 0; }
-                          }
-/*--- End of Basic Layout stuff from tufte.css ---*/
-
-/* -- Jekyll specific styling --*/
-//helper classes
-
-.contrast { color: $contrast-color;}
-.smaller { font-size: 80%;}
-//Nav and Footer styling area
-
-header > nav.group, body footer {
-  width: 95%;
-  padding-top: 2rem;
+.group::after {
+    content: "";
+    display: table;
+    clear: both
 }
 
-nav.group a.active:before{ content:"\0003c\000a0";} // escaped unicode for the carats and then a space on active menu links
-nav.group a.active:after{ content:"\000a0\0003e" ;}
+nav.group {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center;     /* 垂直居中 */
+    /* 如果需要单行文本截断 */
+    white-space: nowrap;
+    overflow: visible;  /* 防止搜索下拉框被挡 */
+    text-overflow: ellipsis;
+}
 
-header > nav  a{
-  font-size: 1.2rem;
-  font-family: $sans-font;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: $contrast-color;
-  padding-top: 1.5rem;
+header>nav a {
+    font-size: 1.5rem;
+    font-family: "Gill Sans","Gill Sans MT","Lato",Calibri,sans-serif;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #a00000;
+    padding-top: 1.5rem;
+    display: inline-block;
+    float: left;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-right: 2rem;
+    vertical-align: baseline
+}
+
+/* 隐藏原生 radio 按钮 */
+// .nav-input {
+//   position: absolute;
+//   opacity: 0;
+//   cursor: pointer;
+// }
+
+/* 导航链接基础样式 */
+.nav-link {
   text-decoration: none;
-  display: inline-block;
-  float: left;
-  margin-top: 0;
-  margin-bottom: 0;
-  padding-right: 2rem;
-  //margin-left: 1rem;
-  vertical-align: baseline;
-}
-header > nav a img{
-  height: 5rem;
+  color: #111;
+  padding: 8px 16px;
+  display: block;
   position: relative;
-  max-width: 100%;
-  top:-1.5rem;
-}
-ul.footer-links, .credits{
-  list-style: none;
-  text-align: center;
-  margin: 0 auto;
-}
-ul.footer-links li{
-  display: inline;
-  padding: 0.5rem 0.25rem;
-}
-.credits{
-  padding: 1rem 0rem;
+  transition: color 0.3s ease;
 }
 
-//change font color for credit links in footer
-
-.credits{
-  font-family: $sans-font;
-    & a{
-      color: $contrast-color;
-    }
+/* 下划线样式 */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: #6c757d;
+    left: 0;
+    bottom: -2px;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
 }
 
-// End of Nav and Footer styling area
-
-//Full width page styling stuff
-
-body.full-width, .content-listing, ul.content-listing li.listing{ width: 90%;
-       margin-left: auto;
-       margin-right: auto;
-       padding: 0% 5%;
-
-}
-.full-width article p{
-  width: 90%;
+/* 激活状态和悬停效果 */
+.nav-link.active {
+    color: #a00000;
 }
 
+.nav-link.active::after {
+    transform: scaleX(1);
+    background: #a00000;
 
-h1.content-listing-header{
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
-  font-size: 1.8rem;
 }
 
-li.listing hr{
-  width:100%;
-}
-.listing, .listing h3
-{
-  display: inline-block;
-  margin:0;
-}
-li.listing {
-  margin:0;
-  & p{
-    width: 100%
-  }
+.nav-link:hover:not(.active) {
+    transform: scaleX(1);
+    color: #6c757d;
 }
 
+.nav-link:hover:not(.active)::after {
+    transform: scaleX(1);
+}
 
-li.listing:last-of-type{
-  border-bottom: none;
-  margin-bottom: 1.4rem;
+ul.footer-links,.credits {
+    list-style: none;
+    text-align: center;
+    margin: 0 auto
 }
-li.listing h3.new {
-  text-transform: uppercase;
-  font-style: normal;
+
+ul.footer-links li {
+    display: inline;
+    padding: 0.5rem 0.25rem
 }
+
+.credits {
+    padding: 1rem 0rem
+}
+
+.credits {
+    font-family: "Gill Sans","Gill Sans MT","Lato",Calibri,sans-serif
+}
+
+.credits a {
+    color: #a00000
+}
+
 hr.slender {
     border: 0;
     height: 1px;
+    margin-top: 1.4rem;
+    margin-bottom: 1.4rem;
+    background-image: -webkit-linear-gradient(left, transparent, rgba(0,0,0,0.75), transparent);
+    background-image: -moz-linear-gradient(left, transparent, rgba(0,0,0,0.75), transparent);
+    background-image: -ms-linear-gradient(left, transparent, rgba(0,0,0,0.75), transparent);
+    background-image: -o-linear-gradient(left, transparent, rgba(0,0,0,0.75), transparent)
+}
+
+hr.invisible {
+    border: 0;
+    height: 1px;
+    margin-top: 1.4rem;
+    margin-bottom: 1.4rem
+}
+
+@media screen {
+    .print-footer {
+        display: none
+    }
+}
+
+@media print {
+    *,*::before,*::after {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important
+    }
+
+    @page {
+        margin: 0.75in 0.5in 0.75in 0.5in;
+        orphans: 4;
+        widows: 2
+    }
+
+    body {
+        font-size: 12pt
+    }
+
+    html body span.print-footer {
+        font-family: "Gill Sans","Gill Sans MT","Lato",Calibri,sans-serif;
+        font-size: 9pt;
+        margin-top: 22.4pt;
+        padding-top: 4pt;
+        border-top: 1px solid #000
+    }
+
+    thead {
+        display: table-header-group
+    }
+
+    tr,img {
+        page-break-inside: avoid
+    }
+
+    img {
+        max-width: 100% !important
+    }
+
+    p,h2,h3 {
+        orphans: 4;
+        widows: 4
+    }
+
+    article h2,article h2 h3,article h3,article h3 h4,article h4,article h4 h5 {
+        page-break-after: avoid
+    }
+
+    body header,body footer {
+        display: none
+    }
+}
+// 用于调整分割条的渐变色
+hr.slender {
+    border: 0;
+    height: 1px;
+    margin-top: 1.4rem;
+    margin-bottom:1.4rem;
+    background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0));
+    background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0));
+    background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0));
+    background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0));
+}
+hr.slender_footer {
+    border: 0;
+    height: 1px;
+    width:100%;
     margin-top: 1.4rem;
     margin-bottom:1.4rem;
     background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
@@ -500,8 +1083,8 @@ hr.slender {
     transition: none !important;
     }
     *,
-    *:before,
-    *:after {
+    *::before,
+    *::after {
         background: transparent !important;
         box-shadow: none !important;
         text-shadow: none !important;
@@ -580,67 +1163,478 @@ hr.slender {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-mail3:before {
-  content: "\ea85";
+.icon-line::before {
+  content: "\e900";
+  color: #00c300;
 }
-.icon-amazon:before {
-  content: "\ea87";
+.icon-zhihu::before {
+  content: "\e901";
+  color: #0084ff;
 }
-.icon-google2:before {
-  content: "\ea89";
+.icon-wechat::before {
+  content: "\e96d";
 }
-.icon-facebook2:before {
-  content: "\ea91";
-}
-.icon-twitter:before {
+.icon-twitter::before {
   content: "\ea96";
 }
-.icon-rss2:before {
-  content: "\ea9c";
-}
-.icon-youtube:before {
-  content: "\ea9d";
-}
-.icon-vimeo2:before {
-  content: "\eaa1";
-}
-.icon-lanyrd:before {
-  content: "\eaa2";
-}
-.icon-flickr3:before {
-  content: "\eaa5";
-}
-.icon-behance2:before {
-  content: "\eaa9";
-}
-.icon-dropbox:before {
-  content: "\eaae";
-}
-.icon-github:before {
+.icon-github::before {
   content: "\eab0";
+  color:#000000;
 }
-.icon-blogger2:before {
-  content: "\eab8";
-}
-.icon-soundcloud2:before {
-  content: "\eac4";
-}
-.icon-skype:before {
-  content: "\eac5";
-}
-.icon-reddit:before {
-  content: "\eac6";
-}
-.icon-linkedin:before {
-  content: "\eac9";
-}
-.icon-pinterest:before {
-  content: "\ead1";
-}
-.icon-paypal:before {
-  content: "\ead8";
-}
-.icon-html-five:before {
-  content: "\eae4";
+.icon-QQ::before {
+  content: "\eabd";
 }
 /*-- End of Icomoon icon font section --*/
+
+.footer_word {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+}
+
+
+ul.footer-links {
+    padding-inline-start: 0px
+}
+
+/* 基础 Badge 样式 */
+.badge {
+    /* 基础尺寸 */
+    --badge-width: 4rem;    /* 默认宽度 */
+    --badge-height: auto;   /* 默认高度 */
+    --badge-font-size: 12px;/* 文字大小 */
+    width: var(--badge-width);
+    height: var(--badge-height);
+
+    /* 布局与定位 */
+    display: inline-flex;   /* 弹性布局，居中内容 */
+    align-items: center;
+    justify-content: center;
+    position: relative;     /* 允许绝对定位子元素 */
+    flex-shrink: 0;        /* 禁止压缩宽度 */
+
+    /* 外观 */
+    border-radius: 50%;     /* 圆形（可改为固定值如 4px 实现直角） */
+    background: transparent;    /* 默认背景色 */
+
+    /* 防止选择文本 */
+    user-select: none;
+}
+
+/* 归档页的设置 */
+.archive-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.category-toggle {
+  display: none;
+}
+
+.category-header {
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(120deg, #9fc6ab, #2d6c4c);
+  border: none;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  transition: background 0.3s;
+  /* 新增整体居中 */
+  justify-content: center;
+}
+
+.category-header:hover {
+  background: linear-gradient(120deg, #603954, #493b5e);
+}
+
+h1.archive {
+    font-family: "Gill Sans";
+    text-transform: uppercase;
+    font-size: 1.8rem;
+}
+
+.category-header h2 {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-size: 1.5rem;
+  color: white;
+  /* 文字容器宽度100% */
+  width: 100%;
+  font-family: "Gill Sans";
+}
+
+.tag-group h3 {
+  text-transform: uppercase;
+  font-family: "Gill Sans";
+  font-size: 1.2rem;
+  color: #8dd1cc;
+}
+
+
+.category-title {
+  text-align: center; /* 文字居中 */
+  flex: 1;
+  padding-left: 1rem;
+}
+
+.toggle-icon {
+  margin-right: 1rem;
+  transition: transform 0.3s;
+  color: white;
+}
+
+.category-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  max-height: 0;
+  background: #fffff8;
+  border: 0;
+  border-top: none;
+}
+
+.category-toggle:checked ~ .category-content {
+  max-height: 1000px;
+}
+
+.category-toggle:checked ~ .category-header .toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* 搜索框的设置 */
+.search-container {
+  position: relative;
+}
+
+#search-input {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px; /* 圆角设计 */
+  width: 200px;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+#search-input:focus {
+  border-color: #007bff;
+  outline: none;
+  width: 300px;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+/* 搜索结果下拉框美化 */
+#search-results {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: auto; /* 确保宽度与输入框一致 */
+  width: 300px; /* 与输入框最大宽度一致 */
+  margin-top: 5px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 9000;
+  display: none;
+  scrollbar-width: thin; /* Firefox 滚动条优化 */
+  scrollbar-color: #c1c1c1 #f1f1f1; /* Firefox 滚动条颜色 */
+}
+
+/* 自定义滚动条样式（可选） */
+#search-results::-webkit-scrollbar {
+  width: 8px;
+}
+
+#search-results::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+#search-results::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+#search-results a{
+  display: block;
+  font-family: "STXIHEI";
+  font-style: bold;
+  text-transform: none;
+  padding: 12px 16px;
+  font-size: 15px;
+  text-decoration: none;
+  color: #6f4c2a;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+
+#search-results a:hover {
+  background-color: #f8f9fa;
+}
+
+#search-results a:last-child {
+  border-bottom: none;
+}
+
+/* 滚动条美化（可选） */
+#search-results::-webkit-scrollbar {
+  width: 8px;
+}
+
+#search-results::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+#search-results::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .navbar-left ul {
+    gap: 1rem;
+  }
+  #search-input {
+    width: 150px;
+  }
+  #search-input:focus {
+    width: 200px;
+  }
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+/* index 页面设置 */
+.full-width-container {
+    width: 100%;
+    min-height: 100vh; /* 视口高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fffff8;
+    padding: 20px; /* 替换原来的百分比padding */
+}
+
+/* 内容居中容器 */
+.center-box {
+    max-width: 800px; /* 最大宽度限制 */
+    width: 100%;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+/* 文本样式 */
+.quote-content {
+    font-family: "STKAITI";
+    font-size: 5rem;
+    line-height: 1.6;
+    color: #333;
+}
+
+.quote-source {
+    font-size: 2rem;
+    color: #666;
+    font-style: italic;
+    margin-top: 15px;
+    text-align: right;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .quote-content {
+      font-size: 1.8rem;
+    }
+    .center-box {
+      padding: 20px 10px;
+    }
+}
+
+/* 英文段落字体 */
+:lang(zh-CN) {
+  font-family: "STKAITI", "STXIHEI";
+}
+
+/* 统一按钮样式 */
+.nav-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #88674a, #e7dfd8);
+  color: white !important;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  margin: 0 4px;
+}
+
+.nav-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.page-go {
+  background: linear-gradient(150deg, #5b7c98, #d6e1eb);
+}
+
+/* 整体布局优化 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 4rem 0;
+  font-family: "Gill Sans";
+}
+
+.page-control {
+  display: flex;
+  align-items: center;
+  margin: 0 16px;
+}
+
+/* 保持原有页码输入样式 */
+.page-input {
+  width: 60px;
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  margin: 0 4px;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .pagination {
+    flex-direction: column;
+    align-items: center;
+  }
+  .nav-btn {
+    width: 100%;
+    margin: 6px 0;
+  }
+  .page-control {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #9d6a60, #fcc2b7);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 9999;
+}
+
+.back-to-top.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.back-to-top svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.back-to-top:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.back-to-top:active {
+  transform: translateY(0);
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .back-to-top {
+    width: 40px;
+    height: 40px;
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+
+/* 目录样式 */
+.toc {
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.toc {
+  border-left: 2px;
+  padding-left: 15px;
+  line-height: 1.6;
+}
+.toc-parent {
+  margin: 10px 0;
+}
+.toggle-btn {
+  cursor: pointer;
+  margin-right: 5px;
+  color: #082567;
+}
+.child-container {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+.child-container.open {
+  max-height: 500px;
+}
+
+
+.toc-link.level-1 {
+  color: #656598;
+  font-weight: 600;
+  display: block;
+  margin-left: 10px;
+  font-size: 1.5em;
+}
+.toc-link.level-2 {
+  color: #b1afcb;
+  display: block;
+  margin-left: 25px;
+  font-size: 1.2em;
+}
+.toc-link.active {
+  color: #082567 !important;
+  font-weight: bold;
+}
+
+.container {
+  display: flex;
+  gap: 2rem;
+}
+
+.toc {
+  width: 25%;
+  flex-shrink: 0;
+}
+
+.content {
+  width: 75%;
+  flex-grow: 1;
+}

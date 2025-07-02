@@ -1,11 +1,77 @@
 <!DOCTYPE html>
 <html>
   {% include head.html %}
-  <body class="full-width">
+  <body>
     {% include header.html %}
-    <article>
+    <!-- 新增内容 -->
+    <div class="full-width-container">
       {{ content }}
-    </article>
+    </div>
+    <script>
+    // 动态生成文章列表（假设每篇文章有标题、内容和链接）
+    const articles = [
+      {% for post in site.posts %}
+        {
+          title: "{{ post.title | escape }}",
+          content: "{{ post.content | strip_html | truncatewords: 50 | escape }}",
+          url: "{{ post.url }}"
+        },
+      {% endfor %}
+    ];
+
+    // 获取 DOM 元素
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+
+    // 监听输入框的变化
+    searchInput.addEventListener("input", function () {
+      const query = this.value.trim().toLowerCase();
+
+      // 清空结果容器
+      searchResults.innerHTML = "";
+      searchResults.style.display = "none";
+
+      if (!query) return;
+
+      // 过滤匹配的文章
+      const results = articles.filter((article) => {
+        return (
+          article.title.toLowerCase().includes(query) ||
+          article.content.toLowerCase().includes(query)
+        );
+      });
+
+      // 截断结果为最多 10 条
+      const limitedResults = results.slice(0, 50);
+
+      // 显示搜索结果
+      if (limitedResults.length > 0) {
+        limitedResults.forEach((result) => {
+          const resultItem = document.createElement("a");
+          resultItem.href = result.url;
+          resultItem.textContent = result.title;
+          resultItem.title = result.content; // 提示部分内容
+          searchResults.appendChild(resultItem);
+        });
+        searchResults.style.display = "block";
+      } else {
+        // 显示无结果提示
+        const noResult = document.createElement("div");
+        noResult.textContent = "No Result or Error Title";
+        noResult.style.padding = "20px 20px";
+        noResult.style.color = "#082567";
+        searchResults.appendChild(noResult);
+        searchResults.style.display = "block";
+      }
+    });
+
+    // 点击页面其他区域时隐藏搜索结果
+    document.addEventListener("click", function (e) {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = "none";
+      }
+    });
+    </script>
     {% include print-footer.html %}
     {% include footer.html %}
   </body>
