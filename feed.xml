@@ -3,10 +3,10 @@
   <channel>
     <title>From L77</title>
     <description>Personal Blog</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 30 Jun 2025 22:14:18 +0800</pubDate>
-    <lastBuildDate>Mon, 30 Jun 2025 22:14:18 +0800</lastBuildDate>
+    <link>https://fl77n.github.io/</link>
+    <atom:link href="https://fl77n.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Wed, 02 Jul 2025 23:42:37 +0800</pubDate>
+    <lastBuildDate>Wed, 02 Jul 2025 23:42:37 +0800</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
     
       <item>
@@ -154,8 +154,8 @@
 &lt;p&gt;至此从 DETR 到 DINO 的就讲完啦🍇🍇🍇&lt;/p&gt;
 </description>
         <pubDate>Fri, 19 May 2023 04:41:35 +0800</pubDate>
-        <link>http://localhost:4000/ai/2023/05/19/detr-series.html</link>
-        <guid isPermaLink="true">http://localhost:4000/ai/2023/05/19/detr-series.html</guid>
+        <link>https://fl77n.github.io/ai/2023/05/19/detr-series.html</link>
+        <guid isPermaLink="true">https://fl77n.github.io/ai/2023/05/19/detr-series.html</guid>
         
         <category>DETECTION</category>
         
@@ -479,8 +479,8 @@
 &lt;p&gt;&lt;strong&gt;To Be Continued&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 09 Feb 2023 05:42:00 +0800</pubDate>
-        <link>http://localhost:4000/ai/2023/02/09/cuda2.html</link>
-        <guid isPermaLink="true">http://localhost:4000/ai/2023/02/09/cuda2.html</guid>
+        <link>https://fl77n.github.io/ai/2023/02/09/cuda2.html</link>
+        <guid isPermaLink="true">https://fl77n.github.io/ai/2023/02/09/cuda2.html</guid>
         
         <category>CUDA</category>
         
@@ -1297,8 +1297,8 @@ size_t width, size_t height, enum cudaMemcpyKind kind)
 &lt;p&gt;并且我们同时可以应用上一节的技巧 &lt;strong&gt;对矩阵进行 padding&lt;/strong&gt; 来对齐访存，同时我们在使用共享内存的时候，要注意  &lt;strong&gt;少量多次循环&lt;/strong&gt; 使用的原则。&lt;/p&gt;
 </description>
         <pubDate>Sun, 01 Jan 2023 05:13:02 +0800</pubDate>
-        <link>http://localhost:4000/ai/2023/01/01/cuda1.html</link>
-        <guid isPermaLink="true">http://localhost:4000/ai/2023/01/01/cuda1.html</guid>
+        <link>https://fl77n.github.io/ai/2023/01/01/cuda1.html</link>
+        <guid isPermaLink="true">https://fl77n.github.io/ai/2023/01/01/cuda1.html</guid>
         
         <category>CUDA</category>
         
@@ -1636,8 +1636,8 @@ size_t width, size_t height, enum cudaMemcpyKind kind)
 &lt;p&gt;☕Yolov7 其他部分如 scheduler 和 optimizer 与 Yolov6 保持一致，另外值得一提的是 v7 的隐性层可以提点 0.5 左右，但是也许仅限 v7 同时对隐性层的 lr 等需要特殊设置&lt;/p&gt;
 </description>
         <pubDate>Sun, 06 Nov 2022 18:21:58 +0800</pubDate>
-        <link>http://localhost:4000/ai/2022/11/06/yolov7.html</link>
-        <guid isPermaLink="true">http://localhost:4000/ai/2022/11/06/yolov7.html</guid>
+        <link>https://fl77n.github.io/ai/2022/11/06/yolov7.html</link>
+        <guid isPermaLink="true">https://fl77n.github.io/ai/2022/11/06/yolov7.html</guid>
         
         <category>DETECTION</category>
         
@@ -2080,8 +2080,8 @@ sort\_error_i &amp;amp;= \underset{j \in \mathcal{P}}{\sum}(\ell_{S}(i) - \ell_{
 &lt;p&gt;&lt;a href=&quot;https://github.com/kemaloksuz/RankSortLoss&quot;&gt;源码地址&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 08 Aug 2022 04:39:56 +0800</pubDate>
-        <link>http://localhost:4000/ai/2022/08/08/Rank-Sort-Loss.html</link>
-        <guid isPermaLink="true">http://localhost:4000/ai/2022/08/08/Rank-Sort-Loss.html</guid>
+        <link>https://fl77n.github.io/ai/2022/08/08/Rank-Sort-Loss.html</link>
+        <guid isPermaLink="true">https://fl77n.github.io/ai/2022/08/08/Rank-Sort-Loss.html</guid>
         
         <category>DETECTION</category>
         
@@ -2253,8 +2253,8 @@ sort\_error_i &amp;amp;= \underset{j \in \mathcal{P}}{\sum}(\ell_{S}(i) - \ell_{
 &lt;/ul&gt;
 </description>
         <pubDate>Sun, 05 Jun 2022 17:29:33 +0800</pubDate>
-        <link>http://localhost:4000/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html</link>
-        <guid isPermaLink="true">http://localhost:4000/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html</guid>
+        <link>https://fl77n.github.io/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html</link>
+        <guid isPermaLink="true">https://fl77n.github.io/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html</guid>
         
         <category>微积分</category>
         
@@ -2715,8 +2715,8 @@ etc...
 
 </description>
         <pubDate>Mon, 13 Apr 2020 17:46:04 +0800</pubDate>
-        <link>http://localhost:4000/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html</guid>
+        <link>https://fl77n.github.io/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html</link>
+        <guid isPermaLink="true">https://fl77n.github.io/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html</guid>
         
         <category>jekyll</category>
         
