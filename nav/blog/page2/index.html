@@ -49,7 +49,7 @@
   <link rel="stylesheet" type="text/css" href="/css/tufte.css">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="http://localhost:4000/nav/blog/">
+  <link rel="canonical" href="http://localhost:4000/nav/blog/page2/">
 
   <link rel="alternate" type="application/rss+xml" title="From L77" href="http://localhost:4000/feed.xml" />
 </head>
@@ -115,47 +115,52 @@
   
     <li class="index">
       <hr class="invisible">
-      <a href="/ai/2023/05/19/detr-series.html">
-        <h2 class="contrast">DETR SERIES</h2>
+      <a href="/ai/2022/11/06/yolov7.html">
+        <h2 class="contrast">YoloV7 标签匹配及 loss 计算解析</h2>
       </a>
       <br>
       <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
-        May 19, 2023
+        November 6, 2022
       </span>
       <br/>
-      <div><p>🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法</p>
+      <div><p>🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。</p>
 </div>
     </li>
   
     <li class="index">
       <hr class="invisible">
-      <a href="/ai/2023/02/09/cuda2.html">
-        <h2 class="contrast">CUDA 编程（进阶篇）</h2>
+      <a href="/ai/2022/08/08/Rank-Sort-Loss.html">
+        <h2 class="contrast">Rank & Sort Loss 解读</h2>
       </a>
       <br>
       <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
-        February 9, 2023
+        August 8, 2022
       </span>
       <br/>
-      <div><h1 id="general-matrix-multiplication">General Matrix Multiplication</h1>
-
-<p>GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子<a href="https://zhuanlan.zhihu.com/p/435908830">文章</a>中的代码进行解读，也作为代码阅读笔记梳理整个思路。</p>
+      <div><p>Rank &amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 <a href="https://github.com/cccorn/AP-loss">AP Loss</a>、<a href="https://github.com/CV-IP/aLRPLoss">aLRPLoss</a> 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？</p>
 </div>
     </li>
   
     <li class="index">
       <hr class="invisible">
-      <a href="/ai/2023/01/01/cuda1.html">
-        <h2 class="contrast">CUDA 编程（基础篇）</h2>
+      <a href="/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html">
+        <h2 class="contrast">变限积分求导的种种</h2>
       </a>
       <br>
       <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
-        January 1, 2023
+        June 5, 2022
       </span>
       <br/>
-      <div><h2 id="简介">简介</h2>
+      <div><h2 id="变上限积分求导的理解">变上限积分求导的理解</h2>
 
-<p>cuda 关于矩阵相关运算的入门编程及相关技巧，是我的学习笔记，比较适合初学者。</p>
+<p>假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：</p>
+
+\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]
+
+<p>其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分：</p>
+
+\[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\]
+
 </div>
     </li>
   
@@ -164,19 +169,21 @@
 <!-- 分页导航 -->
 <div class="pagination">
   
+    <a href="/nav/blog/" class="nav-btn prev"><< PREV</a>
+  
 
   <!-- 页码控制区域 -->
   <div class="page-control">
     <span class="page-label">PAGE</span>
     <input type="number" id="currentPage"
            min="1" max="3"
-           value="1" class="page-input">
+           value="2" class="page-input">
     <span class="page-label">of 3&nbsp;</span>
     <button onclick="jumpToPage()" class="nav-btn page-go">GO</button>
   </div>
 
   
-    <a href="/nav/blog/page2/" class="nav-btn next">NEXT >></a>
+    <a href="/nav/blog/page3/" class="nav-btn next">NEXT >></a>
   
 </div>
 

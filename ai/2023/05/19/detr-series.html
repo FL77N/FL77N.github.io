@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>DETR SERIES</title>
+  <meta name="description" content="🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法">
+  <!-- 现代多尺寸图标 -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+  <link rel="manifest" href="/assets/img/site.webmanifest" />
+
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+  
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>  
+
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="http://localhost:4000/ai/2023/05/19/detr-series.html">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="http://localhost:4000/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and pages template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon.png" alt="CH"></a>
+	
+		
+<!--		<input type="radio" id="blog" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/blog/index.html" class="nav-link">blog</a>
+  	
+		
+<!--		<input type="radio" id="archive" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/archive.html" class="nav-link">archive</a>
+  	
+		
+<!--		<input type="radio" id="about" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/about.html" class="nav-link">about</a>
+  	
+	<!-- 右侧搜索框 -->
+	<div class="navbar-right">
+	  <div class="search-container">
+		<input type="text" id="search-input" placeholder="search blog..." />
+		<div id="search-results" class="search-results"></div>
+	  </div>
+	</div>
+	</nav>
+
+
+	<script>
+        // 页面加载时设置激活状态
+        document.addEventListener('DOMContentLoaded', () => {
+<!--            const currentPage = window.location.pathname.split('/').pop();-->
+            const currentPage = window.location.href;
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+
+        // 导航点击处理（可选，用于单页应用）
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 如果是单页应用，取消注释以下代码：
+                e.preventDefault();
+                window.location.href = this.href;
+                history.pushState({}, '', this.href);
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</header>
+    <article>
+        <div class="container">
+          <nav class="toc" id="toc"></nav>
+          <main class="content">
+            <h1 style="text-align: left">DETR SERIES</h1>
+            
+            
+            
+            <p class="subtitle" style="text-align:right"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> DETECTION NOTE</span></p>
+            
+            <p>🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法<!--more--></p>
+
+<h1 id="detr">DETR</h1>
+
+<h2 id="framework">Framework</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/1.png" /><figcaption></figcaption></figure>
+
+<p>DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测</p>
+
+<h2 id="transformer">Transformer</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/2.jpg" /><figcaption></figcaption></figure>
+
+<p>显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder 和多个 decoder 组成。decoder 的第二个多头注意力 (Multi-Head Attention <strong>MHA</strong>) 将 encoder 的输出作为两个输入。实际上 MAH 中主要由点积放缩注意力算子组成，大概可以看到其由 Query、Key 和 Value 三者作为输入，进行一系列矩阵操作得到结果</p>
+
+<figure class="fullwidth"><img src="/assets/detr-series/3.jpg" /><figcaption></figcaption></figure>
+
+<p>通过上图可以简单对点积缩放注意力算子进行介绍。每一个 Embedding 可以生成对应的 Q、K、V ，然后每一个 Embedding 的 Q 都会跟 n 个 K （包括自己的）进行向量内积计算，从而得到 n 个 值，再通过 softmax 得到 n 个权重，最后和 n 个 V 相乘得到了最后的结果。这个过程可以通过右边矩阵相乘实现，里面涉及两个矩阵乘法 Q x K，其结果和 V 进行矩阵相乘。而对于 encoder 而言，Embedding 的个数是和 image 的尺寸成正比，那么其矩阵相乘的计算复杂度就和 image 的尺寸就成平方关系了</p>
+
+<h1 id="deformable-detr">Deformable-DETR</h1>
+
+<h2 id="motivation">Motivation</h2>
+
+<p>Deformable DETR 这篇文章是商汤发表的文章。在这篇文章里面，认为 DETR 收敛慢的原因在于训练初期由于初始化的因素，模型对特征图的关注是非常均衡的，但是我们训练的目的是为了突出一个位置进行特别的关注，因此要想达到这种效果，原 DETR 需要经过较长时间的收敛。受到可变形卷积的启发，于是想到能不能做可变形注意力机制来进行加快收敛</p>
+
+<h2 id="framework-1">Framework</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/4.png" /><figcaption></figcaption></figure>
+
+<p>从上图我们可以看出，对于特征图的每一个位置会生成参考点(reference point)，并且通过 Query 来生成相应的 sampling offsets，图中的是每一个点会生成三个 offsets 代表由三个偏移点来生成这个点的特征值，而这三个偏移点的权重也是由 Query 生成的 (Attention Weights)。从这里看到其中没有涉及矩阵乘法，因此和 image 的尺寸是成线性关系的</p>
+
+<h2 id="focus">Focus</h2>
+
+<ul>
+  <li>
+    <p>deformable attention</p>
+
+    <p>最核心的地方应该在于如何进行可变形注意力的计算了，可见下面两行代码：</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sampling_offsets</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">sampling_offsets</span><span class="p">(</span><span class="n">query</span><span class="p">).</span><span class="nf">view</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">Len_q</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">n_levels</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+  
+<span class="n">attention_weights</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">attention_weights</span><span class="p">(</span><span class="n">query</span><span class="p">).</span><span class="nf">view</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">Len_q</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">n_levels</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">n_points</span><span class="p">)</span>
+</code></pre></div>    </div>
+
+    <p>这里的 self.n_points 一般为 4，Len_q 为 query embedding 的个数，在 encoder 里面则为 Hi * Wi，decoder 中则为需要预测 boxes 的个数。这里对每一个位置生成了 4 个采样点的偏移和4 个采样点的权重，这个<strong>偏移</strong>加上<strong>基础点</strong>的位置得到最后采样点的坐标（这里是不是很像 anchor + offsets 的感觉），得到坐标之后就可以用双线插值法得到这些点的 Value，乘上 <code class="language-plaintext highlighter-rouge">attention_weights</code> 就能得到最终的输出了。<a href="https://github.com/fundamentalvision/Deformable-DETR/blob/11169a60c33333af00a4849f1808023eba96a931/models/ops/functions/ms_deform_attn_func.py#L41">这里是其 pytorch 的实现</a> cuda 实现也基本一致</p>
+  </li>
+  <li>
+    <p>two-stage &amp; iterative bounding box refinement</p>
+
+    <p>这里讲的是从 encoder 里面出来后的输出的使用，和如何不断在 decoder 中迭代每一个 decoder layer 的输出</p>
+
+    <p>首先前者会通过 encoder 得到每个位置的偏移预测和分数，通过分数选出 topk 的 proposal，这里我们有他们的偏移和 anchor 的位置，肯定也能得到其最终坐标，这个坐标就是进行 decoder 中起始的 anchor 坐标。通过对得到的坐标进行维度的转换得到进入 decoder 的query 和位置编码。<a href="https://github.com/fundamentalvision/Deformable-DETR/blob/11169a60c33333af00a4849f1808023eba96a931/models/deformable_transformer.py#L157">源码位置在这里。</a></p>
+
+    <p>后者 boxes 的迭代可以理解为每个 decoder layer 层对 boxes 进行 refine 送入下一层中作为起始的 anchor 坐标。这里是不是很像 Cascade RCNN 的思路</p>
+  </li>
+</ul>
+
+<p>最终效果也是非常明显，将 Epoch 从 500 降低至了 50！</p>
+
+<h1 id="dab-detr">DAB-DETR</h1>
+
+<p>从这篇文章开始，都是粤港澳大湾区数字经济研究院的工作了，接下来的三篇文章基本都是基于 Deformable DETR 之上进行做的，基本是针对 DETR 收敛速度的研究。因此只介绍基于 Deformable DETR 之上的版本。</p>
+
+<h2 id="motivation-1">Motivation</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/5.jpg" /><figcaption></figcaption></figure>
+
+<p>文章通过前人的经验得出，导致 DETR 训练速度慢的原因很大可能是因为 decoder 中 cross attention 这个模块，由上面的对比可以看出其与 self attention 的区别主要就在于 query 的不同。文章猜想两个原因：query 比较难学和 query 的位置编码方式不对</p>
+
+<h2 id="framework-2">Framework</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/6.png" /><figcaption></figcaption></figure>
+
+<p>文章分别进行了实验：1、使用训练好的 query 来进行实验，发现并没有加快收敛；2、对 decoder 的位置编码改为正弦位置编码，并让 query 中的一个 embedding 关注一个位置发现收敛变快。最终得到上述的网络框架，通过编码的 anchor 会和 query、key 结合，当然这种情况仅限与 DETR 的改动，在 Deformable DETR 里面仅仅对位置编码进行重新调整了一下，<a href="https://github.com/IDEA-Research/DAB-DETR/blob/f235284b26ea9715ecd66b2ee4308ff1dfca4924/models/dab_deformable_detr/deformable_transformer.py#L404">源码在这里</a></p>
+
+<h2 id="focus-1">Focus</h2>
+
+<p>这篇文章里面还有一些其他改进，但是经过我的实验发现可能只是对这个模型有效，所以就没介绍。我觉得其最重要的是，它告诉了我们 decoder 里面的 query 到底在学什么？它就是位置的先验，最后出来的也是有多少 embedding 就有多少的框。这是文章最重要的意义，也指引后面的工作可以朝着这个方向去努力</p>
+
+<h1 id="dn-detr">DN-DETR</h1>
+
+<h2 id="motivation-2">Motivation</h2>
+
+<p>DN-DETR 从另外一个方面来探索 DETR 收敛慢的原因，那就是匈牙利算法匹配的不稳定性。比如经常出现这个 anchor 在上一次的匹配中是匹配给 GT1 的，但是这一次就匹配给 GT2 了，这使得 anchor 老是换来换去学习，从而致使收敛慢。那么这个问题是由什么引起的呢？</p>
+
+<p>经过前面几篇论文的探索，我们可以把类 DETR 的学习氛围两阶段：good anchor 和 relative offsets 的学习，前者是在 encoder 中学习，后者的微调是在 decoder 中的。然而good anchor 容易办到，offsets 的学习却难。因此，文章认为导致匹配不稳定的因素主要是这个。offsets 的学习质量可以用 L1 loss 很好的量化，文中也涉及了一些指标来量化是否稳定。从实验上看，确实 L1 更稳定时，匹配也稳定，这两者是相辅相成的</p>
+
+<h2 id="framework-3">Framework</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/7.png" /><figcaption></figcaption></figure>
+
+<p>其实可以看到，与 DAB-DETR 相比，最大的差别仍然在 decoder 处，主要是 query 的输入。DN-DETR 认为我们可以把对 offsets 的学习，看作一种对噪声学习的过程，因此，可以直接在 GT 周围生成一些 noised boxes，这些 boxes 是 GT 进行稍微移动得到的。然后将得到的 noised boxes 转化为高维的 embedding 与原本的 query 进行 cat，同时这些 noised boxes 的类别本应该是 GT 的类别，但是为了学习类别的噪声，因此将其任意翻转到其他类别再进行 embed。最后希望通过模型的学习，将 offsets 学好，同时把类别整对。这里可以看作<strong>增加了很多 good anchor 供模型学习</strong>，而且这些 boxes 最后不用参加匈牙利匹配，因为它们是由某个 GT 演化而来，从出生开始就已经形成了天然的匹配</p>
+
+<h2 id="focus-2">Focus</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/8.png" /><figcaption></figcaption></figure>
+
+<p>那么还有另外一个问题没有解决，就是生成的 noised boxes 是带有 GT 信息的，不能被由正常 query 预测的 boxes 在进行<strong>注意力计算</strong>的时候学到。因为真正到推理的时候，就没有人给你提供 GT 的信息了。文章通过上图中右边的 attention mask 来对其进行了屏蔽。灰色的是信息不相通的，对于生成的部分 (denoising part) 互相看不见，自己只能跟自己玩，生成的部分可以看见正常预测的部分 (matching part)，但是正常预测的看不见生成的部分。这里很合理，因为正常预测的部分不含有 GT 信息，被不被看到无所谓。（这个 mask 的看法为：group1 横着对出去灰色的是看不见的，彩色的看得见，其余皆是如此</p>
+
+<p>最后收敛效果也很显著，只需要 12 epoch 就能达到 44.1 AP</p>
+
+<h1 id="dino">DINO</h1>
+
+<p>DINO 则是这个系列的集大成者，代码的话建议看<a href="https://github.com/IDEA-Research/detrex">这个</a>，原 repo 感觉有点乱。DINO 整体的 pipline 没有太大变化，主要基于 DN-DETR 在三个方面上进行了改进</p>
+
+<figure class="fullwidth"><img src="/assets/detr-series/9.png" /><figcaption></figcaption></figure>
+
+<h2 id="contrastive-denoising-training">Contrastive DeNoising Training</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/10.png" /><figcaption></figcaption></figure>
+
+<p>首先动刀的地方在加噪声这个环境，之前 DN-DETR 的噪声实际上只有正样本的噪声没有负样本的，因此 DINO 在生成正样本的同时也生成了高质量的负样本噪声，简单来说就是负样本噪声离 GT 比正样本噪声更远，宽高形变更严重。这样做主要使得小目标检测的效果变化好了，不过论文好像没有研究这个的原因</p>
+
+<blockquote>
+  <p>It can inhibit confusion and select high-quality anchors (queries) for predicting bounding boxes</p>
+</blockquote>
+
+<h2 id="mixed-query-selection">Mixed Query Selection</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/11.jpg" /><figcaption></figcaption></figure>
+
+<p>这里对比了一下 Deformable DETR 和 DINO 进入 decoder 前 query 和 position-embedding 的生成。可以发现 DINO 的 query 并没有由 proposal 来生成，文章是这样说的：</p>
+
+<blockquote>
+  <p>As the selected features are preliminary content features without further refinement, they could be ambiguous and misleading to the decoder</p>
+</blockquote>
+
+<h2 id="look-forward-twice">Look Forward Twice</h2>
+
+<figure class="fullwidth"><img src="/assets/detr-series/12.jpg" /><figcaption></figcaption></figure>
+
+<p>其实差别就在于，上一层的 points 需不需要 detach 后再送入下一层进行 refine，文章是这样说的：</p>
+
+<blockquote>
+  <p>However, we conjecture that the improved box information from a later layer could be more helpful to correct the box prediction in its adjacent early layer</p>
+</blockquote>
+
+<p>虽然论文讲了挺多，后面两个改动，在代码中的表现就一行。文章的消融实验其实没有太大对比性，因为文章中消融实验的 AP 为 47.9 是 DINO-scale 的精度，但是 repo 的精度已经到了 49.0 了。不过有一说一这确实厉害，12 epoch 能跑出这个成绩！</p>
+
+<p>至此从 DETR 到 DINO 的就讲完啦🍇🍇🍇</p>
+
+            <p class="subtitle" style="text-align:right"><span style="color: #ffb6c1; font-style: inherit;">May 19, 2023</span></p>
+          </main>
+        </div>
+    </article>
+    <script>
+    // 动态生成文章列表（假设每篇文章有标题、内容和链接）
+    const articles = [
+      
+        {
+          title: "DETR SERIES",
+          content: "🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法 DETR Framework DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测 Transformer 显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder 和多个 decoder 组成。decoder 的第二个多头注意力 (Multi-Head Attention MHA) 将 encoder 的输出作为两个输入。实际上 MAH 中主要由点积放缩注意力算子组成，大概可以看到其由 Query、Key...",
+          url: "/ai/2023/05/19/detr-series.html"
+        },
+      
+        {
+          title: "CUDA 编程（进阶篇）",
+          content: "General Matrix Multiplication GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子文章中的代码进行解读，也作为代码阅读笔记梳理整个思路。 首先，其优化技巧分块计算、shared memory 的多次利用、register 的多次利用以及各种 bank 的 conflict 解决，有的甚至会涉及到汇编层面的优化，这里有些技巧在基础篇已经讲过，就不再赘述了。 其次，简单叙述一下优化的思路，主要的思路就是对矩阵进行分块计算，不同 block 负责计算出 C 中的不同部分，同时在 block 内又让不同线程负责不同部分，这里面为了能多次利用 shared memory，需要进行多次循环，因此在 block 内有多次大循环，在大循环内又有每个线程中的多次小循环。因为涉及到把数据不断搬到 shared memory，所以作者设计了预取 prefetch 的做法，这样做可以掩盖 io 的 latency，因此也要设计哪些线程搬运哪些数据。由于可能在访问 shared memory 的时候有 bank conflict，所以也要设计哪些线程访问哪些内存。 分块计算的思路 首先如下图，对 C 进行分块： 由图可知，C 被分为 MxN/BlOCK_SIZE_M/BlOCK_SIZE_N 块，每块的大小为高 BLOCK_SIZE_M，宽 BLOCK_SIZE_N，每一块对应 A 中的相应行，对应...",
+          url: "/ai/2023/02/09/cuda2.html"
+        },
+      
+        {
+          title: "CUDA 编程（基础篇）",
+          content: "简介 cuda 关于矩阵相关运算的入门编程及相关技巧，是我的学习笔记，比较适合初学者。 矩阵相加 这一节通过矩阵相加来介绍 cuda 编程的常规流程，并介绍一些术语 流程 memory alloc  用于在 gpu 上开辟空间 cudaMalloc((void**) &amp;amp;d_o, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;amp;d_a, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;amp;d_b, sizeof(float) * (M * N)); 其中 M 和 N 分别是矩阵的行和列 copy data cudaMemcpy(d_o, h_o, sizeof(float) * (M * N), cudaMemcpyHostToDevice); cudaMemcpy(d_a,...",
+          url: "/ai/2023/01/01/cuda1.html"
+        },
+      
+        {
+          title: "YoloV7 标签匹配及 loss 计算解析",
+          content: "🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分 如上如所示，YoloV7 同大多数单阶段目标检测算法属于密集检测 (dense detection)。上图是一个 7x7 的特征图红色的点是基于特征图的网格点，进行偏移后的点，然后在其上铺设 anchor box，每个点铺设一定数量的 anchor。当然也有直接在网格点上进行铺设的，一般来讲没有太大差别。下面我们开始介绍 v7 后处理，主要分为两部分：标签匹配和 loss 计算 Label Assignment 📄标签匹配主要分为两步：先是进行粗筛，然后是进行精筛 Find-3-Positive 📑顾名思义，第一步是找到三个正样本，就是对于每一个 GT 找到上图的三个 anchor 作为正样本。首先我们先大概讲一下匹配的规则 如上图所示，对于每一个网格，会被分为四个部分，绿色点是 GT 中心点，蓝色点是匹配给 GT 的正样本点。首先 GT 中心点所在的网格会被定义为正样本，然后根据中心点在网格的位置来找到另外两个正样本。比如在位置 1 是左上的点会被定义为其正样本，位置 2 是右上，位置 3 是左下，位置 4 是右下 📚下面是代码的注解和讲解：...",
+          url: "/ai/2022/11/06/yolov7.html"
+        },
+      
+        {
+          title: "Rank &amp; Sort Loss 解读",
+          content: "Rank &amp;amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 AP Loss、aLRPLoss 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp;amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？ 关于训练预测不一致的问题 简单来说，就是在分类和回归在训练的时候是分开的训练，计算 loss 并进行反向优化。但是在预测的时候却是用分类分数排序来进行 nms 后处理。这里可能导致一种情况就是分类分数很高，但是回归不好（这个问题在 FCOS 中有阐述）。 之前的工作 常见的目标检测网络一般会使用 nms 作为后处理，这时我们常常希望所有正样本的得分排在负样本前面，另外我们还希望位置预测更准确的框最后被留下来。之前的 AP Loss 和 aLRP Loss 由于需要附加的 head 来进行分类精度和位置精度综合评价（其实就是为了消除分类和回归的不一致问题，如 FCOS 的 centerness、IoU head 之类的），确实在解决类别不均衡问题（正负样本不均衡）等有着不错的效果，但是需要更多的时间和数据增强来进行训练。 Rank &amp;amp; Sort Loss...",
+          url: "/ai/2022/08/08/Rank-Sort-Loss.html"
+        },
+      
+        {
+          title: "变限积分求导的种种",
+          content: "变上限积分求导的理解 假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有： \[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\] 其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分： \[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\] 因此，其中我们称 \(\int_{a}^{x}f(t)dt\) 为 \(f(x)\) 的变上限积的定积分，也算是 \(f(x)\) 的一个原函数。同时我们也可以得到牛顿-莱布尼茨...",
+          url: "/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html"
+        },
+      
+        {
+          title: "Tufte-style Jekyll blog",
+          content: "The Tufte Jekyll theme is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. The idea for this project is essentially cribbed...",
+          url: "/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html"
+        },
+      
+    ];
+
+    // 获取 DOM 元素
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+
+    // 监听输入框的变化
+    searchInput.addEventListener("input", function () {
+      const query = this.value.trim().toLowerCase();
+
+      // 清空结果容器
+      searchResults.innerHTML = "";
+      searchResults.style.display = "none";
+
+      if (!query) return;
+
+      // 过滤匹配的文章
+      const results = articles.filter((article) => {
+        return (
+          article.title.toLowerCase().includes(query) ||
+          article.content.toLowerCase().includes(query)
+        );
+      });
+
+      // 截断结果为最多 10 条
+      const limitedResults = results.slice(0, 50);
+
+      // 显示搜索结果
+      if (limitedResults.length > 0) {
+        limitedResults.forEach((result) => {
+          const resultItem = document.createElement("a");
+          resultItem.href = result.url;
+          resultItem.textContent = result.title;
+          resultItem.title = result.content; // 提示部分内容
+          searchResults.appendChild(resultItem);
+        });
+        searchResults.style.display = "block";
+      } else {
+        // 显示无结果提示
+        const noResult = document.createElement("div");
+        noResult.textContent = "No Result or Error Title";
+        noResult.style.padding = "20px 20px";
+        noResult.style.color = "#082567";
+        searchResults.appendChild(noResult);
+        searchResults.style.display = "block";
+      }
+    });
+
+    // 点击页面其他区域时隐藏搜索结果
+    document.addEventListener("click", function (e) {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = "none";
+      }
+    });
+
+    // 返回顶部功能实现
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTop = document.getElementById('backToTop');
+
+      // 滚动监听 [[7]]
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // 平滑滚动 [[9]]
+      backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    function generateTOC() {
+      const toc = document.getElementById('toc');
+      const headings = document.querySelectorAll('h1, h2');
+
+      headings.forEach(heading => {
+        if (!heading.id) {
+          // 使用标准化编码方式
+          heading.id = encodeURIComponent(
+            heading.textContent
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '-') // 替换所有非字母数字字符
+          );
+        }
+
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        link.classList.add('toc-link', `level-${heading.tagName[1]}`);
+
+        if (heading.tagName === 'H2') {
+          const parentDiv = toc.lastChild;
+          if (parentDiv?.classList.contains('toc-parent')) {
+            parentDiv.querySelector('.child-container').appendChild(link);
+          }
+        } else {
+          const parentDiv = document.createElement('div');
+          parentDiv.className = 'toc-parent';
+
+          const toggleBtn = document.createElement('button');
+          toggleBtn.className = 'toggle-btn';
+          toggleBtn.textContent = '♠';
+          toggleBtn.addEventListener('click', () => {
+            const child = parentDiv.querySelector('.child-container');
+            child.classList.toggle('open');
+            toggleBtn.textContent = child.classList.contains('open') ? '♥' : '♠';
+          });
+
+          const childContainer = document.createElement('div');
+          childContainer.className = 'child-container';
+
+          parentDiv.appendChild(toggleBtn);
+          parentDiv.appendChild(link);
+          parentDiv.appendChild(childContainer);
+          toc.appendChild(parentDiv);
+        }
+      });
+    }
+
+    // 滚动监听与高亮 [[7]][[9]]
+    window.addEventListener('scroll', () => {
+      let currentSection = '';
+      const scrollY = window.scrollY + 50; // 偏移量优化
+
+      document.querySelectorAll('h1, h2').forEach(section => {
+        if (section.offsetTop <= scrollY) {
+          currentSection = section.id;
+        }
+      });
+
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.hash === `#${currentSection}`) {
+          link.classList.add('active');
+          // 自动展开父容器
+          const parent = link.closest('.toc-parent');
+          if (parent) {
+            parent.querySelector('.child-container').classList.add('open');
+            parent.querySelector('.toggle-btn').textContent = '♥';
+          }
+        }
+      });
+    });
+
+    // 修复平滑滚动并添加自动折叠功能
+    document.addEventListener('DOMContentLoaded', () => {
+      generateTOC();
+
+      // 新增滚动方向检测 [[5]]
+      let lastScrollPosition = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        const isScrollingUp = currentScroll < lastScrollPosition;
+
+        // 更新滚动位置记录
+        lastScrollPosition = currentScroll;
+
+        let currentSection = '';
+        const scrollY = currentScroll + 100; // 偏移量优化
+
+        document.querySelectorAll('h2').forEach(section => {
+          if (section.offsetTop <= scrollY) {
+            currentSection = section.id;
+          }
+        });
+
+        // 关闭所有非当前标题的展开状态
+        document.querySelectorAll('.toc-parent').forEach(parent => {
+          const childContainer = parent.querySelector('.child-container');
+          if (!parent.contains(document.querySelector(`#${currentSection}`))) {
+            childContainer.classList.remove('open');
+            parent.querySelector('.toggle-btn').textContent = '♠';
+          }
+        });
+
+        // 处理当前激活标题
+        const activeLink = document.querySelector(`.toc-link[href="#${currentSection}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+          activeLink.closest('.toc-parent').querySelector('.child-container').classList.add('open');
+          activeLink.closest('.toc-parent').querySelector('.toggle-btn').textContent = '♥';
+        } else {
+          document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+        }
+
+        // 特殊处理向上滚动场景 [[7]]
+        if (isScrollingUp) {
+          setTimeout(() => {
+            document.querySelectorAll('.child-container.open').forEach(container => {
+              if (container.getBoundingClientRect().top > window.innerHeight) {
+                container.classList.remove('open');
+                container.previousElementSibling.textContent = '♠';
+              }
+            });
+          }, 100);
+        }
+      });
+
+      // 修正平滑滚动 [[10]]
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = decodeURIComponent(link.hash); // 解码处理
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+    </script>
+    <span class="print-footer">DETR SERIES - May 19, 2023 - L77</span>
+    <footer>
+  <hr class="slender_footer">
+  <ul class="footer-links">   
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+      
+  </ul>
+<div class="credits">
+<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">Powered By Jekyll And Tufte Theme</span>
+</div>  
+</footer>
+    <!-- 在body底部新增按钮 -->
+    <button id="backToTop" class="back-to-top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="currentColor"
+              d="M12 4l8 8H16v8H8v-8H4l8-8z"
+              style="transform: rotate(0deg); transition: 0.3s;"/>
+      </svg>
+    </button>
+  </body>
+</html>

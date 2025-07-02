@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>YoloV7 标签匹配及 loss 计算解析</title>
+  <meta name="description" content="🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。">
+  <!-- 现代多尺寸图标 -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+  <link rel="manifest" href="/assets/img/site.webmanifest" />
+
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+  
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>  
+
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="http://localhost:4000/ai/2022/11/06/yolov7.html">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="http://localhost:4000/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and pages template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon.png" alt="CH"></a>
+	
+		
+<!--		<input type="radio" id="blog" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/blog/index.html" class="nav-link">blog</a>
+  	
+		
+<!--		<input type="radio" id="archive" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/archive.html" class="nav-link">archive</a>
+  	
+		
+<!--		<input type="radio" id="about" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/about.html" class="nav-link">about</a>
+  	
+	<!-- 右侧搜索框 -->
+	<div class="navbar-right">
+	  <div class="search-container">
+		<input type="text" id="search-input" placeholder="search blog..." />
+		<div id="search-results" class="search-results"></div>
+	  </div>
+	</div>
+	</nav>
+
+
+	<script>
+        // 页面加载时设置激活状态
+        document.addEventListener('DOMContentLoaded', () => {
+<!--            const currentPage = window.location.pathname.split('/').pop();-->
+            const currentPage = window.location.href;
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+
+        // 导航点击处理（可选，用于单页应用）
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 如果是单页应用，取消注释以下代码：
+                e.preventDefault();
+                window.location.href = this.href;
+                history.pushState({}, '', this.href);
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</header>
+    <article>
+        <div class="container">
+          <nav class="toc" id="toc"></nav>
+          <main class="content">
+            <h1 style="text-align: left">YoloV7 标签匹配及 loss 计算解析</h1>
+            
+            
+            
+            <p class="subtitle" style="text-align:right"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> DETECTION NOTE</span></p>
+            
+            <p>🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。<!--more-->因此我们着重介绍后处理部分</p>
+
+<figure class="fullwidth"><img src="/assets/yolov7/1.png" /><figcaption></figcaption></figure>
+
+<p>如上如所示，YoloV7 同大多数单阶段目标检测算法属于密集检测 (dense detection)。上图是一个 7x7 的特征图红色的点是基于特征图的网格点，进行偏移后的点，然后在其上铺设 anchor box，每个点铺设一定数量的 anchor。当然也有直接在网格点上进行铺设的，一般来讲没有太大差别。下面我们开始介绍 v7 后处理，主要分为两部分：标签匹配和 loss 计算</p>
+
+<h1 id="label-assignment">Label Assignment</h1>
+
+<p>📄标签匹配主要分为两步：先是进行<strong>粗筛</strong>，然后是进行<strong>精筛</strong></p>
+
+<h2 id="find-3-positive">Find-3-Positive</h2>
+
+<p>📑顾名思义，第一步是找到三个正样本，就是对于每一个 GT 找到上图的三个 anchor 作为正样本。首先我们先大概讲一下匹配的规则</p>
+
+<figure class="fullwidth"><img src="/assets/yolov7/2.png" /><figcaption></figcaption></figure>
+
+<p>如上图所示，对于每一个网格，会被分为四个部分，<strong>绿色点</strong>是 GT 中心点，<strong>蓝色点</strong>是匹配给 GT 的正样本点。首先 GT 中心点所在的网格会被定义为正样本，然后根据中心点在网格的位置来找到另外两个正样本。比如在位置 1 是左上的点会被定义为其正样本，位置 2 是右上，位置 3 是左下，位置 4 是右下</p>
+
+<figure class="fullwidth"><img src="/assets/yolov7/3.png" /><figcaption></figcaption></figure>
+
+<p>📚下面是代码的注解和讲解：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># na -- num_anchor nt -- num_targets
+# targets [nt, 6] [bs_id, cls, x, y, w, h]
+</span><span class="n">na</span><span class="p">,</span> <span class="n">nt</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">na</span><span class="p">,</span> <span class="n">targets</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># indices for assignment idx
+# anch for assignment anchor
+</span><span class="n">indices</span><span class="p">,</span> <span class="n">anch</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="c1"># 用于将 target 映射到特征图的网格上
+</span><span class="n">gain</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">ones</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">targets</span><span class="p">.</span><span class="n">device</span><span class="p">).</span><span class="nf">long</span><span class="p">()</span>
+<span class="c1"># [na, nt] eg. ai[0, :] = [0, ..., 0] ai[1, :] = [1, ..., 1]
+</span><span class="n">ai</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">arange</span><span class="p">(</span><span class="n">na</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">targets</span><span class="p">.</span><span class="n">device</span><span class="p">).</span><span class="nf">float</span><span class="p">().</span><span class="nf">view</span><span class="p">(</span><span class="n">na</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nf">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nt</span><span class="p">)</span>
+<span class="c1"># [na, nt, 7]
+</span><span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">((</span><span class="n">targets</span><span class="p">.</span><span class="nf">repeat</span><span class="p">(</span><span class="n">na</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">ai</span><span class="p">[:,</span> <span class="p">:,</span> <span class="bp">None</span><span class="p">]),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1"># 预设 4 个方向上的偏移
+</span><span class="n">g</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">off</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                   <span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="n">targets</span><span class="p">.</span><span class="n">device</span><span class="p">).</span><span class="nf">float</span><span class="p">()</span> <span class="o">*</span> <span class="n">g</span>
+    <span class="c1"># 对每个特征层进行匹配
+</span>	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">nl</span><span class="p">):</span>
+        <span class="c1"># 获取特征图 i 的 anchors [3, 2]
+</span>        <span class="n">anchors</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">anchors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="c1"># gain = [1, 1, w_i, h_i, w_i, h_i, 1]
+</span>        <span class="n">gain</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">shape</span><span class="p">)[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">targets</span> <span class="o">*</span> <span class="n">gain</span>
+        <span class="k">if</span> <span class="n">nt</span><span class="p">:</span>
+            <span class="c1"># 获取每个 gt 与 anchor 的长之间的比与宽之间的比 [na, nt, 2]
+</span>            <span class="n">r</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">/</span> <span class="n">anchors</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">]</span>
+            <span class="c1"># 获得比值都小于阈值 anchor_t 的 mask [na, nt]
+</span>            <span class="n">j</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">max</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">r</span><span class="p">).</span><span class="nf">max</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">self</span><span class="p">.</span><span class="n">hyp</span><span class="p">[</span><span class="sh">'</span><span class="s">anchor_t</span><span class="sh">'</span><span class="p">]</span>
+            <span class="c1"># 获得满足条件的 gt [n1, 7]
+</span>            <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="c1"># gt 在该特征图上的坐标
+</span>            <span class="n">gxy</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+            <span class="c1"># 将坐标映射到网格的对称位置，网格的 1 和 4 对称，2 和 3 对称
+</span>            <span class="n">gxi</span> <span class="o">=</span> <span class="n">gain</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span> <span class="o">-</span> <span class="n">gxy</span>
+            <span class="c1"># 如果在网格位置 1：j、k 均为真值，即找到了左上两个正样本
+</span>            <span class="c1"># 位置 2：j 为假，k 为真（上） 但此时位置 2 无法缺少一个正样本没有表示
+</span>            <span class="c1"># [n1] [n1]
+</span>            <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="p">((</span><span class="n">gxy</span> <span class="o">%</span> <span class="mf">1.</span> <span class="o">&lt;</span> <span class="n">g</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">gxy</span> <span class="o">&gt;</span> <span class="mf">1.</span><span class="p">)).</span><span class="n">T</span>
+            <span class="c1"># 由上行就可以看出无法表示 2 的全部正样本，对于位置 2 只能找到一个正样本
+</span>            <span class="c1"># 3，4 位置正样本无法表示，因此要将 2，3，4 映射到对称位置上
+</span>            <span class="c1"># 其中位置 1：j -&gt; 1、k -&gt; 1、l -&gt; 0、m -&gt; 0
+</span>            <span class="c1"># 其中位置 2：j -&gt; 0、k -&gt; 1、l -&gt; 1、m -&gt; 0
+</span>            <span class="c1"># 其中位置 3：j -&gt; 1、k -&gt; 0、l -&gt; 0、m -&gt; 1
+</span>            <span class="c1"># 其中位置 4：j -&gt; 0、k -&gt; 0、l -&gt; 1、m -&gt; 1
+</span>            <span class="n">l</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="p">((</span><span class="n">gxi</span> <span class="o">%</span> <span class="mf">1.</span> <span class="o">&lt;</span> <span class="n">g</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">gxi</span> <span class="o">&gt;</span> <span class="mf">1.</span><span class="p">)).</span><span class="n">T</span>
+            <span class="c1"># [n1 ,5] 是否选取 gt 中心点所在网格上下左右四个网格为正样本
+</span>            <span class="c1"># jklm 分别代表左、上、右、下
+</span>            <span class="n">j</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">stack</span><span class="p">((</span><span class="n">torch</span><span class="p">.</span><span class="nf">ones_like</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+            <span class="c1"># [5, n1, 7] -&gt; [n2, 7]
+</span>            <span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="nf">repeat</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))[</span><span class="n">j</span><span class="p">]</span>
+            <span class="c1"># [5, n1, 2] -&gt; [n2, 2] 获得偏移，以便后面得到三个正样本的坐标
+</span>            <span class="c1"># 所以这里的 n2 = 3 * n1
+</span>            <span class="n">offsets</span> <span class="o">=</span> <span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="nf">zeros_like</span><span class="p">(</span><span class="n">gxy</span><span class="p">)[</span><span class="bp">None</span><span class="p">]</span> <span class="o">+</span> <span class="n">off</span><span class="p">[:,</span> <span class="bp">None</span><span class="p">])[</span><span class="n">j</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">offsets</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># 正样本的 bs_idx、cls、横纵坐标、宽高
+</span>        <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">].</span><span class="nf">long</span><span class="p">().</span><span class="n">T</span>
+        <span class="n">gxy</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">gwh</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
+        <span class="c1"># 获得正样本 xy 坐标
+</span>        <span class="n">gij</span> <span class="o">=</span> <span class="p">(</span><span class="n">gxy</span> <span class="o">-</span> <span class="n">offsets</span><span class="p">).</span><span class="nf">long</span><span class="p">()</span>
+        <span class="n">gi</span><span class="p">,</span> <span class="n">gj</span> <span class="o">=</span> <span class="n">gij</span><span class="p">.</span><span class="n">T</span>
+        <span class="c1"># 所有正样本匹配的 anchor idx
+</span>        <span class="n">a</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">].</span><span class="nf">long</span><span class="p">()</span>
+        <span class="n">indices</span><span class="p">.</span><span class="nf">append</span><span class="p">((</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">gj</span><span class="p">.</span><span class="nf">clamp_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">gain</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">gi</span><span class="p">.</span><span class="nf">clamp_</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">gain</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">anch</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">anchors</span><span class="p">[</span><span class="n">a</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">indices</span><span class="p">,</span> <span class="n">anch</span>
+</code></pre></div></div>
+
+<h3 id="ota">OTA</h3>
+
+<p>📑在获得初步的正样本后，然后进行第二次筛选，使用的是简易的 OTA，其计算过程是：先计算每个 gt 与所有 anchor 的 iou 并将前十的 iou 之和作为该 gt 匹配的正样本个数，然后计算每一个 gt 和 anchor 计算 cost 来确定最后的正样本，需要注意的是选正样本是基于第一步的基础之上</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">build_targets</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">imgs</span><span class="p">):</span>
+    <span class="n">indices</span><span class="p">,</span> <span class="n">anch</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">find_3_positive</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+
+    <span class="c1"># [[], [], []]
+</span>    <span class="n">matching_bs</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+    <span class="n">matching_as</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+    <span class="n">matching_gjs</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+    <span class="n">matching_gis</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+    <span class="n">matching_targets</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+    <span class="n">matching_anchs</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+
+    <span class="n">nl</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>    
+
+    <span class="k">for</span> <span class="n">batch_idx</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+		<span class="c1"># 取出第 batch_idx 的 target
+</span>        <span class="n">b_idx</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">batch_idx</span>
+        <span class="n">this_target</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="n">b_idx</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">this_target</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+            <span class="c1"># 将 target 完全映射回原长度
+</span>        <span class="n">txywh</span> <span class="o">=</span> <span class="n">this_target</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">*</span> <span class="n">imgs</span><span class="p">[</span><span class="n">batch_idx</span><span class="p">].</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">txyxy</span> <span class="o">=</span> <span class="nf">xywh2xyxy</span><span class="p">(</span><span class="n">txywh</span><span class="p">)</span>
+
+        <span class="n">pxyxys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">p_cls</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">p_obj</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">from_which_layer</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_b</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_a</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_gj</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_gi</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_anch</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pi</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+            <span class="c1"># 取出第 i 个 level 的匹配的信息
+</span>            <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">gj</span><span class="p">,</span> <span class="n">gi</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="c1"># 取出该图在 level 匹配到的样本信息 mask
+</span>            <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="n">batch_idx</span><span class="p">)</span>
+            <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">gj</span><span class="p">,</span> <span class="n">gi</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">gj</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">gi</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>                
+            <span class="n">all_b</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+            <span class="n">all_a</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="n">all_gj</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">gj</span><span class="p">)</span>
+            <span class="n">all_gi</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">gi</span><span class="p">)</span>
+            <span class="n">all_anch</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">anch</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">idx</span><span class="p">])</span>
+            <span class="n">from_which_layer</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="nf">ones</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">b</span><span class="p">),))</span> <span class="o">*</span> <span class="n">i</span><span class="p">)</span>
+            <span class="c1"># 获得所有正样本的预测 [n, 85]
+</span>            <span class="n">fg_pred</span> <span class="o">=</span> <span class="n">pi</span><span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">gj</span><span class="p">,</span> <span class="n">gi</span><span class="p">]</span>                
+            <span class="n">p_obj</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">fg_pred</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
+            <span class="n">p_cls</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">fg_pred</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">:])</span>
+
+            <span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">stack</span><span class="p">([</span><span class="n">gi</span><span class="p">,</span> <span class="n">gj</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">pxy</span> <span class="o">=</span> <span class="p">(</span><span class="n">fg_pred</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">].</span><span class="nf">sigmoid</span><span class="p">()</span> <span class="o">*</span> <span class="mf">2.</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="n">grid</span><span class="p">)</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">stride</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> 
+            <span class="n">pwh</span> <span class="o">=</span> <span class="p">(</span><span class="n">fg_pred</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">].</span><span class="nf">sigmoid</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">anch</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">stride</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">pxywh</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">([</span><span class="n">pxy</span><span class="p">,</span> <span class="n">pwh</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">pxyxy</span> <span class="o">=</span> <span class="nf">xywh2xyxy</span><span class="p">(</span><span class="n">pxywh</span><span class="p">)</span>
+            <span class="n">pxyxys</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">pxyxy</span><span class="p">)</span>
+            <span class="c1"># [n ,4]
+</span>        <span class="n">pxyxys</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">pxyxys</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pxyxys</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">p_obj</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">p_obj</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">p_cls</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">p_cls</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">from_which_layer</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">from_which_layer</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">all_b</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">all_b</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">all_a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">all_a</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">all_gj</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">all_gj</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">all_gi</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">all_gi</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">all_anch</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">all_anch</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># [n, n] 获取每一个 tgt 与预测框的 iou
+</span>        <span class="n">pair_wise_iou</span> <span class="o">=</span> <span class="nf">box_iou</span><span class="p">(</span><span class="n">txyxy</span><span class="p">,</span> <span class="n">pxyxys</span><span class="p">)</span>
+        <span class="n">pair_wise_iou_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="n">pair_wise_iou</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span>
+        <span class="c1"># [n, 10] 取与 tgt iou 排名前 10 的预测框
+</span>        <span class="n">top_k</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">topk</span><span class="p">(</span><span class="n">pair_wise_iou</span><span class="p">,</span> <span class="nf">min</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">pair_wise_iou</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># [n] 对于每个 tgt 的正样本个数取为上述前 10 个 iou 的和
+</span>        <span class="n">dynamic_ks</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">clamp</span><span class="p">(</span><span class="n">top_k</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nf">int</span><span class="p">(),</span> <span class="nb">min</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># [n, n, 80]
+</span>        <span class="n">gt_cls_per_image</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">F</span><span class="p">.</span><span class="nf">one_hot</span><span class="p">(</span><span class="n">this_target</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">].</span><span class="nf">to</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">self</span><span class="p">.</span><span class="n">nc</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">float</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">repeat</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pxyxys</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">num_gt</span> <span class="o">=</span> <span class="n">this_target</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># [n, n, 80]
+</span>        <span class="n">cls_preds_</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">p_cls</span><span class="p">.</span><span class="nf">float</span><span class="p">().</span><span class="nf">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nf">repeat</span><span class="p">(</span><span class="n">num_gt</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nf">sigmoid_</span><span class="p">()</span>
+            <span class="o">*</span> <span class="n">p_obj</span><span class="p">.</span><span class="nf">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nf">repeat</span><span class="p">(</span><span class="n">num_gt</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nf">sigmoid_</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="n">y</span> <span class="o">=</span> <span class="n">cls_preds_</span><span class="p">.</span><span class="nf">sqrt_</span><span class="p">()</span>
+        <span class="c1"># [n, n] 计算 cls 的代价
+</span>        <span class="n">pair_wise_cls_loss</span> <span class="o">=</span> <span class="n">F</span><span class="p">.</span><span class="nf">binary_cross_entropy_with_logits</span><span class="p">(</span>
+            <span class="n">torch</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="n">y</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">y</span><span class="p">))</span> <span class="p">,</span> <span class="n">gt_cls_per_image</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="sh">"</span><span class="s">none</span><span class="sh">"</span>
+        <span class="p">).</span><span class="nf">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">cls_preds_</span>
+
+        <span class="n">cost</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">pair_wise_cls_loss</span>
+            <span class="o">+</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">pair_wise_iou_loss</span>
+        <span class="p">)</span>
+        <span class="c1"># [n, n]
+</span>        <span class="n">matching_matrix</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros_like</span><span class="p">(</span><span class="n">cost</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">gt_idx</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">num_gt</span><span class="p">):</span>
+            <span class="c1"># 对于每个 gt 选择 cost 前 dynamic_ks 个小的预测框作为正样本
+</span>            <span class="n">_</span><span class="p">,</span> <span class="n">pos_idx</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">topk</span><span class="p">(</span>
+                <span class="n">cost</span><span class="p">[</span><span class="n">gt_idx</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="n">dynamic_ks</span><span class="p">[</span><span class="n">gt_idx</span><span class="p">].</span><span class="nf">item</span><span class="p">(),</span> <span class="n">largest</span><span class="o">=</span><span class="bp">False</span>
+            <span class="p">)</span>
+            <span class="n">matching_matrix</span><span class="p">[</span><span class="n">gt_idx</span><span class="p">][</span><span class="n">pos_idx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+        <span class="k">del</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">dynamic_ks</span>
+        <span class="c1"># [n] 计算每个 anchor 匹配到了多少个 gt
+</span>        <span class="n">anchor_matching_gt</span> <span class="o">=</span> <span class="n">matching_matrix</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="nf">if </span><span class="p">(</span><span class="n">anchor_matching_gt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">).</span><span class="nf">sum</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># [n, am] 获取匹配 gt 数大于 1 的 anchor 与 gt 最小的 cost 的 gt 的下标
+</span>            <span class="n">_</span><span class="p">,</span> <span class="n">cost_argmin</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">min</span><span class="p">(</span><span class="n">cost</span><span class="p">[:,</span> <span class="n">anchor_matching_gt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># 先全部置为 0
+</span>            <span class="n">matching_matrix</span><span class="p">[:,</span> <span class="n">anchor_matching_gt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.0</span>
+            <span class="c1"># 将与 anchor 中 cost 最小对应的 gt 设置为它的正样本
+</span>            <span class="c1"># 这样做的原因是因为保证每一个 anchor 只匹配到一个 gt
+</span>            <span class="n">matching_matrix</span><span class="p">[</span><span class="n">cost_argmin</span><span class="p">,</span> <span class="n">anchor_matching_gt</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="c1"># [n] 获得 anchor 的 mask，其中 true 为正样本，反之为负样本
+</span>        <span class="n">fg_mask_inboxes</span> <span class="o">=</span> <span class="n">matching_matrix</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
+        <span class="c1"># 获取每个 anchor 匹配到 gt 的下标
+</span>        <span class="n">matched_gt_inds</span> <span class="o">=</span> <span class="n">matching_matrix</span><span class="p">[:,</span> <span class="n">fg_mask_inboxes</span><span class="p">].</span><span class="nf">argmax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># 获取所有正样本的信息
+</span>        <span class="n">from_which_layer</span> <span class="o">=</span> <span class="n">from_which_layer</span><span class="p">[</span><span class="n">fg_mask_inboxes</span><span class="p">]</span>
+        <span class="n">all_b</span> <span class="o">=</span> <span class="n">all_b</span><span class="p">[</span><span class="n">fg_mask_inboxes</span><span class="p">]</span>
+        <span class="n">all_a</span> <span class="o">=</span> <span class="n">all_a</span><span class="p">[</span><span class="n">fg_mask_inboxes</span><span class="p">]</span>
+        <span class="n">all_gj</span> <span class="o">=</span> <span class="n">all_gj</span><span class="p">[</span><span class="n">fg_mask_inboxes</span><span class="p">]</span>
+        <span class="n">all_gi</span> <span class="o">=</span> <span class="n">all_gi</span><span class="p">[</span><span class="n">fg_mask_inboxes</span><span class="p">]</span>
+        <span class="n">all_anch</span> <span class="o">=</span> <span class="n">all_anch</span><span class="p">[</span><span class="n">fg_mask_inboxes</span><span class="p">]</span>
+
+        <span class="n">this_target</span> <span class="o">=</span> <span class="n">this_target</span><span class="p">[</span><span class="n">matched_gt_inds</span><span class="p">]</span>
+        <span class="c1"># 进行分层储存，得到不同 level 的正样本
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
+            <span class="n">layer_idx</span> <span class="o">=</span> <span class="n">from_which_layer</span> <span class="o">==</span> <span class="n">i</span>
+            <span class="n">matching_bs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">all_b</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">])</span>
+            <span class="n">matching_as</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">all_a</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">])</span>
+            <span class="n">matching_gjs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">all_gj</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">])</span>
+            <span class="n">matching_gis</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">all_gi</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">])</span>
+            <span class="n">matching_targets</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">this_target</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">])</span>
+            <span class="n">matching_anchs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">all_anch</span><span class="p">[</span><span class="n">layer_idx</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">matching_targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="p">[]:</span>
+        	<span class="n">matching_bs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">matching_bs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        	<span class="n">matching_as</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">matching_as</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        	<span class="n">matching_gjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">matching_gjs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        	<span class="n">matching_gis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">matching_gis</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        	<span class="n">matching_targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">matching_targets</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        	<span class="n">matching_anchs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">(</span><span class="n">matching_anchs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">matching_bs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([],</span> <span class="n">device</span><span class="o">=</span><span class="sh">'</span><span class="s">cuda:0</span><span class="sh">'</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">matching_as</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([],</span> <span class="n">device</span><span class="o">=</span><span class="sh">'</span><span class="s">cuda:0</span><span class="sh">'</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">matching_gjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([],</span> <span class="n">device</span><span class="o">=</span><span class="sh">'</span><span class="s">cuda:0</span><span class="sh">'</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">matching_gis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([],</span> <span class="n">device</span><span class="o">=</span><span class="sh">'</span><span class="s">cuda:0</span><span class="sh">'</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">matching_targets</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([],</span> <span class="n">device</span><span class="o">=</span><span class="sh">'</span><span class="s">cuda:0</span><span class="sh">'</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">)</span>
+            <span class="n">matching_anchs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([],</span> <span class="n">device</span><span class="o">=</span><span class="sh">'</span><span class="s">cuda:0</span><span class="sh">'</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">matching_bs</span><span class="p">,</span> <span class="n">matching_as</span><span class="p">,</span> <span class="n">matching_gjs</span><span class="p">,</span> <span class="n">matching_gis</span><span class="p">,</span> <span class="n">matching_targets</span><span class="p">,</span> <span class="n">matching_anch</span>
+</code></pre></div></div>
+
+<h2 id="loss-computation">Loss Computation</h2>
+
+<p>📑v7 的 loss 计算分为：分类损失、回归损失和目标损失</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">imgs</span><span class="p">):</span>
+    <span class="n">device</span> <span class="o">=</span> <span class="n">targets</span><span class="p">.</span><span class="n">device</span>
+    <span class="n">lcls</span><span class="p">,</span> <span class="n">lbox</span><span class="p">,</span> <span class="n">lobj</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">),</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">),</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">bs</span><span class="p">,</span> <span class="n">as_</span><span class="p">,</span> <span class="n">gjs</span><span class="p">,</span> <span class="n">gis</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">anchors</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">build_targets</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">imgs</span><span class="p">)</span>
+    <span class="c1"># 每个 level 特征图的宽高
+</span>    <span class="n">pre_gen_gains</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">(</span><span class="n">pp</span><span class="p">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)[[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span> <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span> 
+
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pi</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+        <span class="c1"># 取出第 level 的正样本信息
+</span>        <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">gj</span><span class="p">,</span> <span class="n">gi</span> <span class="o">=</span> <span class="n">bs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">as_</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gjs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">tobj</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros_like</span><span class="p">(</span><span class="n">pi</span><span class="p">[...,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">n</span><span class="p">:</span>
+            <span class="c1"># 获得正样本的预测结果
+</span>            <span class="n">ps</span> <span class="o">=</span> <span class="n">pi</span><span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">gj</span><span class="p">,</span> <span class="n">gi</span><span class="p">]</span>
+
+            <span class="c1"># 正样本的坐标
+</span>            <span class="n">grid</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">stack</span><span class="p">([</span><span class="n">gi</span><span class="p">,</span> <span class="n">gj</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># 这里得到的是用 stride norm 过后的预测框
+</span>            <span class="n">pxy</span> <span class="o">=</span> <span class="n">ps</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">].</span><span class="nf">sigmoid</span><span class="p">()</span> <span class="o">*</span> <span class="mf">2.</span> <span class="o">-</span> <span class="mf">0.5</span>
+            <span class="n">pwh</span> <span class="o">=</span> <span class="p">(</span><span class="n">ps</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">].</span><span class="nf">sigmoid</span><span class="p">()</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">anchors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">pbox</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">((</span><span class="n">pxy</span><span class="p">,</span> <span class="n">pwh</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">selected_tbox</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span> <span class="o">*</span> <span class="n">pre_gen_gains</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="c1"># 预测的是离格点距离，因此 gt 需要减去相应格点的坐标
+</span>            <span class="n">selected_tbox</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">-=</span> <span class="n">grid</span>
+            <span class="n">iou</span> <span class="o">=</span> <span class="nf">bbox_iou</span><span class="p">(</span><span class="n">pbox</span><span class="p">.</span><span class="n">T</span><span class="p">,</span> <span class="n">selected_tbox</span><span class="p">,</span> <span class="n">x1y1x2y2</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">CIoU</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">lbox</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">iou</span><span class="p">).</span><span class="nf">mean</span><span class="p">()</span>
+
+            <span class="c1"># 将 obj label 中正样本位置设置为与 gt 的 iou，其余为 0
+</span>            <span class="n">tobj</span><span class="p">[</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">gj</span><span class="p">,</span> <span class="n">gi</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">gr</span><span class="p">)</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">gr</span> <span class="o">*</span> <span class="n">iou</span><span class="p">.</span><span class="nf">detach</span><span class="p">().</span><span class="nf">clamp</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nf">type</span><span class="p">(</span><span class="n">tobj</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+
+            <span class="n">selected_tcls</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="n">i</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">].</span><span class="nf">long</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">nc</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># cls loss 只计算了正样本的 loss
+</span>                <span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">full_like</span><span class="p">(</span><span class="n">ps</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">:],</span> <span class="n">self</span><span class="p">.</span><span class="n">cn</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+                <span class="n">t</span><span class="p">[</span><span class="nf">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">selected_tcls</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">cp</span>
+                <span class="n">lcls</span> <span class="o">+=</span> <span class="n">self</span><span class="p">.</span><span class="nc">BCEcls</span><span class="p">(</span><span class="n">ps</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">:],</span> <span class="n">t</span><span class="p">)</span>
+
+            <span class="c1"># obj 计算为全部样本的 loss
+</span>            <span class="n">obji</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nc">BCEobj</span><span class="p">(</span><span class="n">pi</span><span class="p">[...,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">tobj</span><span class="p">)</span>
+            <span class="n">lobj</span> <span class="o">+=</span> <span class="n">obji</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">balance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># obj loss
+</span>            <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">autobalance</span><span class="p">:</span>
+                <span class="n">self</span><span class="p">.</span><span class="n">balance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">balance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.9999</span> <span class="o">+</span> <span class="mf">0.0001</span> <span class="o">/</span> <span class="n">obji</span><span class="p">.</span><span class="nf">detach</span><span class="p">().</span><span class="nf">item</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">autobalance</span><span class="p">:</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">balance</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">balance</span><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">ssi</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">self</span><span class="p">.</span><span class="n">balance</span><span class="p">]</span>
+    <span class="n">lbox</span> <span class="o">*=</span> <span class="n">self</span><span class="p">.</span><span class="n">hyp</span><span class="p">[</span><span class="sh">'</span><span class="s">box</span><span class="sh">'</span><span class="p">]</span>
+    <span class="n">lobj</span> <span class="o">*=</span> <span class="n">self</span><span class="p">.</span><span class="n">hyp</span><span class="p">[</span><span class="sh">'</span><span class="s">obj</span><span class="sh">'</span><span class="p">]</span>
+    <span class="n">lcls</span> <span class="o">*=</span> <span class="n">self</span><span class="p">.</span><span class="n">hyp</span><span class="p">[</span><span class="sh">'</span><span class="s">cls</span><span class="sh">'</span><span class="p">]</span>
+    <span class="n">bs</span> <span class="o">=</span> <span class="n">tobj</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># batch size
+</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">lbox</span> <span class="o">+</span> <span class="n">lobj</span> <span class="o">+</span> <span class="n">lcls</span>
+    <span class="k">return</span> <span class="n">loss</span> <span class="o">*</span> <span class="n">bs</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="nf">cat</span><span class="p">((</span><span class="n">lbox</span><span class="p">,</span> <span class="n">lobj</span><span class="p">,</span> <span class="n">lcls</span><span class="p">,</span> <span class="n">loss</span><span class="p">)).</span><span class="nf">detach</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>☕Yolov7 其他部分如 scheduler 和 optimizer 与 Yolov6 保持一致，另外值得一提的是 v7 的隐性层可以提点 0.5 左右，但是也许仅限 v7 同时对隐性层的 lr 等需要特殊设置</p>
+
+            <p class="subtitle" style="text-align:right"><span style="color: #ffb6c1; font-style: inherit;">November 6, 2022</span></p>
+          </main>
+        </div>
+    </article>
+    <script>
+    // 动态生成文章列表（假设每篇文章有标题、内容和链接）
+    const articles = [
+      
+        {
+          title: "DETR SERIES",
+          content: "🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法 # DETR ## Framework {% fullwidth &#39;assets/detr-series/1.png&#39; &quot;&quot; %} DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测 ## Transformer {% fullwidth &#39;assets/detr-series/2.jpg&#39; &quot;&quot; %} 显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder...",
+          url: "/ai/2023/05/19/detr-series.html"
+        },
+      
+        {
+          title: "CUDA 编程（进阶篇）",
+          content: "# General Matrix Multiplication GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子[文章](https://zhuanlan.zhihu.com/p/435908830)中的代码进行解读，也作为代码阅读笔记梳理整个思路。 首先，其优化技巧**分块计算**、**shared memory 的多次利用**、**register 的多次利用**以及**各种 bank 的 conflict 解决**，有的甚至会涉及到汇编层面的优化，这里有些技巧在基础篇已经讲过，就不再赘述了。 其次，简单叙述一下优化的思路，主要的思路就是对矩阵进行分块计算，不同 block 负责计算出 C 中的不同部分，同时在 block 内又让不同线程负责不同部分，这里面为了能多次利用 shared memory，需要进行多次循环，因此在 block 内有多次大循环，在大循环内又有每个线程中的多次小循环。因为涉及到把数据不断搬到 shared memory，所以作者设计了预取 prefetch 的做法，这样做可以掩盖 io 的 latency，因此也要设计哪些线程搬运哪些数据。由于可能在访问 shared memory 的时候有 bank conflict，所以也要设计哪些线程访问哪些内存。 ## 分块计算的思路 首先如下图，对 C 进行分块： {% fullwidth &#39;assets/cuda2/1.png&#39; &quot;&quot; %} 由图可知，C...",
+          url: "/ai/2023/02/09/cuda2.html"
+        },
+      
+        {
+          title: "CUDA 编程（基础篇）",
+          content: "## 简介 cuda 关于矩阵相关运算的入门编程及相关技巧，是我的学习笔记，比较适合初学者。 ## 矩阵相加 这一节通过矩阵相加来介绍 cuda 编程的常规流程，并介绍一些术语 ### 流程 * memory alloc  用于在 gpu 上开辟空间 ```c++ cudaMalloc((void**) &amp;d_o, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;d_a, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;d_b, sizeof(float) * (M * N)); ``` 其中 M 和 N 分别是矩阵的行和列 * copy data ```c++ cudaMemcpy(d_o,...",
+          url: "/ai/2023/01/01/cuda1.html"
+        },
+      
+        {
+          title: "YoloV7 标签匹配及 loss 计算解析",
+          content: "🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分 如上如所示，YoloV7 同大多数单阶段目标检测算法属于密集检测 (dense detection)。上图是一个 7x7 的特征图红色的点是基于特征图的网格点，进行偏移后的点，然后在其上铺设 anchor box，每个点铺设一定数量的 anchor。当然也有直接在网格点上进行铺设的，一般来讲没有太大差别。下面我们开始介绍 v7 后处理，主要分为两部分：标签匹配和 loss 计算 Label Assignment 📄标签匹配主要分为两步：先是进行粗筛，然后是进行精筛 Find-3-Positive 📑顾名思义，第一步是找到三个正样本，就是对于每一个 GT 找到上图的三个 anchor 作为正样本。首先我们先大概讲一下匹配的规则 如上图所示，对于每一个网格，会被分为四个部分，绿色点是 GT 中心点，蓝色点是匹配给 GT 的正样本点。首先 GT 中心点所在的网格会被定义为正样本，然后根据中心点在网格的位置来找到另外两个正样本。比如在位置 1 是左上的点会被定义为其正样本，位置 2 是右上，位置 3 是左下，位置 4 是右下 📚下面是代码的注解和讲解：...",
+          url: "/ai/2022/11/06/yolov7.html"
+        },
+      
+        {
+          title: "Rank &amp; Sort Loss 解读",
+          content: "Rank &amp;amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 AP Loss、aLRPLoss 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp;amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？ 关于训练预测不一致的问题 简单来说，就是在分类和回归在训练的时候是分开的训练，计算 loss 并进行反向优化。但是在预测的时候却是用分类分数排序来进行 nms 后处理。这里可能导致一种情况就是分类分数很高，但是回归不好（这个问题在 FCOS 中有阐述）。 之前的工作 常见的目标检测网络一般会使用 nms 作为后处理，这时我们常常希望所有正样本的得分排在负样本前面，另外我们还希望位置预测更准确的框最后被留下来。之前的 AP Loss 和 aLRP Loss 由于需要附加的 head 来进行分类精度和位置精度综合评价（其实就是为了消除分类和回归的不一致问题，如 FCOS 的 centerness、IoU head 之类的），确实在解决类别不均衡问题（正负样本不均衡）等有着不错的效果，但是需要更多的时间和数据增强来进行训练。 Rank &amp;amp; Sort Loss...",
+          url: "/ai/2022/08/08/Rank-Sort-Loss.html"
+        },
+      
+        {
+          title: "变限积分求导的种种",
+          content: "变上限积分求导的理解 假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有： \[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\] 其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分： \[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\] 因此，其中我们称 \(\int_{a}^{x}f(t)dt\) 为 \(f(x)\) 的变上限积的定积分，也算是 \(f(x)\) 的一个原函数。同时我们也可以得到牛顿-莱布尼茨...",
+          url: "/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html"
+        },
+      
+        {
+          title: "Tufte-style Jekyll blog",
+          content: "The Tufte Jekyll theme is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. The idea for this project is essentially cribbed...",
+          url: "/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html"
+        },
+      
+    ];
+
+    // 获取 DOM 元素
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+
+    // 监听输入框的变化
+    searchInput.addEventListener("input", function () {
+      const query = this.value.trim().toLowerCase();
+
+      // 清空结果容器
+      searchResults.innerHTML = "";
+      searchResults.style.display = "none";
+
+      if (!query) return;
+
+      // 过滤匹配的文章
+      const results = articles.filter((article) => {
+        return (
+          article.title.toLowerCase().includes(query) ||
+          article.content.toLowerCase().includes(query)
+        );
+      });
+
+      // 截断结果为最多 10 条
+      const limitedResults = results.slice(0, 50);
+
+      // 显示搜索结果
+      if (limitedResults.length > 0) {
+        limitedResults.forEach((result) => {
+          const resultItem = document.createElement("a");
+          resultItem.href = result.url;
+          resultItem.textContent = result.title;
+          resultItem.title = result.content; // 提示部分内容
+          searchResults.appendChild(resultItem);
+        });
+        searchResults.style.display = "block";
+      } else {
+        // 显示无结果提示
+        const noResult = document.createElement("div");
+        noResult.textContent = "No Result or Error Title";
+        noResult.style.padding = "20px 20px";
+        noResult.style.color = "#082567";
+        searchResults.appendChild(noResult);
+        searchResults.style.display = "block";
+      }
+    });
+
+    // 点击页面其他区域时隐藏搜索结果
+    document.addEventListener("click", function (e) {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = "none";
+      }
+    });
+
+    // 返回顶部功能实现
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTop = document.getElementById('backToTop');
+
+      // 滚动监听 [[7]]
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // 平滑滚动 [[9]]
+      backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    function generateTOC() {
+      const toc = document.getElementById('toc');
+      const headings = document.querySelectorAll('h1, h2');
+
+      headings.forEach(heading => {
+        if (!heading.id) {
+          // 使用标准化编码方式
+          heading.id = encodeURIComponent(
+            heading.textContent
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '-') // 替换所有非字母数字字符
+          );
+        }
+
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        link.classList.add('toc-link', `level-${heading.tagName[1]}`);
+
+        if (heading.tagName === 'H2') {
+          const parentDiv = toc.lastChild;
+          if (parentDiv?.classList.contains('toc-parent')) {
+            parentDiv.querySelector('.child-container').appendChild(link);
+          }
+        } else {
+          const parentDiv = document.createElement('div');
+          parentDiv.className = 'toc-parent';
+
+          const toggleBtn = document.createElement('button');
+          toggleBtn.className = 'toggle-btn';
+          toggleBtn.textContent = '♠';
+          toggleBtn.addEventListener('click', () => {
+            const child = parentDiv.querySelector('.child-container');
+            child.classList.toggle('open');
+            toggleBtn.textContent = child.classList.contains('open') ? '♥' : '♠';
+          });
+
+          const childContainer = document.createElement('div');
+          childContainer.className = 'child-container';
+
+          parentDiv.appendChild(toggleBtn);
+          parentDiv.appendChild(link);
+          parentDiv.appendChild(childContainer);
+          toc.appendChild(parentDiv);
+        }
+      });
+    }
+
+    // 滚动监听与高亮 [[7]][[9]]
+    window.addEventListener('scroll', () => {
+      let currentSection = '';
+      const scrollY = window.scrollY + 50; // 偏移量优化
+
+      document.querySelectorAll('h1, h2').forEach(section => {
+        if (section.offsetTop <= scrollY) {
+          currentSection = section.id;
+        }
+      });
+
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.hash === `#${currentSection}`) {
+          link.classList.add('active');
+          // 自动展开父容器
+          const parent = link.closest('.toc-parent');
+          if (parent) {
+            parent.querySelector('.child-container').classList.add('open');
+            parent.querySelector('.toggle-btn').textContent = '♥';
+          }
+        }
+      });
+    });
+
+    // 修复平滑滚动并添加自动折叠功能
+    document.addEventListener('DOMContentLoaded', () => {
+      generateTOC();
+
+      // 新增滚动方向检测 [[5]]
+      let lastScrollPosition = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        const isScrollingUp = currentScroll < lastScrollPosition;
+
+        // 更新滚动位置记录
+        lastScrollPosition = currentScroll;
+
+        let currentSection = '';
+        const scrollY = currentScroll + 100; // 偏移量优化
+
+        document.querySelectorAll('h2').forEach(section => {
+          if (section.offsetTop <= scrollY) {
+            currentSection = section.id;
+          }
+        });
+
+        // 关闭所有非当前标题的展开状态
+        document.querySelectorAll('.toc-parent').forEach(parent => {
+          const childContainer = parent.querySelector('.child-container');
+          if (!parent.contains(document.querySelector(`#${currentSection}`))) {
+            childContainer.classList.remove('open');
+            parent.querySelector('.toggle-btn').textContent = '♠';
+          }
+        });
+
+        // 处理当前激活标题
+        const activeLink = document.querySelector(`.toc-link[href="#${currentSection}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+          activeLink.closest('.toc-parent').querySelector('.child-container').classList.add('open');
+          activeLink.closest('.toc-parent').querySelector('.toggle-btn').textContent = '♥';
+        } else {
+          document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+        }
+
+        // 特殊处理向上滚动场景 [[7]]
+        if (isScrollingUp) {
+          setTimeout(() => {
+            document.querySelectorAll('.child-container.open').forEach(container => {
+              if (container.getBoundingClientRect().top > window.innerHeight) {
+                container.classList.remove('open');
+                container.previousElementSibling.textContent = '♠';
+              }
+            });
+          }, 100);
+        }
+      });
+
+      // 修正平滑滚动 [[10]]
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = decodeURIComponent(link.hash); // 解码处理
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+    </script>
+    <span class="print-footer">YoloV7 标签匹配及 loss 计算解析 - November 6, 2022 - L77</span>
+    <footer>
+  <hr class="slender_footer">
+  <ul class="footer-links">   
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+      
+  </ul>
+<div class="credits">
+<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">Powered By Jekyll And Tufte Theme</span>
+</div>  
+</footer>
+    <!-- 在body底部新增按钮 -->
+    <button id="backToTop" class="back-to-top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="currentColor"
+              d="M12 4l8 8H16v8H8v-8H4l8-8z"
+              style="transform: rotate(0deg); transition: 0.3s;"/>
+      </svg>
+    </button>
+  </body>
+</html>

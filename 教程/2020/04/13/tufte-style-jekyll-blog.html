@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Tufte-style Jekyll blog</title>
+  <meta name="description" content="The Tufte Jekyll theme  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its ...">
+  <!-- 现代多尺寸图标 -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+  <link rel="manifest" href="/assets/img/site.webmanifest" />
+
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+  
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>  
+
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="http://localhost:4000/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="http://localhost:4000/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and pages template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon.png" alt="CH"></a>
+	
+		
+<!--		<input type="radio" id="blog" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/blog/index.html" class="nav-link">blog</a>
+  	
+		
+<!--		<input type="radio" id="archive" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/archive.html" class="nav-link">archive</a>
+  	
+		
+<!--		<input type="radio" id="about" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/about.html" class="nav-link">about</a>
+  	
+	<!-- 右侧搜索框 -->
+	<div class="navbar-right">
+	  <div class="search-container">
+		<input type="text" id="search-input" placeholder="search blog..." />
+		<div id="search-results" class="search-results"></div>
+	  </div>
+	</div>
+	</nav>
+
+
+	<script>
+        // 页面加载时设置激活状态
+        document.addEventListener('DOMContentLoaded', () => {
+<!--            const currentPage = window.location.pathname.split('/').pop();-->
+            const currentPage = window.location.href;
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+
+        // 导航点击处理（可选，用于单页应用）
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 如果是单页应用，取消注释以下代码：
+                e.preventDefault();
+                window.location.href = this.href;
+                history.pushState({}, '', this.href);
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</header>
+    <article>
+        <div class="container">
+          <nav class="toc" id="toc"></nav>
+          <main class="content">
+            <h1 style="text-align: left">Tufte-style Jekyll blog</h1>
+            
+            
+            
+            <p class="subtitle" style="text-align:right"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; 教程</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> jekyll blog</span></p>
+            
+            <p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. The idea for this project is essentially cribbed wholesale from Tufte and R Markdown’s Tufte Handout format<label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle" /><span class="sidenote">See <a href="https://tufte-latex.github.io/tufte-latex/">tufte-latex.github.io/tufte-latex/</a> and <a href="http://rmarkdown.rstudio.com/tufte_handout_format.html">rmarkdown.rstudio.com/tufte_handout_format</a> </span> This page is an adaptation of the <a href="http://rmarkdown.rstudio.com/examples/tufte-handout.pdf">Tufte Handout PDF</a>.<!--more--></p>
+
+<h2 id="jekyll-customizations">Jekyll customizations</h2>
+
+<p>This Jekyll blog theme is based on the github repository by Edward Tufte <a href="https://github.com/edwardtufte/tufte-css">here</a>, which was orginally created by Dave Leipmann, but is now labeled under Edward Tufte’s moniker. I borrowed freely from the Tufte-CSS repo and have transformed many of the typographic and page-structural features into a set of custom Liquid tags that make creating content using this style much easier than writing straight HTML. Essentially, if you know markdown, and mix in a few custom Liquid tags, you can be creating a website with this document style in short order.</p>
+
+<p>The remainder of this sample post is a self-documenting survey of the features of the Tufte-Jekyll theme. I have taken almost all of the sample content from the <a href="https://github.com/edwardtufte/tufte-css">Tufte-css</a> repo and embedded it here to illustrate the parity in appearence between the two. The additional verbiage and commentary I have added is to document the custom <em>Liquid</em> markup tags and other features that are bundled with this theme.</p>
+
+<h3 id="the-sass-settings-file">The SASS settings file</h3>
+
+<p>I have taken much of the actual <em>Tufte-css</em> files and modified them as necessary to accomodate the needs inherent in creating a Jekyll theme that has additional writing aids such as the Liquid tags. I have also turned the CSS file into a <a href="http://sass-lang.com">SASS</a> file (the .scss type).  This means that you can alter things like font choices, text color, background color, and underlining style by changing values in this file. When the Jekyll site is built using <code class="language-plaintext highlighter-rouge">jekyll build</code> the settings in this file will be compiled into the customized CSS file that the site uses. If you don’t use SCSS or SASS, you are missing out on a huge productivity tool.</p>
+
+<p>This file looks like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/* This file contains all the constants for colors and font styles */
+
+$body-font:   ETBembo, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+// Note that Gill Sans is the top of the stack and corresponds to what is used in Tufte's books
+// However, it is not a free font, so if it is not present on the computer that is viewing the webpage
+// The free Google 'Lato' font is used instead. It is similar.
+$sans-font:  "Gill Sans", "Gill Sans MT", "Lato", Calibri, sans-serif;
+$code-font: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+$url-font: "Lucida Console", "Lucida Sans Typewriter", Monaco, "Bitstream Vera Sans Mono", monospace;
+$text-color: #111;
+$bg-color: #fffff8;
+$contrast-color: #a00000;
+$border-color: #333333;
+$link-style: color; // choices are 'color' or 'underline'. Default is color using $contrast-color set above
+</code></pre></div></div>
+<p>Any of these values can be changed in the <code class="language-plaintext highlighter-rouge">_sass/_settings.scss</code> file before the site is built. The default values are the ones from <em>tufte-css</em>.</p>
+
+<h2 id="fundamentals">Fundamentals</h2>
+
+<h3 id="color">Color</h3>
+
+<p>Although paper handouts obviously have a pure white background, the web is better served by the use of slightly off-white and off-black colors. I picked <code class="language-plaintext highlighter-rouge">#fffff8</code> and <code class="language-plaintext highlighter-rouge">#111111</code> because they are nearly indistinguishable from their ‘pure’ cousins, but dial down the harsh contrast. Tufte’s books are a study in spare, minimalist design. In his book <a href="http://www.edwardtufte.com/tufte/books_vdqi">The Visual Display of Quantitative Information</a>, he uses a red ink to add some visual punctuation to the buff colored paper and dark ink. In that spirit, links are styled using a similar red color.</p>
+
+<h3 id="headings">Headings</h3>
+
+<p>Tufte CSS uses <code class="language-plaintext highlighter-rouge">&lt;h1&gt;</code> for the document title, <code class="language-plaintext highlighter-rouge">&lt;p&gt;</code> with class <code class="language-plaintext highlighter-rouge">code</code> for the document subtitle, <code class="language-plaintext highlighter-rouge">&lt;h2&gt;</code> for section headings, and <code class="language-plaintext highlighter-rouge">&lt;h3&gt;</code> for low-level headings. More specific headings are not encouraged. If you feel the urge to reach for a heading of level 4 or greater, consider redesigning your document:</p>
+
+<blockquote>
+  <p>[It is] notable that the Feynman lectures (3 volumes) write about all of physics in 1800 pages, using only 2 levels of hierarchical headings: chapters and A-level heads in the text. It also uses the methodology of <em>sentences</em> which then cumulate sequentially into <em>paragraphs</em>, rather than the grunts of bullet points. Undergraduate Caltech physics is very complicated material, but it didn’t require an elaborate hierarchy to organize.</p>
+</blockquote>
+
+<p><cite><a href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB">http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB</a></cite></p>
+
+<p>As a bonus, this excerpt regarding the use of headings provides an example of using block quotes. Markdown does not have a native <code class="language-plaintext highlighter-rouge">&lt;cite&gt;</code> shorthand, but real html can be sprinkled in with the Markdown text. In the previous example, the <code class="language-plaintext highlighter-rouge">&lt;cite&gt;</code> was preceded with a single return after the quotation itself. The previous blockquote was written in Markdown thusly:</p>
+
+<pre><code class="language-Liquid">[It is] notable that the Feynman lectures (3 volumes) write about all of physics in 1800 pages, using only 2 levels of hierarchical headings: chapters and A-level heads in the text. It also uses the methodology of *sentences* which then cumulate sequentially into *paragraphs*, rather than the grunts of bullet points. Undergraduate Caltech physics is very complicated material, but it didn’t require an elaborate hierarchy to organize.
+&lt;cite&gt;[http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB](http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB)&lt;/cite&gt;
+</code></pre>
+
+<p><span class="newthought">In his later books</span> <label for="two" class="margin-toggle sidenote-number"></label><input type="checkbox" id="two" class="margin-toggle" /><span class="sidenote"><a href="http://www.edwardtufte.com/tufte/books_be">http://www.edwardtufte.com/tufte/books_be</a> </span>, Tufte starts each section with a bit of vertical space, a non-indented paragraph, and sets the first few words of the sentence in small caps. To accomplish this using this style, enclose the sentence fragment you want styled with small caps in a custom Liquid tag called ‘newthought’ like so:</p>
+
+<pre><code class="language-Liquid">{% newthought 'In his later books' %}
+</code></pre>
+
+<h3 id="text">Text</h3>
+
+<p>In print, Tufte uses the proprietary Monotype Bembo<label for="3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="3" class="margin-toggle" /><span class="sidenote">See Tufte’s comment in the <a href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt">Tufte book fonts</a> thread. </span> font. A similar effect is achieved in digital formats with the now open-source ETBembo, which Tufte-Jekyll supplies with a <code class="language-plaintext highlighter-rouge">@font-face</code> reference to a .ttf file. Thanks to <a href="https://github.com/daveliepmann/tufte-css/commit/0a810a7d5f4707941c6f9fe99a53ec41f50a5c00">Linjie Ding</a>, italicized text uses the ETBembo Italic font instead of mechanically skewing the characters. In case ETBembo somehow doesn’t work, Tufte CSS degrades gracefully to other serif fonts like Palatino and Georgia. Notice that Tufte CSS includes separate font files for <strong>bold</strong> (strong) and <em>italic</em> (emphasis), instead of relying on the browser to mechanically transform the text. This is typographic best practice. It’s also really important. Thus concludes my unnecessary use of em and strong for the purpose of example.</p>
+
+<p>Code snippets ape GitHub’s font selection using Microsoft’s <a href="http://www.microsoft.com/typography/ClearTypeFonts.mspx"><em>Consolas</em></a> and the sans-serif font uses Tufte’s choice of Gill Sans. Since this is not a free font, and some systems will not have it installed, the free google font <a href="https://www.google.com/fonts/specimen/Lato"><em>Lato</em></a> is designated as a fallback.</p>
+
+<h2 id="epigraphs">Epigraphs</h2>
+
+<div class="epigraph"><blockquote><p>The English language . . . becomes ugly and inaccurate because our thoughts are foolish, but the slovenliness of our language makes it easier for us to have foolish thoughts.</p><footer>George Orwell, <cite> "Politics and the English Language" </cite></footer></blockquote></div>
+
+<div class="epigraph"><blockquote><p>For a successful technology, reality must take precedence over public relations, for Nature cannot be fooled.</p><footer>Richard P. Feynman, <cite> “What Do You Care What Other People Think?” </cite></footer></blockquote></div>
+
+<p>If you’d like to introduce your page or a section of your page with some quotes, use epigraphs. The two examples above show how they are styled. Epigraph elements are modeled after chapter epigraphs in Tufte’s books (particularly <em>Beautiful Evidence</em>). The <a href="https://github.com/edwardtufte/tufte-css">Tufte-css</a> gitub repository has detailed instructions on how to achieve this using HTML elements. As an easier alternative, the <em>Tufte-jekyll</em> theme uses custom <em>Liquid tag</em> pairs that allow the writer to embed elements such as epigraphs in the middle of the regular Markdown text being edited.</p>
+
+<p>In order to use an epigraph in a page or section, type this:</p>
+
+<p><code class="language-plaintext highlighter-rouge">{% epigraph 'text of citation' 'author of citation' 'citation source'  %}</code></p>
+
+<p>to produce this:</p>
+
+<div class="epigraph"><blockquote><p>I do not paint things, I paint only the differences between things.</p><footer>Henri Matisse, <cite>Henri Matisse Dessins: thèmes et variations, 1943</cite></footer></blockquote></div>
+
+<div class="epigraph"><blockquote><p> "How did you go bankrupt?" Two ways. Gradually, then suddenly.</p><footer>Ernest Hemingway, <cite> "The Sun Also Rises" </cite></footer></blockquote></div>
+
+<h3 id="lists">Lists</h3>
+
+<p>Tufte points out that while lists have valid uses, they tend to promote ineffective writing habits due to their “lack of syntactic and intellectual discipline”. He is particularly critical of hierarchical and bullet-pointed lists. So before reaching for an HTML list element, ask yourself:</p>
+
+<ul>
+  <li>Does this list actually have to be represented using an HTML ul or ol element?</li>
+  <li>Would my idea be better expressed as sentences in paragraphs?</li>
+  <li>Is my message causally complex enough to warrant a flow diagram instead?</li>
+</ul>
+
+<p>This is but a small subset of a proper overview of the topic of lists in communication. A better way to understand Tufte’s thoughts on lists would be to read “The Cognitive Style of PowerPoint: Pitching Out Corrupts Within,” a chapter in Tufte’s book <em>Beautiful Evidence</em>, excerpted at some length by Tufte himself <a href="http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0002QF">on his website</a>. The whole piece is information-dense and therefore difficult to summarize. He speaks to web design specifically, but in terms of examples and principles rather than as a set of simple do-this, don’t-do-that prescriptions. It is well worth reading in full for that reason alone.</p>
+
+<p>For these reasons, Tufte CSS encourages caution before reaching for a list element, and by default removes the bullet points from unordered lists.</p>
+
+<h2 id="figures">Figures</h2>
+
+<h3 id="margin-figures">Margin Figures</h3>
+
+<p><label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/img/rhino.png" /><br />F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” <em>Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice</em> (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s <em>Visual Explanations</em>.</span></p>
+
+<p>Images and graphics play an integral role in Tufte’s work. To place figures in the margin, use the custom margin figure liquid tag included in the <code class="language-plaintext highlighter-rouge">_plugins</code> directory like so:</p>
+
+<p><code class="language-plaintext highlighter-rouge">{% marginfigure 'mf-id-whatever' 'assets/img/rhino.png' 'F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” *Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice* (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s *Visual Explanations*.'  %}</code>.</p>
+
+<p>Note that this tag has <em>three</em> parameters. The first is an arbitrary id. This parameter can be named anything as long as it is unique to this post. The second parameter is the path to the image. And the final parameter is whatever caption you want to be displayed with the figure.  All parameters <em>must</em> be enclosed in quotes for this simple liquid tag to work!</p>
+
+<p>In this example, the <em>Liquid</em> marginfigure tag was inserted <em>before</em> the paragraph so that it aligns with the beginning of the paragraph. On small screens, the image will collapse into a small symbol: <span class="contrast ">⊕</span> at the location it has been inserted in the manuscript. Clicking on it will open the image.</p>
+
+<h3 id="full-width-figures">Full Width Figures</h3>
+
+<p>If you need a full-width image or figure, another custom liquid tag is available to use. Oddly enough, it is named ‘fullwidth’, and this markup:</p>
+
+<p><code class="language-plaintext highlighter-rouge">{% fullwidth 'assets/img/napoleons-march.png' 'Napoleon's March *(Edward Tufte’s English translation)*'  %}</code></p>
+
+<p>Yields this:</p>
+
+<figure class="fullwidth"><img src="/assets/img/napoleons-march.png" /><figcaption>Napoleon’s March <em>(Edward Tufte’s English translation)</em></figcaption></figure>
+
+<h3 id="main-column-figures">Main Column Figures</h3>
+
+<p>Besides margin and full width figures, you can of course also include figures constrained to the main column. Yes, you guessed it, a custom liquid tag rides to the rescue once again:</p>
+
+<p><code class="language-plaintext highlighter-rouge">{% maincolumn 'assets/img/export-imports.png' 'From Edward Tufte, *Visual Display of Quantitative Information*, page 92'  %}</code></p>
+
+<p>yields this:</p>
+
+<figure><img src="/assets/img/exports-imports.png" /><figcaption class="maincolumn-figure">From Edward Tufte, <em>Visual Display of Quantitative Information</em>, page 92</figcaption></figure>
+
+<h2 id="sidenotes-and-margin-notes">Sidenotes and Margin notes</h2>
+
+<p>One of the most prominent and distinctive features of Tufte’s style is the extensive use of sidenotes and margin notes. Perhaps you have noticed their use in this document already. You are very astute.</p>
+
+<p>There is a wide margin to provide ample room for sidenotes and small figures. There exists a slight semantic distinction between <em>sidenotes</em> and <em>marginnotes</em>.</p>
+
+<h3 id="sidenotes">Sidenotes</h3>
+
+<p>Sidenotes<label for="sn-id-whatever" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-id-whatever" class="margin-toggle" /><span class="sidenote">This is a sidenote and <em>displays a superscript</em> </span> display a superscript. The <em>sidenote</em> Liquid tag contains two components. The first is an identifier allowing the sidenote to be targeted by the twitchy index fingers of mobile device users so that all the yummy sidenote goodness is revealed when the superscript is tapped. The second components is the actual content of the sidenote. Both of these components should be enclosed in single quotes. Note that we are using the CSS ‘counter’ trick to automagically keep track of the number sequence on each page or post. On small screens, the sidenotes disappear and when the superscript is clicked, a side note will open below the content, which can then be closed with a similar click. Here is the markup for the sidenote at the beginning of this paragraph:</p>
+
+<p><code class="language-plaintext highlighter-rouge">{% sidenote 'sn-id-whatever' 'This is a sidenote and *displays a superscript*'%}</code></p>
+
+<h3 id="margin-notes">Margin notes</h3>
+
+<p>Margin notes<label for="mn-id-whatever" class="margin-toggle"> ⊕</label><input type="checkbox" id="mn-id-whatever" class="margin-toggle" /><span class="marginnote">This is a margin note <em>without</em> a superscript </span> are similar to sidenotes, but do not display a superscript. The <em>marginnnote</em> Liquid tags has the same two components as the <em>sidenote</em> tag. Anything can be placed in a margin note. Well, anything that is an inline element. Block level elements can make the Kramdown parser do strange things. On small screens, the margin notes disappear and this symbol: <span class="contrast ">⊕</span> pops up. When clicked, it will open the margin note below the content, which can then be closed with a similar click. The Markdown content has a similar sort of markup as a sidenote, but without a number involved:</p>
+
+<p><code class="language-plaintext highlighter-rouge">{% marginnote 'mn-id-whatever' 'This is a margin note *without* a superscript' %}</code></p>
+
+<h2 id="equations">Equations</h2>
+
+<p>The Markdown parser being used by this Jekyll theme is Kramdown, which contains some built-in <a href="//www.mathjax.org">Mathjax</a> support. Both inline and block-level mathematical figures can be added to the content.</p>
+
+<p>For instance, the following inline sequence:</p>
+
+<p><em>When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\)</em></p>
+
+<p>is written by enclosing a Mathjax expression within <em>a matching pair of double dollar signs: <code class="language-plaintext highlighter-rouge">$$</code></em>:</p>
+
+<p><code class="language-plaintext highlighter-rouge">When $$ a \ne 0 $$, there are two solutions to $$ ax^2 + bx + c = 0 $$</code></p>
+
+<p>Similarly, this block-level Mathjax expression:</p>
+
+\[x = {-b \pm \sqrt{b^2-4ac} \over 2a}\]
+
+<p>is written by enclosing the expression within a pair of <code class="language-plaintext highlighter-rouge">$$</code> with an empty line above and below:</p>
+
+<p><code class="language-plaintext highlighter-rouge">$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$</code></p>
+
+<p>You can get pretty fancy, for instance, the wave equation’s nabla is no big thing:</p>
+
+\[\frac{\partial^2 y}{\partial t^2}= c^2\nabla^2u\]
+
+<p>All of the standard <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> equation markup is available to use inside these block tags.</p>
+
+<p>Please note that the block-level Mathjax expressions <em>must</em> be on their own line, separated from content above and below the block by a blank line for the Kramdown parser and the Mathjax javascript to play nicely with one another.</p>
+
+<p>The Mathjax integration is tricky, and some things such as the inline matrix notation simply do not work well unless allowances are made for using the notation for a small matrix. Bottom line: If you are using this to document mathematics, be super careful to isolate your <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> blocks by blank lines!</p>
+
+<h2 id="tables">Tables</h2>
+
+<p>Tables are, frankly,  a pain in the ass to create. That said, they often are one of the best methods for presenting data. Tabular data are normally presented with right-aligned numbers, left-aligned text, and minimal grid lines.</p>
+
+<p>Note that when writing Jekyll Markdown content, there will often be a need to get some dirt under your fingernails and stoop to writing a little honest-to-god html. Yes, all that hideous <code class="language-plaintext highlighter-rouge">&lt;table&gt;..&lt;thead&gt;..&lt;th&gt;</code> nonsense. <em>And</em> you must wrap the unholy mess in a <code class="language-plaintext highlighter-rouge">&lt;div class="table-wrapper"&gt;</code> tag to ensure that the table stays centered in the main content column.</p>
+
+<p>Tables are designed with an <code class="language-plaintext highlighter-rouge">overflow:scroll</code> property to create slider bars when the viewport is narrow. This is so that you do not collapse all your beautiful data into a jumble of letters and numbers when you view it on your smartphone.</p>
+
+<p><label for="table-1-id" class="margin-toggle"> ⊕</label><input type="checkbox" id="table-1-id" class="margin-toggle" /><span class="marginnote"><em>Table 1</em>: A table with default style formatting </span></p>
+<div class="table-wrapper">
+  <table class="table-alpha" id="newspaper-tone">
+    <thead>
+      <tr>
+        <th class="left">Content and tone of front-page articles in 94 U.S. newspapers, October and November, 1974</th>
+        <th class="left">Number of articles</th>
+        <th>Percent of articles with negative criticism of specific person or policy</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text">Watergate: defendants and prosecutors, Ford’s pardon of Nixon</td>
+        <td><div class="number">537</div></td>
+        <td class="c"><div class="number">49%</div></td>
+      </tr>
+      <tr>
+        <td class="text">Inflation, high cost of living</td>
+        <td><div class="number">415</div></td>
+        <td class="c"><div class="number">28%</div></td>
+      </tr>
+      <tr>
+        <td class="text">Government competence: costs, quality, salaries of public employees</td>
+        <td><div class="number">322</div></td>
+        <td class="c"><div class="number">30%</div></td>
+      </tr>
+      <tr>
+        <td class="text">Confidence in government: power of special interests, trust in political leaders, dishonesty in politics</td>
+        <td><div class="number">266</div></td>
+        <td class="c"><div class="number">52%</div></td>
+      </tr>
+      <tr>
+        <td class="text">Government power: regulation of business, secrecy, control of CIA and FBI</td>
+        <td><div class="number">154</div></td>
+        <td class="c"><div class="number">42%</div></td>
+      </tr>
+      <tr>
+        <td class="text">Crime</td>
+        <td><div class="number">123</div></td>
+        <td class="c"><div class="number r">30%</div></td>
+      </tr>
+      <tr>
+        <td class="text">Race</td>
+        <td><div class="number">103</div></td>
+        <td class="c"><div class="number">25%</div></td>
+      </tr>
+      <tr>
+        <td class="text">Unemployment</td>
+        <td><div class="number">100</div></td>
+        <td class="c"><div class="number">13%</div></td>
+      </tr>
+      <tr>
+        <td class="text">Shortages: energy, food</td>
+        <td><div class="number">68</div></td>
+        <td class="c"><div class="number">16%</div></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>This is not the One True Table. Such a style does not exist. One must craft each data table with custom care to the narrative one is telling with that specific data. So take this not as “the table style to use”, but rather as “a table style to start from”. From here, use principles to guide you: avoid chartjunk, optimize the data-ink ratio (“within reason”, as Tufte says), and “mobilize every graphical element, perhaps several times over, to show the data.<label for="table-id" class="margin-toggle sidenote-number"></label><input type="checkbox" id="table-id" class="margin-toggle" /><span class="sidenote">Page 139, <em>The Visual Display of Quantitative Information</em>, Edward Tufte 2001. </span> Furthermore, one must know when to reach for more complex data presentation tools, like a custom graphic or a JavaScript charting library.</p>
+
+<p>As an example of alternative table styles, academic publications written in <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> often rely on the <code class="language-plaintext highlighter-rouge">booktabs</code> package to produce clean, clear tables. Similar results can be achieved in Tufte CSS with the <code class="language-plaintext highlighter-rouge">booktabs</code> class, as demonstrated in this table:</p>
+
+<p><label for="table-2-id" class="margin-toggle"> ⊕</label><input type="checkbox" id="table-2-id" class="margin-toggle" /><span class="marginnote"><em>Table 2</em>: A table with booktabs style formatting </span></p>
+<div class="table-wrapper">
+<table class="booktabs">
+          <thead>
+            <tr><th colspan="2" class="cmid">Items</th><th class="nocmid"></th></tr>
+            <tr><th class="l">Animal</th><th>Description</th><th class="r">Price ($)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Gnat</td>     <td>per gram</td><td class="r">13.65</td></tr>
+            <tr><td></td>         <td>each</td>    <td class="r">0.01</td></tr>
+            <tr><td>Gnu</td>      <td>stuffed</td> <td class="r">92.50</td></tr>
+            <tr><td>Emu</td>      <td>stuffed</td> <td class="r">33.33</td></tr>
+            <tr><td>Armadillo</td><td>frozen</td>  <td class="r">8.99</td></tr>
+          </tbody>
+</table>
+</div>
+
+<p>The table above was written in HTML as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;div class="table-wrapper"&gt;
+&lt;table class="booktabs"&gt;
+          &lt;thead&gt;
+            &lt;tr&gt;&lt;th colspan="2" class="cmid"&gt;Items&lt;/th&gt;&lt;th class="nocmid"&gt;&lt;/th&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;th class="l"&gt;Animal&lt;/th&gt;&lt;th&gt;Description&lt;/th class="r"&gt;&lt;th&gt;Price ($)&lt;/th&gt;&lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+            &lt;tr&gt;&lt;td&gt;Gnat&lt;/td&gt;     &lt;td&gt;per gram&lt;/td&gt;&lt;td class="r"&gt;13.65&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt;each&lt;/td&gt;    &lt;td class="r"&gt;0.01&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Gnu&lt;/td&gt;      &lt;td&gt;stuffed&lt;/td&gt; &lt;td class="r"&gt;92.50&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Emu&lt;/td&gt;      &lt;td&gt;stuffed&lt;/td&gt; &lt;td class="r"&gt;33.33&lt;/td&gt;&lt;/tr&gt;
+            &lt;tr&gt;&lt;td&gt;Armadillo&lt;/td&gt;&lt;td&gt;frozen&lt;/td&gt;  &lt;td class="r"&gt;8.99&lt;/td&gt;&lt;/tr&gt;
+          &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/div&gt;
+</code></pre></div></div>
+
+<p><span class="newthought">I like this style of table,</span>   so I have made it the default for unstyled tables. This allows use of the <a href="https://michelf.ca/projects/php-markdown/extra/"><em>Markdown Extra</em></a> features built into the <a href="http://kramdown.gettalong.org/parser/kramdown.html"><em>Kramdown</em></a> parser. Here is a table created using the Markdown Extra table syntax to make a nice table which has the side benefit of being human readable in the raw Markdown file:</p>
+
+<p><label for="tableID-3" class="margin-toggle"> ⊕</label><input type="checkbox" id="tableID-3" class="margin-toggle" /><span class="marginnote">Table 3: a table created with <em>Markdown Extra</em> markup using only the default table styling </span></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th style="text-align: right">mpg</th>
+      <th style="text-align: right">cyl</th>
+      <th style="text-align: right">disp</th>
+      <th style="text-align: right">hp</th>
+      <th style="text-align: right">drat</th>
+      <th style="text-align: right">wt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Mazda RX4</td>
+      <td style="text-align: right">21</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">160</td>
+      <td style="text-align: right">110</td>
+      <td style="text-align: right">3.90</td>
+      <td style="text-align: right">2.62</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Mazda RX4 Wag</td>
+      <td style="text-align: right">21</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">160</td>
+      <td style="text-align: right">110</td>
+      <td style="text-align: right">3.90</td>
+      <td style="text-align: right">2.88</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Datsun 710</td>
+      <td style="text-align: right">22.8</td>
+      <td style="text-align: right">4</td>
+      <td style="text-align: right">108</td>
+      <td style="text-align: right">93</td>
+      <td style="text-align: right">3.85</td>
+      <td style="text-align: right">2.32</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Hornet 4 Drive</td>
+      <td style="text-align: right">21.4</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">258</td>
+      <td style="text-align: right">110</td>
+      <td style="text-align: right">3.08</td>
+      <td style="text-align: right">3.21</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Hornet Sportabout</td>
+      <td style="text-align: right">18.7</td>
+      <td style="text-align: right">8</td>
+      <td style="text-align: right">360</td>
+      <td style="text-align: right">175</td>
+      <td style="text-align: right">3.15</td>
+      <td style="text-align: right">3.44</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Valiant</td>
+      <td style="text-align: right">18.1</td>
+      <td style="text-align: right">6</td>
+      <td style="text-align: right">160</td>
+      <td style="text-align: right">105</td>
+      <td style="text-align: right">2.76</td>
+      <td style="text-align: right">3.46</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Using the following Markdown formatting:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|                 |mpg  | cyl  |  disp  |   hp   |  drat  | wt  |
+|:----------------|----:|-----:|-------:|-------:|-------:|----:|
+|Mazda RX4        |21   |6     |160     |110     |3.90    |2.62 |
+|Mazda RX4 Wag    |21   |6     |160     |110     |3.90    |2.88 |
+|Datsun 710       |22.8 |4     |108     |93      |3.85    |2.32 |
+etc...
+</code></pre></div></div>
+
+<p>The following is a more simple table, showing the Markdown-style table markup. Remember to label the table with a <em>marginnote</em> Liquid tag, and you <em>must</em> separate the label from the table with a single blank line. This markup:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{% marginnote 'Table-ID4' 'Table 4: a simple table showing left, center, and right alignment of table headings and data'  %}
+
+|**Left** |**Center**|**Right**|
+|:--------|:--------:|--------:|
+ Aardvarks|         1|$3.50
+       Cat|   5      |$4.23
+  Dogs    |3         |$5.29
+</code></pre></div></div>
+
+<p>Yields this table:</p>
+
+<p><label for="Table-ID4" class="margin-toggle"> ⊕</label><input type="checkbox" id="Table-ID4" class="margin-toggle" /><span class="marginnote">Table 4: a simple table showing left, center, and right alignment of table headings and data </span></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"><strong>Left</strong></th>
+      <th style="text-align: center"><strong>Center</strong></th>
+      <th style="text-align: right"><strong>Right</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Aardvarks</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: right">$3.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Cat</td>
+      <td style="text-align: center">5</td>
+      <td style="text-align: right">$4.23</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Dogs</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: right">$5.29</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="code">Code</h2>
+
+<p>Code samples use a monospace font using the ‘code’ class. The Kramdown parser has the ‘GFM’ option enabled, which stands for ‘Github Flavored Markdown’, and this means that both inline code such as <code class="language-plaintext highlighter-rouge">#include &lt;stdio.h&gt;</code> and blocks of code can be delimited by surrounding them with 3 backticks:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(map tufte-style all-the-things)
+</code></pre></div></div>
+<p>is created by the following markup:</p>
+<pre><code>```(map tufte-style all-the-things)```</code></pre>
+
+<p>To get the code highlighted in the language of your choice like so:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="nn">Jekyll</span>
+  <span class="k">class</span> <span class="nc">RenderFullWidthTag</span> <span class="o">&lt;</span> <span class="no">Liquid</span><span class="o">::</span><span class="no">Tag</span>
+  <span class="nb">require</span> <span class="s2">"shellwords"</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">tag_name</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">tokens</span><span class="p">)</span>
+      <span class="k">super</span>
+      <span class="vi">@text</span> <span class="o">=</span> <span class="n">text</span><span class="p">.</span><span class="nf">shellsplit</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+      <span class="s2">"&lt;div&gt;&lt;img class='fullwidth' src='</span><span class="si">#{</span><span class="vi">@text</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">'/&gt;&lt;/div&gt; "</span> <span class="o">+</span>
+      <span class="s2">"&lt;p&gt;&lt;span class='marginnote'&gt;</span><span class="si">#{</span><span class="vi">@text</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&lt;/span&gt;&lt;/p&gt;"</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">Liquid</span><span class="o">::</span><span class="no">Template</span><span class="p">.</span><span class="nf">register_tag</span><span class="p">(</span><span class="s1">'fullwidth'</span><span class="p">,</span> <span class="no">Jekyll</span><span class="o">::</span><span class="no">RenderFullWidthTag</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Enclose the code block in three backticks, followed by a space and then the language name, like this:</p>
+
+<pre> <code>``` ruby
+    module Jekyll
+    blah, blah...
+   ```</code> </pre>
+
+
+            <p class="subtitle" style="text-align:right"><span style="color: #ffb6c1; font-style: inherit;">April 13, 2020</span></p>
+          </main>
+        </div>
+    </article>
+    <script>
+    // 动态生成文章列表（假设每篇文章有标题、内容和链接）
+    const articles = [
+      
+        {
+          title: "DETR SERIES",
+          content: "🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法 # DETR ## Framework {% fullwidth &#39;assets/detr-series/1.png&#39; &quot;&quot; %} DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测 ## Transformer {% fullwidth &#39;assets/detr-series/2.jpg&#39; &quot;&quot; %} 显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder...",
+          url: "/ai/2023/05/19/detr-series.html"
+        },
+      
+        {
+          title: "CUDA 编程（进阶篇）",
+          content: "# General Matrix Multiplication GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子[文章](https://zhuanlan.zhihu.com/p/435908830)中的代码进行解读，也作为代码阅读笔记梳理整个思路。 首先，其优化技巧**分块计算**、**shared memory 的多次利用**、**register 的多次利用**以及**各种 bank 的 conflict 解决**，有的甚至会涉及到汇编层面的优化，这里有些技巧在基础篇已经讲过，就不再赘述了。 其次，简单叙述一下优化的思路，主要的思路就是对矩阵进行分块计算，不同 block 负责计算出 C 中的不同部分，同时在 block 内又让不同线程负责不同部分，这里面为了能多次利用 shared memory，需要进行多次循环，因此在 block 内有多次大循环，在大循环内又有每个线程中的多次小循环。因为涉及到把数据不断搬到 shared memory，所以作者设计了预取 prefetch 的做法，这样做可以掩盖 io 的 latency，因此也要设计哪些线程搬运哪些数据。由于可能在访问 shared memory 的时候有 bank conflict，所以也要设计哪些线程访问哪些内存。 ## 分块计算的思路 首先如下图，对 C 进行分块： {% fullwidth &#39;assets/cuda2/1.png&#39; &quot;&quot; %} 由图可知，C...",
+          url: "/ai/2023/02/09/cuda2.html"
+        },
+      
+        {
+          title: "CUDA 编程（基础篇）",
+          content: "## 简介 cuda 关于矩阵相关运算的入门编程及相关技巧，是我的学习笔记，比较适合初学者。 ## 矩阵相加 这一节通过矩阵相加来介绍 cuda 编程的常规流程，并介绍一些术语 ### 流程 * memory alloc  用于在 gpu 上开辟空间 ```c++ cudaMalloc((void**) &amp;d_o, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;d_a, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;d_b, sizeof(float) * (M * N)); ``` 其中 M 和 N 分别是矩阵的行和列 * copy data ```c++ cudaMemcpy(d_o,...",
+          url: "/ai/2023/01/01/cuda1.html"
+        },
+      
+        {
+          title: "YoloV7 标签匹配及 loss 计算解析",
+          content: "🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分 {% fullwidth &#39;assets/yolov7/1.png&#39; &quot;&quot; %} 如上如所示，YoloV7 同大多数单阶段目标检测算法属于密集检测 (dense detection)。上图是一个 7x7 的特征图红色的点是基于特征图的网格点，进行偏移后的点，然后在其上铺设 anchor box，每个点铺设一定数量的 anchor。当然也有直接在网格点上进行铺设的，一般来讲没有太大差别。下面我们开始介绍 v7 后处理，主要分为两部分：标签匹配和 loss 计算 # Label Assignment 📄标签匹配主要分为两步：先是进行**粗筛**，然后是进行**精筛** ## Find-3-Positive 📑顾名思义，第一步是找到三个正样本，就是对于每一个 GT 找到上图的三个 anchor 作为正样本。首先我们先大概讲一下匹配的规则 {% fullwidth &#39;assets/yolov7/2.png&#39; &quot;&quot; %} 如上图所示，对于每一个网格，会被分为四个部分，**绿色点**是 GT 中心点，**蓝色点**是匹配给 GT...",
+          url: "/ai/2022/11/06/yolov7.html"
+        },
+      
+        {
+          title: "Rank &amp; Sort Loss 解读",
+          content: "Rank &amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 [AP Loss](https://github.com/cccorn/AP-loss)、[aLRPLoss](https://github.com/CV-IP/aLRPLoss) 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？ ## 关于训练预测不一致的问题 简单来说，就是在分类和回归在训练的时候是分开的训练，计算 loss 并进行反向优化。但是在预测的时候却是用分类分数排序来进行 nms 后处理。这里可能导致一种情况就是分类分数很高，但是回归不好（这个问题在 FCOS 中有阐述）。 ## 之前的工作 常见的目标检测网络一般会使用 nms 作为后处理，这时我们常常希望所有正样本的得分排在负样本前面，另外我们还希望位置预测更准确的框最后被留下来。之前的 AP Loss 和 aLRP Loss 由于需要附加的 head 来进行分类精度和位置精度综合评价（其实就是为了消除分类和回归的不一致问题，如 FCOS 的 centerness、IoU head 之类的），确实在解决类别不均衡问题（正负样本不均衡）等有着不错的效果，但是需要更多的时间和数据增强来进行训练。 ## Rank...",
+          url: "/ai/2022/08/08/Rank-Sort-Loss.html"
+        },
+      
+        {
+          title: "变限积分求导的种种",
+          content: "## 变上限积分求导的理解 假设 $$F(x)$$ 是 $$f(x)$$ 的一个原函数，即 $$F^{\prime}(x) = f(x)$$。那么对 $$f(x)$$ 积分，有： $$\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C$$ 其中 $$C$$ 是常数，可以将其表示为 $$-F(a)$$。如果 $$f(x)$$ 在 $$[a, x]$$ 上连续，我们对其进行积分： $$\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C$$ 因此，其中我们称 $$\int_{a}^{x}f(t)dt$$ 为 $$f(x)$$ 的变上限积的定积分，也算是 $$f(x)$$...",
+          url: "/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html"
+        },
+      
+        {
+          title: "Tufte-style Jekyll blog",
+          content: "The Tufte Jekyll theme is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. The idea for this project is essentially cribbed...",
+          url: "/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html"
+        },
+      
+    ];
+
+    // 获取 DOM 元素
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+
+    // 监听输入框的变化
+    searchInput.addEventListener("input", function () {
+      const query = this.value.trim().toLowerCase();
+
+      // 清空结果容器
+      searchResults.innerHTML = "";
+      searchResults.style.display = "none";
+
+      if (!query) return;
+
+      // 过滤匹配的文章
+      const results = articles.filter((article) => {
+        return (
+          article.title.toLowerCase().includes(query) ||
+          article.content.toLowerCase().includes(query)
+        );
+      });
+
+      // 截断结果为最多 10 条
+      const limitedResults = results.slice(0, 50);
+
+      // 显示搜索结果
+      if (limitedResults.length > 0) {
+        limitedResults.forEach((result) => {
+          const resultItem = document.createElement("a");
+          resultItem.href = result.url;
+          resultItem.textContent = result.title;
+          resultItem.title = result.content; // 提示部分内容
+          searchResults.appendChild(resultItem);
+        });
+        searchResults.style.display = "block";
+      } else {
+        // 显示无结果提示
+        const noResult = document.createElement("div");
+        noResult.textContent = "No Result or Error Title";
+        noResult.style.padding = "20px 20px";
+        noResult.style.color = "#082567";
+        searchResults.appendChild(noResult);
+        searchResults.style.display = "block";
+      }
+    });
+
+    // 点击页面其他区域时隐藏搜索结果
+    document.addEventListener("click", function (e) {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = "none";
+      }
+    });
+
+    // 返回顶部功能实现
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTop = document.getElementById('backToTop');
+
+      // 滚动监听 [[7]]
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // 平滑滚动 [[9]]
+      backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    function generateTOC() {
+      const toc = document.getElementById('toc');
+      const headings = document.querySelectorAll('h1, h2');
+
+      headings.forEach(heading => {
+        if (!heading.id) {
+          // 使用标准化编码方式
+          heading.id = encodeURIComponent(
+            heading.textContent
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '-') // 替换所有非字母数字字符
+          );
+        }
+
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        link.classList.add('toc-link', `level-${heading.tagName[1]}`);
+
+        if (heading.tagName === 'H2') {
+          const parentDiv = toc.lastChild;
+          if (parentDiv?.classList.contains('toc-parent')) {
+            parentDiv.querySelector('.child-container').appendChild(link);
+          }
+        } else {
+          const parentDiv = document.createElement('div');
+          parentDiv.className = 'toc-parent';
+
+          const toggleBtn = document.createElement('button');
+          toggleBtn.className = 'toggle-btn';
+          toggleBtn.textContent = '♠';
+          toggleBtn.addEventListener('click', () => {
+            const child = parentDiv.querySelector('.child-container');
+            child.classList.toggle('open');
+            toggleBtn.textContent = child.classList.contains('open') ? '♥' : '♠';
+          });
+
+          const childContainer = document.createElement('div');
+          childContainer.className = 'child-container';
+
+          parentDiv.appendChild(toggleBtn);
+          parentDiv.appendChild(link);
+          parentDiv.appendChild(childContainer);
+          toc.appendChild(parentDiv);
+        }
+      });
+    }
+
+    // 滚动监听与高亮 [[7]][[9]]
+    window.addEventListener('scroll', () => {
+      let currentSection = '';
+      const scrollY = window.scrollY + 50; // 偏移量优化
+
+      document.querySelectorAll('h1, h2').forEach(section => {
+        if (section.offsetTop <= scrollY) {
+          currentSection = section.id;
+        }
+      });
+
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.hash === `#${currentSection}`) {
+          link.classList.add('active');
+          // 自动展开父容器
+          const parent = link.closest('.toc-parent');
+          if (parent) {
+            parent.querySelector('.child-container').classList.add('open');
+            parent.querySelector('.toggle-btn').textContent = '♥';
+          }
+        }
+      });
+    });
+
+    // 修复平滑滚动并添加自动折叠功能
+    document.addEventListener('DOMContentLoaded', () => {
+      generateTOC();
+
+      // 新增滚动方向检测 [[5]]
+      let lastScrollPosition = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        const isScrollingUp = currentScroll < lastScrollPosition;
+
+        // 更新滚动位置记录
+        lastScrollPosition = currentScroll;
+
+        let currentSection = '';
+        const scrollY = currentScroll + 100; // 偏移量优化
+
+        document.querySelectorAll('h2').forEach(section => {
+          if (section.offsetTop <= scrollY) {
+            currentSection = section.id;
+          }
+        });
+
+        // 关闭所有非当前标题的展开状态
+        document.querySelectorAll('.toc-parent').forEach(parent => {
+          const childContainer = parent.querySelector('.child-container');
+          if (!parent.contains(document.querySelector(`#${currentSection}`))) {
+            childContainer.classList.remove('open');
+            parent.querySelector('.toggle-btn').textContent = '♠';
+          }
+        });
+
+        // 处理当前激活标题
+        const activeLink = document.querySelector(`.toc-link[href="#${currentSection}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+          activeLink.closest('.toc-parent').querySelector('.child-container').classList.add('open');
+          activeLink.closest('.toc-parent').querySelector('.toggle-btn').textContent = '♥';
+        } else {
+          document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+        }
+
+        // 特殊处理向上滚动场景 [[7]]
+        if (isScrollingUp) {
+          setTimeout(() => {
+            document.querySelectorAll('.child-container.open').forEach(container => {
+              if (container.getBoundingClientRect().top > window.innerHeight) {
+                container.classList.remove('open');
+                container.previousElementSibling.textContent = '♠';
+              }
+            });
+          }, 100);
+        }
+      });
+
+      // 修正平滑滚动 [[10]]
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = decodeURIComponent(link.hash); // 解码处理
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+    </script>
+    <span class="print-footer">Tufte-style Jekyll blog - April 13, 2020 - L77</span>
+    <footer>
+  <hr class="slender_footer">
+  <ul class="footer-links">   
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+      
+  </ul>
+<div class="credits">
+<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">Powered By Jekyll And Tufte Theme</span>
+</div>  
+</footer>
+    <!-- 在body底部新增按钮 -->
+    <button id="backToTop" class="back-to-top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="currentColor"
+              d="M12 4l8 8H16v8H8v-8H4l8-8z"
+              style="transform: rotate(0deg); transition: 0.3s;"/>
+      </svg>
+    </button>
+  </body>
+</html>

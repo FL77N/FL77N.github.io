@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Rank & Sort Loss 解读</title>
+  <meta name="description" content="Rank &amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 AP Loss、aLRPL...">
+  <!-- 现代多尺寸图标 -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+  <link rel="manifest" href="/assets/img/site.webmanifest" />
+
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+  
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>  
+
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="http://localhost:4000/ai/2022/08/08/Rank-Sort-Loss.html">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="http://localhost:4000/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and pages template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon.png" alt="CH"></a>
+	
+		
+<!--		<input type="radio" id="blog" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/blog/index.html" class="nav-link">blog</a>
+  	
+		
+<!--		<input type="radio" id="archive" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/archive.html" class="nav-link">archive</a>
+  	
+		
+<!--		<input type="radio" id="about" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/about.html" class="nav-link">about</a>
+  	
+	<!-- 右侧搜索框 -->
+	<div class="navbar-right">
+	  <div class="search-container">
+		<input type="text" id="search-input" placeholder="search blog..." />
+		<div id="search-results" class="search-results"></div>
+	  </div>
+	</div>
+	</nav>
+
+
+	<script>
+        // 页面加载时设置激活状态
+        document.addEventListener('DOMContentLoaded', () => {
+<!--            const currentPage = window.location.pathname.split('/').pop();-->
+            const currentPage = window.location.href;
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+
+        // 导航点击处理（可选，用于单页应用）
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 如果是单页应用，取消注释以下代码：
+                e.preventDefault();
+                window.location.href = this.href;
+                history.pushState({}, '', this.href);
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</header>
+    <article>
+        <div class="container">
+          <nav class="toc" id="toc"></nav>
+          <main class="content">
+            <h1 style="text-align: left">Rank & Sort Loss 解读</h1>
+            
+            
+            
+            <p class="subtitle" style="text-align:right"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> DETECTION NOTE</span></p>
+            
+            <p>Rank &amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 <a href="https://github.com/cccorn/AP-loss">AP Loss</a>、<a href="https://github.com/CV-IP/aLRPLoss">aLRPLoss</a> 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？<!--more--></p>
+
+<h2 id="关于训练预测不一致的问题">关于训练预测不一致的问题</h2>
+
+<p>简单来说，就是在分类和回归在训练的时候是分开的训练，计算 loss 并进行反向优化。但是在预测的时候却是用分类分数排序来进行 nms 后处理。这里可能导致一种情况就是分类分数很高，但是回归不好（这个问题在 FCOS 中有阐述）。</p>
+
+<h2 id="之前的工作">之前的工作</h2>
+
+<p>常见的目标检测网络一般会使用 nms 作为后处理，这时我们常常希望所有正样本的得分排在负样本前面，另外我们还希望位置预测更准确的框最后被留下来。之前的 AP Loss 和 aLRP Loss 由于需要附加的 head 来进行分类精度和位置精度综合评价（其实就是为了消除分类和回归的不一致问题，如 FCOS 的 centerness、IoU head 之类的），确实在解决类别不均衡问题（正负样本不均衡）等有着不错的效果，但是需要更多的时间和数据增强来进行训练。</p>
+
+<h2 id="rank--sort-loss">Rank &amp; Sort Loss</h2>
+
+<p>Rank &amp; Sort Loss (RS Loss) 并没有增加额外的辅助 head 来进行解决训练和预测不一致的问题，仅通过 RS Loss 进行简单训练：</p>
+<ul>
+  <li>通过 Sort Loss 加上 <a href="https://github.com/implus/GFocal">Quality Focal Loss</a>  的启发（避免了增加额外的 head），使用 IoU 来作为分类 label，使得可以通过连续的数值 (IoU) 来作为标签给预测框中的正样本进行排序。</li>
+  <li>通过 Rank Loss 使得所有正样本都能排序在负样本之前，并且只选取了较高分数的负样本进行计算，在不使用启发式的采样情况下解决了正负样本不均衡的问题。</li>
+  <li>不需要进行多任务的权重或系数调整。</li>
+</ul>
+
+<figure class="fullwidth"><img src="/assets/Rank-Sort-Loss/1.png" /><figcaption></figcaption></figure>
+
+<p>由上图可以看出，一般的标签分配正样本之间是没有区分的，但是在 RS Loss 里面正样本全部大于负样本，然后在正样本之间也会有排序，排序的依据就是 Anchor 经过调整后跟 GT 的 IoU 值。</p>
+
+<h1 id="-对基于-rank-的-loss-的回顾">♠ 对基于 rank 的 loss 的回顾</h1>
+
+<p>由于基于排序的特性，它不是连续可微。因此，常常采用了误差驱动的方式来进行反向传播。以下来复习一下如何将误差驱动优化融进反向传播：</p>
+
+<ul>
+  <li>
+    <p>Loss 的定义</p>
+
+    <p>$\mathcal{L} = \frac{1}{Z} \underset{i \in \mathcal{P}}{\sum} \ell(i)$ ，其中 $Z$  是用来归一化的常数，$\mathcal{P}$ 则是所有正样本的集合，$\ell(i)$ 是计算正样本 $i$ 的误差项。</p>
+  </li>
+  <li>
+    <p>Loss 的计算</p>
+
+    <figure class="fullwidth"><img src="/assets/Rank-Sort-Loss/2.png" /><figcaption></figcaption></figure>
+
+    <ul>
+      <li>
+        <p><i><font color="5151A2" size="4" face="Times">Step 1.</font> </i> 如上图所示，误差 $x_{ij}$ 的值为样本 $i$ 与样本 $j$ 的预测分数之差。</p>
+      </li>
+      <li>
+        <p><i><font color="5151A2" size="4" face="Times">Step 2.</font> </i> 用每一对样本的误差值 $x_{ij}$ 来计算这对样本对样本 $i$ 产生的 loss 值，由下述公式计算得到：
+\(L_{ij} = \begin{cases}
+\ell(i)p(j|i),\quad for\ i \ \in \mathcal{P},j \ \in \ \mathcal{N} \\\\
+0,\qquad \qquad \  otherwise,
+\end{cases}\)
+其中 $p(j|i)$ 是 $\ell(i)$ 分布的概率<del>密度</del>质量函数，$\mathcal{N}$ 则是所选负样本的集合。一般借鉴了感知学习（感知机）来进行误差驱动，因此使用了阶跃函数 $H(x)$ 。对于第 $i$ 个样本，$rank(i)=\underset{j \in \mathcal{P\cup N}}{\sum} H(x_{ij})$  为该样本在所有样本的位次，$rank^{+}(i)=\underset{j \in \mathcal{P}}{\sum} H(x_{ij})$ 为该样本在所有正样本中的位次，$rank^{-}(i)=\underset{j \in \mathcal{N}}{\sum} H(x_{ij})$ 为该样本在较大概率分数负样本中的位次，这个位次真值应该为 0 ，否则将产生 loss （因为所有正样本需要排在所有负样本之前），对于 AP Loss 来说 $\ell(i)$ 和 $p(j|i)$ 可以分别表示为 $\frac{rank^{-}(i)}{rank(i)}$ 和 $\frac{H(x_{ij})}{rank^{-}(i)}$ 。其中可以推断出 $L_{ij}=\frac{H(x_{ij})}{rank(i)}$ 即样本 $j$ 对 $i$ 产生的 loss，这里只会在其概率分数大于样本 $i$ 时会产生 loss。</p>
+      </li>
+      <li>
+        <p><i><font color="5151A2" size="4" face="Times">Step 3.</font> </i> 计算最终的 Loss，$\mathcal{L}=\frac{1}{Z}\underset{i \in \mathcal{P}}{\sum} \ell(i)=\frac{1}{Z}\underset{i \in \mathcal{P}}{\sum} \underset{j \in \mathcal{N}}{\sum} L_{ij}$ 。</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Loss的优化</p>
+
+    <p>优化其实就是一个求梯度的过程，这里我们可以使用链式求导法则，然而 $L_{ij}$ 是不可微的，因此其梯度可以使用 $\Delta x_{ij}$ ，我们可以结合上图进行以下推导：
+\(\begin{aligned}
+\frac{\partial \mathcal{L}}{\partial s_i} &amp;= \sum_{j} \frac{\partial \mathcal{L}}{\partial L_{ij}} \Delta x_{ij} \frac{\partial x_{ij}}{\partial s_i} + \sum_{j} \frac{\partial \mathcal{L}}{\partial L_{ji}} \Delta x_{ji} \frac{\partial x_{ji}}{\partial s_i}\\\\
+&amp; = \frac{1}{Z}\sum_{j} \Delta x_{ji} - \frac{1}{Z}\sum_{j} \Delta x_{ij} \\\\
+&amp; = \frac{1}{Z} \Big( \sum_{j}\Delta x_{ji} -  \sum_{j}\Delta x_{ij}\Big) 
+\end{aligned}\)
+ 其中 $\Delta x_{ij}$ 可以由 $-(L^{<em>}_{ij} - L_{ij})$ 计算得到并进行误差驱动更新值，其中 $L^{</em>}_{ij}$ 是 GT。AP Loss 和 aLRP Loss 都是通过这种方式进行优化的。</p>
+  </li>
+  <li>
+    <p>文章对以上的部分一些改进</p>
+
+    <p>RS Loss 认为：</p>
+
+    <ul>
+      <li>
+        <p>$L^{*}_{ij}$ 不为 0 时解释性比较差（因为 $L$ 为排序误差产生的 loss，按理来说应该没有误差是最好的，也就是 loss 为 0，那么 GT 应该为 0 才对）</p>
+      </li>
+      <li>
+        <p>关于 $L_{ij}$ 的计算来说，只有样本 $i$ 为正样本，$j$ 为负样本的时候才会产生非零值，其忽略了其他情况的一些误差。</p>
+      </li>
+    </ul>
+
+    <p>因此对 Loss Function 进行了重定义为：
+\(\mathcal{L}=\frac{1}{Z}\underset{i \in \mathcal{P \cup N}}{\sum} (\ell(i) - \ell^{\*}(i))\)
+ 其中 $\ell^{*}(i)$ 是期望的误差，这里其实考虑了 $i$ 属于正负样本的不同情况，另外直接使用与期望的误差之间差值作为 loss 的值，使得目标 loss 只能向着 0 优化，解决了上述两个问题。</p>
+
+    <p>关于 Loss 的计算则改为：
+\(\mathcal{L}=\frac{1}{Z}\underset{i \in \mathcal{P \cup N}}{\sum} (\ell(i) - \ell^{\*}(i))p(j|i)\)
+最后的 Loss 的优化，由于我们的最终 loss 目标是 0，所以 $\Delta x_{ij} = -(L^{*}<em>{ij} - L</em>{ij}) = L_{ij}$ ，最终优化可以简化为：
+\(\frac{\partial \mathcal{L}}{\partial s_i} = \frac{1}{Z} \Big( \sum_{j}L_{ji} - \sum_{j}L_{ij} \Big)\)</p>
+  </li>
+</ul>
+
+<h1 id="-rank--sort-loss">♦ Rank &amp; Sort Loss</h1>
+
+<h2 id="loss-的定义">Loss 的定义</h2>
+
+\[\mathcal{L}_{RS}=\frac{1}{|\mathcal{P}|}\underset{i \in \mathcal{P}}{\sum} (\ell_{RS}(i) - \ell_{RS}^{*}(i))\]
+
+<p>其中 $\ell_{RS}(i)$ 是当前 rank error 和 sort error 的累积起来的和，其可以用下式表示
+\(\ell_{RS}(i) = \frac{rank^{-}(i)}{rank(i)} + \frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})(1 - y_j)}{rank^{+}(i)}\)
+前一项为 rank error，后一项为 sort error，后一项对分数大于 $i$ 的样本乘以了一个 $1-y$ 的权重，这里的 $y$ 是分数标签（即该样本与 GT 的 IoU 值）。这里其实使得那些分数比样本 $i$ 大，但是分数的标签又不是特别大（回归质量不是特别好）的样本进行了惩罚使其产生较大的 error。对于误差的标签，首先 rank error 我们希望所有正样本都排在负样本之前，而这时 rank error 为 0，而对于 sort error 我们则希望只有标签分数大于样本 $i$ 的预测分数可以比它大，从而产生 error，此时产生期望的误差（也就是回归比 $i$ 好的样本，我们是可以容忍分数比它高的），这部分样本由于有期望的误差，在计算 loss 时会产生更小的 loss。那些分数的标签不行，但预测分数又比较大的会产生更大的 loss:
+\(\ell^{*}_{RS}(i) = 0 + \frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})[y_j\ge y_i](1 - y_j)}{H(x_{ij})[y_j\ge y_i]}\)
+同时论文还将 $H(x_{ij})$ 平滑进入区间 $[-\delta_{RS},\delta_{RS}]$ 中，其中 $x_{ij} = x_{ij}/2\delta_{RS} + 0.5$ 。</p>
+
+<h2 id="loss-的计算">Loss 的计算</h2>
+
+<p>关于 loss 的计算同上面也是进行三部曲，最后得到:
+\(L_{ij}=\begin{cases}
+(\ell_{R}(i) - \ell_{R}^{\*}(i))p_{R}(j|i),\quad for\ i \in \mathcal{P},j\ \in \mathcal{N} \\\\
+(\ell_{S}(i) - \ell_{S}^{\*}(i))p_{S}(j|i),\quad for\ i \in \mathcal{P},j\ \in \mathcal{P} \\\\
+0, \quad \qquad \qquad \qquad \qquad \ ohterwise
+\end{cases}\)
+其中
+\(\begin{aligned}
+p_{R}(j|i)&amp;=\frac{H(x_{ij})}{\underset{k \in \mathcal{N}}{\sum} H(x_{ik})} =\frac{H(x_{ij})}{rank^{-}(i)} \\\\
+p_{S}(j|i)&amp;=\frac{H(x_{ij})[y_j &lt; y_i]}{\underset{k \in \mathcal{P}}{\sum} H(x_{ik})[y_k &lt; y_i]}
+\end{aligned}\)
+这里对于 rank 的概率质量函数只会统计分数大于 $i$ 的样本，这里其实和之前没有什么区别；对于 sort 而言概率质量函数只会统计分数大于 $i$ 且分数的标签小于 $i$ 的<span id="rl">样本</span>。</p>
+
+<p>以上的 loss 计算则具体为：
+\(L_{ij}=\begin{cases}
+\frac{rank^{-}(i)}{rank(i)}\frac{H(x_{ij})}{rank^{-}(i)},\quad \qquad \qquad \ \qquad \qquad \ \qquad \qquad \qquad \quad \  for\ i \in \mathcal{P},j\ \in \mathcal{N} \\\\
+\Bigg(\frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})(1 - y_j)}{rank^{+}(i)} - \frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})[y_j\ge y_i](1 - y_j)}{\underset{j \in \mathcal{P}}{\sum}H(x_{ij})[y_j\ge y_i]}\Bigg)\frac{H(x_{ij})[y_j &lt; y_i]}{\underset{k \in \mathcal{P}}{\sum} H(x_{ik})[y_k &lt; y_i]},\quad for\ i \in \mathcal{P},j\ \in \mathcal{P} \\\\
+0, \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad \ ohterwise
+\end{cases}\)</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>最后再对 $L_{ij}$ 进行积分（离散就是求和）$\mathcal{L}_{RS}(i)=\frac{1}{</td>
+      <td>\mathcal{P}</td>
+      <td>}\underset{j \in \mathcal{P \cup N}}{\sum} L_{ij}=\frac{1}{</td>
+      <td>\mathcal{P}</td>
+      <td>}L_{i}$ ，得到最终的 loss：$\mathcal{L}_{RS}=\frac{1}{</td>
+      <td>\mathcal{P}</td>
+      <td>}\underset{i \in \mathcal{P}}{\sum} L_{i}$</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="loss-的优化">Loss 的优化</h2>
+
+<p>这里一定要注意 $i$ 和 $j$ 这两个下标的顺序，顺序不一样就会导致计算的结果和方式不一样。</p>
+
+<p>对于 $i \in \mathcal{N}$ 时，</p>
+
+<p>根据上式中的 $L_{ij}$ 的计算规则，实际上我们只需要计算 rank 产生的 loss 就好，因为 sort 产生的 loss 只会在正样本之间计算，而 rank 产生的 loss 需要正样本对所有负样本的计算，因此只有 $j\ \in \mathcal{P}, i \ \in \mathcal{N}$ 符合（注意这里的顺序噢，$i,j$ 就不行噢）：
+\(\begin{aligned}
+\frac{\partial L_{RS}}{\partial s_i} &amp;= \frac{1}{|\mathcal{P}|} \Big(-0 \cdot\underset{j \in \mathcal{P}}{\sum}L_{ij}+\underset{j \in \mathcal{P}}{\sum}L_{ji}-0 \cdot \underset{j \in \mathcal{N}}{\sum}L_{ij}+0 \cdot \underset{j \in \mathcal{N}}{\sum}L_{ji}\Big) \\\\
+&amp;= \frac{1}{|\mathcal{P}|}\underset{j \in \mathcal{P}}{\sum}\Big(\ell_{R}(j)-\cancelto{0}{\ell^{\*}_{R}(j)}\Big)p_{R}(i|j) \\\\
+&amp;= \frac{1}{|\mathcal{P}|}\underset{j \in \mathcal{P}}{\sum}\ell_{R}(j)p_{R}(i|j) \quad for \ i \in \mathcal{N}
+\end{aligned}\)
+对于 $i \in \mathcal{P}$ 时，</p>
+
+<p>这时候只有 $j\ \in \mathcal{N}, i \ \in \mathcal{P}$ 这种情况是不行的（因为这样就是计算每一个负样本与所有正样本的 loss 了）:
+\(\begin{aligned}
+\frac{\partial L_{RS}}{\partial s_i} &amp;= \frac{1}{|\mathcal{P}|} \Big(-\underset{j \in \mathcal{P}}{\sum}L_{ij}+\underset{j \in \mathcal{P}}{\sum}L_{ji}-\underset{j \in \mathcal{N}}{\sum}L_{ij}+0 \cdot\underset{j \in \mathcal{N}}{\sum}L_{ji}\Big) \\\\
+&amp;= \frac{1}{|\mathcal{P}|}\Big(-\underset{j \in \mathcal{P}}{\sum}(\ell_{S}(i) - \ell_{S}^{\*}(i))p_{S}(j|i)+\underset{j \in \mathcal{P}}{\sum}(\ell_{S}(j) - \ell_{S}^{\*}(j))p_{S}(i|j)-\underset{j \in \mathcal{N}}{\sum}(\ell_{R}(i) - \ell_{R}^{\*}(i))p_{R}(j|i)+0\Big) \\\\
+&amp;= \frac{1}{|\mathcal{P}|}\Big(-(\ell_{S}(i) - \ell_{S}^{\*}(i))\underset{j \in \mathcal{P}}{\sum}p_{S}(j|i)+\underset{j \in \mathcal{P}}{\sum}(\ell_{S}(j) - \ell_{S}^{\*}(j))p_{S}(i|j)-(\ell_{R}(i) - \ell_{R}^{\*}(i))\underset{j \in \mathcal{P}}{\sum}p_{R}(j|i)+0\Big) \\\\
+&amp;=\frac{1}{|\mathcal{P}|}\Big(-(\ell_{S}(i) - \ell_{S}^{\*}(i))+\underset{j \in \mathcal{P}}{\sum}(\ell_{S}(j) - \ell_{S}^{\*}(j))p_{S}(i|j)-(\ell_{R}(i) - \ell_{R}^{\*}(i))+0\Big)  \quad for \ i \in \mathcal{P}
+\end{aligned}\)</p>
+
+<p>需要记住的是，rank 中的 loss $L_{kl}$ 其中必须满足 $k \in \mathcal{P},l\ \in \mathcal{N}$ ，sort 中的 loss $L_{kl}$ 其中必须满足 $k \in \mathcal{P},l\ \in \mathcal{P}$ 其余情况均为 0，因此一对样本要么产生 rank loss（一正样本一负），要么产生 sort （两正）</p>
+
+<p>最终的梯度为样本 $i$ 为正负样本产生梯度之和：
+\(\begin{aligned}
+\frac{\partial L_{RS}}{\partial s_i} = \frac{1}{|\mathcal{P}|}\Big(
+&amp;\underset{j \in \mathcal{P}}{\sum}\ell_{R}(j)p_{R}(i|j)-\ell_{R}(i) \\\\
++&amp;\underset{j \in \mathcal{P}}{\sum}(\ell_{S}(j) - \ell_{S}^{\*}(j))p_{S}(i|j)-(\ell_{S}(i) - \ell_{S}^{\*}(i))\Big)
+\end{aligned}\)
+关于多任务的权重，使用下述方法避免了人工设置权重：
+\(\mathcal{L}_{RS-model} = \mathcal{L}_{RS} + \lambda_{box}\mathcal{L}_{box}\)
+其中 $\lambda_{box} = \left|\mathcal{L}<em>{RS}/\mathcal{L}</em>{box} \right|$</p>
+
+<h2 id="算法的表现">算法的表现</h2>
+
+<p>RS Loss 解决训练预测不一致以及类别不均衡等问题，思路还是挺新颖的，而且具有较好的表现。</p>
+
+<ul>
+  <li>
+    <p>单阶段网络的性能</p>
+
+    <figure class="fullwidth"><img src="/assets/Rank-Sort-Loss/3.png" /><figcaption></figcaption></figure>
+  </li>
+  <li>
+    <p>两阶段网络的性能</p>
+
+    <figure class="fullwidth"><img src="/assets/Rank-Sort-Loss/4.png" /><figcaption></figcaption></figure>
+  </li>
+</ul>
+
+<p>可以看到还是在下游任务上还是又不小的提升的，只得大家借鉴其思路，创新自己的工作。</p>
+
+<h1 id="-核心代码解读">♣ 核心代码解读</h1>
+
+<ul>
+  <li>
+    <p>由于排序的方式来计算 loss 是不可微的，因此我们需要通过代码自己实现上述 <a href="#LC">Loss 计算</a>中计算出来的 RS-Loss 和 <a href="#LO">Loss 优化</a>中计算出来的梯度。首先需要用到 torch 里面的自动求导机制 <code class="language-plaintext highlighter-rouge">torch.autograd.Function</code>，重写里面的 <code class="language-plaintext highlighter-rouge">forward</code> 和 <code class="language-plaintext highlighter-rouge">backward</code>，关于这个我们最后再讲怎么编写。</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">RankSort</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">autograd</span><span class="p">.</span><span class="n">Function</span><span class="p">):</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">logits</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">delta_RS</span><span class="o">=</span><span class="mf">0.50</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span> 
+		<span class="c1"># logits 和 targets 的 shape 是一样的，都是 [N*80]
+</span>        <span class="c1"># 其中 N 是预测框的个数 logits 就是 one-hot label 然后展平
+</span>        <span class="n">classification_grads</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="n">logits</span><span class="p">.</span><span class="n">shape</span><span class="p">).</span><span class="nf">cuda</span><span class="p">()</span>
+        <span class="c1"># 取出正样本的 mask
+</span>        <span class="n">fg_labels</span> <span class="o">=</span> <span class="p">(</span><span class="n">targets</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">)</span>
+        <span class="c1"># 得到正样本的预测分数
+</span>        <span class="n">fg_logits</span> <span class="o">=</span> <span class="n">logits</span><span class="p">[</span><span class="n">fg_labels</span><span class="p">]</span>
+        <span class="c1"># 得到正样本的真值分数
+</span>        <span class="n">fg_targets</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="n">fg_labels</span><span class="p">]</span>
+        <span class="c1"># 得到正样本的个数
+</span>        <span class="n">fg_num</span> <span class="o">=</span> <span class="nf">len</span><span class="p">(</span><span class="n">fg_logits</span><span class="p">)</span>
+  
+        <span class="c1"># 以比正样本预测分数的最小值小 delta_RS，这里是 0.5 为阈值
+</span>        <span class="c1"># 这样做的原因，应该是只调整那些预测分数比较大的负样本
+</span>        <span class="c1"># 这样做的优点在于：
+</span>        <span class="c1"># i）分数较大的负样本更可能影响正样本的排序 所以在 BP 优化它们
+</span>        <span class="c1"># ii）另外大多数负样本分数低 但其实我们不用管分数低，不让它们参与计算
+</span>        <span class="c1"># 从而解决了样本不均衡问题。
+</span>        <span class="n">threshold_logit</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">min</span><span class="p">(</span><span class="n">fg_logits</span><span class="p">)</span> <span class="o">-</span> <span class="n">delta_RS</span>
+        <span class="c1"># 得到相对（较高分数）负样本的 mask
+</span>        <span class="n">relevant_bg_labels</span> <span class="o">=</span> <span class="p">((</span><span class="n">targets</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">logits</span><span class="o">&gt;=</span><span class="n">threshold_logit</span><span class="p">))</span>
+        <span class="c1"># 得到相对负样本的预测分数
+</span>        <span class="n">relevant_bg_logits</span> <span class="o">=</span> <span class="n">logits</span><span class="p">[</span><span class="n">relevant_bg_labels</span><span class="p">]</span>
+        <span class="c1"># 初始化相对负样本、正样本的反向传播梯度
+</span>        <span class="n">relevant_bg_grad</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">relevant_bg_logits</span><span class="p">)).</span><span class="nf">cuda</span><span class="p">()</span>
+        <span class="n">fg_grad</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="n">fg_num</span><span class="p">).</span><span class="nf">cuda</span><span class="p">()</span>
+        <span class="c1"># 初始化 sorting_error、ranking_error
+</span>        <span class="n">sorting_error</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="n">fg_num</span><span class="p">).</span><span class="nf">cuda</span><span class="p">()</span>
+        <span class="n">ranking_error</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">zeros</span><span class="p">(</span><span class="n">fg_num</span><span class="p">).</span><span class="nf">cuda</span><span class="p">()</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>接下来就是计算 RS Loss 梯度的部分，我们首先保证梯度能够正确实现，因为只要梯度能被正确计算，那么优化的过程就是正常的。</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="c1"># 首先对所有正样本的预测分数进行从小到大排序
+</span>    	      <span class="n">order</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nf">argsort</span><span class="p">(</span><span class="n">fg_logits</span><span class="p">)</span>
+          
+        <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">order</span><span class="p">:</span>
+            <span class="c1"># 这里其实每个样本和正样本 i 的分数差 x_{ij} 即 Step1
+</span>            <span class="c1"># 所有正样本与正样本 i 的分数差
+</span>            <span class="n">fg_relations</span><span class="o">=</span><span class="n">fg_logits</span> <span class="o">-</span> <span class="n">fg_logits</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+            <span class="c1"># 所有负样本与正样本 i 的分数差
+</span>            <span class="n">bg_relations</span><span class="o">=</span><span class="n">relevant_bg_logits</span> <span class="o">-</span> <span class="n">fg_logits</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+  
+            <span class="k">if</span> <span class="n">delta_RS</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># 这里没有直接使用阶跃函数 H(x)，而是进行调整后在 0 到 1 截断
+</span>                <span class="n">fg_relations</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nf">clamp</span><span class="p">(</span>
+                    <span class="n">fg_relations</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">delta_RS</span><span class="p">)</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="nb">max</span><span class="o">=</span><span class="mi">1</span>
+                <span class="p">)</span>
+                <span class="c1"># 这里分数比样本 i 小 0.5 的样本，与 i 形成的差都会截断为 0
+</span>                <span class="c1"># 反之大于 0.5 的样本，形成的差都会截断为 1
+</span>                <span class="n">bg_relations</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="nf">clamp</span><span class="p">(</span>
+                    <span class="n">bg_relations</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">delta_RS</span><span class="p">)</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fg_relations</span> <span class="o">=</span> <span class="p">(</span><span class="n">fg_relations</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">).</span><span class="nf">float</span><span class="p">()</span>
+                <span class="n">bg_relations</span> <span class="o">=</span> <span class="p">(</span><span class="n">bg_relations</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">).</span><span class="nf">float</span><span class="p">()</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>接下来我们先来计算样本 $i$ 的 rank error，首先我们可以由<a href="#rl">前面的结论</a>得出下列公式：
+\(\begin{aligned}
+rank\_error_i &amp;= \underset{j \in \mathcal{N}}{\sum}(\ell_{R}(i) - \ell_{R}^{\*}(i))p_{R}(j|i) \quad  for\ i \in \mathcal{P},j\ \in \mathcal{N}\\\\
+&amp;=\underset{j \in \mathcal{N}}{\sum}\frac{rank^{-}(i)}{rank(i)}\frac{H(x_{ij})}{rank^{-}(i)}, \\\\
+&amp;=\frac{\underset{j \in \mathcal{N}}{\sum}H(x_{ij})}{rank(i)} \\\\
+&amp;=\frac{rank^{-}(i)}{rank(i)}
+\end{aligned}\)</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            <span class="c1"># 计算所有正样本中排在 i 之前的样本个数（大致可以这么理解）
+</span>    		    <span class="c1"># 因为代码的实现，其实计算了所有分数在 i 左右 0.5 的样本与 i 的差之总和
+</span>    		      <span class="n">rank_pos</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">fg_relations</span><span class="p">)</span>
+            <span class="c1"># 计算相对负样本中排在 i 之前的样本个数（这部分样本在预测中很容易被预测为正样本，所以 FP）
+</span>            <span class="n">FP_num</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">bg_relations</span><span class="p">)</span>
+            <span class="c1"># 总的排序当然是两者之和啦
+</span>            <span class="n">rank</span> <span class="o">=</span> <span class="n">rank_pos</span> <span class="o">+</span> <span class="n">FP_num</span>
+            <span class="c1"># 上述公式最后一行不就是 FP_num/rank 嘛
+</span>            <span class="n">ranking_error</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">FP_num</span> <span class="o">/</span> <span class="n">rank</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>接下来我们先来计算样本 $i$ 的 sort error，首先我们可以由<a href="#rl">前面的结论</a>得出下列公式：
+\(\begin{aligned}
+sort\_error_i &amp;= \underset{j \in \mathcal{P}}{\sum}(\ell_{S}(i) - \ell_{S}^{\*}(i))p_{S}(j|i) \quad  for\ i \in \mathcal{P},j\ \in \mathcal{P}\\\\
+&amp;=\underset{j \in \mathcal{P}}{\sum}\Bigg(\frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})(1 - y_j)}{rank^{+}(i)} - \frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})[y_j\ge y_i](1 - y_j)}{\underset{j \in \mathcal{P}}{\sum}H(x_{ij})[y_j\ge y_i]}\Bigg)\frac{H(x_{ij})[y_j &lt; y_i]}{\underset{k \in \mathcal{P}}{\sum} H(x_{ik})[y_k &lt; y_i]}
+\end{aligned}\)
+这里由于 $\frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})(1 - y_j)}{rank^{+}(i)}$ 和 $\frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})<a href="1 - y_j">y_j\ge y_i</a>}{H(x_{ij})[y_j\ge y_i]}$ 的分子或者分母会对 $j$ 进行积分，那么分子和分母将不会和 $j$ 有关系，那么上式可以变为：
+\(\begin{aligned}
+  &amp;\Bigg(\frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})(1 - y_j)}{rank^{+}(i)} - \frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})[y_j\ge y_i](1 - y_j)}{\underset{j \in \mathcal{P}}{\sum}H(x_{ij})[y_j\ge y_i]}\Bigg)\underset{j \in \mathcal{P}}{\sum}\frac{H(x_{ij})[y_j &lt; y_i]}{\underset{k \in \mathcal{P}}{\sum} H(x_{ik})[y_k &lt; y_i]} \\\\
+  =&amp;\Bigg(\frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})(1 - y_j)}{rank^{+}(i)} - \frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})[y_j\ge y_i](1 - y_j)}{\underset{j \in \mathcal{P}}{\sum}H(x_{ij})[y_j\ge y_i]}\Bigg)\frac{\underset{j \in \mathcal{P}}{\sum}H(x_{ij})[y_j &lt; y_i]}{\underset{k \in \mathcal{P}}{\sum} H(x_{ik})[y_k &lt; y_i]} \\\\
+  =&amp;\frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})(1 - y_j)}{rank^{+}(i)} - \frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ij})[y_j\ge y_i](1 - y_j)}{\underset{j \in \mathcal{P}}{\sum}H(x_{ij})[y_j\ge y_i]}
+  \end{aligned} \tag{s}\)</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            <span class="c1"># 这里实现的是 s 中的前面一项，计算当前的 sort_error
+</span>  			      <span class="c1"># 这里使用 1-fg_targets 作为权重，是希望那些分数标签特别大的如：0.8、0.9 不产生较大 error
+</span>      	  <span class="n">current_sorting_error</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">fg_relations</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">fg_targets</span><span class="p">))</span> <span class="o">/</span> <span class="n">rank_pos</span>
+            <span class="c1"># 这里实现的是 s* 中的后面一项，首先得到分数标签大于 i 的样本的 mask
+</span>            <span class="n">iou_relations</span> <span class="o">=</span> <span class="p">(</span><span class="n">fg_targets</span> <span class="o">&gt;=</span> <span class="n">fg_targets</span><span class="p">[</span><span class="n">ii</span><span class="p">])</span>
+            <span class="c1"># 然后得到期望的分母的积分项，这里标签分数小于 i 的样本与 i 的分数差都会变为 0
+</span>            <span class="c1"># 意思是不允许标签分数小于 i ，预测分数还比 i 大或者接近 i
+</span>            <span class="n">target_sorted_order</span> <span class="o">=</span> <span class="n">iou_relations</span> <span class="o">*</span> <span class="n">fg_relations</span>
+            <span class="c1"># s* 中的后面一项的分母
+</span>            <span class="n">rank_pos_target</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">target_sorted_order</span><span class="p">)</span>
+  			<span class="c1"># 最后得到 s* 中的后面一项
+</span>            <span class="n">target_sorting_error</span><span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">target_sorted_order</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">fg_targets</span><span class="p">))</span> <span class="o">/</span> <span class="n">rank_pos_target</span>
+            <span class="n">sorting_error</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_sorting_error</span> <span class="o">-</span> <span class="n">target_sorting_error</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>之前我们分别计算过当样本 $i$ 为正样本和负样本时产生的梯度，因为 $L_{R}$ 和 $L_{S}$ 是相加得到的 $L_{RS}$，所以我们可以先计算<a href="#LO">由 rank error 产生的 loss</a>得出下列公式：
+\(\begin{aligned}
+\frac{\partial L_{R}}{\partial s_i} 
+&amp;= \frac{1}{|\mathcal{P}|}\Big(\underset{j \in \mathcal{P}}{\sum}\ell_{R}(j)p_{R}(i|j)-\ell_{R}(i)\Big) \\\\
+&amp;= \frac{1}{|\mathcal{P}|}\Big(\underset{j \in \mathcal{P}}{\sum}\frac{rank^{-}(j)}{rank(j)}\frac{H(x_{ji})}{rank^{-}(j)}-\frac{rank^{-}(i)}{rank(i)}\Big) \\\\
+&amp;= \frac{1}{|\mathcal{P}|}\Big(\underset{j \in \mathcal{P}}{\sum}\frac{H(x_{ji})}{rank(j)}-\frac{rank^{-}(i)}{rank(i)}\Big)
+\end{aligned}\)</p>
+  </li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>注意这里的表达式和之前的 <a href="#rlc">rank error</a> 是不一样的，这里对 $j$ 积分并不能消去概率质量函数 $p_{R}(i</td>
+      <td>j)$，因为$\ell_{R}(j)$ 也是跟 $j$ 相关的，另外需要注意的是前一项的 $i \in \mathcal{N}$，后一项的 $i \in \mathcal{P}$。因此后一项等于 rank error。</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>               <span class="k">if</span> <span class="n">FP_num</span> <span class="o">&gt;</span> <span class="n">eps</span><span class="p">:</span>
+          	        <span class="c1"># 这里注意 j 是正样本，那么由之前的代码得正样本的 1/rank = ranking_error[ii]/FP_num
+</span>              	    <span class="c1"># 分子跟之前一样为 bg_relations
+</span>              	    <span class="c1"># 由于我们是对正样本进行求和，因此只能每次计算进行这个正样本对所有相对负样本产生的梯度
+</span>                   <span class="c1"># 下行代码只算了一个正样本的情况，并不是上述公式完全实现。因此注意到 relevant_bg_grad 没有下标
+</span>          		       <span class="n">relevant_bg_grad</span> <span class="o">+=</span> <span class="p">(</span><span class="n">bg_relations</span> <span class="o">*</span> <span class="p">(</span><span class="n">ranking_error</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">/</span> <span class="n">FP_num</span><span class="p">))</span>
+                   <span class="c1"># 这就是算对正样本的梯度，因此根据上式就等于 ranking_error[ii]
+</span>                   <span class="n">fg_grad</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">-=</span> <span class="n">ranking_error</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>            
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>接着我们计算一下由 sort loss 产生的梯度，同样我们先由之前的推到列出等式，这里第一项为什么不能通过积分消去概率质量函数同上：
+\(\begin{aligned}
+\frac{\partial L_{S}}{\partial s_i} &amp;= \frac{1}{|\mathcal{P}|}\Big(\underset{j \in \mathcal{P}}{\sum}(\ell_{S}(j) - \ell_{S}^{\*}(j))p_{S}(i|j)-\big(\ell_{S}(i) - \ell_{S}^{\*}(i)\big)\Big) \\\\
+ &amp;= \frac{1}{|\mathcal{P}|}\underset{j \in \mathcal{P}}{\sum}\Bigg(\frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ji})(1 - y_i)}{rank^{+}(j)} - \frac{\underset{j \in \mathcal{P}}{\sum} H(x_{ji})[y_i\ge y_j](1 - y_i)}{\underset{j \in \mathcal{P}}{\sum}H(x_{ji})[y_i\ge y_j]}\Bigg)\frac{H(x_{ji})[y_i &lt; y_j]}{\underset{k \in \mathcal{P}}{\sum} H(x_{jk})[y_k &lt; y_j]} -\frac{1}{|\mathcal{P}|}\big(\ell_{S}(i) - \ell_{S}^{\*}(i)\big)
+\end{aligned}\)</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            <span class="c1"># 这里得到分数标签小于 i 的样本的 mask
+</span>      	   <span class="n">missorted_examples</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">iou_relations</span><span class="p">)</span> <span class="o">*</span> <span class="n">fg_relations</span>
+            <span class="c1"># 计算概率质量函数的分母
+</span>            <span class="n">sorting_pmf_denom</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="n">missorted_examples</span><span class="p">)</span>
+    
+            <span class="k">if</span> <span class="n">sorting_pmf_denom</span> <span class="o">&gt;</span> <span class="n">eps</span><span class="p">:</span>
+            	   <span class="c1"># 大括号内的就是 sorting_error[ii]，而概率密度函数为 missorted_examples/sorting_pmf_denom
+</span>                <span class="c1"># 这里跟之前一样只能计算一个正样本 j 对所有正样本的梯度贡献，因此 fg_grad 没有下标
+</span>                <span class="n">fg_grad</span> <span class="o">+=</span> <span class="p">(</span><span class="n">sorting_error</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">missorted_examples</span> <span class="o">/</span> <span class="n">sorting_pmf_denom</span><span class="p">))</span>
+                <span class="c1"># 后面一项则是算的样本 i 的 sort error 对 i 的梯度
+</span>                <span class="n">fg_grad</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">-=</span> <span class="n">sorting_error</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span>
+    
+        <span class="c1"># 最后进行归一化
+</span>        <span class="n">classification_grads</span><span class="p">[</span><span class="n">fg_labels</span><span class="p">]</span><span class="o">=</span> <span class="p">(</span><span class="n">fg_grad</span><span class="o">/</span><span class="n">fg_num</span><span class="p">)</span>
+        <span class="n">classification_grads</span><span class="p">[</span><span class="n">relevant_bg_labels</span><span class="p">]</span><span class="o">=</span> <span class="p">(</span><span class="n">relevant_bg_grad</span><span class="o">/</span><span class="n">fg_num</span><span class="p">)</span>
+  	      <span class="c1"># 保存计算的梯度
+</span>        <span class="n">ctx</span><span class="p">.</span><span class="nf">save_for_backward</span><span class="p">(</span><span class="n">classification_grads</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="n">ranking_error</span><span class="p">.</span><span class="nf">mean</span><span class="p">(),</span> <span class="n">sorting_error</span><span class="p">.</span><span class="nf">mean</span><span class="p">()</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>至此 RS loss 和其梯度计算完毕</p>
+
+<p>番外篇 torch.autograd.Function 的使用 帮你搞定自定义求导的情况!!!</p>
+
+<p>其实，就需要重写两个成员函数 <code class="language-plaintext highlighter-rouge">forward</code> 和 <code class="language-plaintext highlighter-rouge">backward</code> 里面的内容</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 先定义一个类 MyOperation，它需要继承 torch.autograd.Function
+</span><span class="k">class</span> <span class="nc">MyOperation</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">autograd</span><span class="p">.</span><span class="n">Function</span><span class="p">):</span>
+    <span class="c1"># 静态成员函数 forward 实现的就是你的算子前向怎么算嘛
+</span>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="c1"># 这里我们设定为 4 个输入， 2 个输出
+</span>        <span class="n">output1</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">z</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="c1"># 我们假定只需要对 x 进行求梯度，这里我们定义它的梯度为 x
+</span>        <span class="c1"># 这里的梯度都是乱写的，反正都是自定义
+</span>        <span class="n">x_grad1</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">output2</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="n">y</span>
+        <span class="n">x_grad2</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">full_like</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="c1"># 把梯度保存下来传给 backward
+</span>        <span class="n">ctx</span><span class="p">.</span><span class="nf">save_for_backward</span><span class="p">(</span><span class="n">x_grad1</span><span class="p">,</span> <span class="n">x_grad2</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">output1</span><span class="p">.</span><span class="nf">mean</span><span class="p">(),</span> <span class="n">output2</span><span class="p">.</span><span class="nf">mean</span><span class="p">()</span>
+    <span class="c1"># backward 是 forward 的逆过程
+</span>    <span class="c1"># 因此 forward 有几个输入 backward 就有几个输出
+</span>    <span class="c1"># 因此 forward 有几个输出 backward 就有几个输入
+</span>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">backward</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">ouput1_grad</span><span class="p">,</span> <span class="n">output2_grad</span><span class="p">):</span>
+        <span class="c1"># ouput1_grad, output2_grad 为正向的下一层，反向上一层的梯度
+</span>        <span class="c1"># 其实也是这一层输出的梯度
+</span>        <span class="c1"># 获取之前保存的对这一层输入的梯度
+</span>        <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">saved_tensors</span>
+        <span class="c1"># 链式求导法则，这里 g1 为 x_grad1，它只与 output1 的梯度有关
+</span>        <span class="n">g1</span> <span class="o">*=</span> <span class="n">output1_grad</span>
+        <span class="c1"># 同理
+</span>        <span class="n">g2</span> <span class="o">*=</span> <span class="n">output2_grad</span>
+        <span class="c1"># 注意最后 x 的梯度应该是两个 output 造成的梯度之和
+</span>        <span class="c1"># 另外咱们需要求导的只有 x, 所以其余(y, z, b)用 None
+</span>        <span class="k">return</span> <span class="n">g1</span><span class="o">+</span><span class="n">g2</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span>
+
+<span class="c1"># 调用的时候直接使用 apply
+</span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([</span><span class="mi">34</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">tensor</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">MyOperation</span><span class="p">.</span><span class="nf">apply</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">cuda</span><span class="p">(),</span> <span class="n">y</span><span class="p">.</span><span class="nf">cuda</span><span class="p">(),</span> <span class="n">z</span><span class="p">.</span><span class="nf">cuda</span><span class="p">(),</span> <span class="n">b</span><span class="p">.</span><span class="nf">cuda</span><span class="p">())</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span>
+<span class="n">loss</span><span class="p">.</span><span class="nf">backward</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">grad</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>这样它就会按照你定义的方式去反向传播啦！完结 :rocket::rocket:</p>
+
+<p><a href="https://arxiv.org/pdf/2107.11669.pdf">论文地址</a></p>
+
+<p><a href="https://github.com/kemaloksuz/RankSortLoss">源码地址</a></p>
+
+            <p class="subtitle" style="text-align:right"><span style="color: #ffb6c1; font-style: inherit;">August 8, 2022</span></p>
+          </main>
+        </div>
+    </article>
+    <script>
+    // 动态生成文章列表（假设每篇文章有标题、内容和链接）
+    const articles = [
+      
+        {
+          title: "DETR SERIES",
+          content: "🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法 # DETR ## Framework {% fullwidth &#39;assets/detr-series/1.png&#39; &quot;&quot; %} DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测 ## Transformer {% fullwidth &#39;assets/detr-series/2.jpg&#39; &quot;&quot; %} 显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder...",
+          url: "/ai/2023/05/19/detr-series.html"
+        },
+      
+        {
+          title: "CUDA 编程（进阶篇）",
+          content: "# General Matrix Multiplication GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子[文章](https://zhuanlan.zhihu.com/p/435908830)中的代码进行解读，也作为代码阅读笔记梳理整个思路。 首先，其优化技巧**分块计算**、**shared memory 的多次利用**、**register 的多次利用**以及**各种 bank 的 conflict 解决**，有的甚至会涉及到汇编层面的优化，这里有些技巧在基础篇已经讲过，就不再赘述了。 其次，简单叙述一下优化的思路，主要的思路就是对矩阵进行分块计算，不同 block 负责计算出 C 中的不同部分，同时在 block 内又让不同线程负责不同部分，这里面为了能多次利用 shared memory，需要进行多次循环，因此在 block 内有多次大循环，在大循环内又有每个线程中的多次小循环。因为涉及到把数据不断搬到 shared memory，所以作者设计了预取 prefetch 的做法，这样做可以掩盖 io 的 latency，因此也要设计哪些线程搬运哪些数据。由于可能在访问 shared memory 的时候有 bank conflict，所以也要设计哪些线程访问哪些内存。 ## 分块计算的思路 首先如下图，对 C 进行分块： {% fullwidth &#39;assets/cuda2/1.png&#39; &quot;&quot; %} 由图可知，C...",
+          url: "/ai/2023/02/09/cuda2.html"
+        },
+      
+        {
+          title: "CUDA 编程（基础篇）",
+          content: "## 简介 cuda 关于矩阵相关运算的入门编程及相关技巧，是我的学习笔记，比较适合初学者。 ## 矩阵相加 这一节通过矩阵相加来介绍 cuda 编程的常规流程，并介绍一些术语 ### 流程 * memory alloc  用于在 gpu 上开辟空间 ```c++ cudaMalloc((void**) &amp;d_o, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;d_a, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;d_b, sizeof(float) * (M * N)); ``` 其中 M 和 N 分别是矩阵的行和列 * copy data ```c++ cudaMemcpy(d_o,...",
+          url: "/ai/2023/01/01/cuda1.html"
+        },
+      
+        {
+          title: "YoloV7 标签匹配及 loss 计算解析",
+          content: "🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分 {% fullwidth &#39;assets/yolov7/1.png&#39; &quot;&quot; %} 如上如所示，YoloV7 同大多数单阶段目标检测算法属于密集检测 (dense detection)。上图是一个 7x7 的特征图红色的点是基于特征图的网格点，进行偏移后的点，然后在其上铺设 anchor box，每个点铺设一定数量的 anchor。当然也有直接在网格点上进行铺设的，一般来讲没有太大差别。下面我们开始介绍 v7 后处理，主要分为两部分：标签匹配和 loss 计算 # Label Assignment 📄标签匹配主要分为两步：先是进行**粗筛**，然后是进行**精筛** ## Find-3-Positive 📑顾名思义，第一步是找到三个正样本，就是对于每一个 GT 找到上图的三个 anchor 作为正样本。首先我们先大概讲一下匹配的规则 {% fullwidth &#39;assets/yolov7/2.png&#39; &quot;&quot; %} 如上图所示，对于每一个网格，会被分为四个部分，**绿色点**是 GT 中心点，**蓝色点**是匹配给 GT...",
+          url: "/ai/2022/11/06/yolov7.html"
+        },
+      
+        {
+          title: "Rank &amp; Sort Loss 解读",
+          content: "Rank &amp;amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 AP Loss、aLRPLoss 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp;amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？ 关于训练预测不一致的问题 简单来说，就是在分类和回归在训练的时候是分开的训练，计算 loss 并进行反向优化。但是在预测的时候却是用分类分数排序来进行 nms 后处理。这里可能导致一种情况就是分类分数很高，但是回归不好（这个问题在 FCOS 中有阐述）。 之前的工作 常见的目标检测网络一般会使用 nms 作为后处理，这时我们常常希望所有正样本的得分排在负样本前面，另外我们还希望位置预测更准确的框最后被留下来。之前的 AP Loss 和 aLRP Loss 由于需要附加的 head 来进行分类精度和位置精度综合评价（其实就是为了消除分类和回归的不一致问题，如 FCOS 的 centerness、IoU head 之类的），确实在解决类别不均衡问题（正负样本不均衡）等有着不错的效果，但是需要更多的时间和数据增强来进行训练。 Rank &amp;amp; Sort Loss...",
+          url: "/ai/2022/08/08/Rank-Sort-Loss.html"
+        },
+      
+        {
+          title: "变限积分求导的种种",
+          content: "变上限积分求导的理解 假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有： \[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\] 其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分： \[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\] 因此，其中我们称 \(\int_{a}^{x}f(t)dt\) 为 \(f(x)\) 的变上限积的定积分，也算是 \(f(x)\) 的一个原函数。同时我们也可以得到牛顿-莱布尼茨...",
+          url: "/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html"
+        },
+      
+        {
+          title: "Tufte-style Jekyll blog",
+          content: "The Tufte Jekyll theme is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. The idea for this project is essentially cribbed...",
+          url: "/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html"
+        },
+      
+    ];
+
+    // 获取 DOM 元素
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+
+    // 监听输入框的变化
+    searchInput.addEventListener("input", function () {
+      const query = this.value.trim().toLowerCase();
+
+      // 清空结果容器
+      searchResults.innerHTML = "";
+      searchResults.style.display = "none";
+
+      if (!query) return;
+
+      // 过滤匹配的文章
+      const results = articles.filter((article) => {
+        return (
+          article.title.toLowerCase().includes(query) ||
+          article.content.toLowerCase().includes(query)
+        );
+      });
+
+      // 截断结果为最多 10 条
+      const limitedResults = results.slice(0, 50);
+
+      // 显示搜索结果
+      if (limitedResults.length > 0) {
+        limitedResults.forEach((result) => {
+          const resultItem = document.createElement("a");
+          resultItem.href = result.url;
+          resultItem.textContent = result.title;
+          resultItem.title = result.content; // 提示部分内容
+          searchResults.appendChild(resultItem);
+        });
+        searchResults.style.display = "block";
+      } else {
+        // 显示无结果提示
+        const noResult = document.createElement("div");
+        noResult.textContent = "No Result or Error Title";
+        noResult.style.padding = "20px 20px";
+        noResult.style.color = "#082567";
+        searchResults.appendChild(noResult);
+        searchResults.style.display = "block";
+      }
+    });
+
+    // 点击页面其他区域时隐藏搜索结果
+    document.addEventListener("click", function (e) {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = "none";
+      }
+    });
+
+    // 返回顶部功能实现
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTop = document.getElementById('backToTop');
+
+      // 滚动监听 [[7]]
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // 平滑滚动 [[9]]
+      backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    function generateTOC() {
+      const toc = document.getElementById('toc');
+      const headings = document.querySelectorAll('h1, h2');
+
+      headings.forEach(heading => {
+        if (!heading.id) {
+          // 使用标准化编码方式
+          heading.id = encodeURIComponent(
+            heading.textContent
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '-') // 替换所有非字母数字字符
+          );
+        }
+
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        link.classList.add('toc-link', `level-${heading.tagName[1]}`);
+
+        if (heading.tagName === 'H2') {
+          const parentDiv = toc.lastChild;
+          if (parentDiv?.classList.contains('toc-parent')) {
+            parentDiv.querySelector('.child-container').appendChild(link);
+          }
+        } else {
+          const parentDiv = document.createElement('div');
+          parentDiv.className = 'toc-parent';
+
+          const toggleBtn = document.createElement('button');
+          toggleBtn.className = 'toggle-btn';
+          toggleBtn.textContent = '♠';
+          toggleBtn.addEventListener('click', () => {
+            const child = parentDiv.querySelector('.child-container');
+            child.classList.toggle('open');
+            toggleBtn.textContent = child.classList.contains('open') ? '♥' : '♠';
+          });
+
+          const childContainer = document.createElement('div');
+          childContainer.className = 'child-container';
+
+          parentDiv.appendChild(toggleBtn);
+          parentDiv.appendChild(link);
+          parentDiv.appendChild(childContainer);
+          toc.appendChild(parentDiv);
+        }
+      });
+    }
+
+    // 滚动监听与高亮 [[7]][[9]]
+    window.addEventListener('scroll', () => {
+      let currentSection = '';
+      const scrollY = window.scrollY + 50; // 偏移量优化
+
+      document.querySelectorAll('h1, h2').forEach(section => {
+        if (section.offsetTop <= scrollY) {
+          currentSection = section.id;
+        }
+      });
+
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.hash === `#${currentSection}`) {
+          link.classList.add('active');
+          // 自动展开父容器
+          const parent = link.closest('.toc-parent');
+          if (parent) {
+            parent.querySelector('.child-container').classList.add('open');
+            parent.querySelector('.toggle-btn').textContent = '♥';
+          }
+        }
+      });
+    });
+
+    // 修复平滑滚动并添加自动折叠功能
+    document.addEventListener('DOMContentLoaded', () => {
+      generateTOC();
+
+      // 新增滚动方向检测 [[5]]
+      let lastScrollPosition = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        const isScrollingUp = currentScroll < lastScrollPosition;
+
+        // 更新滚动位置记录
+        lastScrollPosition = currentScroll;
+
+        let currentSection = '';
+        const scrollY = currentScroll + 100; // 偏移量优化
+
+        document.querySelectorAll('h2').forEach(section => {
+          if (section.offsetTop <= scrollY) {
+            currentSection = section.id;
+          }
+        });
+
+        // 关闭所有非当前标题的展开状态
+        document.querySelectorAll('.toc-parent').forEach(parent => {
+          const childContainer = parent.querySelector('.child-container');
+          if (!parent.contains(document.querySelector(`#${currentSection}`))) {
+            childContainer.classList.remove('open');
+            parent.querySelector('.toggle-btn').textContent = '♠';
+          }
+        });
+
+        // 处理当前激活标题
+        const activeLink = document.querySelector(`.toc-link[href="#${currentSection}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+          activeLink.closest('.toc-parent').querySelector('.child-container').classList.add('open');
+          activeLink.closest('.toc-parent').querySelector('.toggle-btn').textContent = '♥';
+        } else {
+          document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+        }
+
+        // 特殊处理向上滚动场景 [[7]]
+        if (isScrollingUp) {
+          setTimeout(() => {
+            document.querySelectorAll('.child-container.open').forEach(container => {
+              if (container.getBoundingClientRect().top > window.innerHeight) {
+                container.classList.remove('open');
+                container.previousElementSibling.textContent = '♠';
+              }
+            });
+          }, 100);
+        }
+      });
+
+      // 修正平滑滚动 [[10]]
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = decodeURIComponent(link.hash); // 解码处理
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+    </script>
+    <span class="print-footer">Rank & Sort Loss 解读 - August 8, 2022 - L77</span>
+    <footer>
+  <hr class="slender_footer">
+  <ul class="footer-links">   
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+      
+  </ul>
+<div class="credits">
+<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">Powered By Jekyll And Tufte Theme</span>
+</div>  
+</footer>
+    <!-- 在body底部新增按钮 -->
+    <button id="backToTop" class="back-to-top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="currentColor"
+              d="M12 4l8 8H16v8H8v-8H4l8-8z"
+              style="transform: rotate(0deg); transition: 0.3s;"/>
+      </svg>
+    </button>
+  </body>
+</html>

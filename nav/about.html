@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>BLOG</title>
+  <title>ABOUT</title>
   <meta name="description" content="Personal Blog">
   <!-- 现代多尺寸图标 -->
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
@@ -49,7 +49,7 @@
   <link rel="stylesheet" type="text/css" href="/css/tufte.css">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="http://localhost:4000/nav/blog/">
+  <link rel="canonical" href="http://localhost:4000/nav/about.html">
 
   <link rel="alternate" type="application/rss+xml" title="From L77" href="http://localhost:4000/feed.xml" />
 </head>
@@ -110,104 +110,11 @@
     </script>
 </header>
     <article class="group">
-      <h1>ARTICLES</h1>
-<ul class="content-listing">
-  
-    <li class="index">
-      <hr class="invisible">
-      <a href="/ai/2023/05/19/detr-series.html">
-        <h2 class="contrast">DETR SERIES</h2>
-      </a>
-      <br>
-      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
-        May 19, 2023
-      </span>
-      <br/>
-      <div><p>🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法</p>
-</div>
-    </li>
-  
-    <li class="index">
-      <hr class="invisible">
-      <a href="/ai/2023/02/09/cuda2.html">
-        <h2 class="contrast">CUDA 编程（进阶篇）</h2>
-      </a>
-      <br>
-      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
-        February 9, 2023
-      </span>
-      <br/>
-      <div><h1 id="general-matrix-multiplication">General Matrix Multiplication</h1>
+      <p>这是我的 BLOG，主要用于记录我个人学习的笔记或者也可能是一些杂想，比如：大模型相关的知识、CUDA 的 GEMM、以及心理学相关的沟通和心理类型之类的知识。目前我的工作是大部分是跟训练和推理框架有关的内容，可能以后也会从事其他方面的工作。我的爱好有：LOL、钢琴和羽毛球，也喜欢烹饪一些自己喜欢的食物<label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/about/1.jpg" /><br />在家煮火锅，边烫边看电视也很不错哦</span>和探索一些好吃的美食</p>
 
-<p>GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子<a href="https://zhuanlan.zhihu.com/p/435908830">文章</a>中的代码进行解读，也作为代码阅读笔记梳理整个思路。</p>
-</div>
-    </li>
-  
-    <li class="index">
-      <hr class="invisible">
-      <a href="/ai/2023/01/01/cuda1.html">
-        <h2 class="contrast">CUDA 编程（基础篇）</h2>
-      </a>
-      <br>
-      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
-        January 1, 2023
-      </span>
-      <br/>
-      <div><h2 id="简介">简介</h2>
-
-<p>cuda 关于矩阵相关运算的入门编程及相关技巧，是我的学习笔记，比较适合初学者。</p>
-</div>
-    </li>
-  
-</ul>
-
-<!-- 分页导航 -->
-<div class="pagination">
-  
-
-  <!-- 页码控制区域 -->
-  <div class="page-control">
-    <span class="page-label">PAGE</span>
-    <input type="number" id="currentPage"
-           min="1" max="3"
-           value="1" class="page-input">
-    <span class="page-label">of 3&nbsp;</span>
-    <button onclick="jumpToPage()" class="nav-btn page-go">GO</button>
-  </div>
-
-  
-    <a href="/nav/blog/page2/" class="nav-btn next">NEXT >></a>
-  
-</div>
+<p>之所以选择 Jekyll 中 Tufte 主题是因为它的简洁和优雅以及印刷字体 et-book 的美观，最重要的是旁注<label for="2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="2" class="margin-toggle" /><span class="sidenote">对就是这个 </span>这个功能 ，让我觉得很特别，最后我觉得这种极简风的博客更容易使人关注记录内容本身。BLOG 里面第一篇文章 <strong>Tufte-style Jekyll blog</strong> 是直接从原生主题里面拿过来的，里面详细讲解了该主题的用法。我在原主题上增加了 <i><font color="5151A2">博客搜索、归档、分页、目录以及回到顶部等功能</font> </i> ，关于作图我可能会用 excalidraw 和 draw.io 草图风的。如果这些记录能够帮助到你，我会非常开心！另外你想跟我讨论其中的内容，可以通过底部的链接发信息给我~</p>
 
 
-<script>
-function jumpToPage() {
-  const currentPage = document.getElementById('currentPage').value;
-  const totalPages = 3;
-
-  // 输入验证 [[4]]
-  if (currentPage < 1 || currentPage > totalPages) {
-    alert(`请输入1到${totalPages}之间的页码`);
-    return;
-  }
-
-  // Jekyll分页路径规范 [[8]]
-  const baseUrl = '';
-  const pageNumber = currentPage === '1' ? 'nav/blog/index.html' : `nav/blog/page${currentPage}/`;
-  const path = `${baseUrl}/${pageNumber}`;
-
-  window.location.href = path;
-}
-
-// 回车键事件处理 [[9]]
-document.getElementById('currentPage').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    jumpToPage();
-  }
-});
-</script>
     </article>
     <script>
     // 动态生成文章列表（假设每篇文章有标题、内容和链接）
@@ -333,7 +240,7 @@ document.getElementById('currentPage').addEventListener('keypress', (e) => {
       });
     });
     </script>
-    <span class="print-footer">BLOG - L77</span>
+    <span class="print-footer">ABOUT - L77</span>
     <footer>
   <hr class="slender_footer">
   <ul class="footer-links">   

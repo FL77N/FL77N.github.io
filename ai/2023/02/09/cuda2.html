@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>CUDA 编程（进阶篇）</title>
+  <meta name="description" content="General Matrix MultiplicationGEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子文章中的代码进行解读，也作为代码阅读笔记梳理整个思路。">
+  <!-- 现代多尺寸图标 -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+  <link rel="manifest" href="/assets/img/site.webmanifest" />
+
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+  
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>  
+
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="http://localhost:4000/ai/2023/02/09/cuda2.html">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="http://localhost:4000/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and pages template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon.png" alt="CH"></a>
+	
+		
+<!--		<input type="radio" id="blog" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/blog/index.html" class="nav-link">blog</a>
+  	
+		
+<!--		<input type="radio" id="archive" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/archive.html" class="nav-link">archive</a>
+  	
+		
+<!--		<input type="radio" id="about" name="nav" class="nav-input">-->
+		<a href="http://localhost:4000/nav/about.html" class="nav-link">about</a>
+  	
+	<!-- 右侧搜索框 -->
+	<div class="navbar-right">
+	  <div class="search-container">
+		<input type="text" id="search-input" placeholder="search blog..." />
+		<div id="search-results" class="search-results"></div>
+	  </div>
+	</div>
+	</nav>
+
+
+	<script>
+        // 页面加载时设置激活状态
+        document.addEventListener('DOMContentLoaded', () => {
+<!--            const currentPage = window.location.pathname.split('/').pop();-->
+            const currentPage = window.location.href;
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+
+        // 导航点击处理（可选，用于单页应用）
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 如果是单页应用，取消注释以下代码：
+                e.preventDefault();
+                window.location.href = this.href;
+                history.pushState({}, '', this.href);
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</header>
+    <article>
+        <div class="container">
+          <nav class="toc" id="toc"></nav>
+          <main class="content">
+            <h1 style="text-align: left">CUDA 编程（进阶篇）</h1>
+            
+            
+            
+            <p class="subtitle" style="text-align:right"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> CUDA</span></p>
+            
+            <h1 id="general-matrix-multiplication">General Matrix Multiplication</h1>
+
+<p>GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子<a href="https://zhuanlan.zhihu.com/p/435908830">文章</a>中的代码进行解读，也作为代码阅读笔记梳理整个思路。<!--more--></p>
+
+<p>首先，其优化技巧<strong>分块计算</strong>、<strong>shared memory 的多次利用</strong>、<strong>register 的多次利用</strong>以及<strong>各种 bank 的 conflict 解决</strong>，有的甚至会涉及到汇编层面的优化，这里有些技巧在基础篇已经讲过，就不再赘述了。</p>
+
+<p>其次，简单叙述一下优化的思路，主要的思路就是对矩阵进行分块计算，不同 block 负责计算出 C 中的不同部分，同时在 block 内又让不同线程负责不同部分，这里面为了能多次利用 shared memory，需要进行多次循环，因此在 block 内有多次大循环，在大循环内又有每个线程中的多次小循环。因为涉及到把数据不断搬到 shared memory，所以作者设计了预取 prefetch 的做法，这样做可以掩盖 io 的 latency，因此也要设计哪些线程搬运哪些数据。由于可能在访问 shared memory 的时候有 bank conflict，所以也要设计哪些线程访问哪些内存。</p>
+
+<h2 id="分块计算的思路">分块计算的思路</h2>
+
+<p>首先如下图，对 C 进行分块：</p>
+
+<figure class="fullwidth"><img src="/assets/cuda2/1.png" /><figcaption></figcaption></figure>
+
+<p>由图可知，C 被分为 MxN/BlOCK_SIZE_M/BlOCK_SIZE_N 块，每块的大小为高 BLOCK_SIZE_M，宽 BLOCK_SIZE_N，每一块对应 A 中的相应行，对应 B 中相应列。其中一个块交给一个 block 来计算，在本次示例中，A、B、C 都是 2048 的方阵，每块的大小为 128 的方阵，因此需要 256 个 block。</p>
+
+<figure class="fullwidth"><img src="/assets/cuda2/2.png" /><figcaption></figcaption></figure>
+
+<p>对于每个 block 而言，实际上是 A 中的某些行形成的矩阵（Ai）和 B 中的某些列形成的矩阵（Bi）进行矩阵乘法得到的。如上图所示，我们可以对 Ai 中的按列进行再一次划分（Aij）和 Bi 中按照相同的规则按行再次进行划分（Bij），其实可以发现 Ai 中的第 i 列只会和 Bi 中的第 i 行进行相应的运算，其实运算结果的矩阵就是 128 的方阵，所以其实 Ai 和 Bi 的矩阵乘法结果也可以看成多个 128 方阵的累加结果。对于一个 block 来说要进行 K/BLOCK_SIZE_K=8 次循环，然后将结果进行点对点叠加得到。</p>
+
+<figure class="fullwidth"><img src="/assets/cuda2/3.png" /><figcaption></figcaption></figure>
+
+<p>对于每个 Aij 和 Bij 进行矩阵乘法的时候也不是直接按传统的 Aij 的某一行与 Bij 的某一列进行向量相乘得到最终结果的一个元素来算的，我们每次只计算 Aij 中的第 m 列和 Bi 中的第 m 行的运算结果。这实际上是有考虑 shared memory 的 bank conflict，并且虽然我们设定每个线程在每次小迭代中只计算 Aij 中的 8 个元素和 Bij 中的 8 个元素运算的结果，然而这 8 个元素并不是紧挨着的，如上如可知，我们开了 256 个线程来计算这 128x128 的矩阵，每个线程负责 64 个元素。256 个线程一共 8 个 wrap，我们需要使得每个 wrap 内不发生 bank conflict。上图展示了这个 8 个 wrap 负责的位置，以及 wrap 内线程的负责情况。下面先详细介绍一下 bank conflict：</p>
+
+<h2 id="bank-conflict"><font face="Times">Bank Conflict</font></h2>
+
+<figure class="fullwidth"><img src="/assets/cuda2/4.png" /><figcaption></figcaption></figure>
+
+<p>在 shared memory 中的连续的内存被放入 32 个 bank 中，通常每 4 Bytes 一个 bank。如上图所示，一个 float 或者一个 int 占某一个 bank 中的一格，因此可以将一个 bank 理解为一个内存块，一个 bank 是一列，32 个 bank 组成 shared memory。一般 shared memory 的大小是 64 KB，也就是说一个 bank 最多有 2000 Bytes（500 行）。当我们给一个 wrap 中线程分配访问 shared memory 的地址时，也就是分配哪一个线程访问哪一个 bank 中的哪一格。<strong>什么是 bank conflict？</strong>当 <strong>同一 wrap 中</strong> 的 <strong>不同线程</strong>，访问 <strong>同一 bank</strong> 中的 <strong>不同地址</strong> ，此时不能并行访问，只能串行，所以会导致速度下降。shared memory 中的访问可能性：</p>
+
+<ul>
+  <li>不同线程，访问不同 bank；这种情况是最希望的，因为可以并行访问</li>
+  <li>不同线程，访问同一 bank 中的同一地址（同一格），这种情况 gpu 会自动广播给所有线程，因此不影响速度</li>
+  <li>不同线程，访问同一 bank 中的不同地址（比如有 64 个线程，一个线程访问 4 Bytes，那么第 0 线程访问的  0，第 32 线程访问的 32，他们都属于 bank 0）这时候就会 conflict</li>
+</ul>
+
+<p>为何不讨论不同 wrap 之间的 conflict 呢？因为不同 wrap 不能同时访问 SM 中的 shared memory。<strong>关于如何解决呢？</strong> 目前一般有两个办法：</p>
+
+<ul>
+  <li>对 shared memory 开辟的长度进行改变，比如 32x6，对 0 线程而言 ，tid x 6 / 32，那么 16 线程就会发现冲突。如果将其改为 32 x 7 就不会了</li>
+  <li>对线程访问的地址进行设计，使其不会冲突</li>
+</ul>
+
+<p>最后我们基于他的代码进行分析和学习（源代码注释也挺清楚的了）：</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">template</span> <span class="o">&lt;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">BLOCK_SIZE_M</span><span class="p">,</span>  <span class="c1">// C 中每个分块的高</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">BLOCK_SIZE_K</span><span class="p">,</span>  <span class="c1">// A 中每次需要搬到共享内存块的宽</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">BLOCK_SIZE_N</span><span class="p">,</span>  <span class="c1">// C 中每个分块的宽</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">THREAD_SIZE_Y</span><span class="p">,</span> <span class="c1">// C 中每个分块中一个线程需要计算的块的宽</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">THREAD_SIZE_X</span><span class="p">,</span>  <span class="c1">// C 中每个分块中一个线程需要计算的块的高</span>
+    <span class="k">const</span> <span class="n">bool</span> <span class="n">ENABLE_DOUBLE_BUFFER</span> <span class="c1">// 是否开启预取</span>
+    <span class="o">&gt;</span> 
+<span class="n">__global__</span> <span class="kt">void</span> <span class="nf">Sgemm</span><span class="p">(</span> 
+    <span class="kt">float</span> <span class="o">*</span> <span class="n">__restrict__</span> <span class="n">A</span><span class="p">,</span>
+    <span class="kt">float</span> <span class="o">*</span> <span class="n">__restrict__</span> <span class="n">B</span><span class="p">,</span>
+    <span class="kt">float</span> <span class="o">*</span> <span class="n">__restrict__</span> <span class="n">C</span><span class="p">,</span> 
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">M</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">N</span><span class="p">,</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Block 索引</span>
+    <span class="kt">int</span> <span class="n">bx</span> <span class="o">=</span> <span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">by</span> <span class="o">=</span> <span class="n">blockIdx</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+
+    <span class="c1">// Thread 索引</span>
+    <span class="kt">int</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ty</span> <span class="o">=</span> <span class="n">threadIdx</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    
+    <span class="c1">// 一个 block 线程的总数</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">THREAD_X_PER_BLOCK</span> <span class="o">=</span> <span class="n">BLOCK_SIZE_N</span> <span class="o">/</span> <span class="n">THREAD_SIZE_X</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">THREAD_Y_PER_BLOCK</span> <span class="o">=</span> <span class="n">BLOCK_SIZE_M</span> <span class="o">/</span> <span class="n">THREAD_SIZE_Y</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">THREAD_NUM_PER_BLOCK</span> <span class="o">=</span> <span class="n">THREAD_X_PER_BLOCK</span> <span class="o">*</span> <span class="n">THREAD_Y_PER_BLOCK</span><span class="p">;</span>
+
+    <span class="c1">// 线程在当前 block 中的索引</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">tid</span> <span class="o">=</span> <span class="n">ty</span> <span class="o">*</span> <span class="n">THREAD_X_PER_BLOCK</span> <span class="o">+</span> <span class="n">tx</span><span class="p">;</span>
+
+    <span class="c1">// 为搬运 A、B 矩阵，开了两份共享内存</span>
+    <span class="n">__shared__</span> <span class="kt">float</span> <span class="n">As</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">BLOCK_SIZE_K</span><span class="p">][</span><span class="n">BLOCK_SIZE_M</span><span class="p">];</span>
+    <span class="n">__shared__</span> <span class="kt">float</span> <span class="n">Bs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">BLOCK_SIZE_K</span><span class="p">][</span><span class="n">BLOCK_SIZE_N</span><span class="p">];</span>
+    <span class="c1">// 在寄存器上开辟了记录累积结果以便把最终结果搬到 C 中</span>
+    <span class="kt">float</span> <span class="n">accum</span><span class="p">[</span><span class="n">THREAD_SIZE_Y</span><span class="p">][</span><span class="n">THREAD_SIZE_X</span><span class="p">];</span>
+    <span class="cp">#pragma unroll
+</span>    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">THREAD_SIZE_Y</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="cp">#pragma unroll
+</span>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">THREAD_SIZE_X</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+            <span class="n">accum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 当前线程为搬运共享内存到寄存器上所开辟的内存</span>
+    <span class="kt">float</span> <span class="n">frag_a</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">THREAD_SIZE_Y</span><span class="p">];</span>
+    <span class="kt">float</span> <span class="n">frag_b</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">THREAD_SIZE_X</span><span class="p">];</span>
+    <span class="c1">// 这里计算每个线程每次搬运 4 个 float 需要搬运的次数（从 global 搬到 shared 上）</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">ldg_num_a</span> <span class="o">=</span> <span class="n">BLOCK_SIZE_M</span> <span class="o">*</span> <span class="n">BLOCK_SIZE_K</span> <span class="o">/</span> <span class="p">(</span><span class="n">THREAD_NUM_PER_BLOCK</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">ldg_num_b</span> <span class="o">=</span> <span class="n">BLOCK_SIZE_K</span> <span class="o">*</span> <span class="n">BLOCK_SIZE_N</span> <span class="o">/</span> <span class="p">(</span><span class="n">THREAD_NUM_PER_BLOCK</span> <span class="o">*</span> <span class="mi">4</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">ldg_a_reg</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">ldg_num_a</span><span class="p">];</span>
+    <span class="kt">float</span> <span class="n">ldg_b_reg</span><span class="p">[</span><span class="mi">4</span><span class="o">*</span><span class="n">ldg_num_b</span><span class="p">];</span>
+
+    <span class="c1">// 搬运一行需要的线程数</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">A_TILE_THREAD_PER_ROW</span> <span class="o">=</span> <span class="n">BLOCK_SIZE_K</span> <span class="o">/</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">B_TILE_THREAD_PER_ROW</span> <span class="o">=</span> <span class="n">BLOCK_SIZE_N</span> <span class="o">/</span> <span class="mi">4</span><span class="p">;</span>
+
+    <span class="c1">// 计算当前线程应该从哪一行哪一列开始搬运</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">A_TILE_ROW_START</span> <span class="o">=</span> <span class="n">tid</span> <span class="o">/</span> <span class="n">A_TILE_THREAD_PER_ROW</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">B_TILE_ROW_START</span> <span class="o">=</span> <span class="n">tid</span> <span class="o">/</span> <span class="n">B_TILE_THREAD_PER_ROW</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">A_TILE_COL</span> <span class="o">=</span> <span class="n">tid</span> <span class="o">%</span> <span class="n">A_TILE_THREAD_PER_ROW</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span> 
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">B_TILE_COL</span> <span class="o">=</span> <span class="n">tid</span> <span class="o">%</span> <span class="n">B_TILE_THREAD_PER_ROW</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span>
+
+    <span class="c1">// 总体搬运一次需要跨过的行数 -- stride</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">A_TILE_ROW_STRIDE</span> <span class="o">=</span> <span class="n">THREAD_NUM_PER_BLOCK</span> <span class="o">/</span> <span class="n">A_TILE_THREAD_PER_ROW</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">B_TILE_ROW_STRIDE</span> <span class="o">=</span> <span class="n">THREAD_NUM_PER_BLOCK</span> <span class="o">/</span> <span class="n">B_TILE_THREAD_PER_ROW</span><span class="p">;</span>
+
+    <span class="c1">// 指向属于该 block 那个块的首地址 </span>
+    <span class="n">A</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">A</span><span class="p">[(</span><span class="n">BLOCK_SIZE_M</span> <span class="o">*</span> <span class="n">by</span><span class="p">)</span><span class="o">*</span> <span class="n">K</span><span class="p">];</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">B</span><span class="p">[</span><span class="n">BLOCK_SIZE_N</span> <span class="o">*</span> <span class="n">bx</span><span class="p">];</span>
+
+    <span class="c1">// 需要该线程搬运共享内存的索引（从 shared 搬到 register 上）</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">warp_id</span> <span class="o">=</span> <span class="n">tid</span> <span class="o">/</span> <span class="mi">32</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">lane_id</span> <span class="o">=</span> <span class="n">tid</span> <span class="o">%</span> <span class="mi">32</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">a_tile_index</span> <span class="o">=</span>  <span class="n">warp_id</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="mi">16</span> <span class="o">+</span> <span class="n">lane_id</span><span class="o">/</span><span class="mi">8</span><span class="o">*</span><span class="mi">4</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">b_tile_index</span> <span class="o">=</span>  <span class="n">warp_id</span><span class="o">%</span><span class="mi">2</span><span class="o">*</span><span class="mi">32</span> <span class="o">+</span> <span class="n">lane_id</span><span class="o">%</span><span class="mi">8</span><span class="o">*</span><span class="mi">4</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>上面这份代码主要对需要的 index 进行了计算，其中</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 需要该线程搬运共享内存的索引（从 shared 搬到 register 上）</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">warp_id</span> <span class="o">=</span> <span class="n">tid</span> <span class="o">/</span> <span class="mi">32</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">lane_id</span> <span class="o">=</span> <span class="n">tid</span> <span class="o">%</span> <span class="mi">32</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">a_tile_index</span> <span class="o">=</span>  <span class="n">warp_id</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="mi">16</span> <span class="o">+</span> <span class="n">lane_id</span><span class="o">/</span><span class="mi">8</span><span class="o">*</span><span class="mi">4</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">b_tile_index</span> <span class="o">=</span>  <span class="n">warp_id</span><span class="o">%</span><span class="mi">2</span><span class="o">*</span><span class="mi">32</span> <span class="o">+</span> <span class="n">lane_id</span><span class="o">%</span><span class="mi">8</span><span class="o">*</span><span class="mi">4</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>这段代码的作用就是为了避免 bank conflict ，其效果如讲解分块时的图是一致的。首先，进行了计算该线程属于哪一个 wrap，在 wrap 中的局部 id 是多少，然后计算去共享内存搬运数据时从哪一个地址开始，举例说明：对于 A 矩阵需要搬运的共享内存而言，根据 wrap id 来确定大的位置（即这一片都是这个 wrap 需要搬运的数据，可参考前面分块画那个示意图）<code class="language-plaintext highlighter-rouge">warp_id/2*16</code> 得知每行两个 wrap，排完两个 wrap，跳（stride）16 个 foat。从 <code class="language-plaintext highlighter-rouge">lane_id/8*4</code> 可以看出 <strong>在 wrap 内</strong> 每行 8 个线程，也就是一共 4 行，4 行跳了 16 float，所以一个线程搬运 A 中的 4 个 float 刚好可以用 float4 这样可以访存对齐。由于开 256 个线程，一共 8 个 wrap 每行两个，一共 4 行，那才 64 float。但 A （转置后）一行有 128 个 float，所以需要搬运两次，因此一个线程搬运 8 个 float。</p>
+
+<p>需要的 index 计算完成后，接下来就是数据的搬运了</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 首先将第一次大迭代相应的数据 global memory 搬运至 shared memory</span>
+    <span class="cp">#pragma unroll
+</span>    <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">BLOCK_SIZE_M</span> <span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">A_TILE_ROW_STRIDE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">ldg_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="n">A_TILE_ROW_STRIDE</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">OFFSET</span><span class="p">(</span>
+            <span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="c1">// row</span>
+            <span class="n">A_TILE_COL</span><span class="p">,</span> <span class="c1">// col</span>
+            <span class="n">K</span><span class="p">)]);</span>
+        <span class="n">As</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">A_TILE_COL</span><span class="p">][</span><span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="p">];</span>
+        <span class="n">As</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">A_TILE_COL</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+        <span class="n">As</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">A_TILE_COL</span><span class="o">+</span><span class="mi">2</span><span class="p">][</span><span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="o">+</span><span class="mi">2</span><span class="p">];</span>
+        <span class="n">As</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">A_TILE_COL</span><span class="o">+</span><span class="mi">3</span><span class="p">][</span><span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="o">+</span><span class="mi">3</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="cp">#pragma unroll
+</span>    <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">BLOCK_SIZE_K</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">B_TILE_ROW_STRIDE</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">Bs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">B_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">][</span><span class="n">B_TILE_COL</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="n">OFFSET</span><span class="p">(</span>
+                <span class="n">B_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="c1">// row</span>
+                <span class="n">B_TILE_COL</span><span class="p">,</span> <span class="c1">// col</span>
+                <span class="n">N</span> <span class="p">)]);</span>
+    <span class="p">}</span>
+    <span class="n">__syncthreads</span><span class="p">();</span>
+    
+    <span class="c1">// 再把 shared memory 中的第一次小迭代数据搬到 register 中</span>
+    <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">As</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">a_tile_index</span><span class="p">]);</span>
+    <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">As</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">a_tile_index</span> <span class="o">+</span> <span class="mi">64</span><span class="p">]);</span>
+
+    <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">Bs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">b_tile_index</span><span class="p">]);</span>
+    <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">Bs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">b_tile_index</span> <span class="o">+</span> <span class="mi">64</span><span class="p">]);</span>
+</code></pre></div></div>
+
+<p>可以注意到上一段代码，最后搬到 register 确实搬了两次。首先，这段代码将第一次大迭代需要的数据存入了 shared memory 里面，然后把第一次小迭代需要的数据存入了 register，其中：</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">FETCH_FLOAT4</code>：是利用 cuda 中的类型 float4 而设置的宏，很明显一次可以取 4 个 float，可以避免访存不对齐的问题；</li>
+  <li><code class="language-plaintext highlighter-rouge">ldg_a_reg</code>：显然要想从 A 中搬运数据到存 A 数据的 shared memory 需要转置，此时不能直接使用 <code class="language-plaintext highlighter-rouge">FETCH_FLOAT4</code></li>
+</ul>
+
+<p>接下来就是正式计算的代码了</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 作为预取数据的数组 index</span>
+    <span class="kt">int</span> <span class="n">write_stage_idx</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">tile_idx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">do</span><span class="p">{</span>
+        <span class="c1">// 大迭代中每次的 stride 为 BLOCK_SIZE_K</span>
+        <span class="n">tile_idx</span> <span class="o">+=</span> <span class="n">BLOCK_SIZE_K</span><span class="p">;</span>
+        <span class="c1">// 先将下一次大迭代的 global memory 中的数据考到 register 中</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">tile_idx</span><span class="o">&lt;</span> <span class="n">K</span><span class="p">){</span>
+            <span class="cp">#pragma unroll
+</span>            <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">BLOCK_SIZE_M</span> <span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">A_TILE_ROW_STRIDE</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">ldg_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="n">A_TILE_ROW_STRIDE</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span>
+                <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">OFFSET</span><span class="p">(</span>
+                    <span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="c1">// row</span>
+                    <span class="n">A_TILE_COL</span> <span class="o">+</span> <span class="n">tile_idx</span><span class="p">,</span> <span class="c1">// col</span>
+                    <span class="n">K</span> <span class="p">)]);</span>
+            <span class="p">}</span>
+            <span class="cp">#pragma unroll
+</span>            <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">BLOCK_SIZE_K</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">B_TILE_ROW_STRIDE</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">ldg_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="n">B_TILE_ROW_STRIDE</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span>
+                <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">ldg_b_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="n">OFFSET</span><span class="p">(</span>
+                    <span class="n">tile_idx</span> <span class="o">+</span> <span class="n">B_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="c1">// row</span>
+                    <span class="n">B_TILE_COL</span><span class="p">,</span> <span class="c1">// col</span>
+                    <span class="n">N</span> <span class="p">)]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 作为加载数据的数组的 index write 为 0 load 就为 1</span>
+        <span class="kt">int</span> <span class="n">load_stage_idx</span> <span class="o">=</span> <span class="n">write_stage_idx</span> <span class="o">^</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="cp">#pragma unroll
+</span>        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">BLOCK_SIZE_K</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+            <span class="c1">// 第一次大迭代中 load_stage_idx 就为 0</span>
+            <span class="c1">// 因为在上部分代码中，我们已经进行了数据的预取</span>
+            <span class="c1">// 这里把下一次小迭代的需要数据放入 register 中</span>
+            <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_a</span><span class="p">[(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">As</span><span class="p">[</span><span class="n">load_stage_idx</span><span class="p">][(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">a_tile_index</span><span class="p">]);</span>
+            <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_a</span><span class="p">[(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="p">][</span><span class="mi">4</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">As</span><span class="p">[</span><span class="n">load_stage_idx</span><span class="p">][(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">a_tile_index</span> <span class="o">+</span> <span class="mi">64</span><span class="p">]);</span>
+            <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_b</span><span class="p">[(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">Bs</span><span class="p">[</span><span class="n">load_stage_idx</span><span class="p">][(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">b_tile_index</span><span class="p">]);</span>
+            <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_b</span><span class="p">[(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="mi">2</span><span class="p">][</span><span class="mi">4</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">Bs</span><span class="p">[</span><span class="n">load_stage_idx</span><span class="p">][(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">b_tile_index</span> <span class="o">+</span> <span class="mi">64</span><span class="p">]);</span>
+            <span class="c1">// 这里把第一次小迭代的数据拿出来进行计算</span>
+            <span class="cp">#pragma unroll
+</span>            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">thread_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">thread_y</span> <span class="o">&lt;</span> <span class="n">THREAD_SIZE_Y</span><span class="p">;</span> <span class="o">++</span><span class="n">thread_y</span><span class="p">)</span> <span class="p">{</span>
+                <span class="cp">#pragma unroll
+</span>                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">thread_x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">thread_x</span> <span class="o">&lt;</span> <span class="n">THREAD_SIZE_X</span><span class="p">;</span> <span class="o">++</span><span class="n">thread_x</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">accum</span><span class="p">[</span><span class="n">thread_y</span><span class="p">][</span><span class="n">thread_x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">frag_a</span><span class="p">[</span><span class="n">j</span><span class="o">%</span><span class="mi">2</span><span class="p">][</span><span class="n">thread_y</span><span class="p">]</span> <span class="o">*</span> <span class="n">frag_b</span><span class="p">[</span><span class="n">j</span><span class="o">%</span><span class="mi">2</span><span class="p">][</span><span class="n">thread_x</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">tile_idx</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">){</span>
+            <span class="c1">// 将刚才的预取到 register 中的数据，存到 shared momery 中</span>
+            <span class="c1">// 供下一次小迭代反复使用</span>
+            <span class="cp">#pragma unroll
+</span>            <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">BLOCK_SIZE_M</span> <span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">A_TILE_ROW_STRIDE</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">ldg_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="n">A_TILE_ROW_STRIDE</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span>
+                <span class="n">As</span><span class="p">[</span><span class="n">write_stage_idx</span><span class="p">][</span><span class="n">A_TILE_COL</span><span class="p">][</span><span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="p">];</span>
+                <span class="n">As</span><span class="p">[</span><span class="n">write_stage_idx</span><span class="p">][</span><span class="n">A_TILE_COL</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+                <span class="n">As</span><span class="p">[</span><span class="n">write_stage_idx</span><span class="p">][</span><span class="n">A_TILE_COL</span><span class="o">+</span><span class="mi">2</span><span class="p">][</span><span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="o">+</span><span class="mi">2</span><span class="p">];</span>
+                <span class="n">As</span><span class="p">[</span><span class="n">write_stage_idx</span><span class="p">][</span><span class="n">A_TILE_COL</span><span class="o">+</span><span class="mi">3</span><span class="p">][</span><span class="n">A_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">ldg_a_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="o">+</span><span class="mi">3</span><span class="p">];</span>
+            <span class="p">}</span>
+
+            <span class="cp">#pragma unroll
+</span>            <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">BLOCK_SIZE_K</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">B_TILE_ROW_STRIDE</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">ldg_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="n">B_TILE_ROW_STRIDE</span> <span class="o">*</span> <span class="mi">4</span><span class="p">;</span>
+                <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">Bs</span><span class="p">[</span><span class="n">write_stage_idx</span><span class="p">][</span><span class="n">B_TILE_ROW_START</span> <span class="o">+</span> <span class="n">i</span><span class="p">][</span><span class="n">B_TILE_COL</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">ldg_b_reg</span><span class="p">[</span><span class="n">ldg_index</span><span class="p">]);</span>
+            <span class="p">}</span>
+
+            <span class="n">__syncthreads</span><span class="p">();</span>
+            <span class="c1">// 下一次的预取索引就应该是上一次的加载索引</span>
+            <span class="c1">// 同理上面使用的预取索引就是下一次的加载索引 预取就是为了未来的加载嘛</span>
+            <span class="n">write_stage_idx</span> <span class="o">^=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 把第一次小迭代的数据预取至寄存器</span>
+        <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">As</span><span class="p">[</span><span class="n">load_stage_idx</span><span class="o">^</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">a_tile_index</span><span class="p">]);</span>
+        <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_a</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">As</span><span class="p">[</span><span class="n">load_stage_idx</span><span class="o">^</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">a_tile_index</span> <span class="o">+</span> <span class="mi">64</span><span class="p">]);</span>
+
+        <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">Bs</span><span class="p">[</span><span class="n">load_stage_idx</span><span class="o">^</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">b_tile_index</span><span class="p">]);</span>
+        <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">frag_b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">Bs</span><span class="p">[</span><span class="n">load_stage_idx</span><span class="o">^</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="n">b_tile_index</span> <span class="o">+</span> <span class="mi">64</span><span class="p">]);</span>
+        <span class="c1">// 计算最后一次小迭代</span>
+        <span class="cp">#pragma unroll
+</span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">thread_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">thread_y</span> <span class="o">&lt;</span> <span class="n">THREAD_SIZE_Y</span><span class="p">;</span> <span class="o">++</span><span class="n">thread_y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cp">#pragma unroll
+</span>            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">thread_x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">thread_x</span> <span class="o">&lt;</span> <span class="n">THREAD_SIZE_X</span><span class="p">;</span> <span class="o">++</span><span class="n">thread_x</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">accum</span><span class="p">[</span><span class="n">thread_y</span><span class="p">][</span><span class="n">thread_x</span><span class="p">]</span> <span class="o">+=</span> <span class="n">frag_a</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">thread_y</span><span class="p">]</span> <span class="o">*</span> <span class="n">frag_b</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">thread_x</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span><span class="k">while</span><span class="p">(</span><span class="n">tile_idx</span><span class="o">&lt;</span> <span class="n">K</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>每次大迭代中最后一次小迭代放到搬完数据的最后来做，<strong>猜测</strong>这样在执行指令的时候就可以边取存下一次迭代的数据时，边执行计算。最后把每个线程寄存器上的结果搬回 C 中</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">const</span> <span class="kt">int</span> <span class="n">c_block_row</span> <span class="o">=</span> <span class="n">a_tile_index</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">int</span> <span class="n">c_block_col</span> <span class="o">=</span> <span class="n">b_tile_index</span><span class="p">;</span>
+
+    <span class="c1">//store C00 block</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">C</span><span class="p">[</span><span class="n">OFFSET</span><span class="p">(</span>
+        <span class="n">BLOCK_SIZE_M</span> <span class="o">*</span> <span class="n">by</span> <span class="o">+</span> <span class="n">c_block_row</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span>
+        <span class="n">BLOCK_SIZE_N</span> <span class="o">*</span> <span class="n">bx</span> <span class="o">+</span> <span class="n">c_block_col</span><span class="p">,</span>
+        <span class="n">N</span><span class="p">)])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">accum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="c1">//store C01 block</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">C</span><span class="p">[</span><span class="n">OFFSET</span><span class="p">(</span>
+        <span class="n">BLOCK_SIZE_M</span> <span class="o">*</span> <span class="n">by</span> <span class="o">+</span> <span class="n">c_block_row</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span>
+        <span class="n">BLOCK_SIZE_N</span> <span class="o">*</span> <span class="n">bx</span> <span class="o">+</span> <span class="n">c_block_col</span> <span class="o">+</span> <span class="mi">64</span><span class="p">,</span>
+        <span class="n">N</span><span class="p">)])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">accum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">4</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="c1">//store C10 block</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">C</span><span class="p">[</span><span class="n">OFFSET</span><span class="p">(</span>
+        <span class="n">BLOCK_SIZE_M</span> <span class="o">*</span> <span class="n">by</span> <span class="o">+</span> <span class="n">c_block_row</span> <span class="o">+</span> <span class="mi">64</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span>
+        <span class="n">BLOCK_SIZE_N</span> <span class="o">*</span> <span class="n">bx</span> <span class="o">+</span> <span class="n">c_block_col</span><span class="p">,</span>
+        <span class="n">N</span><span class="p">)])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">accum</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="c1">//store C11 block</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">C</span><span class="p">[</span><span class="n">OFFSET</span><span class="p">(</span>
+        <span class="n">BLOCK_SIZE_M</span> <span class="o">*</span> <span class="n">by</span> <span class="o">+</span> <span class="n">c_block_row</span> <span class="o">+</span> <span class="mi">64</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span>
+        <span class="n">BLOCK_SIZE_N</span> <span class="o">*</span> <span class="n">bx</span> <span class="o">+</span> <span class="n">c_block_col</span> <span class="o">+</span> <span class="mi">64</span><span class="p">,</span>
+        <span class="n">N</span><span class="p">)])</span> <span class="o">=</span> <span class="n">FETCH_FLOAT4</span><span class="p">(</span><span class="n">accum</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="p">][</span><span class="mi">4</span><span class="p">]);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="trick"><font face="Times">Trick</font></h2>
+
+<ul>
+  <li>首先分块：如何分给 block，block 内如何分给线程</li>
+  <li>然后搬运数据：大迭代的数据怎么搬运、小迭代的数据怎么搬运、利用 shared memory 和 register 提高搬运数据的效率；利用预取掩盖访问 latency</li>
+  <li>最后如何防止 bank conflict，对各个 wrap 应该访问的地址进行了设计</li>
+</ul>
+
+<p><strong>To Be Continued</strong></p>
+
+            <p class="subtitle" style="text-align:right"><span style="color: #ffb6c1; font-style: inherit;">February 9, 2023</span></p>
+          </main>
+        </div>
+    </article>
+    <script>
+    // 动态生成文章列表（假设每篇文章有标题、内容和链接）
+    const articles = [
+      
+        {
+          title: "DETR SERIES",
+          content: "🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法 # DETR ## Framework {% fullwidth &#39;assets/detr-series/1.png&#39; &quot;&quot; %} DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测 ## Transformer {% fullwidth &#39;assets/detr-series/2.jpg&#39; &quot;&quot; %} 显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder...",
+          url: "/ai/2023/05/19/detr-series.html"
+        },
+      
+        {
+          title: "CUDA 编程（进阶篇）",
+          content: "General Matrix Multiplication GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子文章中的代码进行解读，也作为代码阅读笔记梳理整个思路。 首先，其优化技巧分块计算、shared memory 的多次利用、register 的多次利用以及各种 bank 的 conflict 解决，有的甚至会涉及到汇编层面的优化，这里有些技巧在基础篇已经讲过，就不再赘述了。 其次，简单叙述一下优化的思路，主要的思路就是对矩阵进行分块计算，不同 block 负责计算出 C 中的不同部分，同时在 block 内又让不同线程负责不同部分，这里面为了能多次利用 shared memory，需要进行多次循环，因此在 block 内有多次大循环，在大循环内又有每个线程中的多次小循环。因为涉及到把数据不断搬到 shared memory，所以作者设计了预取 prefetch 的做法，这样做可以掩盖 io 的 latency，因此也要设计哪些线程搬运哪些数据。由于可能在访问 shared memory 的时候有 bank conflict，所以也要设计哪些线程访问哪些内存。 分块计算的思路 首先如下图，对 C 进行分块： 由图可知，C 被分为 MxN/BlOCK_SIZE_M/BlOCK_SIZE_N 块，每块的大小为高 BLOCK_SIZE_M，宽 BLOCK_SIZE_N，每一块对应 A 中的相应行，对应...",
+          url: "/ai/2023/02/09/cuda2.html"
+        },
+      
+        {
+          title: "CUDA 编程（基础篇）",
+          content: "简介 cuda 关于矩阵相关运算的入门编程及相关技巧，是我的学习笔记，比较适合初学者。 矩阵相加 这一节通过矩阵相加来介绍 cuda 编程的常规流程，并介绍一些术语 流程 memory alloc  用于在 gpu 上开辟空间 cudaMalloc((void**) &amp;amp;d_o, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;amp;d_a, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;amp;d_b, sizeof(float) * (M * N)); 其中 M 和 N 分别是矩阵的行和列 copy data cudaMemcpy(d_o, h_o, sizeof(float) * (M * N), cudaMemcpyHostToDevice); cudaMemcpy(d_a,...",
+          url: "/ai/2023/01/01/cuda1.html"
+        },
+      
+        {
+          title: "YoloV7 标签匹配及 loss 计算解析",
+          content: "🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分 如上如所示，YoloV7 同大多数单阶段目标检测算法属于密集检测 (dense detection)。上图是一个 7x7 的特征图红色的点是基于特征图的网格点，进行偏移后的点，然后在其上铺设 anchor box，每个点铺设一定数量的 anchor。当然也有直接在网格点上进行铺设的，一般来讲没有太大差别。下面我们开始介绍 v7 后处理，主要分为两部分：标签匹配和 loss 计算 Label Assignment 📄标签匹配主要分为两步：先是进行粗筛，然后是进行精筛 Find-3-Positive 📑顾名思义，第一步是找到三个正样本，就是对于每一个 GT 找到上图的三个 anchor 作为正样本。首先我们先大概讲一下匹配的规则 如上图所示，对于每一个网格，会被分为四个部分，绿色点是 GT 中心点，蓝色点是匹配给 GT 的正样本点。首先 GT 中心点所在的网格会被定义为正样本，然后根据中心点在网格的位置来找到另外两个正样本。比如在位置 1 是左上的点会被定义为其正样本，位置 2 是右上，位置 3 是左下，位置 4 是右下 📚下面是代码的注解和讲解：...",
+          url: "/ai/2022/11/06/yolov7.html"
+        },
+      
+        {
+          title: "Rank &amp; Sort Loss 解读",
+          content: "Rank &amp;amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 AP Loss、aLRPLoss 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp;amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？ 关于训练预测不一致的问题 简单来说，就是在分类和回归在训练的时候是分开的训练，计算 loss 并进行反向优化。但是在预测的时候却是用分类分数排序来进行 nms 后处理。这里可能导致一种情况就是分类分数很高，但是回归不好（这个问题在 FCOS 中有阐述）。 之前的工作 常见的目标检测网络一般会使用 nms 作为后处理，这时我们常常希望所有正样本的得分排在负样本前面，另外我们还希望位置预测更准确的框最后被留下来。之前的 AP Loss 和 aLRP Loss 由于需要附加的 head 来进行分类精度和位置精度综合评价（其实就是为了消除分类和回归的不一致问题，如 FCOS 的 centerness、IoU head 之类的），确实在解决类别不均衡问题（正负样本不均衡）等有着不错的效果，但是需要更多的时间和数据增强来进行训练。 Rank &amp;amp; Sort Loss...",
+          url: "/ai/2022/08/08/Rank-Sort-Loss.html"
+        },
+      
+        {
+          title: "变限积分求导的种种",
+          content: "变上限积分求导的理解 假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有： \[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\] 其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分： \[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\] 因此，其中我们称 \(\int_{a}^{x}f(t)dt\) 为 \(f(x)\) 的变上限积的定积分，也算是 \(f(x)\) 的一个原函数。同时我们也可以得到牛顿-莱布尼茨...",
+          url: "/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html"
+        },
+      
+        {
+          title: "Tufte-style Jekyll blog",
+          content: "The Tufte Jekyll theme is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. The idea for this project is essentially cribbed...",
+          url: "/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html"
+        },
+      
+    ];
+
+    // 获取 DOM 元素
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+
+    // 监听输入框的变化
+    searchInput.addEventListener("input", function () {
+      const query = this.value.trim().toLowerCase();
+
+      // 清空结果容器
+      searchResults.innerHTML = "";
+      searchResults.style.display = "none";
+
+      if (!query) return;
+
+      // 过滤匹配的文章
+      const results = articles.filter((article) => {
+        return (
+          article.title.toLowerCase().includes(query) ||
+          article.content.toLowerCase().includes(query)
+        );
+      });
+
+      // 截断结果为最多 10 条
+      const limitedResults = results.slice(0, 50);
+
+      // 显示搜索结果
+      if (limitedResults.length > 0) {
+        limitedResults.forEach((result) => {
+          const resultItem = document.createElement("a");
+          resultItem.href = result.url;
+          resultItem.textContent = result.title;
+          resultItem.title = result.content; // 提示部分内容
+          searchResults.appendChild(resultItem);
+        });
+        searchResults.style.display = "block";
+      } else {
+        // 显示无结果提示
+        const noResult = document.createElement("div");
+        noResult.textContent = "No Result or Error Title";
+        noResult.style.padding = "20px 20px";
+        noResult.style.color = "#082567";
+        searchResults.appendChild(noResult);
+        searchResults.style.display = "block";
+      }
+    });
+
+    // 点击页面其他区域时隐藏搜索结果
+    document.addEventListener("click", function (e) {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = "none";
+      }
+    });
+
+    // 返回顶部功能实现
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTop = document.getElementById('backToTop');
+
+      // 滚动监听 [[7]]
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // 平滑滚动 [[9]]
+      backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    function generateTOC() {
+      const toc = document.getElementById('toc');
+      const headings = document.querySelectorAll('h1, h2');
+
+      headings.forEach(heading => {
+        if (!heading.id) {
+          // 使用标准化编码方式
+          heading.id = encodeURIComponent(
+            heading.textContent
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '-') // 替换所有非字母数字字符
+          );
+        }
+
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        link.classList.add('toc-link', `level-${heading.tagName[1]}`);
+
+        if (heading.tagName === 'H2') {
+          const parentDiv = toc.lastChild;
+          if (parentDiv?.classList.contains('toc-parent')) {
+            parentDiv.querySelector('.child-container').appendChild(link);
+          }
+        } else {
+          const parentDiv = document.createElement('div');
+          parentDiv.className = 'toc-parent';
+
+          const toggleBtn = document.createElement('button');
+          toggleBtn.className = 'toggle-btn';
+          toggleBtn.textContent = '♠';
+          toggleBtn.addEventListener('click', () => {
+            const child = parentDiv.querySelector('.child-container');
+            child.classList.toggle('open');
+            toggleBtn.textContent = child.classList.contains('open') ? '♥' : '♠';
+          });
+
+          const childContainer = document.createElement('div');
+          childContainer.className = 'child-container';
+
+          parentDiv.appendChild(toggleBtn);
+          parentDiv.appendChild(link);
+          parentDiv.appendChild(childContainer);
+          toc.appendChild(parentDiv);
+        }
+      });
+    }
+
+    // 滚动监听与高亮 [[7]][[9]]
+    window.addEventListener('scroll', () => {
+      let currentSection = '';
+      const scrollY = window.scrollY + 50; // 偏移量优化
+
+      document.querySelectorAll('h1, h2').forEach(section => {
+        if (section.offsetTop <= scrollY) {
+          currentSection = section.id;
+        }
+      });
+
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.hash === `#${currentSection}`) {
+          link.classList.add('active');
+          // 自动展开父容器
+          const parent = link.closest('.toc-parent');
+          if (parent) {
+            parent.querySelector('.child-container').classList.add('open');
+            parent.querySelector('.toggle-btn').textContent = '♥';
+          }
+        }
+      });
+    });
+
+    // 修复平滑滚动并添加自动折叠功能
+    document.addEventListener('DOMContentLoaded', () => {
+      generateTOC();
+
+      // 新增滚动方向检测 [[5]]
+      let lastScrollPosition = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        const isScrollingUp = currentScroll < lastScrollPosition;
+
+        // 更新滚动位置记录
+        lastScrollPosition = currentScroll;
+
+        let currentSection = '';
+        const scrollY = currentScroll + 100; // 偏移量优化
+
+        document.querySelectorAll('h2').forEach(section => {
+          if (section.offsetTop <= scrollY) {
+            currentSection = section.id;
+          }
+        });
+
+        // 关闭所有非当前标题的展开状态
+        document.querySelectorAll('.toc-parent').forEach(parent => {
+          const childContainer = parent.querySelector('.child-container');
+          if (!parent.contains(document.querySelector(`#${currentSection}`))) {
+            childContainer.classList.remove('open');
+            parent.querySelector('.toggle-btn').textContent = '♠';
+          }
+        });
+
+        // 处理当前激活标题
+        const activeLink = document.querySelector(`.toc-link[href="#${currentSection}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+          activeLink.closest('.toc-parent').querySelector('.child-container').classList.add('open');
+          activeLink.closest('.toc-parent').querySelector('.toggle-btn').textContent = '♥';
+        } else {
+          document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+        }
+
+        // 特殊处理向上滚动场景 [[7]]
+        if (isScrollingUp) {
+          setTimeout(() => {
+            document.querySelectorAll('.child-container.open').forEach(container => {
+              if (container.getBoundingClientRect().top > window.innerHeight) {
+                container.classList.remove('open');
+                container.previousElementSibling.textContent = '♠';
+              }
+            });
+          }, 100);
+        }
+      });
+
+      // 修正平滑滚动 [[10]]
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = decodeURIComponent(link.hash); // 解码处理
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+    </script>
+    <span class="print-footer">CUDA 编程（进阶篇） - February 9, 2023 - L77</span>
+    <footer>
+  <hr class="slender_footer">
+  <ul class="footer-links">   
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+      
+  </ul>
+<div class="credits">
+<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">Powered By Jekyll And Tufte Theme</span>
+</div>  
+</footer>
+    <!-- 在body底部新增按钮 -->
+    <button id="backToTop" class="back-to-top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="currentColor"
+              d="M12 4l8 8H16v8H8v-8H4l8-8z"
+              style="transform: rotate(0deg); transition: 0.3s;"/>
+      </svg>
+    </button>
+  </body>
+</html>
