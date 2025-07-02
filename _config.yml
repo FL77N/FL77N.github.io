@@ -17,13 +17,13 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-baseurl: ""
+baseurl: https://fl77n.github.io
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 title: From L77
 author: L77
 email: feizzhang@163.com
 description: Personal Blog
-github_username:  jekyll
+github_username:  fl77n
 show_excerpts: true
 
 name: tufte
