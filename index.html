@@ -216,6 +216,29 @@
         searchResults.style.display = "none";
       }
     });
+
+    // 返回顶部功能实现
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTop = document.getElementById('backToTop');
+
+      // 滚动监听 [[7]]
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // 平滑滚动 [[9]]
+      backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
     </script>
     <span class="print-footer">Home - L77</span>
     <footer>
