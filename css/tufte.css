@@ -211,6 +211,13 @@
   font-style: normal;
 }
 @font-face {
+  font-family: ETBembo;
+  src: url("../fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.eot");
+  src: url("../fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.eot?#iefix") format("embedded-opentype"), url("../fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.woff") format("woff"), url("../fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.ttf") format("truetype"), url("../fonts/et-book/et-book-bold-line-figures/et-book-bold-line-figures.svg#etbemboromanosf") format("svg");
+  font-weight: normal;
+  font-style: bold;
+}
+@font-face {
   font-family: STXIHEI;
   src: url("../fonts/STXIHEI.TTF") format("truetype");
   font-weight: normal;
@@ -563,6 +570,7 @@ h1 {
   margin-bottom: 1.568rem;
   font-size: 2.5rem;
   line-height: 1.184;
+  color: #a00000;
 }
 
 h2 {
@@ -1010,7 +1018,9 @@ caption, .booktabs caption {
   }
 }
 .contrast {
-  color: #a00000;
+  color: #6a5acd;
+  font-style: bold;
+  font-family: ETBembo;
 }
 
 .smaller {
