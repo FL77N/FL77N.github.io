@@ -1018,11 +1018,12 @@ caption, .booktabs caption {
   }
 }
 .contrast {
-  color: #6a5acd;
-  font-style: bold;
-  font-family: ETBembo;
+  color: #0d610d;
+  font-style: line;
+  font-family: Gill Sans;
 }
 
+/*color: #6a5acd;*/
 .smaller {
   font-size: 80%;
 }
