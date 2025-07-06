@@ -728,14 +728,14 @@ img {
 
 .sidenote-number::after, .sidenote::before {
   font-family: ETBembo;
-  color: #a00000;
+  color: #7d453c;
   position: relative;
   vertical-align: baseline;
 }
 
 .sidenote-number::after {
   content: counter(sidenote-counter);
-  font-size: 0.2rem;
+  font-size: 0.8rem;
   top: -0.5rem;
   left: 0.1rem;
 }
