@@ -836,19 +836,22 @@ a {
   text-decoration: none;
 }
 
-p > a:link, p > a:visited {
-  color: inherit;
+/* 段落中的链接样式 */
+p a:link,
+p a:visited {
+  color: #8AE48A; /* 默认未访问颜色 */
+  text-decoration: none; /* 移除下划线 */
 }
 
-p > a:link {
-  background: -webkit-linear-gradient(#fffff8, #fffff8), -webkit-linear-gradient(#fffff8, #fffff8), -webkit-linear-gradient(#333, #333);
-  background: linear-gradient(#fffff8, #fffff8), linear-gradient(#fffff8, #fffff8), linear-gradient(#333, #333);
-  -webkit-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-  -moz-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-  background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-  background-repeat: no-repeat, no-repeat, repeat-x;
-  text-shadow: 0.03em 0 #fffff8, -0.03em 0 #fffff8, 0 0.03em #fffff8, 0 -0.03em #fffff8, 0.06em 0 #fffff8, -0.06em 0 #fffff8, 0.09em 0 #fffff8, -0.09em 0 #fffff8, 0.12em 0 #fffff8, -0.12em 0 #fffff8, 0.15em 0 #fffff8, -0.15em 0 #fffff8;
-  background-position: 0% 93%, 100% 93%, 0% 93%;
+p a:hover,
+p a:active {
+  color: #684865; /* 悬停/点击时颜色 */
+  text-decoration: none;
+}
+
+/* 可选：键盘聚焦样式 */
+p a:focus {
+  outline: none; /* 移除虚线框（需注意可访问性） */
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
