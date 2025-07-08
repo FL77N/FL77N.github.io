@@ -433,6 +433,7 @@
           </main>
         </div>
     </article>
+
     <script>
     // 动态生成文章列表（假设每篇文章有标题、内容和链接）
     const articles = [
@@ -732,5 +733,22 @@
               style="transform: rotate(0deg); transition: 0.3s;"/>
       </svg>
     </button>
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+    <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+    <script src="/js/md5.min.js"></script>
+    <script type="text/javascript">
+        var gitalk = new Gitalk({
+            clientID: 'Ov23licvcxtn5F7EB8yu',
+            clientSecret: 'faf9275b7f42e2edcfc48ca0b7fa0f4de65481d5',
+            repo: 'https://github.com/FL77N/FL77N.github.io',
+            owner: 'fl77n',
+            admin: ['fl77n'],
+            id: md5(location.href.match('/(?<=posts/)(.*)(?=/)/')[1]),
+            language: 'en',
+            perPage: 10,
+        });
+        gitalk.render('gitalk-container');
+    </script>
   </body>
 </html>
