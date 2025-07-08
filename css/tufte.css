@@ -837,20 +837,20 @@ a {
 }
 
 /* 段落中的链接样式 */
-p a:link,
-p a:visited {
-  color: #8AE48A; /* 默认未访问颜色 */
+p > a:link,
+p > a:visited {
+  color: #7b68ee; /* 默认未访问颜色 */
   text-decoration: none; /* 移除下划线 */
 }
 
-p a:hover,
-p a:active {
+p > a:hover,
+p > a:active {
   color: #684865; /* 悬停/点击时颜色 */
   text-decoration: none;
 }
 
 /* 可选：键盘聚焦样式 */
-p a:focus {
+p > a:focus {
   outline: none; /* 移除虚线框（需注意可访问性） */
 }
 
