@@ -269,8 +269,14 @@
 }
 
 code.language-plaintext.highlighter-rouge {
-  background-color: #D4D4F8; /* 设置背景为红色 */
+  background-color: #ececfb;
   color: #823F61;
+  border-radius: 12px;
+  padding-right: 0.45rem;
+  padding-left: 0.45rem;
+  padding-top: 0.05rem;
+  padding-bottom: 0.05rem;
+  font-size: 1.1rem;
 }
 
 .highlight {
