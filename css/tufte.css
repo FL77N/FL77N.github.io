@@ -698,7 +698,8 @@ article {
 }
 
 blockquote p, pre {
-  padding-right: 0 10%;
+  padding-right: 3%;
+  padding-left: 1.5%;
 }
 
 blockquote * {
@@ -711,6 +712,15 @@ blockquote p {
 
 blockquote footer {
   text-align: right;
+}
+
+blockquote {
+  background-color: #fbf6ee;
+  color: #dd9090;
+}
+
+blockquote {
+  border-left: 5px solid #624531;
 }
 
 figure.maincolumn {
