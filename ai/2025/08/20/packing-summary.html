@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>让 Packing 加速你的训练</title>
+  <title>让 Packing 加速你的大模型训练</title>
   <meta name="description" content="这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作">
   <!-- 现代多尺寸图标 -->
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
@@ -117,7 +117,7 @@
         <div class="container">
           <nav class="toc" id="toc"></nav>
           <main class="content">
-            <h1 style="text-align: left">让 Packing 加速你的训练</h1>
+            <h1 style="text-align: left">让 Packing 加速你的大模型训练</h1>
             
             
             
@@ -229,7 +229,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="hierarchical-groups-auto-selection">Hierarchical Groups Auto-Selection</h2>
 
-<figure class="flexwidth"><img src="/assets/packing-summary/image3.png" width="70%" height="70%" /><figcaption>Auto-Selection 算法</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/packing-summary/image3.png" width="60%" height="60%" /><figcaption>Auto-Selection 算法</figcaption></figure>
 
 <p>整个流程，首先对每个 length 在开某个 SP 的条件下，尽量去尝试不开 checkpoint 的最大层数，比如对于 32k 开 SP 为 2 对应不开的 checkpoint 的最大层数为 0（即需要全开），继续 profile SP 为 4、8 不开 checkpoint 的层数（尽量不要超过 8 因为节点间通信慢），最后得到 32k 在 SP 为 8 不开 checkpoint 层数为 24 层是 32k 所有配置中最快的，同理我们可以得出 128k、64k 以及 16k、8k 的最快对应的 SP checkpoint 配置，同时我们也可以得出最快的 length 是哪一个，如下图则是对 LLama 8B profile 的配置结果（注意这里的每个 iter 会调整 gradient accumulation step 来使得每个 iter 过的 token 数量一样）</p>
 
@@ -295,7 +295,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
     const articles = [
       
         {
-          title: "让 Packing 加速你的训练",
+          title: "让 Packing 加速你的大模型训练",
           content: "这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作 在解读论文之前，先对 Data Packing 进行一个简单的介绍，现在看来它是一种很常见的消除组内 Padding 的方法。如下图所示，左边是我们一般组 batch 的方式，绿色是文本原本的 token，灰色是 Padding 的 token，这样子组 batch 的缺点在于会浪费算力去算灰色的 token（这些token 是原本不需要去计算的） 当我们采用 Packing 的方式去组 batch 时，就不存在这个问题了（如右边）。需要考虑的是怎么样才可以使得组到我们想要的长度（尽量将算力全用到有效的地方）以及会不会给 loss 计算带来问题 Packing 示意图 OmniBal 介绍的第一篇论文是 Towards Fast Instruction-Tuning for Vision-Language Models via Omniverse Computation Balance，OmniBal...",
           url: "/ai/2025/08/20/packing-summary.html"
         },
@@ -610,7 +610,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
         locale: { placeholder: '欢迎交流' },
       });
     </script>
-    <span class="print-footer">让 Packing 加速你的训练 - August 20, 2025 - L77</span>
+    <span class="print-footer">让 Packing 加速你的大模型训练 - August 20, 2025 - L77</span>
     <footer>
   <hr class="slender_footer">
   <ul class="footer-links">   

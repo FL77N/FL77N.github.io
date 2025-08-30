@@ -190,7 +190,7 @@
     const articles = [
       
         {
-          title: "让 Packing 加速你的训练",
+          title: "让 Packing 加速你的大模型训练",
           content: "这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作 在解读论文之前，先对 Data Packing 进行一个简单的介绍，现在看来它是一种很常见的消除组内 Padding 的方法。如下图所示，左边是我们一般组 batch 的方式，绿色是文本原本的 token，灰色是 Padding 的 token，这样子组 batch 的缺点在于会浪费算力去算灰色的 token（这些token 是原本不需要去计算的） 当我们采用 Packing 的方式去组 batch 时，就不存在这个问题了（如右边）。需要考虑的是怎么样才可以使得组到我们想要的长度（尽量将算力全用到有效的地方）以及会不会给 loss 计算带来问题 {% fullwidth &#39;assets/packing-summary/packing1.png&#39; &#39;Packing 示意图&#39; %} # OmniBal 介绍的第一篇论文是 [Towards Fast Instruction-Tuning for Vision-Language...",
           url: "/ai/2025/08/20/packing-summary.html"
         },

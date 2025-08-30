@@ -5,12 +5,12 @@
     <description>Personal Blog</description>
     <link>https://froml77.top/</link>
     <atom:link href="https://froml77.top/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 30 Aug 2025 10:30:33 +0800</pubDate>
-    <lastBuildDate>Sat, 30 Aug 2025 10:30:33 +0800</lastBuildDate>
+    <pubDate>Sat, 30 Aug 2025 10:42:25 +0800</pubDate>
+    <lastBuildDate>Sat, 30 Aug 2025 10:42:25 +0800</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
     
       <item>
-        <title>让 Packing 加速你的训练</title>
+        <title>让 Packing 加速你的大模型训练</title>
         <description>&lt;p&gt;这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作&lt;!--more--&gt;&lt;/p&gt;
 
 &lt;p&gt;在解读论文之前，先对 Data Packing 进行一个简单的介绍，现在看来它是一种很常见的消除组内 Padding 的方法。如下图所示，左边是我们一般组 batch 的方式，绿色是文本原本的 token，灰色是 Padding 的 token，这样子组 batch 的缺点在于会浪费算力去算灰色的 token（这些token 是原本不需要去计算的）&lt;/p&gt;
@@ -117,7 +117,7 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
 
 &lt;h2 id=&quot;hierarchical-groups-auto-selection&quot;&gt;Hierarchical Groups Auto-Selection&lt;/h2&gt;
 
-&lt;figure class=&quot;flexwidth&quot;&gt;&lt;img src=&quot;/assets/packing-summary/image3.png&quot; width=&quot;70%&quot; height=&quot;70%&quot; /&gt;&lt;figcaption&gt;Auto-Selection 算法&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;figure class=&quot;flexwidth&quot;&gt;&lt;img src=&quot;/assets/packing-summary/image3.png&quot; width=&quot;60%&quot; height=&quot;60%&quot; /&gt;&lt;figcaption&gt;Auto-Selection 算法&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;整个流程，首先对每个 length 在开某个 SP 的条件下，尽量去尝试不开 checkpoint 的最大层数，比如对于 32k 开 SP 为 2 对应不开的 checkpoint 的最大层数为 0（即需要全开），继续 profile SP 为 4、8 不开 checkpoint 的层数（尽量不要超过 8 因为节点间通信慢），最后得到 32k 在 SP 为 8 不开 checkpoint 层数为 24 层是 32k 所有配置中最快的，同理我们可以得出 128k、64k 以及 16k、8k 的最快对应的 SP checkpoint 配置，同时我们也可以得出最快的 length 是哪一个，如下图则是对 LLama 8B profile 的配置结果（注意这里的每个 iter 会调整 gradient accumulation step 来使得每个 iter 过的 token 数量一样）&lt;/p&gt;
 
