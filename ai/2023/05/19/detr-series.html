@@ -550,6 +550,33 @@
     });
     </script>
     <!-- vercel & waline leancloud-->
+    <!-- waline 部分字体设置 -->
+    <style>
+      .wl-count {
+        font-size: 1em;
+      }
+      .wl-header label {
+        font-size: 1.2rem;
+        padding-top: 0.2em;
+        padding-right: 0.2em;
+        padding-bottom: 0.2em;
+        padding-left: 0.2em;
+      }
+      .wl-header input {
+        font-size: 1.1rem;
+        padding: 0.1em;
+        color: #b49292;
+      }
+      .wl-card .wl-content {
+        margin-bottom: 0;
+        padding-top: 0;
+        font-size: 1em;
+      }
+      .wl-content > div > p {
+        font-size: 1em;
+        color: #3e346e;
+      }
+    </style>
     <div class="comment_container" id="waline"></div>
     <style>
       :root {
@@ -568,13 +595,13 @@
           --waline-disable-color: #000;
           --waline-code-bg-color: #282c34;  /* 代码块的背景颜色 */
           --waline-bq-color: #f0f0f0;  /* 引用块的颜色 */
-          --waline-avatar-size: 3.25rem;
+          --waline-avatar-size: 1.25rem;
           --waline-m-avatar-size: calc(var(--waline-avatar-size) * 9 / 13);
           --waline-badge-color: #3498db;
           --waline-badge-font-size: 0.75em;
-          --waline-info-bg-color: #f8f8f8;
-          --waline-info-color: #999;
-          --waline-info-font-size: 0.0001em;
+          --waline-info-bg-color: #fffff8;
+          --waline-info-color: #b49292;
+          --waline-info-font-size: 0.5em;
           --waline-border: 1px solid var(--waline-border-color);
           --waline-avatar-radius: 50%;
           --waline-box-shadow: none;
