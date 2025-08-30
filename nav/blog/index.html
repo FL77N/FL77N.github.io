@@ -115,8 +115,36 @@
   
     <li class="index">
       <hr class="invisible">
+      <a href="/ai/2025/08/20/packing-summary.html">
+        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>让 Packing 加速你的训练</h2>
+      </a>
+      <br>
+      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
+        August 20, 2025
+      </span>
+      <br/>
+      <div><p>这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作</p>
+</div>
+    </li>
+  
+    <li class="index">
+      <hr class="invisible">
+      <a href="/summary/2025/08/15/first-work-summary.html">
+        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>AI 之旅之从识图到读书</h2>
+      </a>
+      <br>
+      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
+        August 15, 2025
+      </span>
+      <br/>
+      <div><p>这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。部门的整体氛围很好，上下级之间、同事之间都能愉快的相处，这使得我这期间的工作生活很顺心。回到工作内容部分，总体而言可以分为两部分的工作：CV 和 LLM</p>
+</div>
+    </li>
+  
+    <li class="index">
+      <hr class="invisible">
       <a href="/ai/2023/05/19/detr-series.html">
-        <h2 class="contrast">DETR SERIES</h2>
+        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>DETR SERIES</h2>
       </a>
       <br>
       <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
@@ -130,7 +158,7 @@
     <li class="index">
       <hr class="invisible">
       <a href="/ai/2023/02/09/cuda2.html">
-        <h2 class="contrast">CUDA 编程（进阶篇）</h2>
+        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>CUDA 编程（进阶篇）</h2>
       </a>
       <br>
       <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
@@ -146,7 +174,7 @@
     <li class="index">
       <hr class="invisible">
       <a href="/ai/2023/01/01/cuda1.html">
-        <h2 class="contrast">CUDA 编程（基础篇）</h2>
+        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>CUDA 编程（基础篇）</h2>
       </a>
       <br>
       <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
@@ -169,9 +197,9 @@
   <div class="page-control">
     <span class="page-label">PAGE</span>
     <input type="number" id="currentPage"
-           min="1" max="3"
+           min="1" max="2"
            value="1" class="page-input">
-    <span class="page-label">of 3&nbsp;</span>
+    <span class="page-label">of 2&nbsp;</span>
     <button onclick="jumpToPage()" class="nav-btn page-go">GO</button>
   </div>
 
@@ -184,7 +212,7 @@
 <script>
 function jumpToPage() {
   const currentPage = document.getElementById('currentPage').value;
-  const totalPages = 3;
+  const totalPages = 2;
 
   // 输入验证 [[4]]
   if (currentPage < 1 || currentPage > totalPages) {
@@ -212,6 +240,18 @@ document.getElementById('currentPage').addEventListener('keypress', (e) => {
     <script>
     // 动态生成文章列表（假设每篇文章有标题、内容和链接）
     const articles = [
+      
+        {
+          title: "让 Packing 加速你的训练",
+          content: "这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作 在解读论文之前，先对 Data Packing 进行一个简单的介绍，现在看来它是一种很常见的消除组内 Padding 的方法。如下图所示，左边是我们一般组 batch 的方式，绿色是文本原本的 token，灰色是 Padding 的 token，这样子组 batch 的缺点在于会浪费算力去算灰色的 token（这些token 是原本不需要去计算的） 当我们采用 Packing 的方式去组 batch 时，就不存在这个问题了（如右边）。需要考虑的是怎么样才可以使得组到我们想要的长度（尽量将算力全用到有效的地方）以及会不会给 loss 计算带来问题 Packing 示意图 OmniBal 介绍的第一篇论文是 Towards Fast Instruction-Tuning for Vision-Language Models via Omniverse Computation Balance，OmniBal...",
+          url: "/ai/2025/08/20/packing-summary.html"
+        },
+      
+        {
+          title: "AI 之旅之从识图到读书",
+          content: "这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。部门的整体氛围很好，上下级之间、同事之间都能愉快的相处，这使得我这期间的工作生活很顺心。回到工作内容部分，总体而言可以分为两部分的工作：CV 和 LLM Computer Vision Period 我研究生期间的研究方向是深度学习目标检测（DeepLearning Detection），有一段在华为中央研究院实习的经历，在研究生阶段参加过几次百度举办的算法复现比赛以及贡献过相应的开源项目。入职后，接手的第一个任务就是复现 YoloV6 算法，因为硕士期间参加过百度的复现比赛百度的大佬也对我进行过一些代码和复现方法上的指导 ，所以上手还算顺利 复现 没错！从上面可以看出来，我的第一个主营业务就是复现，所谓复现就是把别人的算法加到自己的训练框架里面不管你 copy 也好，自己重新搭网络结构也好 。最终的目的是：在我们的框架用相同的 config 能去训练这个算法并在测试集上跟官方 paper 的公示精度指标一致 那么我在这个阶段复现了哪些算法呢？主要是一些当时 SoTA 的目标检测算法：YoloV6、Onenet、YoloV7、DINO 等其实在之前参加百度复现赛和 PaddleDetection 做开源贡献时，复现过 Retinanet、ATSS、Fast RCNN、Faster RCNN 以及 Sparse RCNN 算是非常适合这个岗位了 。当然在做完算法复现后，我们常常会做一些组合操作来探索算法的特性，像各种标签匹配：OTA、简化版 OTA、匈牙利算法匹配、TAL 等等，各种分类的 loss、框回归的 loss 以及辅助 loss 等等，我们会将上述的和不同的网络结构以及数据增强的方式进行组合搭配，看看有什么化学反应，能不能训练出比较厉害的 baseline model 出来。总之 CV 时代，前处理、网络结构、后处理，都玩得很花 Other 除了复现和日常的框架维护、代码迁移和答疑外，也有做一些其他方面的探索，主要分为以下几个方面： 对于...",
+          url: "/summary/2025/08/15/first-work-summary.html"
+        },
       
         {
           title: "DETR SERIES",

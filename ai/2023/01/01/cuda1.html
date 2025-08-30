@@ -54,6 +54,10 @@
   <link rel="alternate" type="application/rss+xml" title="From L77" href="https://froml77.top/feed.xml" />
 </head>
 
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/@waline/client@v3/dist/waline.css"
+  />
   <body>
     <!--- Header and pages template site-wide -->
 <header>
@@ -117,7 +121,7 @@
             
             
             
-            <p class="subtitle" style="text-align:right"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> CUDA</span></p>
+            <p class="subtitle" style="text-align:right; font-size: 1rem"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Words:</span><span style="color: #082567; font-style: inherit;">&nbsp; 9799</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span style="color: #082567; font-style: inherit;">40min&nbsp;&nbsp;&nbsp;</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> CUDA</span></p>
             
             <h2 id="简介">简介</h2>
 
@@ -933,6 +937,18 @@ size_t width, size_t height, enum cudaMemcpyKind kind)
     const articles = [
       
         {
+          title: "让 Packing 加速你的训练",
+          content: "这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作 在解读论文之前，先对 Data Packing 进行一个简单的介绍，现在看来它是一种很常见的消除组内 Padding 的方法。如下图所示，左边是我们一般组 batch 的方式，绿色是文本原本的 token，灰色是 Padding 的 token，这样子组 batch 的缺点在于会浪费算力去算灰色的 token（这些token 是原本不需要去计算的） 当我们采用 Packing 的方式去组 batch 时，就不存在这个问题了（如右边）。需要考虑的是怎么样才可以使得组到我们想要的长度（尽量将算力全用到有效的地方）以及会不会给 loss 计算带来问题 {% fullwidth &#39;assets/packing-summary/packing1.png&#39; &#39;Packing 示意图&#39; %} # OmniBal 介绍的第一篇论文是 [Towards Fast Instruction-Tuning for Vision-Language...",
+          url: "/ai/2025/08/20/packing-summary.html"
+        },
+      
+        {
+          title: "AI 之旅之从识图到读书",
+          content: "这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。部门的整体氛围很好，上下级之间、同事之间都能愉快的相处，这使得我这期间的工作生活很顺心。回到工作内容部分，总体而言可以分为两部分的工作：CV 和 LLM # Computer Vision Period 我研究生期间的研究方向是深度学习目标检测（DeepLearning Detection），有一段在华为中央研究院实习的经历，在研究生阶段参加过几次百度举办的算法复现比赛以及贡献过相应的开源项目。入职后，接手的第一个任务就是复现 YoloV6 算法，因为硕士期间参加过百度的复现比赛{% sidenote 1 &#39;百度的大佬也对我进行过一些代码和复现方法上的指导&#39; %}，所以上手还算顺利 ## 复现 没错！从上面可以看出来，我的第一个主营业务就是复现，所谓复现就是把别人的算法加到自己的训练框架里面{% sidenote 2 &#39;不管你 copy 也好，自己重新搭网络结构也好&#39; %}。最终的目的是：在我们的框架用相同的 config 能去训练这个算法并在测试集上跟官方 paper 的公示精度指标一致 那么我在这个阶段复现了哪些算法呢？主要是一些当时 SoTA 的目标检测算法：[YoloV6](https://arxiv.org/abs/2209.02976)、[Onenet](https://arxiv.org/abs/2410.07549)、[YoloV7](https://arxiv.org/abs/2207.02696)、[DINO](https://arxiv.org/pdf/2203.03605) 等{% sidenote 3 &#39;其实在之前参加百度复现赛和 [PaddleDetection](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.8.1) 做开源贡献时，复现过 [Retinanet](https://arxiv.org/abs/1708.02002)、[ATSS](https://arxiv.org/abs/1912.02424)、[Fast RCNN](https://arxiv.org/abs/1504.08083)、[Faster RCNN](https://arxiv.org/abs/1506.01497) 以及 [Sparse RCNN](https://arxiv.org/abs/2011.12450) 算是非常适合这个岗位了&#39; %}。当然在做完算法复现后，我们常常会做一些组合操作来探索算法的特性，像各种标签匹配：OTA、简化版 OTA、匈牙利算法匹配、TAL 等等，各种分类的 loss、框回归的 loss...",
+          url: "/summary/2025/08/15/first-work-summary.html"
+        },
+      
+        {
           title: "DETR SERIES",
           content: "🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法 # DETR ## Framework {% fullwidth &#39;assets/detr-series/1.png&#39; &quot;&quot; %} DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测 ## Transformer {% fullwidth &#39;assets/detr-series/2.jpg&#39; &quot;&quot; %} 显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder...",
           url: "/ai/2023/05/19/detr-series.html"
@@ -1196,21 +1212,45 @@ size_t width, size_t height, enum cudaMemcpyKind kind)
       });
     });
     </script>
-    <div id="gitalk-container"></div>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-    <script src="https://froml77.top/js/md5.min.js"></script>
-    <script type="text/javascript">
-    var gitalk = new Gitalk({
-        clientID: 'Ov23licvcxtn5F7EB8yu',
-        clientSecret: 'faf9275b7f42e2edcfc48ca0b7fa0f4de65481d5',
-        repo: 'FL77N.github.io',
-        id: md5(location.href),
-        owner: 'fl77n',
-        admin: ['fl77n'],
-        perPage: 10
-    })
-    gitalk.render('gitalk-container')
+    <!-- vercel & waline leancloud-->
+    <div class="comment_container" id="waline"></div>
+    <style>
+      :root {
+          --waline-font-size: 1.5rem; /* 字体大小 */
+          --waline-white: #fff;
+          --waline-light-grey: #999;
+          --waline-dark-grey: #666;
+          --waline-theme-color: #70c092; /* 主题色 */
+          --waline-active-color: #2ecc71; /* 活动状态的颜色 */
+          --waline-color: #c65f5f;  /* 一般文本颜色 */
+          --waline-bg-color: #fffff8;  /* 背景颜色 */
+          --waline-bg-color-light: #f8f8f8;
+          --waline-bg-color-hover: #f0f0f0;  /* 鼠标悬停时的背景颜色 */
+          --waline-border-color: #ddd;  /* 边框颜色 */
+          --waline-disable-bg-color: #f8f8f8;
+          --waline-disable-color: #000;
+          --waline-code-bg-color: #282c34;  /* 代码块的背景颜色 */
+          --waline-bq-color: #f0f0f0;  /* 引用块的颜色 */
+          --waline-avatar-size: 3.25rem;
+          --waline-m-avatar-size: calc(var(--waline-avatar-size) * 9 / 13);
+          --waline-badge-color: #3498db;
+          --waline-badge-font-size: 0.75em;
+          --waline-info-bg-color: #f8f8f8;
+          --waline-info-color: #999;
+          --waline-info-font-size: 0.0001em;
+          --waline-border: 1px solid var(--waline-border-color);
+          --waline-avatar-radius: 50%;
+          --waline-box-shadow: none;
+      }
+    </style>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+
+      init({
+        el: '#waline',
+        serverURL: 'https://blog-waline-q6y4ofnpt-fl77ns-projects.vercel.app',
+        locale: { placeholder: '欢迎交流' },
+      });
     </script>
     <span class="print-footer">CUDA 编程（基础篇） - January 1, 2023 - L77</span>
     <footer>

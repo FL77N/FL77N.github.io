@@ -681,7 +681,7 @@ li.listing p {
 }
 
 li.index::marker {
-  content: "♣";
+  content: "";
   font-size: 1.5em;
   margin-right: 5em;
 }
@@ -731,24 +731,42 @@ figure.maincolumn > figcaption {
   display: block !important;
 }
 
+figure {
+  text-align: center;
+}
+
+figure figcaption {
+  margin-right: 0%;
+  margin-left: 0%;
+}
+
 figure.fullwidth figcaption {
   float: left;
   margin-right: 0%;
   margin-left: 36%;
 }
 
-img {
+figure.fullwidth img {
   max-width: 100%;
+}
+
+figure.flexwidth img {
+  display: inline-block; /* 保持行内块特性（默认值） */
+  margin: 0 auto;
+}
+
+img {
+  max-width: 90%;
 }
 
 /* 旁注、列表的设置 */
 .sidenote, .marginnote {
-  width: 24.0625vw;
+  width: 23.0625vw;
   max-width: 336.875px;
-  margin-right: -60%;
+  margin-right: -70%;
   float: right;
   clear: right;
-  font-size: 1rem;
+  font-size: 1.2rem;
   margin-top: 0;
   margin-bottom: 1.4rem;
   line-height: 1.4;
@@ -785,7 +803,7 @@ blockquote .sidenote, blockquote .marginnote {
 }
 
 li .sidenote, li .marginnote {
-  margin-right: -63.29%;
+  margin-right: -75%;
 }
 
 /* button 的设置 */
@@ -910,7 +928,7 @@ pre.highlight {
 }
 
 .fullwidth {
-  max-width: 90%;
+  max-width: 100%;
 }
 
 .full-width .sidenote, .full-width .sidenote-number, .full-width .marginnote {
@@ -1819,6 +1837,14 @@ h1.archive {
 .content {
   width: 75%;
   flex-grow: 1;
+}
+
+.comment_container {
+  display: block;
+  width: 60%;
+  margin-left: 16%;
+  margin-right: 20%;
+  padding-right: 10%;
 }
 
 /*# sourceMappingURL=tufte.css.map */

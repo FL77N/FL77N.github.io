@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>让 Packing 加速你的训练</title>
+  <meta name="description" content="这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作">
+  <!-- 现代多尺寸图标 -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+  <link rel="shortcut icon" href="/assets/img/favicon.ico" />
+  <link rel="manifest" href="/assets/img/site.webmanifest" />
+
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+  
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>  
+
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="https://froml77.top/ai/2025/08/20/packing-summary.html">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="https://froml77.top/feed.xml" />
+</head>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/@waline/client@v3/dist/waline.css"
+  />
+  <body>
+    <!--- Header and pages template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon.png" alt="CH"></a>
+	
+		
+<!--		<input type="radio" id="blog" name="nav" class="nav-input">-->
+		<a href="https://froml77.top/nav/blog/index.html" class="nav-link">blog</a>
+  	
+		
+<!--		<input type="radio" id="archive" name="nav" class="nav-input">-->
+		<a href="https://froml77.top/nav/archive.html" class="nav-link">archive</a>
+  	
+		
+<!--		<input type="radio" id="about" name="nav" class="nav-input">-->
+		<a href="https://froml77.top/nav/about.html" class="nav-link">about</a>
+  	
+	<!-- 右侧搜索框 -->
+	<div class="navbar-right">
+	  <div class="search-container">
+		<input type="text" id="search-input" placeholder="search blog..." />
+		<div id="search-results" class="search-results"></div>
+	  </div>
+	</div>
+	</nav>
+
+
+	<script>
+        // 页面加载时设置激活状态
+        document.addEventListener('DOMContentLoaded', () => {
+<!--            const currentPage = window.location.pathname.split('/').pop();-->
+            const currentPage = window.location.href;
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+
+        // 导航点击处理（可选，用于单页应用）
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 如果是单页应用，取消注释以下代码：
+                e.preventDefault();
+                window.location.href = this.href;
+                history.pushState({}, '', this.href);
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</header>
+    <article>
+        <div class="container">
+          <nav class="toc" id="toc"></nav>
+          <main class="content">
+            <h1 style="text-align: left">让 Packing 加速你的训练</h1>
+            
+            
+            
+            <p class="subtitle" style="text-align:right; font-size: 1rem"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Words:</span><span style="color: #082567; font-style: inherit;">&nbsp; 3354</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span style="color: #082567; font-style: inherit;">14min&nbsp;&nbsp;&nbsp;</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> Infra(Train)</span></p>
+            
+            <p>这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作<!--more--></p>
+
+<p>在解读论文之前，先对 Data Packing 进行一个简单的介绍，现在看来它是一种很常见的消除组内 Padding 的方法。如下图所示，左边是我们一般组 batch 的方式，绿色是文本原本的 token，灰色是 Padding 的 token，这样子组 batch 的缺点在于会浪费算力去算灰色的 token（这些token 是原本不需要去计算的）</p>
+
+<p>当我们采用 Packing 的方式去组 batch 时，就不存在这个问题了（如右边）。需要考虑的是怎么样才可以使得组到我们想要的长度（尽量将算力全用到有效的地方）以及会不会给 loss 计算带来问题</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/packing1.png" /><figcaption>Packing 示意图</figcaption></figure>
+
+<h1 id="omnibal">OmniBal</h1>
+
+<p>介绍的第一篇论文是 <a href="https://arxiv.org/pdf/2407.20761">Towards Fast Instruction-Tuning for Vision-Language Models via
+Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。它主要是针对多模态模型训练效率的优化，论文中分别在 DeepSpeed 和 Megatron 上对当时的 Internvl 和 Qwenvl 进行了实验。提出从三个方面来对训练进行优化：data、model 和 memory，接下来我们进行一一介绍</p>
+
+<h2 id="data-imbalance">Data Imbalance</h2>
+
+<p>经过我开头对 Packing 的介绍，很容易知道一般的组 batch 方式很容易造成 token 计算的浪费。其实除了这个问题，如下图所示我们考虑 DP 层面，由于各个 DP 中 mini-batch 数据长度总和不一样，那么各个 DP 的计算量也就不一样，从而致使可能计算量小的 DP 等待计算量大的 DP 的情况<label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle" /><span class="sidenote">当然你可以将数据都 Padding 到固定长度，但这样的话就会浪费更多 token 的计算 </span>。假如我们能把每个 DP 的数据 Packing 到一样的长度<label for="2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="2" class="margin-toggle" /><span class="sidenote">这里是假设计算量和数据总长度大致线性相关时 </span>，就可以解决这个问题</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/packing2.png" /><figcaption>传统组 batch 的劣势</figcaption></figure>
+
+<p>文中使用了一种称之为 Iterative Sampling Filtering 的算法来进行 Packing，具体流程如下伪代码所示，首先是 sampling 阶段：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="n">data_list</span><span class="p">):</span>
+    <span class="n">group</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 当前进行 pack 的组，eg: [data1, data2, ...]
+</span>    <span class="c1"># 存在已经满足条件的组, eg: [[data1, data2, ...], [data4, ...], ...]
+</span>    <span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vit_len_sum</span><span class="p">,</span> <span class="n">total_len_sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">:</span>
+        <span class="n">vit_len</span><span class="p">,</span> <span class="n">total_len</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="c1"># 当前的长度满足所设定的最大值 vit_length total_lenth 时，完成该 group 的 packing
+</span>        <span class="k">if</span> <span class="n">vit_len_sum</span> <span class="o">+</span> <span class="n">vit_len</span> <span class="o">&gt;</span> <span class="n">vit_length</span> <span class="ow">or</span> <span class="n">total_len_sum</span> <span class="o">+</span> <span class="n">total_len</span> <span class="o">&gt;</span> <span class="n">total_lenth</span><span class="p">:</span>
+            <span class="n">groups</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+            <span class="n">vit_len_sum</span> <span class="o">=</span> <span class="n">vit_len</span>
+            <span class="n">total_len_sum</span> <span class="o">=</span> <span class="n">total_len</span>
+            <span class="n">group</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 否则直接加入该 group
+</span>            <span class="n">group</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">vit_len_sum</span> <span class="o">+=</span> <span class="n">vit_len</span>
+            <span class="n">total_len_sum</span> <span class="o">+=</span> <span class="n">total_len</span>
+		<span class="n">groups</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">groups</span>
+</code></pre></div></div>
+
+<p>由上面的代码可是得知，组好的 group （除了最后一个）都是在差一条数据的情况就达到组 group 条件之一：group 的 vit 数量之和大于设定 vit 的最大值 <code class="language-plaintext highlighter-rouge">vit_length</code> ；group 数据长度之和大于设定的长度最大值 <code class="language-plaintext highlighter-rouge">total_lenth</code> 。那么就会存在一个问题，如下图所示黄色部分是阈值长度，group1 和 group2 都差一条数据（灰色部分）达到阈值从而组成了 group，但是他们之间也会存在长度差距</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/packing3.png" /><figcaption>sampling 结果示意图</figcaption></figure>
+
+<p>所以，需要筛出离指定阈值差距较大的 group，如下进行 Filtering 阶段：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">filtering</span><span class="p">(</span><span class="n">groups</span><span class="p">):</span>
+    <span class="n">filter_groups</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 用于存放满足过滤条件的 group
+</span>    <span class="n">need_resampling_data</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 需要再进行 group 的数据
+</span>    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="n">group_vit_len</span> <span class="o">=</span> <span class="nf">sum_vit_len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="n">group_total_len</span> <span class="o">=</span> <span class="nf">sum_total_len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="c1"># total_lenth &gt;= group_total_len &gt; total_length_thresh 满足组好的条件
+</span>        <span class="k">if</span> <span class="n">group_vit_len</span> <span class="o">==</span> <span class="n">vit_length</span> <span class="ow">or</span> <span class="n">group_total_len</span> <span class="o">&gt;=</span> <span class="n">total_length_thresh</span><span class="p">:</span>
+            <span class="n">filter_groups</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">need_resampling_data</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">filter_groups</span><span class="p">,</span> <span class="n">need_resampling_data</span>
+</code></pre></div></div>
+
+<p>对于需要重新 sample 的数据 <code class="language-plaintext highlighter-rouge">need_resampling_data</code>，我们可以再次放进 <code class="language-plaintext highlighter-rouge">sampling</code> 进行组 group，然后 <code class="language-plaintext highlighter-rouge">filtering</code> ，如此循环，体现出了 Iterative Sampling Filtering 中的 Iterative。经过这样的算法，得到的 Packing 结果的总长度可以控制在一定的范围内，使各个 DP 间得到较好的 balance</p>
+
+<h2 id="model-imbalance--memory-imbalance">Model Imbalance &amp; Memory Imbalance</h2>
+
+<p>这两个优化是建立在 Data Balance 之上，当 DP 拥有了近似计算量的输入时，需要考虑对于 VLM 怎么去设置 PP 划分是更合适的。其原因是 VLM 是一个异构的架构，单纯的参数或者层均分都可以造成 PP 之间的计算量不均衡的情况</p>
+
+<p>论文使用了一种 profile 每一层的 forward 时间，那么就能得到总的 forward 时间。假如要对模型进行 PP 3 的切分，也就是需要找到中间两层作为切分点，由于有 forward 时间信息，很容易找到能均分 PP 时间的两层，假如是 <code class="language-plaintext highlighter-rouge">layer_m</code> 和 <code class="language-plaintext highlighter-rouge">layer_n</code> 。另外论文还会找这两层上下层一起作为候选的切分层，因此对于 PP 切分点1 有 <code class="language-plaintext highlighter-rouge">[layer_m-1 layer_m layer_m+1]</code> 三层，同理对于 PP 切分点2 也有同样的三层，总的切分办法一共是 9 种。那么怎么衡量这 9 种方法哪种更好呢，文中提出了一下指标：</p>
+
+\[\text{VAR}(\text{fwd_time}) = \sum_{i=1}^{N} \left(\text{FWD}(S_i) - \overline{\text{FWD}(S_i)}\right)^2\]
+
+\[\text{SUM}(\text{comm}) = \sum_{i=1}^{N-1} \text{ACTIV}(l_{pi})\]
+
+<p>\(\text{VAR}(\text{fwd_time})\) 是各 PP 的时间与均值时间的差值总和，\(\text{SUM}(\text{comm})\) 是各 PP 之间激活值（应该是每个 PP 中最后一层的输出）通信量的总和。也就是文章考虑了计算和通信两个层面来进行选择</p>
+
+<p>对于 memory 是对于不同长度的输入，来调整 model 需要开启 checkpoint 的层数，本质上是尽量提高显存的利用率，减少重计算的层数，从而提高训练效率</p>
+
+<h2 id="performance">Performance</h2>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image.png" /><figcaption>deepspeed 和 megatron 上的表现</figcaption></figure>
+
+<p>可以看到，在两种后端的提速表现都非常明显，而且保证了精度没有明显损失的情况</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image1.png" /><figcaption>不同 size model 上的表现</figcaption></figure>
+
+<p>在不同 size 的模型上也进行了速度验证，最快有超过 3 倍的提速！</p>
+
+<h1 id="hbp">HBP</h1>
+
+<p>HBP 是 Hierarchical Balance Packing 的简称，来自论文 <a href="https://arxiv.org/pdf/2503.07680">Towards Efficient Supervised Fine-tuning for Long-Context LLM</a>。有了上面的基础，比较容易理解 HBP，实际上这篇论文解决的问题很清晰：训练长文本时，难免出现其他长度的数据或者想和其他长度的数据训练（128k 和 32k 8k 混训），那么如果全都 Packing 到 128k，在开 SP 的情况下会存在 all to all 通信浪费</p>
+
+<p>论文的实验都是基于 DeepSpeed 为后端进行的，整体的 Framework 如下图所示</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image2.png" /><figcaption>HBP Framework</figcaption></figure>
+
+<p>在 OmniBal 中我们介绍了可以通过调整开启 checkpoint 的层数来减少重计算从而加速训练，那么现在当开启 SP 时，SP 开得越大，空出来的显存越多，多的显存可以用于减少开启 checkpoint 的层数，但是 SP 越大通信就越耗时，所以这俩需要进行均衡取舍的，上图中的 Hierarchical Groups Auto-Selection 就是干这个事</p>
+
+<p>当对于每个 length 确定了该用什么样的 checkpoint 和 SP 后，就可以进行 Hierarchical Packing 了。由上图可知，对数据按照 length 进行分组后，先 Packing 较长的 length，并用短的数据进行尝试填充，使其尽量 Packing 到指定长度，然后再 Packing 短的</p>
+
+<p>接下来详细介绍这两部分以及为了训练稳定做的课程学习和 Loss 修改部分</p>
+
+<h2 id="hierarchical-groups-auto-selection">Hierarchical Groups Auto-Selection</h2>
+
+<figure class="flexwidth"><img src="/assets/packing-summary/image3.png" width="70%" height="70%" /><figcaption>Auto-Selection 算法</figcaption></figure>
+
+<p>整个流程，首先对每个 length 在开某个 SP 的条件下，尽量去尝试不开 checkpoint 的最大层数，比如对于 32k 开 SP 为 2 对应不开的 checkpoint 的最大层数为 0（即需要全开），继续 profile SP 为 4、8 不开 checkpoint 的层数（尽量不要超过 8 因为节点间通信慢），最后得到 32k 在 SP 为 8 不开 checkpoint 层数为 24 层是 32k 所有配置中最快的，同理我们可以得出 128k、64k 以及 16k、8k 的最快对应的 SP checkpoint 配置，同时我们也可以得出最快的 length 是哪一个，如下图则是对 LLama 8B profile 的配置结果（注意这里的每个 iter 会调整 gradient accumulation step 来使得每个 iter 过的 token 数量一样）</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image4.png" /><figcaption>各 length 结果</figcaption></figure>
+
+<p>一般来讲，profile 的最大 length 是我们需要训练的最大 length ～ \(l_{max}\)，\(l_{max.sp}\) 为 \(l_{max}\) 最快的 SP 配置，这个 length 一定在我们的训练 config 中。最快的 length（如果不是 max）也是需要加到 config 这里标记为 \(l_{best}\) 和对应 SP \(l_{best.sp}\)，这两个配置是一定有的，另外我们需要考虑长度为 \(l_1=l_{best}/l_{best.sp}\) 以及 \(l_2=l_{max}/l_{max.sp}\) 可以理解为这两个 length 是 max 和 best SP 后每个 rank 跑的 length，对应的 SP 设置为 1（即没有 all to all 通信，一个 rank 是一个 DP）。如果 \(l_2 \lt l_{best}\) 则直接并入 \(l_{best}\)，因此最后最多有四组 Packing length 的设置，最少有三组</p>
+
+<h2 id="balance-packing">Balance Packing</h2>
+
+<p>经过了上述的 profile 后，我们可以根据需要训练的 length 对数据进行分组，从 length 最长的组进行 Packing，由 OmniBal 的 ISF 可知，可能存在一些组未到 <code class="language-plaintext highlighter-rouge">length_thresh</code> 的标准，这个时候 HBP 的做法则是一次从后面的组取出 sample 进行补充 Packing 直到达到 thresh 或者遍历完，如下为伪代码所示：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># packed_samples 为已经用 ISF Packing 过的 groups
+</span><span class="k">for</span> <span class="n">sample_id_l</span><span class="p">,</span> <span class="n">sample_l</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">packed_samples</span><span class="p">):</span>
+    <span class="n">llm_num</span> <span class="o">=</span> <span class="nf">token_sum</span><span class="p">(</span><span class="n">sample_l</span><span class="p">)</span>
+    <span class="c1"># 如果 group 长度达到 thresh，即 pack_thresh &lt; llm_num &lt; pack_length 则略过
+</span>    <span class="k">if</span> <span class="n">llm_num</span> <span class="o">&gt;</span> <span class="n">packed_thresh</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="c1"># g_id 越小，里面的数据长度就越小，比如 grouped_samples[0] 都是还未 Packing 的 8k 以下的数据
+</span>    <span class="k">for</span> <span class="n">sub_g_id</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">g_id</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">sample_s</span> <span class="ow">in</span> <span class="n">grouped_samples</span><span class="p">[</span><span class="n">sub_g_id</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">llm_num</span> <span class="o">&gt;</span> <span class="n">packed_thresh</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="c1"># 如果该 sample 用于去 Packing 更长数据组了，则需要改正其 g_id
+</span>            <span class="c1"># 不再加入原长度组的 Packing
+</span>            <span class="k">if</span> <span class="n">sample_s</span><span class="p">[</span><span class="sh">'</span><span class="s">group_id</span><span class="sh">'</span><span class="p">]</span> <span class="o">==</span> <span class="n">sub_g_id</span> <span class="ow">and</span> <span class="n">llm_num</span> <span class="o">+</span> <span class="n">sample_s</span><span class="p">[</span><span class="sh">'</span><span class="s">token_num</span><span class="sh">'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">packed_length</span><span class="p">:</span>
+                <span class="n">sample_s</span><span class="p">[</span><span class="sh">'</span><span class="s">group_id</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">g_id</span>
+                <span class="n">packed_samples</span><span class="p">[</span><span class="n">sample_id_l</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">sample_s</span><span class="p">)</span>
+                <span class="n">llm_num</span> <span class="o">+=</span> <span class="n">sample_s</span><span class="p">[</span><span class="sh">'</span><span class="s">token_num</span><span class="sh">'</span><span class="p">]</span>
+
+</code></pre></div></div>
+
+<p>最后 Packing 数据的形式会是怎么样呢，如下图所示：</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/packing4.png" /><figcaption>packing 结果</figcaption></figure>
+
+<p>可以看到对于 <code class="language-plaintext highlighter-rouge">g_id=2</code> 会有来自短数据的来进行充分 Packing，对于<code class="language-plaintext highlighter-rouge">g_id=1</code> 是由两个小包组成一个大包，每个 DP 分到一个小包，如果还需要 SP，则每个 rank 实际跑的数据长度会更小</p>
+
+<p>这里有 2 个细节需要处理：</p>
+
+<ul>
+  <li>对于每一个层级需要设置不同的 SP group</li>
+  <li>对于每一个层级的 gradient accumulation step 不同</li>
+</ul>
+
+<h2 id="curriculum-learning--stable-loss-normalizer">Curriculum Learning &amp; Stable Loss Normalizer</h2>
+
+<p>这两个都是为了稳定训练的，前者是通过调整数据训练顺序让短数据先训练一部分，使模型能先适应数据的类型。后者则是为了缓解 Packing 给长短数据带来的影响，比如如果长数据和短数据一起训的时候，由于是长短数据一共的 token 数作为 normalization，那么短数据的 loss 贡献程度必然会被大幅度削减，从而影响较短数据优化。文中使用一个 global batch size 的 token 作为 normalization 实际上使用了一个常数，这样保证梯度不大而且各长度数据 loss 贡献不变</p>
+
+<h2 id="performance-1">Performance</h2>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image5.png" /><figcaption>HBP 结果</figcaption></figure>
+
+<p>可以看到加速效果非常明显，这里 balance 是指对于有没有按照包总长度平方进行 sort（这里是对 attention 那的计算量做了一个均衡）</p>
+
+<p>以上便是关于两篇论文的全部内容了</p>
+
+            <p class="subtitle" style="text-align:right"><span style="color: #ffb6c1; font-style: inherit;">August 20, 2025</span></p>
+          </main>
+        </div>
+    </article>
+    <script>
+    // 动态生成文章列表（假设每篇文章有标题、内容和链接）
+    const articles = [
+      
+        {
+          title: "让 Packing 加速你的训练",
+          content: "这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作 在解读论文之前，先对 Data Packing 进行一个简单的介绍，现在看来它是一种很常见的消除组内 Padding 的方法。如下图所示，左边是我们一般组 batch 的方式，绿色是文本原本的 token，灰色是 Padding 的 token，这样子组 batch 的缺点在于会浪费算力去算灰色的 token（这些token 是原本不需要去计算的） 当我们采用 Packing 的方式去组 batch 时，就不存在这个问题了（如右边）。需要考虑的是怎么样才可以使得组到我们想要的长度（尽量将算力全用到有效的地方）以及会不会给 loss 计算带来问题 Packing 示意图 OmniBal 介绍的第一篇论文是 Towards Fast Instruction-Tuning for Vision-Language Models via Omniverse Computation Balance，OmniBal...",
+          url: "/ai/2025/08/20/packing-summary.html"
+        },
+      
+        {
+          title: "AI 之旅之从识图到读书",
+          content: "这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。部门的整体氛围很好，上下级之间、同事之间都能愉快的相处，这使得我这期间的工作生活很顺心。回到工作内容部分，总体而言可以分为两部分的工作：CV 和 LLM Computer Vision Period 我研究生期间的研究方向是深度学习目标检测（DeepLearning Detection），有一段在华为中央研究院实习的经历，在研究生阶段参加过几次百度举办的算法复现比赛以及贡献过相应的开源项目。入职后，接手的第一个任务就是复现 YoloV6 算法，因为硕士期间参加过百度的复现比赛百度的大佬也对我进行过一些代码和复现方法上的指导 ，所以上手还算顺利 复现 没错！从上面可以看出来，我的第一个主营业务就是复现，所谓复现就是把别人的算法加到自己的训练框架里面不管你 copy 也好，自己重新搭网络结构也好 。最终的目的是：在我们的框架用相同的 config 能去训练这个算法并在测试集上跟官方 paper 的公示精度指标一致 那么我在这个阶段复现了哪些算法呢？主要是一些当时 SoTA 的目标检测算法：YoloV6、Onenet、YoloV7、DINO 等其实在之前参加百度复现赛和 PaddleDetection 做开源贡献时，复现过 Retinanet、ATSS、Fast RCNN、Faster RCNN 以及 Sparse RCNN 算是非常适合这个岗位了 。当然在做完算法复现后，我们常常会做一些组合操作来探索算法的特性，像各种标签匹配：OTA、简化版 OTA、匈牙利算法匹配、TAL 等等，各种分类的 loss、框回归的 loss 以及辅助 loss 等等，我们会将上述的和不同的网络结构以及数据增强的方式进行组合搭配，看看有什么化学反应，能不能训练出比较厉害的 baseline model 出来。总之 CV 时代，前处理、网络结构、后处理，都玩得很花 Other 除了复现和日常的框架维护、代码迁移和答疑外，也有做一些其他方面的探索，主要分为以下几个方面： 对于...",
+          url: "/summary/2025/08/15/first-work-summary.html"
+        },
+      
+        {
+          title: "DETR SERIES",
+          content: "🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法 DETR Framework DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测 Transformer 显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder 和多个 decoder 组成。decoder 的第二个多头注意力 (Multi-Head Attention MHA) 将 encoder 的输出作为两个输入。实际上 MAH 中主要由点积放缩注意力算子组成，大概可以看到其由 Query、Key...",
+          url: "/ai/2023/05/19/detr-series.html"
+        },
+      
+        {
+          title: "CUDA 编程（进阶篇）",
+          content: "General Matrix Multiplication GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子文章中的代码进行解读，也作为代码阅读笔记梳理整个思路。 首先，其优化技巧分块计算、shared memory 的多次利用、register 的多次利用以及各种 bank 的 conflict 解决，有的甚至会涉及到汇编层面的优化，这里有些技巧在基础篇已经讲过，就不再赘述了。 其次，简单叙述一下优化的思路，主要的思路就是对矩阵进行分块计算，不同 block 负责计算出 C 中的不同部分，同时在 block 内又让不同线程负责不同部分，这里面为了能多次利用 shared memory，需要进行多次循环，因此在 block 内有多次大循环，在大循环内又有每个线程中的多次小循环。因为涉及到把数据不断搬到 shared memory，所以作者设计了预取 prefetch 的做法，这样做可以掩盖 io 的 latency，因此也要设计哪些线程搬运哪些数据。由于可能在访问 shared memory 的时候有 bank conflict，所以也要设计哪些线程访问哪些内存。 分块计算的思路 首先如下图，对 C 进行分块： 由图可知，C 被分为 MxN/BlOCK_SIZE_M/BlOCK_SIZE_N 块，每块的大小为高 BLOCK_SIZE_M，宽 BLOCK_SIZE_N，每一块对应 A 中的相应行，对应...",
+          url: "/ai/2023/02/09/cuda2.html"
+        },
+      
+        {
+          title: "CUDA 编程（基础篇）",
+          content: "简介 cuda 关于矩阵相关运算的入门编程及相关技巧，是我的学习笔记，比较适合初学者。 矩阵相加 这一节通过矩阵相加来介绍 cuda 编程的常规流程，并介绍一些术语 流程 memory alloc  用于在 gpu 上开辟空间 cudaMalloc((void**) &amp;amp;d_o, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;amp;d_a, sizeof(float) * (M * N)); cudaMalloc((void**) &amp;amp;d_b, sizeof(float) * (M * N)); 其中 M 和 N 分别是矩阵的行和列 copy data cudaMemcpy(d_o, h_o, sizeof(float) * (M * N), cudaMemcpyHostToDevice); cudaMemcpy(d_a,...",
+          url: "/ai/2023/01/01/cuda1.html"
+        },
+      
+        {
+          title: "YoloV7 标签匹配及 loss 计算解析",
+          content: "🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分 如上如所示，YoloV7 同大多数单阶段目标检测算法属于密集检测 (dense detection)。上图是一个 7x7 的特征图红色的点是基于特征图的网格点，进行偏移后的点，然后在其上铺设 anchor box，每个点铺设一定数量的 anchor。当然也有直接在网格点上进行铺设的，一般来讲没有太大差别。下面我们开始介绍 v7 后处理，主要分为两部分：标签匹配和 loss 计算 Label Assignment 📄标签匹配主要分为两步：先是进行粗筛，然后是进行精筛 Find-3-Positive 📑顾名思义，第一步是找到三个正样本，就是对于每一个 GT 找到上图的三个 anchor 作为正样本。首先我们先大概讲一下匹配的规则 如上图所示，对于每一个网格，会被分为四个部分，绿色点是 GT 中心点，蓝色点是匹配给 GT 的正样本点。首先 GT 中心点所在的网格会被定义为正样本，然后根据中心点在网格的位置来找到另外两个正样本。比如在位置 1 是左上的点会被定义为其正样本，位置 2 是右上，位置 3 是左下，位置 4 是右下 📚下面是代码的注解和讲解：...",
+          url: "/ai/2022/11/06/yolov7.html"
+        },
+      
+        {
+          title: "Rank &amp; Sort Loss 解读",
+          content: "Rank &amp;amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 AP Loss、aLRPLoss 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp;amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？ 关于训练预测不一致的问题 简单来说，就是在分类和回归在训练的时候是分开的训练，计算 loss 并进行反向优化。但是在预测的时候却是用分类分数排序来进行 nms 后处理。这里可能导致一种情况就是分类分数很高，但是回归不好（这个问题在 FCOS 中有阐述）。 之前的工作 常见的目标检测网络一般会使用 nms 作为后处理，这时我们常常希望所有正样本的得分排在负样本前面，另外我们还希望位置预测更准确的框最后被留下来。之前的 AP Loss 和 aLRP Loss 由于需要附加的 head 来进行分类精度和位置精度综合评价（其实就是为了消除分类和回归的不一致问题，如 FCOS 的 centerness、IoU head 之类的），确实在解决类别不均衡问题（正负样本不均衡）等有着不错的效果，但是需要更多的时间和数据增强来进行训练。 Rank &amp;amp; Sort Loss...",
+          url: "/ai/2022/08/08/Rank-Sort-Loss.html"
+        },
+      
+        {
+          title: "变限积分求导的种种",
+          content: "变上限积分求导的理解 假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有： \[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\] 其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分： \[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\] 因此，其中我们称 \(\int_{a}^{x}f(t)dt\) 为 \(f(x)\) 的变上限积的定积分，也算是 \(f(x)\) 的一个原函数。同时我们也可以得到牛顿-莱布尼茨...",
+          url: "/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html"
+        },
+      
+        {
+          title: "Tufte-style Jekyll blog",
+          content: "The Tufte Jekyll theme is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. The idea for this project is essentially cribbed...",
+          url: "/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html"
+        },
+      
+    ];
+
+    // 获取 DOM 元素
+    const searchInput = document.getElementById("search-input");
+    const searchResults = document.getElementById("search-results");
+
+    // 监听输入框的变化
+    searchInput.addEventListener("input", function () {
+      const query = this.value.trim().toLowerCase();
+
+      // 清空结果容器
+      searchResults.innerHTML = "";
+      searchResults.style.display = "none";
+
+      if (!query) return;
+
+      // 过滤匹配的文章
+      const results = articles.filter((article) => {
+        return (
+          article.title.toLowerCase().includes(query) ||
+          article.content.toLowerCase().includes(query)
+        );
+      });
+
+      // 截断结果为最多 10 条
+      const limitedResults = results.slice(0, 50);
+
+      // 显示搜索结果
+      if (limitedResults.length > 0) {
+        limitedResults.forEach((result) => {
+          const resultItem = document.createElement("a");
+          resultItem.href = result.url;
+          resultItem.textContent = result.title;
+          resultItem.title = result.content; // 提示部分内容
+          searchResults.appendChild(resultItem);
+        });
+        searchResults.style.display = "block";
+      } else {
+        // 显示无结果提示
+        const noResult = document.createElement("div");
+        noResult.textContent = "No Result or Error Title";
+        noResult.style.padding = "20px 20px";
+        noResult.style.color = "#082567";
+        searchResults.appendChild(noResult);
+        searchResults.style.display = "block";
+      }
+    });
+
+    // 点击页面其他区域时隐藏搜索结果
+    document.addEventListener("click", function (e) {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = "none";
+      }
+    });
+
+    // 返回顶部功能实现
+    document.addEventListener('DOMContentLoaded', () => {
+      const backToTop = document.getElementById('backToTop');
+
+      // 滚动监听 [[7]]
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 100) {
+          backToTop.classList.add('show');
+        } else {
+          backToTop.classList.remove('show');
+        }
+      });
+
+      // 平滑滚动 [[9]]
+      backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    function generateTOC() {
+      const toc = document.getElementById('toc');
+      const headings = document.querySelectorAll('h1, h2');
+
+      headings.forEach(heading => {
+        if (!heading.id) {
+          // 使用标准化编码方式
+          heading.id = encodeURIComponent(
+            heading.textContent
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, '-') // 替换所有非字母数字字符
+          );
+        }
+
+        const link = document.createElement('a');
+        link.href = `#${heading.id}`;
+        link.textContent = heading.textContent;
+        link.classList.add('toc-link', `level-${heading.tagName[1]}`);
+
+        if (heading.tagName === 'H2') {
+          const parentDiv = toc.lastChild;
+          if (parentDiv?.classList.contains('toc-parent')) {
+            parentDiv.querySelector('.child-container').appendChild(link);
+          }
+        } else {
+          const parentDiv = document.createElement('div');
+          parentDiv.className = 'toc-parent';
+
+          const toggleBtn = document.createElement('button');
+          toggleBtn.className = 'toggle-btn';
+          toggleBtn.textContent = '♠';
+          toggleBtn.addEventListener('click', () => {
+            const child = parentDiv.querySelector('.child-container');
+            child.classList.toggle('open');
+            toggleBtn.textContent = child.classList.contains('open') ? '♥' : '♠';
+          });
+
+          const childContainer = document.createElement('div');
+          childContainer.className = 'child-container';
+
+          parentDiv.appendChild(toggleBtn);
+          parentDiv.appendChild(link);
+          parentDiv.appendChild(childContainer);
+          toc.appendChild(parentDiv);
+        }
+      });
+    }
+
+    // 滚动监听与高亮 [[7]][[9]]
+    window.addEventListener('scroll', () => {
+      let currentSection = '';
+      const scrollY = window.scrollY + 50; // 偏移量优化
+
+      document.querySelectorAll('h1, h2').forEach(section => {
+        if (section.offsetTop <= scrollY) {
+          currentSection = section.id;
+        }
+      });
+
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.hash === `#${currentSection}`) {
+          link.classList.add('active');
+          // 自动展开父容器
+          const parent = link.closest('.toc-parent');
+          if (parent) {
+            parent.querySelector('.child-container').classList.add('open');
+            parent.querySelector('.toggle-btn').textContent = '♥';
+          }
+        }
+      });
+    });
+
+    // 修复平滑滚动并添加自动折叠功能
+    document.addEventListener('DOMContentLoaded', () => {
+      generateTOC();
+
+      // 新增滚动方向检测 [[5]]
+      let lastScrollPosition = window.scrollY;
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.scrollY;
+        const isScrollingUp = currentScroll < lastScrollPosition;
+
+        // 更新滚动位置记录
+        lastScrollPosition = currentScroll;
+
+        let currentSection = '';
+        const scrollY = currentScroll + 100; // 偏移量优化
+
+        document.querySelectorAll('h2').forEach(section => {
+          if (section.offsetTop <= scrollY) {
+            currentSection = section.id;
+          }
+        });
+
+        // 关闭所有非当前标题的展开状态
+        document.querySelectorAll('.toc-parent').forEach(parent => {
+          const childContainer = parent.querySelector('.child-container');
+          if (!parent.contains(document.querySelector(`#${currentSection}`))) {
+            childContainer.classList.remove('open');
+            parent.querySelector('.toggle-btn').textContent = '♠';
+          }
+        });
+
+        // 处理当前激活标题
+        const activeLink = document.querySelector(`.toc-link[href="#${currentSection}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+          activeLink.closest('.toc-parent').querySelector('.child-container').classList.add('open');
+          activeLink.closest('.toc-parent').querySelector('.toggle-btn').textContent = '♥';
+        } else {
+          document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+        }
+
+        // 特殊处理向上滚动场景 [[7]]
+        if (isScrollingUp) {
+          setTimeout(() => {
+            document.querySelectorAll('.child-container.open').forEach(container => {
+              if (container.getBoundingClientRect().top > window.innerHeight) {
+                container.classList.remove('open');
+                container.previousElementSibling.textContent = '♠';
+              }
+            });
+          }, 100);
+        }
+      });
+
+      // 修正平滑滚动 [[10]]
+      document.querySelectorAll('.toc-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = decodeURIComponent(link.hash); // 解码处理
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+    </script>
+    <!-- vercel & waline leancloud-->
+    <div class="comment_container" id="waline"></div>
+    <style>
+      :root {
+          --waline-font-size: 1.5rem; /* 字体大小 */
+          --waline-white: #fff;
+          --waline-light-grey: #999;
+          --waline-dark-grey: #666;
+          --waline-theme-color: #70c092; /* 主题色 */
+          --waline-active-color: #2ecc71; /* 活动状态的颜色 */
+          --waline-color: #c65f5f;  /* 一般文本颜色 */
+          --waline-bg-color: #fffff8;  /* 背景颜色 */
+          --waline-bg-color-light: #f8f8f8;
+          --waline-bg-color-hover: #f0f0f0;  /* 鼠标悬停时的背景颜色 */
+          --waline-border-color: #ddd;  /* 边框颜色 */
+          --waline-disable-bg-color: #f8f8f8;
+          --waline-disable-color: #000;
+          --waline-code-bg-color: #282c34;  /* 代码块的背景颜色 */
+          --waline-bq-color: #f0f0f0;  /* 引用块的颜色 */
+          --waline-avatar-size: 3.25rem;
+          --waline-m-avatar-size: calc(var(--waline-avatar-size) * 9 / 13);
+          --waline-badge-color: #3498db;
+          --waline-badge-font-size: 0.75em;
+          --waline-info-bg-color: #f8f8f8;
+          --waline-info-color: #999;
+          --waline-info-font-size: 0.0001em;
+          --waline-border: 1px solid var(--waline-border-color);
+          --waline-avatar-radius: 50%;
+          --waline-box-shadow: none;
+      }
+    </style>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+
+      init({
+        el: '#waline',
+        serverURL: 'https://blog-waline-q6y4ofnpt-fl77ns-projects.vercel.app',
+        locale: { placeholder: '欢迎交流' },
+      });
+    </script>
+    <span class="print-footer">让 Packing 加速你的训练 - August 20, 2025 - L77</span>
+    <footer>
+  <hr class="slender_footer">
+  <ul class="footer-links">   
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+      
+  </ul>
+<div class="credits">
+<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">Powered By Jekyll And Tufte Theme</span>
+</div>  
+</footer>
+    <!-- 在body底部新增按钮 -->
+    <button id="backToTop" class="back-to-top">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="currentColor"
+              d="M12 4l8 8H16v8H8v-8H4l8-8z"
+              style="transform: rotate(0deg); transition: 0.3s;"/>
+      </svg>
+    </button>
+  </body>
+</html>
