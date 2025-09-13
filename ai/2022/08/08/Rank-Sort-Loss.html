@@ -121,7 +121,7 @@
             
             
             
-            <p class="subtitle" style="text-align:right; font-size: 1rem"><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Words:</span><span style="color: #082567; font-style: inherit;">&nbsp; 6185</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span style="color: #082567; font-style: inherit;">25min&nbsp;&nbsp;&nbsp;</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c7eeeb; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> DETECTION</span></p>
+            <p class="subtitle" style="text-align:right; font-size: 1rem"><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Words:</span><span style="color: #082567; font-style: inherit;">&nbsp; 6185</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span style="color: #082567; font-style: inherit;">25min&nbsp;&nbsp;&nbsp;</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> Detection</span></p>
             
             <p>Rank &amp; Sort Loss for Object Detection and Instance Segmentation 这篇文章算是我读的 detection 文章里面比较难理解的，原因可能在于：创新的点跟普通的也不太一样；文章里面比较多公式。但之前也有跟这方面的工作如 <a href="https://github.com/cccorn/AP-loss">AP Loss</a>、<a href="https://github.com/CV-IP/aLRPLoss">aLRPLoss</a> 等。它们都是为了解决一个问题：单阶段目标检测器分类和回归在训练和预测不一致的问题。那么 Rank &amp; Sort Loss 又在以上的工作进行了什么改进呢？又解决了什么问题呢？<!--more--></p>
 
@@ -559,6 +559,12 @@ sort\_error_i &amp;= \underset{j \in \mathcal{P}}{\sum}(\ell_{S}(i) - \ell_{S}^{
     <script>
     // 动态生成文章列表（假设每篇文章有标题、内容和链接）
     const articles = [
+      
+        {
+          title: "0513 到 0824 个股分析与总结",
+          content: "如下图所示，从 2025 年 5 月起，我买入了人生的第二支个股，并且第一次就买到了涨停股。之后我买入过多支个股，除了五粮液、老板电器以及双环科技是从价值投资和穿透回报率考虑，其他都是投机行为，2024 年第一次接触股票以来还没做过任何整理，借此对之前 3 个月关于个股的交易想法和行为进行分析以及总结，便于形成自己的交易体系和规范自己的交易纪律 {% fullwidth &quot;assets/stock-summary-1/image9.png&quot; &#39;连云港交易记录&#39; %} # 建仓动机及收益 | 股票名称 | 清仓收益 | 收益率 | 建仓动机 | 持股天数 | 注 | | --- | --- | --- | --- | --- | --- | | 双环科技 | 108 | 2.93% | 价格低、穿透回报率高 |...",
+          url: "/investment/2025/09/12/stock-summary.html"
+        },
       
         {
           title: "让 Packing 加速你的大模型训练",
