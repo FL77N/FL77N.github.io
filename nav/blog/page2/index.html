@@ -115,6 +115,22 @@
   
     <li class="index">
       <hr class="invisible">
+      <a href="/ai/2023/02/09/cuda2.html">
+        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>CUDA 编程（进阶篇）</h2>
+      </a>
+      <br>
+      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
+        February 9, 2023
+      </span>
+      <br/>
+      <div><h1 id="general-matrix-multiplication">General Matrix Multiplication</h1>
+
+<p>GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子<a href="https://zhuanlan.zhihu.com/p/435908830">文章</a>中的代码进行解读，也作为代码阅读笔记梳理整个思路。</p>
+</div>
+    </li>
+  
+    <li class="index">
+      <hr class="invisible">
       <a href="/ai/2023/01/01/cuda1.html">
         <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>CUDA 编程（基础篇）</h2>
       </a>
@@ -180,20 +196,6 @@
 </div>
     </li>
   
-    <li class="index">
-      <hr class="invisible">
-      <a href="/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html">
-        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>Tufte-style Jekyll blog</h2>
-      </a>
-      <br>
-      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
-        April 13, 2020
-      </span>
-      <br/>
-      <div><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography. The idea for this project is essentially cribbed wholesale from Tufte and R Markdown’s Tufte Handout format<label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle" /><span class="sidenote">See <a href="https://tufte-latex.github.io/tufte-latex/">tufte-latex.github.io/tufte-latex/</a> and <a href="http://rmarkdown.rstudio.com/tufte_handout_format.html">rmarkdown.rstudio.com/tufte_handout_format</a> </span> This page is an adaptation of the <a href="http://rmarkdown.rstudio.com/examples/tufte-handout.pdf">Tufte Handout PDF</a>.</p>
-</div>
-    </li>
-  
 </ul>
 
 <!-- 分页导航 -->
@@ -206,12 +208,14 @@
   <div class="page-control">
     <span class="page-label">PAGE</span>
     <input type="number" id="currentPage"
-           min="1" max="2"
+           min="1" max="3"
            value="2" class="page-input">
-    <span class="page-label">of 2&nbsp;</span>
+    <span class="page-label">of 3&nbsp;</span>
     <button onclick="jumpToPage()" class="nav-btn page-go">GO</button>
   </div>
 
+  
+    <a href="/nav/blog/page3/" class="nav-btn next">NEXT >></a>
   
 </div>
 
@@ -219,7 +223,7 @@
 <script>
 function jumpToPage() {
   const currentPage = document.getElementById('currentPage').value;
-  const totalPages = 2;
+  const totalPages = 3;
 
   // 输入验证 [[4]]
   if (currentPage < 1 || currentPage > totalPages) {
@@ -247,6 +251,12 @@ document.getElementById('currentPage').addEventListener('keypress', (e) => {
     <script>
     // 动态生成文章列表（假设每篇文章有标题、内容和链接）
     const articles = [
+      
+        {
+          title: "Policy Optimization MPO DAPO GSPO",
+          content: "这篇 Blog 主要对 MPO、DAPO、GSPO 进行介绍，这几种强化学习的方法或基于 DPO 或基于 GRPO 改进。因此默认已经有相关知识，这里就不再赘述了 MPO 首先先对 MPO 进行介绍。这里插播一个小插曲，由于我是直接搜索 MPO，因此刚开始我阅读错了 Paper → Mixing Preference Optimization。既然来都来了，那就还是介绍一下，不感兴趣可以跳过 An Efficient Post-Processing Framework for Mixing Diverse Preference Alignment 这篇论文主要想解决的是 MaxMin-RLHF 和 MORLHF 中遇到的问题。因此需要先介绍 MaxMin-RLHFMORLHF 与其思路大致一样 ，文中有大量的公式推导细节感兴趣的同学可以阅读原文 ，本文只做结论上的介绍 MaxMin-RLHF 指出来的问题是在 RLHF 中使用单一的 reward 无法满足人类偏好的多样性。文中特别提到了对于少数派或者某一群体比如学生和上班族的差异 的喜好时，单一的 reward 进行评估非常困难。因此论文训练了多个 reward，并根据 Egalitarian rule in...",
+          url: "/ai/2025/11/27/MPO-DAPO-GSPO.html"
+        },
       
         {
           title: "0513 到 0824 个股分析与总结",
