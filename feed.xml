@@ -5,8 +5,8 @@
     <description>Personal Blog</description>
     <link>https://froml77.top/</link>
     <atom:link href="https://froml77.top/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 Nov 2025 22:07:47 +0800</pubDate>
-    <lastBuildDate>Thu, 27 Nov 2025 22:07:47 +0800</lastBuildDate>
+    <pubDate>Sat, 29 Nov 2025 21:30:37 +0800</pubDate>
+    <lastBuildDate>Sat, 29 Nov 2025 21:30:37 +0800</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
     
       <item>
@@ -45,7 +45,7 @@
 
 &lt;h2 id=&quot;binary-classifier-optimization-for-large-language-model-alignment&quot;&gt;Binary Classifier Optimization for Large Language Model Alignment&lt;/h2&gt;
 
-&lt;p&gt;DPO 就不过多介绍了，我们从 BCO 开始介绍。BCO 全称 Binary Classifier Optimization，不同于 KTO 单从 binary signals 出发，而是理论证明了 binary signal 和 preference optimization (DPO) 之间的联系从而优化。通过一个  a binary classifier 将 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prompt+chosen_completion&lt;/code&gt; map 到 1 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prompt+rejected_completion&lt;/code&gt; map 到 0，从而使用 binary cross-entropy loss 进行优化（对于常见的 AI 应用有点赞和点踩功能，会更方便收集数据）并且证明了此种方法的 BCE Loss 是 DPO 的上界&lt;/p&gt;
+&lt;p&gt;DPO 就不过多介绍了，我们从 BCO 开始介绍。BCO 全称 Binary Classifier Optimization，不同于 KTO 单从 binary signals 出发，而是理论证明了 binary signal 和 preference optimization (DPO) 之间的联系从而优化。通过一个  a binary classifier 将 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prompt+chosen_completion&lt;/code&gt; map 到 1 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prompt+rejected_completion&lt;/code&gt; map 到 0，从而使用 binary cross-entropy loss 进行优化 &lt;label for=&quot;100&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;100&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;对于常见的 AI 应用有点赞和点踩功能，会更方便收集数据，并且可以防止 DPO 训练到一定程度后 choose 和 reject 同时下降的情况，本质上只需要 w &amp;gt; l 就行，可以参考&lt;a href=&quot;https://zhuanlan.zhihu.com/p/694381064&quot;&gt;讨论&lt;/a&gt; &lt;/span&gt;，并且证明了此种方法的 BCE Loss 是 DPO 的上界&lt;/p&gt;
 
 \[\begin{aligned}&amp;amp; \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ -\log \sigma \left( r_\theta(x, y_w) - r_\theta(x, y_l) \right) \right] \\&amp;amp; &amp;lt; \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ -\log \sigma(r_\theta(x, y_w)) - \log \sigma(-r_\theta(x, y_l)) \right] \\&amp;amp; = \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ -\log \sigma(r_\theta(x, y_w)) \right] + \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ -\log \sigma(-r_\theta(x, y_l)) \right]\end{aligned}\]
 
@@ -75,6 +75,10 @@
 
 \[\text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon, 1 + \varepsilon\right) \rightarrow \text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon_{\text{low}}, 1 + \varepsilon_{\text{high}}\right)\]
 
+&lt;figure class=&quot;flexwidth&quot;&gt;&lt;img src=&quot;/assets/MPO-DAPO-GSPO/image5.png&quot; width=&quot;50%&quot; height=&quot;50%&quot; /&gt;&lt;figcaption&gt;clip 示意图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;如图可知当使用了 clip higher 之后，old policy 中的低概率 token 会得到更多的贡献，但实际上是对于优势为正的 token 采取了更加激进的策略，增强了 old policy 中概率小于在 \(1/(1+\varepsilon)\) 的 token 采样几率，在上图表现为增加的粉红采样区域&lt;/p&gt;
+
 &lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/MPO-DAPO-GSPO/image1.png&quot; /&gt;&lt;figcaption&gt;clip 对比实验&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;p&gt;其中 clip 的上限提高了，为了防止低概率 token 容易更低，下限保持没变。效果也很明显， actor 的 entropy collapse 得到了一定程度的解决。文中采取以下配置 ：\(\varepsilon_{\text{low}}\) 为 0.2 和 \(\varepsilon_{\text{high}}\) 为 0.28&lt;/p&gt;
@@ -97,7 +101,7 @@
 
 \[\frac{loss_{0}}{n_{0}G} + \frac{loss_{1}}{n_{1}G} + \frac{loss_{2}}{n_{2}G} + \cdots \rightarrow \frac{loss_{0} + loss_{1} + loss_{2}+ \cdots }{n_{0} + n_{1} + n_{2} + \cdots }\]
 
-&lt;p&gt;从上式可以看出来，DAPO 的 loss 实际上使用同样的 normalization，从相对数值来说，同样等于没用，这时候长回答的 loss 能够体现他真正的 loss 贡献&lt;label for=&quot;10&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;10&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;GRPO 每个 sample 在内部做 normalize 被论文称为 sample level，GSPO 是 sample 内部并没有做 normalize 而是所有 token 一起求和后做 normalize 这样每个 token 的权重是一样的，不会因为 sample 的长度而不一样 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;从上式可以看出来，DAPO 的 loss 实际上使用同样的 normalization，从相对数值来说，同样等于没用，这时候长回答的 loss 能够体现他真正的 loss 贡献&lt;label for=&quot;10&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;10&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;GRPO 每个 sample 在内部做 normalize 被论文称为 sample level，DAPO 是 sample 内部并没有做 normalize 而是所有 token 一起求和后做 normalize 这样每个 token 的权重是一样的，不会因为 sample 的长度而不一样 &lt;/span&gt;&lt;/p&gt;
 
 &lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/MPO-DAPO-GSPO/image2.png&quot; /&gt;&lt;figcaption&gt;loss 对比实验&lt;/figcaption&gt;&lt;/figure&gt;
 
