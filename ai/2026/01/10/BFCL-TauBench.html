@@ -121,11 +121,11 @@
             
             
             
-            <p class="subtitle" style="text-align:right; font-size: 1rem"><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Words:</span><span style="color: #082567; font-style: inherit;">&nbsp; 3955</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span style="color: #082567; font-style: inherit;">16min&nbsp;&nbsp;&nbsp;</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> Algorithm</span></p>
+            <p class="subtitle" style="text-align:right; font-size: 1rem"><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Words:</span><span style="color: #082567; font-style: inherit;">&nbsp; 3908</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span style="color: #082567; font-style: inherit;">16min&nbsp;&nbsp;&nbsp;</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> Algorithm</span></p>
             
             <p>这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍<!--more--></p>
 
-<h1 id="the-berkeley-function-calling-leaderboardbfcl"><a href="https://gorilla.cs.berkeley.edu/leaderboard.html"><strong>The Berkeley Function-Calling Leaderboard(BFCL)</strong></a></h1>
+<h1 id="the-berkeley-function-calling-leaderboardbfcl"><a href="https://gorilla.cs.berkeley.edu/leaderboard.html">The Berkeley Function-Calling Leaderboard(BFCL)</a></h1>
 
 <p>这是 Berkeley 做的一个关于 <strong>Function Call(FC)</strong> 的 benchmark。目前包括：Agentic、Multi Turn、Single Turn 和 Hallucination Measurement 等相关的 benchmark。这里主要针对其中 Multi Turn benchmark 的设计进行介绍</p>
 
@@ -167,8 +167,7 @@
 
 <p>关于其中 turns 和 steps 的统计</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image3.png" /><figcaption>不同 multi turn 例子</figcaption></figure>
-<p>而这个 MPO 所做的事是在多个 reward 中的回答进行评价分数的 Normalization 的工作，主要是为了训练稳定。对 MaxMin 和 MORLHF 都提供了相应的解决方案</p>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image3.png" /><figcaption>turns 和 steps 的统计</figcaption></figure>
 
 <h3 id="数据集构建流程及细节">数据集构建流程及细节</h3>
 
@@ -189,7 +188,7 @@
 <p>主要分为两类 API</p>
 
 <ul>
-  <li>Primary Domain APIs
+  <li><strong>Primary Domain APIs</strong>
     <ul>
       <li>Vehicle Control：展示汽车的状态、预估距离等</li>
       <li>Trading Bots：获取股票信息、下单、获取账户信息等</li>
@@ -197,7 +196,7 @@
       <li>Gorilla File System：ls cd cat 等系统操作命令</li>
     </ul>
   </li>
-  <li>Cross-functional APIs
+  <li><strong>Cross-functional APIs</strong>
     <ul>
       <li>Message API：发送信息、删除信息、查看接收到的信息等</li>
       <li>Twitter API：发推、转推、评论等</li>
@@ -231,7 +230,7 @@
 
 <p>根据上图的示意主要对一下几个部分进行核验</p>
 
-<p>Question Validation</p>
+<p><span style="color: #5CADAD">Question Validation</span></p>
 
 <p>对于每一个问题保证只有一种正确的答案</p>
 
@@ -240,7 +239,7 @@
   <li>Complete Information：当前问题和之前的问题送到这轮时，都需要有所有必须的细节信息来调用正确的 function</li>
 </ul>
 
-<p>Human-Labeled Ground Truth Validation</p>
+<p><span style="color: #5CADAD">Human-Labeled Ground Truth Validation</span></p>
 
 <p>保证数据的可靠性</p>
 
@@ -250,20 +249,20 @@
   <li>Brevity：执行逻辑应该尽量简洁，不需要不必要的 API</li>
 </ul>
 
-<p>Initial Configuration Validation</p>
+<p><span style="color: #5CADAD">Initial Configuration Validation</span></p>
 
 <ul>
   <li>Completeness：所有需要的信息都存在，比如：请求模型删除文件，需要验证文件是否存在</li>
   <li>Uniqueness：所有初始化信息应该是 unique 的，比如：一个 card 存在，就不应该被重复 register</li>
 </ul>
 
-<p>Function List Validation</p>
+<p><span style="color: #5CADAD">Function List Validation</span></p>
 
 <ul>
   <li>Completeness：保证模型能够正常的 call</li>
 </ul>
 
-<p>API Code Validation</p>
+<p><span style="color: #5CADAD">API Code Validation</span></p>
 
 <ul>
   <li>Unit Tests for Functionality：每个 API 需要进行单元测试</li>

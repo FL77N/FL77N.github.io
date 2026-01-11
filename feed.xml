@@ -5,15 +5,15 @@
     <description>Personal Blog</description>
     <link>https://froml77.top/</link>
     <atom:link href="https://froml77.top/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 11 Jan 2026 11:49:00 +0800</pubDate>
-    <lastBuildDate>Sun, 11 Jan 2026 11:49:00 +0800</lastBuildDate>
+    <pubDate>Sun, 11 Jan 2026 12:16:48 +0800</pubDate>
+    <lastBuildDate>Sun, 11 Jan 2026 12:16:48 +0800</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
     
       <item>
         <title>BFCL-TauBench</title>
         <description>&lt;p&gt;这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍&lt;!--more--&gt;&lt;/p&gt;
 
-&lt;h1 id=&quot;the-berkeley-function-calling-leaderboardbfcl&quot;&gt;&lt;a href=&quot;https://gorilla.cs.berkeley.edu/leaderboard.html&quot;&gt;&lt;strong&gt;The Berkeley Function-Calling Leaderboard(BFCL)&lt;/strong&gt;&lt;/a&gt;&lt;/h1&gt;
+&lt;h1 id=&quot;the-berkeley-function-calling-leaderboardbfcl&quot;&gt;&lt;a href=&quot;https://gorilla.cs.berkeley.edu/leaderboard.html&quot;&gt;The Berkeley Function-Calling Leaderboard(BFCL)&lt;/a&gt;&lt;/h1&gt;
 
 &lt;p&gt;这是 Berkeley 做的一个关于 &lt;strong&gt;Function Call(FC)&lt;/strong&gt; 的 benchmark。目前包括：Agentic、Multi Turn、Single Turn 和 Hallucination Measurement 等相关的 benchmark。这里主要针对其中 Multi Turn benchmark 的设计进行介绍&lt;/p&gt;
 
@@ -55,8 +55,7 @@
 
 &lt;p&gt;关于其中 turns 和 steps 的统计&lt;/p&gt;
 
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image3.png&quot; /&gt;&lt;figcaption&gt;不同 multi turn 例子&lt;/figcaption&gt;&lt;/figure&gt;
-&lt;p&gt;而这个 MPO 所做的事是在多个 reward 中的回答进行评价分数的 Normalization 的工作，主要是为了训练稳定。对 MaxMin 和 MORLHF 都提供了相应的解决方案&lt;/p&gt;
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image3.png&quot; /&gt;&lt;figcaption&gt;turns 和 steps 的统计&lt;/figcaption&gt;&lt;/figure&gt;
 
 &lt;h3 id=&quot;数据集构建流程及细节&quot;&gt;数据集构建流程及细节&lt;/h3&gt;
 
@@ -77,7 +76,7 @@
 &lt;p&gt;主要分为两类 API&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Primary Domain APIs
+  &lt;li&gt;&lt;strong&gt;Primary Domain APIs&lt;/strong&gt;
     &lt;ul&gt;
       &lt;li&gt;Vehicle Control：展示汽车的状态、预估距离等&lt;/li&gt;
       &lt;li&gt;Trading Bots：获取股票信息、下单、获取账户信息等&lt;/li&gt;
@@ -85,7 +84,7 @@
       &lt;li&gt;Gorilla File System：ls cd cat 等系统操作命令&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;Cross-functional APIs
+  &lt;li&gt;&lt;strong&gt;Cross-functional APIs&lt;/strong&gt;
     &lt;ul&gt;
       &lt;li&gt;Message API：发送信息、删除信息、查看接收到的信息等&lt;/li&gt;
       &lt;li&gt;Twitter API：发推、转推、评论等&lt;/li&gt;
@@ -119,7 +118,7 @@
 
 &lt;p&gt;根据上图的示意主要对一下几个部分进行核验&lt;/p&gt;
 
-&lt;p&gt;Question Validation&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;color: #5CADAD&quot;&gt;Question Validation&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;对于每一个问题保证只有一种正确的答案&lt;/p&gt;
 
@@ -128,7 +127,7 @@
   &lt;li&gt;Complete Information：当前问题和之前的问题送到这轮时，都需要有所有必须的细节信息来调用正确的 function&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Human-Labeled Ground Truth Validation&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;color: #5CADAD&quot;&gt;Human-Labeled Ground Truth Validation&lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;保证数据的可靠性&lt;/p&gt;
 
@@ -138,20 +137,20 @@
   &lt;li&gt;Brevity：执行逻辑应该尽量简洁，不需要不必要的 API&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Initial Configuration Validation&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;color: #5CADAD&quot;&gt;Initial Configuration Validation&lt;/span&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Completeness：所有需要的信息都存在，比如：请求模型删除文件，需要验证文件是否存在&lt;/li&gt;
   &lt;li&gt;Uniqueness：所有初始化信息应该是 unique 的，比如：一个 card 存在，就不应该被重复 register&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Function List Validation&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;color: #5CADAD&quot;&gt;Function List Validation&lt;/span&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Completeness：保证模型能够正常的 call&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;API Code Validation&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;color: #5CADAD&quot;&gt;API Code Validation&lt;/span&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Unit Tests for Functionality：每个 API 需要进行单元测试&lt;/li&gt;
