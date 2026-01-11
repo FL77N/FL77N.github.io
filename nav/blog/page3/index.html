@@ -115,6 +115,29 @@
   
     <li class="index">
       <hr class="invisible">
+      <a href="/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html">
+        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>变限积分求导的种种</h2>
+      </a>
+      <br>
+      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
+        June 5, 2022
+      </span>
+      <br/>
+      <div><h2 id="变上限积分求导的理解">变上限积分求导的理解</h2>
+
+<p>假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：</p>
+
+\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]
+
+<p>其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分：</p>
+
+\[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\]
+
+</div>
+    </li>
+  
+    <li class="index">
+      <hr class="invisible">
       <a href="/%E6%95%99%E7%A8%8B/2020/04/13/tufte-style-jekyll-blog.html">
         <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>Tufte-style Jekyll blog</h2>
       </a>
@@ -180,6 +203,12 @@ document.getElementById('currentPage').addEventListener('keypress', (e) => {
     <script>
     // 动态生成文章列表（假设每篇文章有标题、内容和链接）
     const articles = [
+      
+        {
+          title: "BFCL-TauBench",
+          content: "这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍 The Berkeley Function-Calling Leaderboard(BFCL) 这是 Berkeley 做的一个关于 Function Call(FC) 的 benchmark。目前包括：Agentic、Multi Turn、Single Turn 和 Hallucination Measurement 等相关的 benchmark。这里主要针对其中 Multi Turn benchmark 的设计进行介绍 关于 Multi-Turn 与 Multi-Step 的定义 Multi Turn 指的多轮对话，Multi Step 指的是每一轮多步的 FC 调用。下图是关于 BFCL...",
+          url: "/ai/2026/01/10/BFCL-TauBench.html"
+        },
       
         {
           title: "Policy Optimization MPO DAPO GSPO",
@@ -344,7 +373,7 @@ document.getElementById('currentPage').addEventListener('keypress', (e) => {
       
   </ul>
 <div class="credits">
-<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">&copy; 2025-2026 &nbsp;&nbsp;L77</span></br> <br>
 <span class="footer_word">Powered By Jekyll And Tufte Theme</span>
 </div>  
 </footer>

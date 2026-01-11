@@ -121,7 +121,7 @@
             
             
             
-            <p class="subtitle" style="text-align:right; font-size: 1rem"><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Words:</span><span style="color: #082567; font-style: inherit;">&nbsp; 4025</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span style="color: #082567; font-style: inherit;">17min&nbsp;&nbsp;&nbsp;</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> Algorithm</span></p>
+            <p class="subtitle" style="text-align:right; font-size: 1rem"><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Words:</span><span style="color: #082567; font-style: inherit;">&nbsp; 4101</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span style="color: #082567; font-style: inherit;">17min&nbsp;&nbsp;&nbsp;</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">Category:</span><span style="color: #082567; font-style: inherit;">&nbsp; AI</span><span style="color: #c38773; font-style: inherit; font-family: Gill Sans">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span style="color: #082567; font-style: inherit;"> Algorithm</span></p>
             
             <p>这篇 Blog 主要对 MPO、DAPO、GSPO 进行介绍，这几种强化学习的方法或基于 <a href="https://arxiv.org/abs/2305.18290">DPO</a> 或基于 <a href="https://arxiv.org/pdf/2402.03300">GRPO</a> 改进。因此默认已经有相关知识，这里就不再赘述了<!--more--></p>
 
@@ -235,7 +235,7 @@
 
 <h1 id="gspo">GSPO</h1>
 
-<p><a href="https://arxiv.org/abs/2507.18071">Group Sequence Policy Optimization</a> 是 Qwen 团队基于 GRPO 之上提出的强化学习方法。在 RL 中常常为了采样的效率考虑，会把一个大 batch 分成多个 mini-batch。这就使得了采样来自 old policy 用于优化  new policy，这也是为什么需要重要性采样的原因<label for="11" class="margin-toggle sidenote-number"></label><input type="checkbox" id="11" class="margin-toggle" /><span class="sidenote">关于重要性采样可以阅读<a href="https://zhuanlan.zhihu.com/p/1893616207791354873">重要性采样与PPO、TRPO</a>以及<a href="https://zhuanlan.zhihu.com/p/1893616207791354873">重要性采样（Importance Sampling）</a>等文章 </span></p>
+<p><a href="https://arxiv.org/abs/2507.18071">Group Sequence Policy Optimization</a> 是 Qwen 团队基于 GRPO 之上提出的强化学习方法。在 RL 中常常为了采样的效率考虑，会把一个大 batch 分成多个 mini-batch。这就使得了采样来自 old policy 用于优化  new policy，这也是为什么需要重要性采样的原因<label for="11" class="margin-toggle sidenote-number"></label><input type="checkbox" id="11" class="margin-toggle" /><span class="sidenote">关于重要性采样可以阅读<a href="https://zhuanlan.zhihu.com/p/1893616207791354873">重要性采样与PPO、TRPO</a>以及<a href="https://zhuanlan.zhihu.com/p/41217212">重要性采样（Importance Sampling）</a>等文章 </span></p>
 
 <p>文章提出了 GRPO 中一个根本性的问题：重要性采样权重的错误应用导致 long-response 任务训练时会 model collapse。简单来说，就是 GRPO 的重要性采样时 token level 的，但是整个奖励确实 sample level 的。这会使得训练的梯度有高方差的噪声，特别是在训练 long-response 数据和使用 clipping 的时候，如果使得 model collapse 即便加载之前的 checkpoint 也无法逆转<label for="12" class="margin-toggle sidenote-number"></label><input type="checkbox" id="12" class="margin-toggle" /><span class="sidenote">这点是为什么呢，因为加载过后也会走老路吗 </span></p>
 
@@ -352,7 +352,27 @@
 
 <h1 id="reference">Reference</h1>
 
-<p>文中 post 出的所有链接</p>
+<p><a href="https://arxiv.org/abs/2502.18699">An Efficient Post-Processing Framework for Mixing Diverse Preference Alignment</a></p>
+
+<p><a href="https://arxiv.org/abs/2402.08925">MaxMin-RLHF</a></p>
+
+<p><a href="https://arxiv.org/abs/2411.10442">Mixed Preference Optimization</a></p>
+
+<p><a href="https://arxiv.org/abs/2305.18290">DPO</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/694381064">不靠谱】有关DPO训练时，为什么chosen和rejected的reward一起下降的猜想</a></p>
+
+<p><a href="https://arxiv.org/abs/2404.04656">BCO</a></p>
+
+<p><a href="https://arxiv.org/abs/2503.14476">DAPO</a></p>
+
+<p><a href="https://arxiv.org/abs/2507.18071">GSPO</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/1893616207791354873">重要性采样与PPO、TRPO</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/41217212">重要性采样（Importance Sampling）</a></p>
+
+<p><a href="https://github.com/huggingface/open-r1/issues/239">Why does the loss start at 0 when I train GRPO, and then possibly increase</a></p>
 
             <p class="subtitle" style="text-align:right"><span style="color: #ffb6c1; font-style: inherit;">November 27, 2025</span></p>
           </main>
@@ -361,6 +381,12 @@
     <script>
     // 动态生成文章列表（假设每篇文章有标题、内容和链接）
     const articles = [
+      
+        {
+          title: "BFCL-TauBench",
+          content: "这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍 # [**The Berkeley Function-Calling Leaderboard(BFCL)**](https://gorilla.cs.berkeley.edu/leaderboard.html) 这是 Berkeley 做的一个关于 **Function Call(FC)** 的 benchmark。目前包括：Agentic、Multi Turn、Single Turn 和 Hallucination Measurement 等相关的 benchmark。这里主要针对其中 Multi Turn benchmark 的设计进行介绍 ## 关于 Multi-Turn 与 Multi-Step 的定义 **Multi Turn** 指的多轮对话，**Multi Step** 指的是每一轮多步的 FC...",
+          url: "/ai/2026/01/10/BFCL-TauBench.html"
+        },
       
         {
           title: "Policy Optimization MPO DAPO GSPO",
@@ -736,7 +762,7 @@
       
   </ul>
 <div class="credits">
-<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">&copy; 2025-2026 &nbsp;&nbsp;L77</span></br> <br>
 <span class="footer_word">Powered By Jekyll And Tufte Theme</span>
 </div>  
 </footer>

@@ -115,6 +115,20 @@
   
     <li class="index">
       <hr class="invisible">
+      <a href="/ai/2026/01/10/BFCL-TauBench.html">
+        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>BFCL-TauBench</h2>
+      </a>
+      <br>
+      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
+        January 10, 2026
+      </span>
+      <br/>
+      <div><p>这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍</p>
+</div>
+    </li>
+  
+    <li class="index">
+      <hr class="invisible">
       <a href="/ai/2025/11/27/MPO-DAPO-GSPO.html">
         <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>Policy Optimization MPO DAPO GSPO</h2>
       </a>
@@ -166,20 +180,6 @@
       </span>
       <br/>
       <div><p>这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。部门的整体氛围很好，上下级之间、同事之间都能愉快的相处，这使得我这期间的工作生活很顺心。回到工作内容部分，总体而言可以分为两部分的工作：CV 和 LLM</p>
-</div>
-    </li>
-  
-    <li class="index">
-      <hr class="invisible">
-      <a href="/ai/2023/05/19/detr-series.html">
-        <h2 class="contrast"><span class="smaller" style="color: black;">♣&nbsp;</span>DETR SERIES</h2>
-      </a>
-      <br>
-      <span class="smaller" style="color: #ffb6c1; font-style: inherit;">
-        May 19, 2023
-      </span>
-      <br/>
-      <div><p>🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法</p>
 </div>
     </li>
   
@@ -236,6 +236,12 @@ document.getElementById('currentPage').addEventListener('keypress', (e) => {
     <script>
     // 动态生成文章列表（假设每篇文章有标题、内容和链接）
     const articles = [
+      
+        {
+          title: "BFCL-TauBench",
+          content: "这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍 The Berkeley Function-Calling Leaderboard(BFCL) 这是 Berkeley 做的一个关于 Function Call(FC) 的 benchmark。目前包括：Agentic、Multi Turn、Single Turn 和 Hallucination Measurement 等相关的 benchmark。这里主要针对其中 Multi Turn benchmark 的设计进行介绍 关于 Multi-Turn 与 Multi-Step 的定义 Multi Turn 指的多轮对话，Multi Step 指的是每一轮多步的 FC 调用。下图是关于 BFCL...",
+          url: "/ai/2026/01/10/BFCL-TauBench.html"
+        },
       
         {
           title: "Policy Optimization MPO DAPO GSPO",
@@ -400,7 +406,7 @@ document.getElementById('currentPage').addEventListener('keypress', (e) => {
       
   </ul>
 <div class="credits">
-<span class="footer_word">&copy; 2025-2025 &nbsp;&nbsp;L77</span></br> <br>
+<span class="footer_word">&copy; 2025-2026 &nbsp;&nbsp;L77</span></br> <br>
 <span class="footer_word">Powered By Jekyll And Tufte Theme</span>
 </div>  
 </footer>

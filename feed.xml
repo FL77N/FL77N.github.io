@@ -5,9 +5,315 @@
     <description>Personal Blog</description>
     <link>https://froml77.top/</link>
     <atom:link href="https://froml77.top/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 29 Nov 2025 21:30:37 +0800</pubDate>
-    <lastBuildDate>Sat, 29 Nov 2025 21:30:37 +0800</lastBuildDate>
+    <pubDate>Sun, 11 Jan 2026 11:49:00 +0800</pubDate>
+    <lastBuildDate>Sun, 11 Jan 2026 11:49:00 +0800</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
+    
+      <item>
+        <title>BFCL-TauBench</title>
+        <description>&lt;p&gt;这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍&lt;!--more--&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;the-berkeley-function-calling-leaderboardbfcl&quot;&gt;&lt;a href=&quot;https://gorilla.cs.berkeley.edu/leaderboard.html&quot;&gt;&lt;strong&gt;The Berkeley Function-Calling Leaderboard(BFCL)&lt;/strong&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;这是 Berkeley 做的一个关于 &lt;strong&gt;Function Call(FC)&lt;/strong&gt; 的 benchmark。目前包括：Agentic、Multi Turn、Single Turn 和 Hallucination Measurement 等相关的 benchmark。这里主要针对其中 Multi Turn benchmark 的设计进行介绍&lt;/p&gt;
+
+&lt;h2 id=&quot;关于-multi-turn-与-multi-step-的定义&quot;&gt;关于 Multi-Turn 与 Multi-Step 的定义&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Multi Turn&lt;/strong&gt; 指的多轮对话，&lt;strong&gt;Multi Step&lt;/strong&gt; 指的是每一轮多步的 FC 调用。下图是关于 BFCL 中关于 Single Turn、Multi Turn 和 Multi Step 的示例&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image.png&quot; /&gt;&lt;figcaption&gt;multi turn 示意图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;multi-turn-的必要性&quot;&gt;Multi-Turn 的必要性&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;与真实的情景更加的贴近，往往 user 需要不断在对话澄清自己的需求&lt;/li&gt;
+  &lt;li&gt;在复杂的 workflow 里，往往一个 function 的输出是另外一个的输入（即 multi step）&lt;/li&gt;
+  &lt;li&gt;在不断的找出和纠错的中可以使得对话系统更加 robust&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;关于数据集构建细节&quot;&gt;关于数据集构建细节&lt;/h2&gt;
+
+&lt;p&gt;现有数据集现状&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image1.png&quot; /&gt;&lt;figcaption&gt;benchmark 现状&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;bfcl-中-multi-turn-数据类型组成&quot;&gt;BFCL 中 Multi Turn 数据类型组成&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Base Multi-Turn：一共 200 条。这部分的数据所有信息清楚明了，无论是用户的请求、前一轮的结果到后一轮的输出等&lt;/li&gt;
+  &lt;li&gt;Augmented Multi-Turn：一共 800 条。这部分数据或 prompts 模棱两可或当前状体不对，模型需要通过 QA 来获得更多细节才能进行做决定、清晰需求等，以下是子类别，每一类有 200 条
+    &lt;ul&gt;
+      &lt;li&gt;Missing Parameters：缺少一些调用 function 的参数，此时模型需要继续询问&lt;/li&gt;
+      &lt;li&gt;Missing Functions：不存在或者缺少这个 function 可用的情况&lt;/li&gt;
+      &lt;li&gt;Long-Context Multi-Turn：长文本的情况，比如上百的文件或者上千条记录&lt;/li&gt;
+      &lt;li&gt;Composite：以上情况的组合情况&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image2.png&quot; /&gt;&lt;figcaption&gt;不同 multi turn 例子&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;关于其中 turns 和 steps 的统计&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image3.png&quot; /&gt;&lt;figcaption&gt;不同 multi turn 例子&lt;/figcaption&gt;&lt;/figure&gt;
+&lt;p&gt;而这个 MPO 所做的事是在多个 reward 中的回答进行评价分数的 Normalization 的工作，主要是为了训练稳定。对 MaxMin 和 MORLHF 都提供了相应的解决方案&lt;/p&gt;
+
+&lt;h3 id=&quot;数据集构建流程及细节&quot;&gt;数据集构建流程及细节&lt;/h3&gt;
+
+&lt;p&gt;数据集构建主要分为三部分：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;构建 API 之间的上下游关系，组建图&lt;/li&gt;
+  &lt;li&gt;在图里 sample 不同的路径&lt;/li&gt;
+  &lt;li&gt;人工根据初始设置核验结果&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;整体 pipline 如下&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image4.png&quot; /&gt;&lt;figcaption&gt;不同 multi turn 例子&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;strong&gt;API Codebase Creation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;主要分为两类 API&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Primary Domain APIs
+    &lt;ul&gt;
+      &lt;li&gt;Vehicle Control：展示汽车的状态、预估距离等&lt;/li&gt;
+      &lt;li&gt;Trading Bots：获取股票信息、下单、获取账户信息等&lt;/li&gt;
+      &lt;li&gt;Travel Booking：订机票、获取最近机场的位置、买保险等&lt;/li&gt;
+      &lt;li&gt;Gorilla File System：ls cd cat 等系统操作命令&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Cross-functional APIs
+    &lt;ul&gt;
+      &lt;li&gt;Message API：发送信息、删除信息、查看接收到的信息等&lt;/li&gt;
+      &lt;li&gt;Twitter API：发推、转推、评论等&lt;/li&gt;
+      &lt;li&gt;Ticket API：创建、关闭等&lt;/li&gt;
+      &lt;li&gt;Math API：平均值、方差等&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;其中 Primary Domain APIs 平均分布在 Base 和 Augmented Multi Turn 中，比如 Base 一共 200 条，其中涉及 Primary Domain APIs 下的 4 类各 50 条&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Graph Edge Construction&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;有了这些 API 便可以根据他们的关系进行搭建图，最后根据图来随机 sample 路径进行构建数据。使用 Trading API 时，就存在几个 API 的依赖关系，完成操作过后可能和其他 API，如 Message API 有依赖关系&lt;label for=&quot;1&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;API 之间可能由次序的依赖关系&lt;br /&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/BFCL-TauBench/image5.png&quot; /&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Task Generation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;主要的构件如下：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Question：考虑到不同人群的提问风格和语气问题：会从 Persona Hub 生成不同年龄、职业、性别的用户背景&lt;/li&gt;
+  &lt;li&gt;Function Lists：对于每一个 query，都会给 model 提供可用的 API 库&lt;/li&gt;
+  &lt;li&gt;Initial Configurations：比如对于一些任务中某些验证和授权已经给了，就避免后续的反复询问&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Human-Labeled Ground Truth Multi-Turn Trajectories&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;人工对于数据的核验非常重要，可以防止 accuracy 过低以及生成的幻觉数据等&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image6.png&quot; /&gt;&lt;figcaption&gt;人工核验示意图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;根据上图的示意主要对一下几个部分进行核验&lt;/p&gt;
+
+&lt;p&gt;Question Validation&lt;/p&gt;
+
+&lt;p&gt;对于每一个问题保证只有一种正确的答案&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Clarity and Specificity：更加清楚的需求：“上传一下文档” → “上传一下 &lt;xxx.pdf&gt; 这个文档“&lt;/xxx.pdf&gt;&lt;/li&gt;
+  &lt;li&gt;Complete Information：当前问题和之前的问题送到这轮时，都需要有所有必须的细节信息来调用正确的 function&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Human-Labeled Ground Truth Validation&lt;/p&gt;
+
+&lt;p&gt;保证数据的可靠性&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Executability：所有 API 都是可执行的，不会报错&lt;/li&gt;
+  &lt;li&gt;Alignment with User Request：API 所采样路径和 API 调用的顺序需要和用户的意图一致，比如：获取价格肯定在下单之前&lt;/li&gt;
+  &lt;li&gt;Brevity：执行逻辑应该尽量简洁，不需要不必要的 API&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Initial Configuration Validation&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Completeness：所有需要的信息都存在，比如：请求模型删除文件，需要验证文件是否存在&lt;/li&gt;
+  &lt;li&gt;Uniqueness：所有初始化信息应该是 unique 的，比如：一个 card 存在，就不应该被重复 register&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Function List Validation&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Completeness：保证模型能够正常的 call&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;API Code Validation&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Unit Tests for Functionality：每个 API 需要进行单元测试&lt;/li&gt;
+  &lt;li&gt;Error Handling Tests：一些 functions 可以被设计为缺少某些参数或者无效的输入时发生错误的 handing&lt;/li&gt;
+  &lt;li&gt;Automated Format Checkers：对于严格要求数据类型的 function 需要检查和纠正格式和数据类型&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;evaluation&quot;&gt;Evaluation&lt;/h2&gt;
+
+&lt;h3 id=&quot;pip-line&quot;&gt;Pip-line&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Initialization：初始的 config 用于初始化 API backend 的状态，每一次 query 都需要更新&lt;/li&gt;
+  &lt;li&gt;Start of a Turn：在最开始的一轮对话，用户的信息以及可用的工具都会加到历史对话中&lt;/li&gt;
+  &lt;li&gt;Within a Turn：在一轮对话主要进行之前信息的获取，当前步骤的执行，以及历史对话的更新，进行下一步骤&lt;/li&gt;
+  &lt;li&gt;Termination of a Turn：一轮对话的结束主要包括，没有调用有效的 function 或者执行完成函数；超出了最大 step 数&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;metrics&quot;&gt;Metrics&lt;/h3&gt;
+
+&lt;p&gt;主要分为 state-based 和 response-based 两个方面&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;state-based：可能存在多种方式解决问题的情况，检查最后的效果可能会更好&lt;/li&gt;
+  &lt;li&gt;response-based：将执行路径和标注的最短路径进行比较，检查模型有没有做无意义的操作&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;τ-bench-1--2&quot;&gt;τ-Bench 1 &amp;amp; 2&lt;/h1&gt;
+
+&lt;p&gt;τ-bench 是 Sierra 这个公司（一家做智能客服的公司）提出的 Tool Agent 相关的 benchmark，这里主要关注他们关于数据构建相关的工作 &lt;a href=&quot;https://arxiv.org/abs/2406.12045&quot;&gt;τ1-banch&lt;/a&gt; and &lt;a href=&quot;https://arxiv.org/abs/2506.07982&quot;&gt;τ2-bench&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;tool-agent-user-interaction-in-version-1&quot;&gt;Tool-Agent-User Interaction In Version 1&lt;/h2&gt;
+
+&lt;p&gt;整个过程可以当作马尔可夫决策过程来看待：状态空间 S、行为空间 A、观察空间 O、转换空间 T、指令空间 U 一起组成该过程&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image7.png&quot; /&gt;&lt;figcaption&gt;user agent 交流过程&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;根据上图进行简单介绍：&lt;/p&gt;
+
+&lt;p&gt;版本 1 中只包含两个 domain 的数据：retail &amp;amp; airline。这两个 domain 都有多个 database 和相应的 API，如图 a，算是属于 S 中 db(database) 中的一部分，这个状态对于 agent 和 user 都是隐藏的，只有像图 b 一样使用 API 这个 action 时才可以被 read。图 c 则是在不同 domain 需要遵守的规则，例如：航空公司对于不同等级的会员有不同的行李的要求。图 d 中是使用 gpt4 来进行模拟用户和 agent 交互，用户的初始状态是：任务的 instruction 和历史对话，当 user 输出 stop 相关的标识时，对话结束&lt;/p&gt;
+
+&lt;h2 id=&quot;benchmark-construction-in-version-1&quot;&gt;Benchmark Construction In Version 1&lt;/h2&gt;
+
+&lt;p&gt;每一个 domain 的数据构建都需要经历以下几三个阶段：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;以尽量简单的原则来设计 database schemas、APIs 和 policies&lt;label for=&quot;2&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;2&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;因为即便是一个很小的 domain 都需要至少 10 个 schemas、APIs 和 policies。这对于现存的 agent 已经很有挑战性了&lt;br /&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/BFCL-TauBench/image8.png&quot; /&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;进行随机采样来完成初始信息来&lt;label for=&quot;3&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;3&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;在构建的库进行随机搭配&lt;br /&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/BFCL-TauBench/image9.png&quot; /&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;最后，最具有挑战性的是保证 user 的 instruction 会对应唯一的结果。比如：如果用户支付方式偏好未指定，那么最后的答案可能不是唯一的。因此通过 GPT4 去多次检验 user 的 instruction 直到不存在多个答案&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;domain-in-version-1&quot;&gt;Domain In Version 1&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;retail&lt;/strong&gt;：主要通过 agent 帮助用户完成订单的取消、修改、返回以及分发，包括修改地址、提供信息等&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;airline&lt;/strong&gt;：主要通过 agent 进行航班的预定和取消等，其中包括了 US 20 多个 city 的 300 次航班，这个 domain 的 policy 会比 retail 复杂很多&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;关于 Version 1 中的几个亮点&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;首先对 data schemas、APIs 以及 rules 进行了简化，但是有基本覆盖了现实生活中的大多数例子&lt;/li&gt;
+  &lt;li&gt;保证数据只有一个唯一答案，替代了不用人工，避免了效率低下&lt;/li&gt;
+  &lt;li&gt;框架模块化，可以很方便的添加或者更新 data schemas、APIs 以及 rules 的各个部分&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;failure-breakdown-in-version-1&quot;&gt;Failure Breakdown In Version 1&lt;/h2&gt;
+
+&lt;figure class=&quot;flexwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image10.png&quot; width=&quot;50%&quot; height=&quot;50%&quot; /&gt;&lt;figcaption&gt;Failure Breakdown 比例图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;从 retail 任务中 sample 了 115 个子任务在 4o 上的表现，其中有 40 个任务失败了：有 4 个是由于用户的 instruction 有 typo 或者表述不清；其余 36 个的具体分类如上&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;用户提供信息错误或者不足：比如用户想用现在买的灯退了换一个带 AC 或者 USB 接口的、低亮度的灯，但是由于符合要求灯的种类太多无法找到预设的唯一答案。而且对于能力弱一点的模型很容易产生幻觉：比如根本没有这个产品。另外有 50% 是模型错误计算价格、提供了错误的信息导致，主要还是因为模型的共识、数据推理以及用户意图判别有问题&lt;/li&gt;
+  &lt;li&gt;模型理解和遵守 domain 的 policy 有问题：比如用户想要退换很多商品，但是退换规则里有跟一个 agent 只能进行一次退换操作。这时候 agent 需要将商品打包进行退换，但是常常出现模型没有理解到位的情况，导致只退换了第一个&lt;/li&gt;
+  &lt;li&gt;复合请求情况下的部分解决：可能出现 agent 忽略第一个请求或者忽略隐含的 action，比如用户想要改所有商品的地址，但实际上 agent 只改了第一个&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;new-in-version-2&quot;&gt;New In Version 2&lt;/h2&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image11.png&quot; /&gt;&lt;figcaption&gt;user 和 agent 可以都使用工具&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;在 τ2-bench 中最重要的是提出 user 和 agent 都可以使用 tools 的思想，只有 agent single-control 的环境中，agent 不能更加完全的了解到 user 的偏好和目标。如上图所示，user 也有自己的 database，可以通过 call tool 来进行查询 database。并且引入了新的 domain 的数据 telecom 并使用 double-control 的方式。交互的示例如下图：&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image12.png&quot; /&gt;&lt;figcaption&gt;user 和 agent 可以都使用工具&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;benchmarktelecom-construction-in-version-2&quot;&gt;Benchmark(Telecom) Construction In Version 2&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Creating agent’s database schema and tools&lt;/strong&gt;：首先通过 LLM 生成一份 PRD 来概述 domain 中的核心商业逻辑。然后根据 PRD 来生成函数以及 mock database，并且会人工 refine code 直到单元测试通过&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Creating user’s database schema and tools&lt;/strong&gt;：实际上跟 agent 同样的方法，比如在 telecom domain 中，模拟 user 的手机状态和控制的 function，以及最后进行单元测试&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Programmatic task creation&lt;/strong&gt;：定义原子任务为某个特定的任务，分别由 init function 初始化状态、solution function 解决问题、assertion function 保证问题解决。多个原子任务可以组成复合任务，只有每个原子任务的 assertion function 通过才可以任务解决了。在 telecom domain 有 15 个原子任务组，共三个意图类别：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;service_issue&lt;/code&gt;，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mobile_data_issue&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mms_issue&lt;/code&gt;，共生成 2285 个任务。最后考虑各个意图的难度均衡 sample 了 114 个任务，如下&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image13.png&quot; /&gt;&lt;figcaption&gt;各个任务情况&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Creating domain-specific agent policy&lt;/strong&gt;：这部分也是根据 task 和 solution 去 prompt 生成&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Manual refinement&lt;/strong&gt;：除了简单 refine，version 2 还加入了模拟用户的详细信息，并且据此分了三类人群&lt;label for=&quot;1&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;这个在后面会由消融实验的分析 &lt;/span&gt;：None，Easy 和 Hard
+    &lt;ol&gt;
+      &lt;li&gt;None：没有特定的信息背景人群&lt;/li&gt;
+      &lt;li&gt;Easy：熟悉该 domain 的人群&lt;/li&gt;
+      &lt;li&gt;Hard：一点不熟悉的人群&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;Ablation Analysis In Version 2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image13.png&quot; /&gt;&lt;figcaption&gt;各个任务情况&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;首先可以看到 telecom domain 的表现是远远比其他 domain 要差的。在 version 2 中，agent 是否 success 主要取决于：怎么和 user 沟通以及合作解决问题的；是否遵循 policy document 中的 domain guidelines。为了更好的评估这两方面，从下面三个 setting 进行 ablation study：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Default&lt;/strong&gt;：dual-control setup&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;No-User&lt;/strong&gt;：可以看作单轮问答，提供给 agent 关于 user 问题的总结和解决成功的标准，agent 使用所有的 tools。主要测试的 agent 的推理能力（不依赖用户提示）&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Oracle Plan&lt;/strong&gt;：会提供给 agent 一系列的 tool 供解决问题，包括 user 和 agent 的 actions。这里就不用 agent 去推理需要做的事，完全与 user 交流就行，是一个非常清晰的 plan&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image15.png&quot; /&gt;&lt;figcaption&gt;关于不同 setting，以及给不给 workflow 提示的实验结果&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;从上述结果（左图是默认模式，右图是有提示各个任务的 workflow 模式），可以得出以下结论：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;默认模式的模型对比：o4 在提供了 user 的问题总结后有明显提升，说明它能更好的使用 ground truth 信息&lt;/li&gt;
+  &lt;li&gt;policy document 的影响：在右图中，会提供模型关于各个任务的 workflow 细节以及详细的 guidance。可以看到除了 oracle-plan 其他都有提升，猜测是因为这种模式本身就提供了 workflow，新的提示可能会影响之前的提示&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;关于 actions 的数量和子任务数量的影响&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image16.png&quot; /&gt;&lt;figcaption&gt;统计图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;可以看到子任务和步数越多成功率越低&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;关于不同人群的影响&lt;/strong&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image17.png&quot; /&gt;&lt;figcaption&gt;关于设置不同人设的效果图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;这里可以看出来，什么信息都不提供比 hard 的人群效果更差&lt;/p&gt;
+
+&lt;p&gt;下图为提示给 agent 的 workflow 示意，会全部写在 prompt 中&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/BFCL-TauBench/image18.png&quot; /&gt;&lt;figcaption&gt;不同 issue 的 workflow 示意图（部分）&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;reference&quot;&gt;Reference&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://gorilla.cs.berkeley.edu/leaderboard.html&quot;&gt;The Berkeley Function-Calling Leaderboard(BFCL)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2406.12045&quot;&gt;τ1-banch&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2506.07982&quot;&gt;τ2-bench&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sat, 10 Jan 2026 04:08:06 +0800</pubDate>
+        <link>https://froml77.top/ai/2026/01/10/BFCL-TauBench.html</link>
+        <guid isPermaLink="true">https://froml77.top/ai/2026/01/10/BFCL-TauBench.html</guid>
+        
+        <category>Algorithm</category>
+        
+        
+        <category>AI</category>
+        
+      </item>
     
       <item>
         <title>Policy Optimization MPO DAPO GSPO</title>
@@ -123,7 +429,7 @@
 
 &lt;h1 id=&quot;gspo&quot;&gt;GSPO&lt;/h1&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2507.18071&quot;&gt;Group Sequence Policy Optimization&lt;/a&gt; 是 Qwen 团队基于 GRPO 之上提出的强化学习方法。在 RL 中常常为了采样的效率考虑，会把一个大 batch 分成多个 mini-batch。这就使得了采样来自 old policy 用于优化  new policy，这也是为什么需要重要性采样的原因&lt;label for=&quot;11&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;11&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;关于重要性采样可以阅读&lt;a href=&quot;https://zhuanlan.zhihu.com/p/1893616207791354873&quot;&gt;重要性采样与PPO、TRPO&lt;/a&gt;以及&lt;a href=&quot;https://zhuanlan.zhihu.com/p/1893616207791354873&quot;&gt;重要性采样（Importance Sampling）&lt;/a&gt;等文章 &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2507.18071&quot;&gt;Group Sequence Policy Optimization&lt;/a&gt; 是 Qwen 团队基于 GRPO 之上提出的强化学习方法。在 RL 中常常为了采样的效率考虑，会把一个大 batch 分成多个 mini-batch。这就使得了采样来自 old policy 用于优化  new policy，这也是为什么需要重要性采样的原因&lt;label for=&quot;11&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;11&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;关于重要性采样可以阅读&lt;a href=&quot;https://zhuanlan.zhihu.com/p/1893616207791354873&quot;&gt;重要性采样与PPO、TRPO&lt;/a&gt;以及&lt;a href=&quot;https://zhuanlan.zhihu.com/p/41217212&quot;&gt;重要性采样（Importance Sampling）&lt;/a&gt;等文章 &lt;/span&gt;&lt;/p&gt;
 
 &lt;p&gt;文章提出了 GRPO 中一个根本性的问题：重要性采样权重的错误应用导致 long-response 任务训练时会 model collapse。简单来说，就是 GRPO 的重要性采样时 token level 的，但是整个奖励确实 sample level 的。这会使得训练的梯度有高方差的噪声，特别是在训练 long-response 数据和使用 clipping 的时候，如果使得 model collapse 即便加载之前的 checkpoint 也无法逆转&lt;label for=&quot;12&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;12&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;这点是为什么呢，因为加载过后也会走老路吗 &lt;/span&gt;&lt;/p&gt;
 
@@ -240,7 +546,27 @@
 
 &lt;h1 id=&quot;reference&quot;&gt;Reference&lt;/h1&gt;
 
-&lt;p&gt;文中 post 出的所有链接&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2502.18699&quot;&gt;An Efficient Post-Processing Framework for Mixing Diverse Preference Alignment&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2402.08925&quot;&gt;MaxMin-RLHF&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2411.10442&quot;&gt;Mixed Preference Optimization&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2305.18290&quot;&gt;DPO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/694381064&quot;&gt;不靠谱】有关DPO训练时，为什么chosen和rejected的reward一起下降的猜想&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2404.04656&quot;&gt;BCO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2503.14476&quot;&gt;DAPO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2507.18071&quot;&gt;GSPO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/1893616207791354873&quot;&gt;重要性采样与PPO、TRPO&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/41217212&quot;&gt;重要性采样（Importance Sampling）&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/huggingface/open-r1/issues/239&quot;&gt;Why does the loss start at 0 when I train GRPO, and then possibly increase&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 27 Nov 2025 04:08:06 +0800</pubDate>
         <link>https://froml77.top/ai/2025/11/27/MPO-DAPO-GSPO.html</link>
@@ -2817,177 +3143,6 @@ sort\_error_i &amp;amp;= \underset{j \in \mathcal{P}}{\sum}(\ell_{S}(i) - \ell_{
         
         
         <category>AI</category>
-        
-      </item>
-    
-      <item>
-        <title>变限积分求导的种种</title>
-        <description>&lt;h2 id=&quot;变上限积分求导的理解&quot;&gt;变上限积分求导的理解&lt;/h2&gt;
-
-&lt;p&gt;假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：&lt;/p&gt;
-
-\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]
-
-&lt;p&gt;其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分：&lt;/p&gt;
-
-\[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\]
-
-&lt;!--more--&gt;
-&lt;p&gt;因此，其中我们称 \(\int_{a}^{x}f(t)dt\) 为 \(f(x)\) 的变上限积的定积分，也算是 \(f(x)\) 的一个原函数。同时我们也可以得到牛顿-莱布尼茨 (Newton-Leibniz) 公式：&lt;/p&gt;
-
-\[\int_{a}^{x=b} f(t)dt = F(b) - F(a)\]
-
-&lt;p&gt;以上严谨的推导需要通过积分中值配合导数的定义来进行求证，这里暂时省略一段。对于变上限积分求导有：&lt;/p&gt;
-
-\[\frac{d\int_{a}^{x} f(t) dt}{dx} = \frac{d(F(x) - F(a))}{dx} = F^{\prime}(x) = f(x)\]
-
-&lt;p&gt;对于更一般的情况，当上下限是关于 \(x\) 的可导函数时：&lt;/p&gt;
-
-\[\begin{aligned}\frac{d\int_{\phi(x)}^{\psi(x)} f(t)dt}{dx} &amp;amp;= \frac{dF(\psi(x)) - F(\phi(x))}{dx} \\\\
-&amp;amp;= F^{\prime}(\psi(x))\psi^{\prime}(x) - F^{\prime}(\phi(x))\phi^{\prime}(x) \\\\
-&amp;amp;=f(\psi(x))\psi^{\prime}(x) - f(\phi(x))\phi^{\prime}(x)\end{aligned}\]
-
-&lt;p&gt;因此对变上下限积分求导有下式：&lt;/p&gt;
-
-\[\frac{d\int_{\phi(x)}^{\psi(x)} f(t)dt}{dx} =f(\psi(x))\psi^{\prime}(x) - f(\phi(x))\phi^{\prime}(x)\]
-
-&lt;h2 id=&quot;应用示例展示&quot;&gt;应用示例展示&lt;/h2&gt;
-
-&lt;p&gt;介绍完理论知识，这里进行举例进行应用。其中涉及到变上限积分时，换元操作易出现错误以及被积函数包含积分上限变量的情况。&lt;/p&gt;
-
-&lt;p&gt;♣ 换元易错示例：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;问题：&lt;/p&gt;
-
-\[\frac{d}{dx}\int_{0}^{x^2}\cos(t^2)dt\]
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;常规解法：&lt;/p&gt;
-
-\[\frac{d}{dx}\int_{0}^{x^2}\cos(t^{2})dt=2x\cdot \cos(x^4)\]
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;学妹的错误解法：&lt;/p&gt;
-
-\[\frac{1}{2}\frac{d}{dx}\int_{0}^{x^2}\cos(t^{2})d(t^2)=x\cdot \cos(x^4)\]
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;学妹的问题在于没有进行上限的变换以及积分变量的换元替换，因此容易出现失误（不熟悉时不建议这么做），咱们按步骤来：&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;先进行积分变量的替换，令 \(a = t^2\)，有 \(da =d(t^2) \rightarrow da = 2tdt \rightarrow \frac{da}{2t} = dt\)&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;然后进行积分上下限的计算，当 \(t=0\) 时，\(a=0\)；当 \(t=x^2\) 时，\(a=x^4\)。带入有：&lt;/p&gt;
-
-\[\begin{aligned}
-&amp;amp;\frac{d}{dx}\int_{0}^{x^4}\cos a\frac{da}{2t} \\\\
-&amp;amp;\because a = t^2 \Rightarrow t = \sqrt{a} \\\\
-&amp;amp;\Rightarrow \frac{d}{dx}\int_{0}^{x^4}\frac{\cos a}{2\sqrt{a}}da \\\\
-&amp;amp;\Rightarrow \frac{\cos(x^4)}{2\sqrt{x^4}}dx^4 = 2x\cdot \cos(x^4)
-\end{aligned}\]
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;♠ 被积函数包含积分上限变量示例：&lt;/p&gt;
-
-&lt;p&gt;本示例借用一个学长探究 Newton-Leibniz 公式与 Navier-Stokes 方程关系时，示范容易出现变上限积分求导时犯的错误，学长本身的推导没有错，只是觉得可以用来提醒其他同学：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;问题：&lt;/p&gt;
-
-    &lt;p&gt;求变上限积分 \(\int_{a(t)}^{b(t)} f(x, t)dx\) 的导数&lt;/p&gt;
-
-    &lt;p&gt;将 N-S 方程 \(\frac{\partial \rho}{\partial t}+ \frac{\partial (\rho \mu)}{\partial t} = 0\) 与上式进行联系&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;解答：&lt;/p&gt;
-
-    &lt;p&gt;我们将上述式子具象化，使用一维流动假设进行联系，假设下述是一根无限长的水管，在 \(t\) 时刻有一滴水（橙色部分），其密度与时间和空间的函数为： \(\rho(x, t)\) ，如下图所示，水滴的边界为 \(a(t)\) 和 \(b(t)\) 。经过时间 \(\Delta t\) ，水滴位置变为  \(a(t+\Delta t)\) 和 \(b(t+\Delta t)\) ，密度变为 \(\rho(x, t+\Delta t)\)（蓝色部分）。&lt;/p&gt;
-
-    &lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/变限积分求导/1.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
-
-    &lt;p&gt;在这迅速变化的世界，我们应该找寻不变的真理。这里的真理就是质量守恒定律，水滴不可能跑着跑着质量还减少了吧，搁这儿减肥呢？因此水滴的质量可以由\(m(t)=\int_{a(t)}^{b(t)}\rho(x,t)dx\) 求得，由质量守恒定律，即质量对时间的导数为 0，有：&lt;/p&gt;
-
-\[\frac{dm}{dt} = \frac{d}{dt}\int_{a(t)}^{b(t)}\rho(x,t)dx = 0\]
-
-    &lt;p&gt;这里是不是很眼熟了，不就是变上限积分求导吗？桥豆麻袋，被积函数含有上限变量 \(t\) ，还能使用其之前的方法直接求导吗？我们举个例子试试：&lt;/p&gt;
-
-    &lt;p&gt;题目：&lt;/p&gt;
-
-\[\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt\]
-
-    &lt;p&gt;解法一：直接对变上限积分直接求导&lt;/p&gt;
-
-\[\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt=2x\cdot x \cdot x^4 = 2x^6\]
-
-    &lt;p&gt;解法二：先积分后求导，因为 \(x\) 不是积分变量，因此我们可以直接将其提到积分号的外面&lt;/p&gt;
-
-\[\begin{aligned}
-\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt&amp;amp;=\frac{d}{dx}x\int_{0}^{x^2} t^{2}dt \\\\
-&amp;amp;=\frac{d}{dx}x\cdot \frac{1}{3}t^3 \Bigg|^{x^2}_{0} = \frac{7x^6}{3}
-\end{aligned}\]
-
-    &lt;p&gt;解法三：将 \(x\) 放到积分号外面，对里面的使用变上限积分求导&lt;/p&gt;
-
-\[\begin{aligned}
-\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt&amp;amp;=\frac{d}{dx}x \cdot\int_{0}^{x^2} t^{2}dt \\\\
-&amp;amp;=\int_{0}^{x^2} t^{2}dt + x \cdot 2x \cdot (x^2)^2 = \frac{7x^6}{3}
-\end{aligned}\]
-
-    &lt;p&gt;显然解法二和解法三是正确的。圆规正转，由上可知我们不能直接对 \(\rho(x,t)\) 使用变上限积分求导。可是我们无法直接先积分后求导，也无法将 \(t\) 分出来。所以只能采取最原始的办法，即使用导数定义的方式来求解了：&lt;/p&gt;
-
-\[\frac{dm}{dt} = \lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{a(t+\Delta t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx-\int_{a(t)}^{b(t)}\rho(x,t)dx\Bigg)\]
-
-    &lt;p&gt;我们可以看到上述分母既有积分上下限的变化，也有被积函数的变化。前者是空间的变化，后者是时间的变化。因此我们得把时空分离开来：&lt;/p&gt;
-
-\[\begin{aligned}
-\frac{dm}{dt} = \lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{b(t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx&amp;amp;+\int_{a(t+\Delta t)}^{a(t)}\rho(x,t+\Delta t)dx \\\\ + \int_{a(t)}^{b(t)}\rho(x,t+\Delta t)dx &amp;amp;-\int_{a(t)}^{b(t)}\rho(x,t)dx\Bigg)
-\end{aligned}\]
-
-    &lt;p&gt;上式前面两项是左右边界的变化（空间的变化），因为被积函数保持一致。后面两项则是密度场随时间的变化。前两项分别是积分上限和下限变化，因此使用变限积分求导：&lt;/p&gt;
-
-\[\begin{aligned}
-\lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\int_{b(t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx &amp;amp;= \rho(b(t),t)\frac{db(t)}{dt}=\rho(b(t),t)\mu(b(t),t) \\\\
-\lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\int_{a(t+\Delta t)}^{a(t)}\rho(x,t+\Delta t)dx &amp;amp;= \rho(a(t),t)\Big(-\frac{da(t)}{dt}\Big)=\rho(b(t),t)\mu(a(t),t) 
-\end{aligned}\]
-
-    &lt;p&gt;其中 \(\mu(x,t)\) 为速度场。使用牛顿-莱布尼兹公式将其合并：&lt;/p&gt;
-
-\[\rho(b(t),t)\frac{db(t)}{dt}-\rho(a(t),t)\frac{da(t)}{dt} =\int_{a(t)}^{b(t)}\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x}dx\]
-
-    &lt;p&gt;后两项积分上下限一致，可见是对密度函数的求导，易得：&lt;/p&gt;
-
-\[\lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{a(t)}^{b(t)}\rho(x,t+\Delta t)-\rho(x,t)dx\Bigg)=\int_{a(t)}^{b(t)}\frac{\partial \rho(x,t)}{\partial t}dx\]
-
-    &lt;p&gt;将上述两个结果整理得到最后求导结果：&lt;/p&gt;
-
-\[\frac{dm}{dt} = \int_{a(t)}^{b(t)}\Bigg(\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x}+\frac{\partial \rho(x,t)}{\partial t} \Bigg)dx = 0\]
-
-    &lt;p&gt;对于任意成立的 \(a(t)\) 和 \(b(t)\) 位置，有：&lt;/p&gt;
-
-\[\frac{\partial \rho(x,t)}{\partial t}+\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x} = 0\]
-
-    &lt;p&gt;这便是一维的流动连续性方程，对于动量、动量矩、能量积分，便可得到完整的 NS 方程。&lt;/p&gt;
-
-    &lt;p&gt;🌸🌸🌸 这段故事完结 🌈🌈🌈&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Sun, 05 Jun 2022 17:29:33 +0800</pubDate>
-        <link>https://froml77.top/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html</link>
-        <guid isPermaLink="true">https://froml77.top/math/2022/06/05/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC.html</guid>
-        
-        <category>微积分</category>
-        
-        
-        <category>MATH</category>
         
       </item>
     
