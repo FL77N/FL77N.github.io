@@ -1,0 +1,7 @@
+main {
+  --color-canvas-default: #fffff8;
+  --color-canvas-subtle: #f5f5ef;
+  --color-border-default: #ffb6c1;
+  --color-border-muted: #ffb6c1;
+  font-family: et-book, "STKAITI", Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+}

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>ARCHIVE</title>
+  <meta name="description" content="Personal Blog">
+
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (!theme) {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/img/site.webmanifest">
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="/archive/">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+</head>
+
+  <body class="full-width">
+    <!--- Header and nav template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon-96x96.png" alt="CH"></a>
+	<a href="/blog/">blog</a>
+	<a class="active" href="/archive/">Archive</a>
+	<a href="/about/">About</a>
+	<div class="search-wrapper">
+	  <input type="text" id="search-input" class="search-input" placeholder="Search articles..." autocomplete="off">
+	  <div id="search-results" class="search-results" style="display:none;"></div>
+	</div>
+	<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+	  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	</button>
+	</nav>
+</header>
+<script>
+(function() {
+  var searchInput = document.getElementById('search-input');
+  var searchResults = document.getElementById('search-results');
+  var posts = null;
+
+  function loadPosts(callback) {
+    if (posts) { callback(); return; }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/search.json');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        posts = JSON.parse(xhr.responseText);
+        callback();
+      }
+    };
+    xhr.send();
+  }
+
+  function doSearch(query) {
+    if (!query || query.length < 1) {
+      searchResults.style.display = 'none';
+      return;
+    }
+    loadPosts(function() {
+      var q = query.toLowerCase();
+      var matches = [];
+      var seen = {};
+      for (var i = 0; i < posts.length; i++) {
+        var p = posts[i];
+        if (seen[p.url]) continue;
+        if (p.title.toLowerCase().indexOf(q) !== -1) {
+          matches.push(p);
+          seen[p.url] = true;
+        }
+      }
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
+      } else {
+        var html = '';
+        for (var j = 0; j < matches.length; j++) {
+          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
+                  '<span class="search-result-title">' + matches[j].title + '</span>' +
+                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
+        }
+        searchResults.innerHTML = html;
+      }
+      searchResults.style.display = 'block';
+    });
+  }
+
+  var debounceTimer;
+  searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      doSearch(searchInput.value.trim());
+    }, 200);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      searchResults.style.display = 'none';
+    }
+  });
+
+  searchInput.addEventListener('focus', function() {
+    if (searchInput.value.trim().length >= 1) {
+      doSearch(searchInput.value.trim());
+    }
+  });
+})();
+
+// Header shadow on scroll
+(function() {
+  var header = document.querySelector('header');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 10) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+})();
+
+// Theme toggle
+(function() {
+  var toggle = document.getElementById('theme-toggle');
+  var iconMoon = toggle.querySelector('.icon-moon');
+  var iconSun = toggle.querySelector('.icon-sun');
+
+  function updateIcons(theme) {
+    if (theme === 'dark') {
+      iconMoon.style.display = 'none';
+      iconSun.style.display = 'block';
+    } else {
+      iconMoon.style.display = 'block';
+      iconSun.style.display = 'none';
+    }
+  }
+
+  updateIcons(document.documentElement.getAttribute('data-theme'));
+
+  toggle.addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateIcons(next);
+
+    // Sync Giscus theme
+    var giscusFrame = document.querySelector('iframe.giscus-frame');
+    if (giscusFrame) {
+      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
+      giscusFrame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme } } },
+        'https://giscus.app'
+      );
+    }
+  });
+})();
+</script>
+
+    <div class="archive-page-container">
+  <h1 style="text-align: center">ALL CATEGORIES</h1>
+<div class="archive-container">
+  
+  
+    
+    <div class="category-group">
+      <input type="checkbox" id="category-1" class="category-toggle">
+      <label for="category-1" class="category-header">
+        <h2>
+          <span class="toggle-icon">♠</span>
+          <span class="category-title">AI</span>
+        </h2>
+      </label>
+      <div class="category-content">
+        
+        
+        
+
+        
+          
+            <div class="tag-group">
+              <h3 id="algorithm">Algorithm</h3>
+              <ul class="post-list">
+                
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/26/GLM-4-6-v">1. GLM-4.6V</a>
+                    <br><span class="post-date color-date">2026-02-23</span>
+                    <br><div><p>这篇 blog 主要还是从数据上进行解析 GLM-4.6V，结构和训练方面只进行简单提及</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/26/BFCL-TAUBENCH">2. BFCL-TauBench</a>
+                    <br><span class="post-date color-date">2026-01-10</span>
+                    <br><div><p>这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/25/MPO-DAPO-GSPO">3. Policy Optimization MPO DAPO GSPO</a>
+                    <br><span class="post-date color-date">2025-11-27</span>
+                    <br><div><p>这篇 Blog 主要对 MPO、DAPO、GSPO 进行介绍，这几种强化学习的方法或基于 <a href="https://arxiv.org/abs/2305.18290">DPO</a> 或基于 <a href="https://arxiv.org/pdf/2402.03300">GRPO</a> 改进。因此默认已经有相关知识，这里就不再赘述了</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+                  
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/25/DETR-SERIES">4. DETR SERIES</a>
+                    <br><span class="post-date color-date">2025-08-15</span>
+                    <br><div><p>🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法。</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+                  
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/22/yolov7">5. YoloV7 标签匹配及 loss 计算解析</a>
+                    <br><span class="post-date color-date">2022-11-06</span>
+                    <br><div><p>本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+              </ul>
+            </div>
+          
+        
+          
+            <div class="tag-group">
+              <h3 id="cuda">Cuda</h3>
+              <ul class="post-list">
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/23/cuda2">1. CUDA 编程（进阶篇）</a>
+                    <br><span class="post-date color-date">2023-02-09</span>
+                    <br><div><p>GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子<a href="https://zhuanlan.zhihu.com/p/435908830">文章</a>中的代码进行解读，也作为代码阅读笔记梳理整个思路</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+                  
+                
+              </ul>
+            </div>
+          
+        
+          
+            <div class="tag-group">
+              <h3 id="infra">Infra</h3>
+              <ul class="post-list">
+                
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/25/PACKING-IN-LLM">1. 让 Packing 加速你的大模型训练</a>
+                    <br><span class="post-date color-date">2025-08-20</span>
+                    <br><div><p>这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+              </ul>
+            </div>
+          
+        
+
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </div>
+    
+    <div class="category-group">
+      <input type="checkbox" id="category-2" class="category-toggle">
+      <label for="category-2" class="category-header">
+        <h2>
+          <span class="toggle-icon">♠</span>
+          <span class="category-title">LIFE</span>
+        </h2>
+      </label>
+      <div class="category-content">
+        
+        
+        
+
+        
+          
+            <div class="tag-group">
+              <h3 id="summary">Summary</h3>
+              <ul class="post-list">
+                
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/25/FIRST-WORK-SUMMARY">1. AI 之旅之从识图到读书</a>
+                    <br><span class="post-date color-date">2025-08-15</span>
+                    <br><div><p>这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+              </ul>
+            </div>
+          
+        
+
+        
+        
+          
+        
+      </div>
+    </div>
+    
+    <div class="category-group">
+      <input type="checkbox" id="category-3" class="category-toggle">
+      <label for="category-3" class="category-header">
+        <h2>
+          <span class="toggle-icon">♠</span>
+          <span class="category-title">MATH</span>
+        </h2>
+      </label>
+      <div class="category-content">
+        
+        
+        
+
+        
+          
+            <div class="tag-group">
+              <h3 id="微积分">微积分</h3>
+              <ul class="post-list">
+                
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC">1. 变限积分求导的种种</a>
+                    <br><span class="post-date color-date">2022-06-05</span>
+                    <br><div><h2 id="变上限积分求导的理解">变上限积分求导的理解</h2>
+
+<p>假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：</p>
+
+\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]
+
+<p>其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分：</p>
+
+\[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\]
+
+</div></br>
+                  </li>
+                  
+                  
+                
+              </ul>
+            </div>
+          
+        
+
+        
+        
+          
+        
+      </div>
+    </div>
+    
+    <div class="category-group">
+      <input type="checkbox" id="category-4" class="category-toggle">
+      <label for="category-4" class="category-header">
+        <h2>
+          <span class="toggle-icon">♠</span>
+          <span class="category-title">jekyll</span>
+        </h2>
+      </label>
+      <div class="category-content">
+        
+        
+        
+
+        
+          
+            <div class="tag-group">
+              <h3 id="css">CSS</h3>
+              <ul class="post-list">
+                
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/20/tufte-style-jekyll-blog">1. Tufte-style Jekyll blog</a>
+                    <br><span class="post-date color-date">2020-04-13</span>
+                    <br><div><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+              </ul>
+            </div>
+          
+        
+          
+            <div class="tag-group">
+              <h3 id="design">Design</h3>
+              <ul class="post-list">
+                
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/20/tufte-style-jekyll-blog">1. Tufte-style Jekyll blog</a>
+                    <br><span class="post-date color-date">2020-04-13</span>
+                    <br><div><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+              </ul>
+            </div>
+          
+        
+          
+            <div class="tag-group">
+              <h3 id="typography">Typography</h3>
+              <ul class="post-list">
+                
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/20/tufte-style-jekyll-blog">1. Tufte-style Jekyll blog</a>
+                    <br><span class="post-date color-date">2020-04-13</span>
+                    <br><div><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+              </ul>
+            </div>
+          
+        
+
+        
+        
+          
+        
+      </div>
+    </div>
+    
+  
+</div>
+</div>
+
+    <span class="print-footer">ARCHIVE - clay harmon</span>
+    <footer>
+  <hr class="slender">
+  <ul class="footer-links">
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+    
+  </ul>
+  <div class="credits">
+    <span>&copy; 2025-2026 L77</span><br><br>
+    <span>Powered By Jekyll And Tufte Theme</span>
+  </div>
+</footer>
+
+    <button id="backToTop" class="back-to-top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
+  </svg>
+</button>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 100) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  });
+  backToTop.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
+
+  </body>
+</html>

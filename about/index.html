@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Home</title>
+  <title>ABOUT</title>
   <meta name="description" content="Personal Blog">
 
   <script>
@@ -58,19 +58,19 @@
   <link rel="stylesheet" type="text/css" href="/css/tufte.css">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="/">
+  <link rel="canonical" href="/about/">
 
   <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
 </head>
 
-  <body class="home-page">
+  <body>
     <!--- Header and nav template site-wide -->
 <header>
     <nav class="group">
 	<a href="/"><img class="badge" src="/assets/img/favicon-96x96.png" alt="CH"></a>
 	<a href="/blog/">blog</a>
 	<a href="/archive/">Archive</a>
-	<a href="/about/">About</a>
+	<a class="active" href="/about/">About</a>
 	<div class="search-wrapper">
 	  <input type="text" id="search-input" class="search-input" placeholder="Search articles..." autocomplete="off">
 	  <div id="search-results" class="search-results" style="display:none;"></div>
@@ -203,15 +203,13 @@
 })();
 </script>
 
-    <div class="full-width-container">
-      <div class="center-box">
-        <div class="quote-wrapper">
-  <p class="quote-content">学而不思则罔，思而不学则殆</p>
-  <p class="quote-source">----《论语》</p>
-</div>
+    <article class="group">
+      <p>这是我的 BLOG，主要用于记录我个人学习的笔记或者也可能是一些杂想，比如：大模型相关的知识、CUDA 的 GEMM、以及心理学相关的沟通和心理类型之类的知识。目前我的工作是大部分是跟训练和推理框架有关的内容，可能以后也会从事其他方面的工作。我的爱好有：LOL、钢琴和羽毛球，也喜欢烹饪一些自己喜欢的食物<label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/about/1.jpg" /><br />在家煮火锅，边烫边看电视也很不错哦</span></p>
 
-      </div>
-    </div>
+<p>之所以选择 Jekyll 中 Tufte 主题是因为它的简洁和优雅以及印刷字体 et-book 的美观，最重要的是旁注<label for="1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="1" class="margin-toggle" /><span class="sidenote">对就是这个 </span>这个功能 ，让我觉得很特别，最后我觉得这种极简风的博客更容易使人关注记录内容本身。BLOG 里面第一篇文章 <strong>Tufte-style Jekyll blog</strong> 是直接从原生主题里面拿过来的，里面详细讲解了该主题的用法。我在原主题上增加了<i><font color="5151A2">博客搜索、归档、分页、目录以及回到顶部等功能</font> </i>，关于作图我可能会用 excalidraw 和 draw.io 草图风的。如果这些记录能够帮助到你，我会非常开心！另外你想跟我讨论其中的内容，可以通过底部的链接发信息给我~</p>
+
+    </article>
+    <span class="print-footer">ABOUT - clay harmon</span>
     <footer>
   <hr class="slender">
   <ul class="footer-links">
@@ -234,6 +232,28 @@
     <span>Powered By Jekyll And Tufte Theme</span>
   </div>
 </footer>
+
+    <button id="backToTop" class="back-to-top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
+  </svg>
+</button>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 100) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  });
+  backToTop.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
 
   </body>
 </html>

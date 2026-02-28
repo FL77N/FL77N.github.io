@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>AI 之旅之从识图到读书</title>
+  <meta name="description" content="这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。">
+
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (!theme) {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/img/site.webmanifest">
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="/articles/25/FIRST-WORK-SUMMARY">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and nav template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon-96x96.png" alt="CH"></a>
+	<a href="/blog/">blog</a>
+	<a href="/archive/">Archive</a>
+	<a href="/about/">About</a>
+	<div class="search-wrapper">
+	  <input type="text" id="search-input" class="search-input" placeholder="Search articles..." autocomplete="off">
+	  <div id="search-results" class="search-results" style="display:none;"></div>
+	</div>
+	<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+	  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	</button>
+	</nav>
+</header>
+<script>
+(function() {
+  var searchInput = document.getElementById('search-input');
+  var searchResults = document.getElementById('search-results');
+  var posts = null;
+
+  function loadPosts(callback) {
+    if (posts) { callback(); return; }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/search.json');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        posts = JSON.parse(xhr.responseText);
+        callback();
+      }
+    };
+    xhr.send();
+  }
+
+  function doSearch(query) {
+    if (!query || query.length < 1) {
+      searchResults.style.display = 'none';
+      return;
+    }
+    loadPosts(function() {
+      var q = query.toLowerCase();
+      var matches = [];
+      var seen = {};
+      for (var i = 0; i < posts.length; i++) {
+        var p = posts[i];
+        if (seen[p.url]) continue;
+        if (p.title.toLowerCase().indexOf(q) !== -1) {
+          matches.push(p);
+          seen[p.url] = true;
+        }
+      }
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
+      } else {
+        var html = '';
+        for (var j = 0; j < matches.length; j++) {
+          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
+                  '<span class="search-result-title">' + matches[j].title + '</span>' +
+                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
+        }
+        searchResults.innerHTML = html;
+      }
+      searchResults.style.display = 'block';
+    });
+  }
+
+  var debounceTimer;
+  searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      doSearch(searchInput.value.trim());
+    }, 200);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      searchResults.style.display = 'none';
+    }
+  });
+
+  searchInput.addEventListener('focus', function() {
+    if (searchInput.value.trim().length >= 1) {
+      doSearch(searchInput.value.trim());
+    }
+  });
+})();
+
+// Header shadow on scroll
+(function() {
+  var header = document.querySelector('header');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 10) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+})();
+
+// Theme toggle
+(function() {
+  var toggle = document.getElementById('theme-toggle');
+  var iconMoon = toggle.querySelector('.icon-moon');
+  var iconSun = toggle.querySelector('.icon-sun');
+
+  function updateIcons(theme) {
+    if (theme === 'dark') {
+      iconMoon.style.display = 'none';
+      iconSun.style.display = 'block';
+    } else {
+      iconMoon.style.display = 'block';
+      iconSun.style.display = 'none';
+    }
+  }
+
+  updateIcons(document.documentElement.getAttribute('data-theme'));
+
+  toggle.addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateIcons(next);
+
+    // Sync Giscus theme
+    var giscusFrame = document.querySelector('iframe.giscus-frame');
+    if (giscusFrame) {
+      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
+      giscusFrame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme } } },
+        'https://giscus.app'
+      );
+    }
+  });
+})();
+</script>
+
+    <article>
+      <div class="container">
+        <nav class="toc" id="toc"></nav>
+        <main class="content">
+          <h1 style="text-align: left">AI 之旅之从识图到读书</h1>
+          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 2783</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">11min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">Category:</span><span class="color-post-meta-value">&nbsp; LIFE</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Summary</span></p>
+
+          <p>这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。<!--more-->部门的整体氛围很好，上下级之间、同事之间都能愉快的相处，这使得我这期间的工作生活很顺心。回到工作内容部分，总体而言可以分为两部分的工作：CV 和 LLM</p>
+
+<h1 id="computer-vision-period">Computer Vision Period</h1>
+
+<p>我研究生期间的研究方向是深度学习目标检测（DeepLearning Detection），有一段在华为中央研究院实习的经历，在研究生阶段参加过几次百度举办的 算法复现比赛以及贡献过相应的开源项目。入职后，接手的第一个任务就是复现 YoloV6 算法，因为硕士期间参加过百度的复现比赛<label for="百度的" class="margin-toggle sidenote-number"></label><input type="checkbox" id="百度的" class="margin-toggle" /><span class="sidenote">百度的大佬也对我进行过一些代码和复现方法上的指导 </span>，所以上手还算顺利</p>
+
+<h2 id="复现">复现</h2>
+
+<p>没错！从上面可以看出来，我的第一个主营业务就是<span style="color: #B87070">复现</span>，所谓复现就是把别人的算法加到自己的训练框架里面<label for="不管你" class="margin-toggle sidenote-number"></label><input type="checkbox" id="不管你" class="margin-toggle" /><span class="sidenote">不管你 copy 也好，自己重新搭网络结构也好 </span>。最终的目的是：在我们的框架用相同的 config 能去训练这个算法并在测试集上跟官方 paper 的公示精度指标一致</p>
+
+<p>那么我在这个阶段复现了哪些算法呢？主要是一些当时 SoTA 的目标检测算法：<a href="https://arxiv.org/abs/2209.02976">YoloV6</a>、<a href="https://arxiv.org/abs/2410.07549">Onenet</a>、<a href="https://arxiv.org/abs/2207.02696">YoloV7</a>、<a href="https://arxiv.org/pdf/2203.03605">DINO</a> 等<label for="当然其" class="margin-toggle sidenote-number"></label><input type="checkbox" id="当然其" class="margin-toggle" /><span class="sidenote">当然其实在之前参加百度复现赛和 <a href="https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.8.1">PaddleDetection</a> 做开源贡献时，复现过 <a href="https://arxiv.org/abs/1708.02002">Retinanet</a>、<a href="https://arxiv.org/abs/1912.02424">ATSS</a>、<a href="https://arxiv.org/abs/1504.08083">Fast RCNN</a>、<a href="https://arxiv.org/abs/1506.01497">Faster RCNN</a> 以及 <a href="https://arxiv.org/abs/2011.12450">Sparse RCNN</a> 算是非常适合这个岗位了 </span>。当然在做完算法复现后，我们常常会做一些组合操作来探索算法的特性，像各种标签匹配：OTA、简化版 OTA、匈牙利算法匹配、TAL 等等，各种分类的 loss、框回归的 loss 以及辅助 loss 等等，我们会将上述的和不同的网络结构以及数据增强的方式进行组合搭配，看看有什么化学反应，能不能训练出比较厉害的 baseline model 出来。总之 CV 时代，前处理、网络结构、后处理，都玩得很花</p>
+
+<h2 id="other">Other</h2>
+
+<p>除了复现和日常的框架维护、代码迁移和答疑外，也有做一些其他方面的探索，主要分为以下几个方面：</p>
+
+<ul>
+  <li>对于 Onenet 的改进，使用单 anchor 或者 point 来预测框，主要是对框的个数以及 anchor 的设置以及添加 iou branch 的探索。简化为单 anchor 或 point 后，对于推理时简化了后处理流程，会有提速效果。当然这里不乏数据增强的加持，才能保证点不掉，其中把目标复制多个的数据增强提升最明显<label for="也很容" class="margin-toggle sidenote-number"></label><input type="checkbox" id="也很容" class="margin-toggle" /><span class="sidenote">也很容易理解，主要增加了正样本数量吧 </span></li>
+  <li>参与了一个可视化检测结果的工作<label for="虽然没" class="margin-toggle sidenote-number"></label><input type="checkbox" id="虽然没" class="margin-toggle" /><span class="sidenote">虽然没什么人用，是为了几个人做的需求 </span>，并且打通了训练完的模型能自动化的进行精度测验以及 base case 可视化</li>
+  <li>ri4rover 比赛训练模型<label for="这个比" class="margin-toggle sidenote-number"></label><input type="checkbox" id="这个比" class="margin-toggle" /><span class="sidenote">这个比赛的重点不是模型训练这块，所以只能算是跟着大佬混了一下 </span>，包括：数据划分、多尺度实验 、anchor尺度实验、学习率实验、数据增强实验、cos-ema 实验、标小车数据。由于任务比较简单，最后采用单 stride 提取特征图，速度上有非常明显提升</li>
+  <li>调研了一下当时比较火的两个项目 <a href="https://segment-anything.com/">segment anything</a> 和 <a href="https://github.com/IDEA-Research/GroundingDINO">GroundingDINO</a>。这两个项目给到的启示是：数据标注层面（人工到半人工到模型）和语言与视觉的 Pipline 的打通。同时也跑通了他们的推理 Code，加到了框架里面。由于 SAM 只支持二分割，尝试进行多类别分割，效果不行</li>
+  <li>最后是跟车有关的项目：主要是地面标识的识别和分割。一部分是需要跟外部合作（最后不了了之），另外一部分看看能不能降低自己的标注成本。技术路线也很简单：首先上大模型进行训练，然后根据 bad case 情况是否需要补充数据或者对于不同检测或分割的物体进行不同分辨率模型或 head 进行检测或分割。最后都基本到达了要求，标注成本也有个 30% 左右下降。这期间也尝试过 SAM 和 groudingdino 的方案，以及将他们串起来</li>
+</ul>
+
+<p>以上是一些主要部分，当然也有一部分时间在跑其他部门的屎山代码。这个期间我们组整体工作还是做得不错的。我们不仅维护了一个易用且算法和功能丰富的 CV 训练框架，而且进行了大量的算法探索（虽然大部分是排列组合与缝合），算是即懂算法也懂框架</p>
+
+<h1 id="large-language-model-period">Large Language Model Period</h1>
+
+<p>随着 openai 点燃了大语言模型的火焰，世界也看到了 LLM 的巨大潜力。我们整个部门也进行了及时调转船头支持 LLM 训练、推理以及量化了。由于模型同质化非常严重，结构基本一致，所以训练将重心放在了训练框架上</p>
+
+<h2 id="框架的搭建">框架的搭建</h2>
+
+<p>虽然本质上我们是基于 DeepSpeed 和 Megatron 之上搭建的缝合怪，但是在那个时期可用的外部框架并不多，所以还是对内部有用的工作。而且框架初期有非常多的杂事需要做，比如，需要不断和外部框架进行精度和速度的对齐、新的模型（qwen internlm baichuan）的精度对齐、新的算子接入时的精度对齐、各种保存模型时的问题、模型加载的问题、dataloader 报错问题、flash attention 接入的问题、打各种镜像、支持各种需要的数据前处理（预先 pack 的，纯文本和 vqa 数据混训）、模型转换（ds 和 mg）以及长文本训练的支持</p>
+
+<p>在对齐的路上遇到过各种奇葩的问题，例如：两边某个层里面一个系数的数据类型不同、数据处理逻辑不通、环境问题（未指定统一版本 cuda）、lr scheduler 不同。总是每天上一当，当当不一样</p>
+
+<h2 id="load-unbalance">Load Unbalance</h2>
+
+<p>借着和 VLM 团队的合作，我们在 data 层面一定程度解决了在 VLM 训练中的负载不均衡问题，虽然原本的任务只是把内部的模型改到使用 Megatron 进行训练。</p>
+
+<p>首先使用 packing 技术解决了 batch 内 padding 浪费的问题与 DP 之间计算量不均衡等待的问题。同时发现了长短文本混训且在使用 SP 时，存在由短文本 packing 组成的长文本被 SP 后，有不必要的 all to all 通信浪费。对此，我们使用了先组成小 group，再由小 group 组成设定长度的大 group，控制 batch collector 与 sampler 让 rank 拿到属于自己 group 以及保证一个 global batch size 内都是同一种类型的数据（要么是纯长文本，要么是短文本组成的长文本）。另外我们还对 Megatron 内 PP 和 CKPT 的设置使用了 profile 的方式求出最佳值。这部分内容我们整理成了<a href="https://arxiv.org/abs/2407.20761">论文</a>发表在了 ICML 2025 上，也是我的第一篇顶会论文</p>
+
+<figure class="flexwidth"><img src="/assets/first-work-summary/image.png" style="width:70%;height:70%" /><figcaption>VLM Packing 算法</figcaption></figure>
+
+<p>无独有偶，我们在与 LLM 团队合作时，同样对当前的 LLM 中 load unbalance 和 packing 技术进行优化。针对长短文本混训的场景，采用分层级的 packing 策略，首先确定最长训练长度为 128k，通过 profile 得出其最快的 SP 和 CKPT 配置，假设是 SP=8。那么我们还需要一个配置是 16k（128k/8） 的 group，得到 16k 的 SP 为 1 以及 profile 好其最佳的 CKPT 配置，然后我们需要组好 8 个 16k 的 group 给 8 个 rank。另外假如我们 profile 发现 32k SP=4 是最快的配置，那么需要加入一个 32k 的配置，然后去除 16k 的配置（虽然 16k 没 all to all 通信，但是有最快的为啥不用），最后整理一下就是会有两个层级 128k SP8 和 32k SP4，32k 以下的只 packing 到 32k。假如最快的是 8k SP1，那么则有 128k SP8、16k SP1 和 8k SP1，8k 以下的只 packing 到 8k。最后我们通过控制 sampler 做了课程学习以及 loss normalization 的改进，这部分也整理成了<a href="https://arxiv.org/abs/2503.07680">论文</a>处于在投状态</p>
+
+<figure class="fullwidth"><img src="/assets/first-work-summary/image1.png" /><figcaption>Hierarchical Batch Packing 示意图</figcaption></figure>
+
+<p>论文这部分工作，我主要的工作在实现算法和处理数据，以及做实验、测验模型精度等</p>
+
+<h2 id="other-1">Other</h2>
+
+<p>最后来自于一些杂七杂八的探索和调研，包括 deepseek R1 训练特性的探索、FP8 训练的适配<label for="看了 deepg" class="margin-toggle sidenote-number"></label><input type="checkbox" id="看了 deepg" class="margin-toggle" /><span class="sidenote">看了 deepgemm，deepseek 的工程能力真的太强了 </span>、视频训练（主要是 internvl 和 qwen vl）的调研等等</p>
+
+<h1 id="总结和安排">总结和安排</h1>
+
+<p>可以看到，在 LLM 时代大部分做的事还是以 Infra 为主的，但整体的工作比较上层，不够深入，这是需要改进的地方。之后可能会去做 LLM 算法相关的工作，也是转了一个方向，目前我对 LLM 训练的认识是 LLM 训练中两个最重要的点：数据的生成和筛选和训练的 pipeline。需要学习的地方还有很多，加油吧少年～</p>
+
+
+          <p class="subtitle" style="text-align:right"><span class="color-date">August 15, 2025</span></p>
+
+          
+            
+<div class="comments-section">
+  <h1>Comments</h1>
+  <p class="comments-hint">Sign in with GitHub to comment, or click the bottom icon to chat with me.</p>
+  <script>
+    (function() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var theme = 'https://froml77.top/css/giscus-' + (isDark ? 'dark' : 'light') + '.css';
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo', 'FL77N/FL77N.github.io');
+      script.setAttribute('data-repo-id', 'R_kgDOHLjozQ');
+      script.setAttribute('data-category', 'Announcements');
+      script.setAttribute('data-category-id', 'DIC_kwDOHLjozc4C3Y7x');
+      script.setAttribute('data-mapping', 'pathname');
+      script.setAttribute('data-strict', '0');
+      script.setAttribute('data-reactions-enabled', '1');
+      script.setAttribute('data-emit-metadata', '0');
+      script.setAttribute('data-input-position', 'top');
+      script.setAttribute('data-theme', theme);
+      script.setAttribute('data-lang', 'en');
+      script.setAttribute('crossorigin', 'anonymous');
+      script.async = true;
+      document.currentScript.parentElement.appendChild(script);
+    })();
+  </script>
+</div>
+
+
+          
+        </main>
+      </div>
+
+      <script>
+(function() {
+  var toc = document.getElementById('toc');
+  if (!toc) return;
+
+  // Only scan H1 and H2
+  var allHeadings = document.querySelectorAll('article h1, article h2');
+  var filteredHeadings = [];
+  var skippedTitle = false;
+
+  allHeadings.forEach(function(h) {
+    // Skip the page title (first h1)
+    if (!skippedTitle && h.tagName === 'H1') {
+      skippedTitle = true;
+      return;
+    }
+    filteredHeadings.push(h);
+  });
+
+  if (filteredHeadings.length === 0) {
+    toc.style.display = 'none';
+    return;
+  }
+
+  // Check if there are any H1 headings in content
+  var hasH1 = false;
+  filteredHeadings.forEach(function(h) {
+    if (h.tagName === 'H1') hasH1 = true;
+  });
+
+  // Build a map from heading id to toc link for fast lookup
+  var idToLink = {};
+
+  filteredHeadings.forEach(function(heading) {
+    if (!heading.id) {
+      heading.id = encodeURIComponent(
+        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
+      );
+    }
+
+    var link = document.createElement('a');
+    link.href = '#' + encodeURIComponent(heading.id);
+    link.textContent = heading.textContent;
+    link.setAttribute('data-heading-id', heading.id);
+
+    idToLink[heading.id] = link;
+
+    if (!hasH1) {
+      // No H1 in content: all H2 are standalone level-1 items
+      link.classList.add('toc-link', 'level-1');
+
+      var itemDiv = document.createElement('div');
+      itemDiv.className = 'toc-parent';
+
+      var toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-btn';
+      toggleBtn.style.visibility = 'hidden';
+
+      itemDiv.appendChild(toggleBtn);
+      itemDiv.appendChild(link);
+      toc.appendChild(itemDiv);
+    } else if (heading.tagName === 'H1') {
+      // H1 as parent
+      link.classList.add('toc-link', 'level-1');
+
+      var parentDiv = document.createElement('div');
+      parentDiv.className = 'toc-parent';
+
+      var toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-btn';
+      toggleBtn.textContent = '\u2660'; // ♠
+      toggleBtn.addEventListener('click', function() {
+        var child = parentDiv.querySelector('.child-container');
+        child.classList.toggle('open');
+        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
+      });
+
+      var childContainer = document.createElement('div');
+      childContainer.className = 'child-container';
+
+      parentDiv.appendChild(toggleBtn);
+      parentDiv.appendChild(link);
+      parentDiv.appendChild(childContainer);
+      toc.appendChild(parentDiv);
+    } else if (heading.tagName === 'H2') {
+      // H2 as child of last H1 parent
+      link.classList.add('toc-link', 'level-2');
+
+      var parentDiv = toc.lastChild;
+      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
+        parentDiv.querySelector('.child-container').appendChild(link);
+      }
+    }
+  });
+
+  // Scroll highlight
+  window.addEventListener('scroll', function() {
+    var currentSection = '';
+    var scrollY = window.scrollY + 100;
+
+    filteredHeadings.forEach(function(section) {
+      if (section.offsetTop <= scrollY) {
+        currentSection = section.id;
+      }
+    });
+
+    document.querySelectorAll('.toc-parent').forEach(function(parent) {
+      var childContainer = parent.querySelector('.child-container');
+      if (childContainer) {
+        childContainer.classList.remove('open');
+      }
+      var btn = parent.querySelector('.toggle-btn');
+      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
+    });
+
+    document.querySelectorAll('.toc-link').forEach(function(link) {
+      link.classList.remove('active');
+    });
+
+    var activeLink = idToLink[currentSection];
+    if (activeLink) {
+      activeLink.classList.add('active');
+      var parent = activeLink.closest('.toc-parent');
+      if (parent) {
+        var child = parent.querySelector('.child-container');
+        if (child) child.classList.add('open');
+        var btn = parent.querySelector('.toggle-btn');
+        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
+      }
+    }
+  });
+
+  // Smooth scroll on click (offset for sticky header)
+  document.querySelectorAll('.toc-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var targetId = link.getAttribute('data-heading-id');
+      var targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        var headerHeight = document.querySelector('header').offsetHeight + 20;
+        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+</script>
+
+    </article>
+    <span class="print-footer">AI 之旅之从识图到读书 - August 15, 2025 - clay harmon</span>
+    <footer>
+  <hr class="slender">
+  <ul class="footer-links">
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+    
+  </ul>
+  <div class="credits">
+    <span>&copy; 2025-2026 L77</span><br><br>
+    <span>Powered By Jekyll And Tufte Theme</span>
+  </div>
+</footer>
+
+    <button id="backToTop" class="back-to-top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
+  </svg>
+</button>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 100) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  });
+  backToTop.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
+
+  </body>
+</html>

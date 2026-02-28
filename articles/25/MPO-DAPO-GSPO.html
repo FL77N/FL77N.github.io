@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Policy Optimization MPO DAPO GSPO</title>
+  <meta name="description" content="这篇 Blog 主要对 MPO、DAPO、GSPO 进行介绍，这几种强化学习的方法或基于 DPO 或基于 GRPO 改进。因此默认已经有相关知识，这里就不再赘述了">
+
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (!theme) {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/img/site.webmanifest">
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="/articles/25/MPO-DAPO-GSPO">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and nav template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon-96x96.png" alt="CH"></a>
+	<a href="/blog/">blog</a>
+	<a href="/archive/">Archive</a>
+	<a href="/about/">About</a>
+	<div class="search-wrapper">
+	  <input type="text" id="search-input" class="search-input" placeholder="Search articles..." autocomplete="off">
+	  <div id="search-results" class="search-results" style="display:none;"></div>
+	</div>
+	<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+	  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	</button>
+	</nav>
+</header>
+<script>
+(function() {
+  var searchInput = document.getElementById('search-input');
+  var searchResults = document.getElementById('search-results');
+  var posts = null;
+
+  function loadPosts(callback) {
+    if (posts) { callback(); return; }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/search.json');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        posts = JSON.parse(xhr.responseText);
+        callback();
+      }
+    };
+    xhr.send();
+  }
+
+  function doSearch(query) {
+    if (!query || query.length < 1) {
+      searchResults.style.display = 'none';
+      return;
+    }
+    loadPosts(function() {
+      var q = query.toLowerCase();
+      var matches = [];
+      var seen = {};
+      for (var i = 0; i < posts.length; i++) {
+        var p = posts[i];
+        if (seen[p.url]) continue;
+        if (p.title.toLowerCase().indexOf(q) !== -1) {
+          matches.push(p);
+          seen[p.url] = true;
+        }
+      }
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
+      } else {
+        var html = '';
+        for (var j = 0; j < matches.length; j++) {
+          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
+                  '<span class="search-result-title">' + matches[j].title + '</span>' +
+                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
+        }
+        searchResults.innerHTML = html;
+      }
+      searchResults.style.display = 'block';
+    });
+  }
+
+  var debounceTimer;
+  searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      doSearch(searchInput.value.trim());
+    }, 200);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      searchResults.style.display = 'none';
+    }
+  });
+
+  searchInput.addEventListener('focus', function() {
+    if (searchInput.value.trim().length >= 1) {
+      doSearch(searchInput.value.trim());
+    }
+  });
+})();
+
+// Header shadow on scroll
+(function() {
+  var header = document.querySelector('header');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 10) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+})();
+
+// Theme toggle
+(function() {
+  var toggle = document.getElementById('theme-toggle');
+  var iconMoon = toggle.querySelector('.icon-moon');
+  var iconSun = toggle.querySelector('.icon-sun');
+
+  function updateIcons(theme) {
+    if (theme === 'dark') {
+      iconMoon.style.display = 'none';
+      iconSun.style.display = 'block';
+    } else {
+      iconMoon.style.display = 'block';
+      iconSun.style.display = 'none';
+    }
+  }
+
+  updateIcons(document.documentElement.getAttribute('data-theme'));
+
+  toggle.addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateIcons(next);
+
+    // Sync Giscus theme
+    var giscusFrame = document.querySelector('iframe.giscus-frame');
+    if (giscusFrame) {
+      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
+      giscusFrame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme } } },
+        'https://giscus.app'
+      );
+    }
+  });
+})();
+</script>
+
+    <article>
+      <div class="container">
+        <nav class="toc" id="toc"></nav>
+        <main class="content">
+          <h1 style="text-align: left">Policy Optimization MPO DAPO GSPO</h1>
+          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 4463</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">17min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">Category:</span><span class="color-post-meta-value">&nbsp; AI</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm</span></p>
+
+          <p>这篇 Blog 主要对 MPO、DAPO、GSPO 进行介绍，这几种强化学习的方法或基于 <a href="https://arxiv.org/abs/2305.18290">DPO</a> 或基于 <a href="https://arxiv.org/pdf/2402.03300">GRPO</a> 改进。因此默认已经有相关知识，这里就不再赘述了
+<!--more--></p>
+
+<h1 id="mpo">MPO</h1>
+
+<p>首先先对 MPO 进行介绍。这里插播一个小插曲，由于我是直接搜索 MPO，因此刚开始我阅读错了 Paper → <a href="https://arxiv.org/abs/2502.18699">Mixing Preference Optimization</a>。既然来都来了，那就还是介绍一下，不感兴趣可以跳过</p>
+
+<h3 id="an-efficient-post-processing-framework-for-mixing-diverse-preference-alignment">An Efficient Post-Processing Framework for Mixing Diverse Preference Alignment</h3>
+
+<p>这篇论文主要想解决的是 MaxMin-RLHF 和 MORLHF 中遇到的问题。因此需要先介绍 MaxMin-RLHF<label for="MORLHF 与" class="margin-toggle sidenote-number"></label><input type="checkbox" id="MORLHF 与" class="margin-toggle" /><span class="sidenote">MORLHF 与其思路大致一样 </span>，文中有大量的公式推导细节<label for="感兴趣" class="margin-toggle sidenote-number"></label><input type="checkbox" id="感兴趣" class="margin-toggle" /><span class="sidenote">感兴趣的同学可以阅读原文 </span>，本文只做结论上的介绍</p>
+
+<p><strong><a href="https://arxiv.org/abs/2402.08925">MaxMin-RLHF</a></strong> 指出来的问题是在 RLHF 中使用单一的 reward 无法满足人类偏好的多样性。文中特别提到了对于少数派或者某一群体<label for="比如学" class="margin-toggle sidenote-number"></label><input type="checkbox" id="比如学" class="margin-toggle" /><span class="sidenote">比如学生和上班族的差异 </span>的喜好时，单一的 reward 进行评估非常困难。因此论文训练了多个 reward，并根据 Egalitarian rule in social choice theory 选择对该回答评分不高的 reward 评分作为最后进行最大优化的评分<label for="关注少" class="margin-toggle sidenote-number"></label><input type="checkbox" id="关注少" class="margin-toggle" /><span class="sidenote">关注少数派发言，使得模型不至于走不到那些极少关注的地方 </span>。MaxMin 也在这里进行了体现</p>
+
+<p>而这个 MPO 所做的事是在多个 reward 中的回答进行评价分数的 Normalization 的工作，主要是为了训练稳定。对 MaxMin 和 MORLHF 都提供了相应的解决方案</p>
+
+<p>关于这个 MPO 就介绍到了这里，<strong>下面进入正题，</strong><a href="https://arxiv.org/abs/2411.10442">Mixed Preference Optimization</a> 这是 InternVL 系列用的强化学习方法，首先他的优化总目标如下：</p>
+
+\[\mathcal{L} = w_p \mathcal{L}_p + w_q \mathcal{L}_q + w_g \mathcal{L}_g\]
+
+<p>文中主要把 Loss 分为三部分组成： Preference Loss, Quality Loss and Generation Loss</p>
+
+<p>其中 Preference Loss 就是 <a href="https://arxiv.org/abs/2305.18290">DPO</a></p>
+
+\[\mathcal{L}_p = - \log \sigma \left( \beta \log \frac{\pi_\theta(y_c \mid x)}{\pi_0(y_c \mid x)} - \beta \log \frac{\pi_\theta(y_r \mid x)}{\pi_0(y_r \mid x)} \right)\]
+
+<p>Quality Loss 是 <a href="https://arxiv.org/abs/2404.04656">BCO</a></p>
+
+\[\mathcal{L}_q = -\log \sigma \left( \beta \log \frac{\pi_\theta(y_c \mid x)}{\pi_0(y_c \mid x)} - \delta \right) - \log \sigma \left( - \left( \beta \log \frac{\pi_\theta(y_r \mid x)}{\pi_0(y_r \mid x)} - \delta \right) \right)\]
+
+<p>Generation Loss</p>
+
+\[\mathcal{L}_g = - \frac{\log \pi_\theta(y_c \mid x)}{|y_c|}\]
+
+<h2 id="binary-classifier-optimization-for-large-language-model-alignment">Binary Classifier Optimization for Large Language Model Alignment</h2>
+
+<p>DPO 就不过多介绍了，我们从 BCO 开始介绍。BCO 全称 Binary Classifier Optimization，不同于 KTO 单从 binary signals 出发，而是理论证明了 binary signal 和 preference optimization (DPO) 之间的联系从而优化。通过一个  a binary classifier 将 <code class="language-plaintext highlighter-rouge">prompt+chosen_completion</code> map 到 1 和 <code class="language-plaintext highlighter-rouge">prompt+rejected_completion</code> map 到 0，从而使用 binary cross-entropy loss 进行优化<label for="对于常" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于常" class="margin-toggle" /><span class="sidenote">对于常见的 AI 应用有点赞和点踩功能，会更方便收集数据，并且可以防止 DPO 训练到一定程度后 choose 和 reject 同时下降的情况，本质上只需要 w &gt; l 就行，可以参考<a href="https://zhuanlan.zhihu.com/p/694381064">讨论</a> </span>并且证明了此种方法的 BCE Loss 是 DPO 的上界</p>
+
+\[\begin{aligned}&amp; \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ -\log \sigma \left( r_\theta(x, y_w) - r_\theta(x, y_l) \right) \right] \\&amp; &lt; \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ -\log \sigma(r_\theta(x, y_w)) - \log \sigma(-r_\theta(x, y_l)) \right] \\&amp; = \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ -\log \sigma(r_\theta(x, y_w)) \right] + \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}} \left[ -\log \sigma(-r_\theta(x, y_l)) \right]\end{aligned}\]
+
+<p>其中  \(r_\theta(x, y) = \beta \log \frac{\pi_\theta(y \mid x)}{\pi_{\text{ref}}(y \mid x)}\)，随着训练进行 BCE 会成为 DPO 严格的上界。由于上式应用了不等式  \(\log \sigma (x) + \log \sigma (y) \lt \log \sigma (x + y)\)，所以比起 DPO 会出来误差项  \(e^{-x} + e^{-y}\)。为了更接近 DPO，文中使用了 reward shift   \(\delta\) 进行缓解<label for="会使" class="margin-toggle sidenote-number"></label><input type="checkbox" id="会使" class="margin-toggle" /><span class="sidenote">会使  \(e^{-x} + e^{-y}\) 变为  \(e^{-(x - \delta)} + e^{-(y - \delta)}\) </span>，最终 BCO 优化目标为：</p>
+
+<p>where   \(r_\theta(x, y) = \beta \log \frac{\pi_\theta(y \mid x)}{\pi_{\text{ref}}(y \mid x)}\), and as training progresses, the binary cross-entropy (BCE) becomes a strict upper bound on Direct Preference Optimization (DPO). Because the above derivation employs the inequality  \(log σ(x) + log σ(y) &lt; log σ(x + y)\), where  \(σ(·)\) denotes the sigmoid function, an additional error term  \(e^{-x} + e^{-y}\) arises relative to DPO. To better approximate DPO, the paper introduces a reward shift \(δ\) to mitigate this effect (which turns  \(e^{-x} + e^{-y}\) into  \(e^{-(x − δ)} + e^{-(y − δ)}\)). The resulting BCO optimization objective is:</p>
+
+\[\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}^+} \left[ -\log \sigma(r_\theta(x, y_w) - \delta) \right] + \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}^-} \left[ -\log \sigma(-(r_\theta(x, y_l) - \delta)) \right]\]
+
+<p>文中推导了即便减去 reward shift 也不会改变 BCO 为 DPO 上界，reward shift 取值由均值不等式得到  \(\delta = \frac{\mathbb{E}{(x,y) \sim \mathcal{D}^+}[r\theta(x, y)] + \mathbb{E}{(x,y) \sim \mathcal{D}^-}[r\theta(x, y)]}{2}\)，为了训练稳定，使用 EMA 进行计算。BCO 的介绍就完了</p>
+
+<p>从 BCO 的介绍可以知道，它可以作为判断生成好坏的标签<label for="从绝对" class="margin-toggle sidenote-number"></label><input type="checkbox" id="从绝对" class="margin-toggle" /><span class="sidenote">从绝对层面进行判断这个 response 的好坏，即 binary 二分 </span>。Generation Loss 其实就是 SFT Loss 主要用于学习偏好回答生成的过程，下面是不同方法的对比结果</p>
+
+<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image.png" style="width:50%;height:50%" /><figcaption>消融实验对比</figcaption></figure>
+
+<p>上图中的 <code class="language-plaintext highlighter-rouge">+</code> 是使用了 SFT Loss，如 DPO+ 指的 DPO + SFT Loss</p>
+
+<h1 id="dapo">DAPO</h1>
+
+<p><a href="https://arxiv.org/abs/2503.14476">DAPO</a> 是 GRPO 的改进版。作者指出很难去复现 GRPO 在 AIME 上的指标，其中发现了 entropy collapse，reward noise 和 training instability 等问题。为了解决这些问题，作者提出了 <strong>D</strong>ecoupled clip and Dynamic s<strong>A</strong>mple <strong>P</strong>olicy <strong>O</strong>ptimization 算法，主要从五个方面进行了改进，首先是去除了 KL 散度，是考虑到所训练的 long-CoT reasoning model 的参数分布早已远远不同于初始的模型了，加上会限制模型的发挥</p>
+
+<h2 id="clip-higher">Clip-Higher</h2>
+
+<p>我们知道裁剪是对重要性采样的裁剪，如下式</p>
+
+\[1 - \varepsilon_{\text{low}} \le r_{i,t}(\theta) = \frac{\pi_\theta(o_{i,t} \mid q, o_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(o_{i,t} \mid q, o_{i,&lt;t})} \le 1 +\varepsilon_{\text{high}}\]
+
+<p>考虑 token 在原 policy 的概率为 0.9<label for="是一个" class="margin-toggle sidenote-number"></label><input type="checkbox" id="是一个" class="margin-toggle" /><span class="sidenote">是一个高概率的 token </span>，在现 policy 的概率贡献最多可以为 1.08，同样对于一个较少采样的 token 其概率为 0.01，哪怕现 policy 概率为 1 也只能贡献 0.012 所占用的权重依然很小，导致模型很难选用这个 token。文中通过将裁剪的上界和下界分别进行设置，旨在提高原 policy 低概率 token 的采用可能性<label for="文中给" class="margin-toggle sidenote-number"></label><input type="checkbox" id="文中给" class="margin-toggle" /><span class="sidenote">文中给这类 token 取名为 exploration token 能增强模型的探索的可能性，相反另外一种为 exploitation token </span>。因此第一个改动为</p>
+
+\[\text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon, 1 + \varepsilon\right) \rightarrow \text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon_{\text{low}}, 1 + \varepsilon_{\text{high}}\right)\]
+
+<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image1.png" style="width:80%;height:80%" /><figcaption>clip 示意图</figcaption></figure>
+
+<p>如图可知当使用了 clip higher 之后，old policy 中的低概率 token 会得到更多的贡献，但实际上是对于优势为正的 token 采取了更加激进的策略，增强了 old policy 中概率小于在  \(1/(1+\varepsilon)\)  的 token 采样几率，在上图表现为增加的粉红采样区域</p>
+
+<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image5.png" style="width:80%;height:80%" /><figcaption>clip 对比实验</figcaption></figure>
+
+<p>其中 clip 的上限提高了，为了防止低概率 token 容易更低，下限保持没变。效果也很明显， actor 的 entropy collapse 得到了一定程度的解决。文中采取以下配置 ： \(\varepsilon_{\text{low}}\) 为 0.2 和  \(\varepsilon_{\text{high}}\)  为 0.28</p>
+
+<h2 id="dynamic-sampling">Dynamic Sampling</h2>
+
+<p>这部分的改进主要是针对某些 prompt 生成的 response 都是对的，这时候 advantage 将会变为 0。那么梯度将会非常小，基本等于白跑。而且会造成梯度方差过大从而影响训练。改进方式也挺简单：一直 sample 直到不全为 0 或者 1<label for="论文特" class="margin-toggle sidenote-number"></label><input type="checkbox" id="论文特" class="margin-toggle" /><span class="sidenote">论文特别说明这种策略并不会影响训练速度，主要是由于采样速度是由长尾数据影响的 </span></p>
+
+<h2 id="token-level-policy-gradient-loss">Token-Level Policy Gradient Loss</h2>
+
+<p>我们可以先看看 GRPO 怎么算 loss 的</p>
+
+\[\frac{1}{G} \sum_{i=1}^{G} \frac{1}{|o_i|} \sum_{t=1}^{|o_i|} \left( \min \left( r_{i,t}(\theta) \hat{A}_{i,t},\ \text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon, 1 + \varepsilon\right) \hat{A}_{i,t} \right) - \beta D_{\text{KL}}(\pi_\theta \| \pi_{\text{ref}}) \right)\]
+
+<p>GRPO 是对于组内每一个 sample 进行 token 级别的平均，然后再进行 sample 级别的平均。这样对于每个 sample 实际上使用了相同的权重，比较长的回答实际上没有对 loss 有更多的贡献。会导致两个缺陷：对于高质量的长回答不能更加重视，既不能学习太多有效的长思考过程，也不能有效遏制重复的垃圾话。 DAPO 则是进行了 token 级别的计算</p>
+
+\[\frac{1}{\sum_{i=1}^{G} |o_i|} \sum_{i=1}^{G} \sum_{t=1}^{|o_i|} \min \left( r_{i,t}(\theta) \hat{A}_{i,t},\ \text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon_{\text{low}}, 1 + \varepsilon_{\text{high}}\right) \hat{A}_{i,t} \right)\]
+
+<p>假设单个 sample 的 loss 总和是   \(loss_i\)，token 数量为  \(n_i\)，一共  \(G\) 个 sample，则一个 group loss 计算变化如下：</p>
+
+<p>Let the total loss for the i-th sample be denoted by  \(loss_i\), and let its token count be  \(n_i\). Suppose there are  \(G\) samples in total. The group loss is computed:</p>
+
+\[\frac{loss_{0}}{n_{0}G} + \frac{loss_{1}}{n_{1}G} + \frac{loss_{2}}{n_{2}G} + \cdots \rightarrow \frac{loss_{0} + loss_{1} + loss_{2}+ \cdots }{n_{0} + n_{1} + n_{2} + \cdots }\]
+
+<p>从上式可以看出来，DAPO 的 loss 实际上使用同样的 normalization，从相对数值来说，同样等于没用，这时候长回答的 loss 能够体现他真正的 loss 贡献<label for="GRPO 每" class="margin-toggle sidenote-number"></label><input type="checkbox" id="GRPO 每" class="margin-toggle" /><span class="sidenote">GRPO 每个 sample 在内部做 normalize 被论文称为 sample level，DAPO 是 sample 内部并没有做 normalize 而是所有 token 一起求和后做 normalize 这样每个 token 的权重是一样的，不会因为 sample 的长度而不一样 </span></p>
+
+<figure class="fullwidth"><img src="/assets/MPO-DAPO-GSPO/image2.png" /><figcaption>loss 实验</figcaption></figure>
+
+<p>可以看到回答长度没有疯涨了，因为会遏制重复的垃圾话模式</p>
+
+<h2 id="overlong-reward-shaping">Overlong Reward Shaping</h2>
+
+<p>主要是关于有的回答过长而被截断的情况，这种 reward 非常影响训练，文章使用了分段函数解决这个问题：</p>
+
+\[R_{\text{length}}(y) = \begin{cases}0, &amp; |y| \leq L_{\text{max}} - L_{\text{cache}} \\\frac{(L_{\text{max}} - L_{\text{cache}}) - |y|}{L_{\text{cache}}}, &amp; L_{\text{max}} - L_{\text{cache}} &lt; |y| \leq L_{\text{max}} \\-1, &amp; L_{\text{max}} &lt; |y|\end{cases}\]
+
+<p>越长惩罚越大，从下图可以看到整体平稳了很多</p>
+
+<figure class="fullwidth"><img src="/assets/MPO-DAPO-GSPO/image3.png" /><figcaption>长度惩罚对比实验</figcaption></figure>
+
+<p>最后是每一项提点的表现</p>
+
+<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image4.png" style="width:80%;height:80%" /><figcaption>总体表现</figcaption></figure>
+
+<h1 id="gspo">GSPO</h1>
+
+<p><a href="https://arxiv.org/abs/2507.18071">Group Sequence Policy Optimization</a> 是 Qwen 团队基于 GRPO 之上提出的强化学习方法。在 RL 中常常为了采样的效率考虑，会把一个大 batch 分成多个 mini-batch。这就使得了采样来自 old policy 用于优化  new policy，这也是为什么需要重要性采样的原因<label for="关于重要" class="margin-toggle sidenote-number"></label><input type="checkbox" id="关于重要" class="margin-toggle" /><span class="sidenote">关于重要性采样可以阅读<a href="https://zhuanlan.zhihu.com/p/1893616207791354873">重要性采样与PPO、TRPO</a>以及<a href="https://zhuanlan.zhihu.com/p/41217212">重要性采样（Importance Sampling）</a>等文章 </span></p>
+
+<p>文章提出了 GRPO 中一个根本性的问题：重要性采样权重的错误应用导致 long-response 任务训练时会 model collapse。简单来说，就是 GRPO 的重要性采样时 token level 的，但是整个奖励确实 sample level 的。这会使得训练的梯度有高方差的噪声，特别是在训练 long-response 数据和使用 clipping 的时候，如果使得 model collapse 即便加载之前的 checkpoint 也无法逆转<label for="这点是为" class="margin-toggle sidenote-number"></label><input type="checkbox" id="这点是为" class="margin-toggle" /><span class="sidenote">这点是为什么呢，因为加载过后也会走老路吗 </span>
+对此，论文提出了 GSPO</p>
+
+\[\mathbb{E}_{x \sim \mathcal{D},\, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^G \min\left( s_i(\theta) \hat{A}_i,\, \text{clip}\left(s_i(\theta), 1-\varepsilon, 1+\varepsilon\right) \hat{A}_i \right) \right]\]
+
+<p>其中</p>
+
+\[s_i(\theta) = \left( \frac{\pi_\theta(y_i|x)}{\pi_{\theta_{\text{old}}}(y_i|x)} \right)^{\frac{1}{|y_i|}} = \exp\left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\theta(y_{i,t}|x, y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x, y_{i,&lt;t})} \right)\]
+
+<p>可以看到主要的区别在于对重要性的计算上，GSPO 是对每个 token 的重要性采样然后进行求和得到，从下面的代码可以看出： GSPO 对于每一个 token 的重要性采样都是一样的，即 sample level</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># source: https://github.com/huggingface/trl/blob/main/trl/trainer/grpo_trainer.py
+# get old policy logps, there is need the old policy logps on update every step
+</span><span class="n">generate_every</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">steps_per_generation</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">num_iterations</span>
+<span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">gradient_accumulation_steps</span> <span class="o">%</span> <span class="n">generate_every</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">use_vllm</span> <span class="ow">and</span> <span class="n">self</span><span class="p">.</span><span class="n">vllm_importance_sampling_correction</span>
+<span class="p">):</span>
+    <span class="n">old_per_token_logps</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_get_per_token_logps_and_entropies</span><span class="p">(</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">prompt_completion_ids</span><span class="p">,</span>
+        <span class="n">attention_mask</span><span class="p">,</span>
+        <span class="n">logits_to_keep</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">num_images</span><span class="o">=</span><span class="n">num_images</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">forward_kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">old_per_token_logps</span> <span class="o">=</span> <span class="bp">None</span>
+    
+<span class="c1"># get reference model logs
+</span><span class="n">ref_per_token_logps</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_get_per_token_logps</span><span class="p">(</span>
+		<span class="n">self</span><span class="p">.</span><span class="n">ref_model</span><span class="p">,</span> <span class="n">prompt_completion_ids</span><span class="p">,</span> <span class="n">attention_mask</span><span class="p">,</span> <span class="n">logits_to_keep</span>
+<span class="p">)</span>
+
+<span class="c1"># get KL
+</span><span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">beta</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+    <span class="n">ref_per_token_logps</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="sh">"</span><span class="s">ref_per_token_logps</span><span class="sh">"</span><span class="p">]</span>
+    <span class="n">per_token_kl</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">torch</span><span class="p">.</span><span class="nf">exp</span><span class="p">(</span><span class="n">ref_per_token_logps</span> <span class="o">-</span> <span class="n">per_token_logps</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">ref_per_token_logps</span> <span class="o">-</span> <span class="n">per_token_logps</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="p">)</span>
+
+<span class="c1"># get Reward
+</span><span class="n">rewards_per_func</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="nf">_calculate_rewards</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">prompts</span><span class="p">,</span> <span class="n">completions</span><span class="p">,</span> <span class="n">completion_ids_list</span><span class="p">)</span>
+
+<span class="c1"># Apply weights to each reward function's output and sum
+</span><span class="n">rewards</span> <span class="o">=</span> <span class="p">(</span><span class="n">rewards_per_func</span> <span class="o">*</span> <span class="n">self</span><span class="p">.</span><span class="n">reward_weights</span><span class="p">.</span><span class="nf">to</span><span class="p">(</span><span class="n">device</span><span class="p">).</span><span class="nf">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)).</span><span class="nf">nansum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get the Advantages
+</span><span class="n">mean_grouped_rewards</span> <span class="o">=</span> <span class="n">rewards</span><span class="p">.</span><span class="nf">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_generations</span><span class="p">).</span><span class="nf">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mean_grouped_rewards</span> <span class="o">=</span> <span class="n">mean_grouped_rewards</span><span class="p">.</span><span class="nf">repeat_interleave</span><span class="p">(</span><span class="n">num_generations</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">advantages</span> <span class="o">=</span> <span class="n">rewards</span> <span class="o">-</span> <span class="n">mean_grouped_rewards</span>
+
+<span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">scale_rewards</span> <span class="ow">in</span> <span class="p">[</span><span class="sh">"</span><span class="s">group</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">none</span><span class="sh">"</span><span class="p">]:</span>
+    <span class="c1"># If self.scale_rewards = "none", we'll still log group level std
+</span>    <span class="n">std_rewards</span> <span class="o">=</span> <span class="n">rewards</span><span class="p">.</span><span class="nf">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_generations</span><span class="p">).</span><span class="nf">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">std_rewards</span> <span class="o">=</span> <span class="n">std_rewards</span><span class="p">.</span><span class="nf">repeat_interleave</span><span class="p">(</span><span class="n">num_generations</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">self</span><span class="p">.</span><span class="n">scale_rewards</span> <span class="o">==</span> <span class="sh">"</span><span class="s">batch</span><span class="sh">"</span><span class="p">:</span>
+    <span class="c1"># Compute global std
+</span>    <span class="n">std_rewards</span> <span class="o">=</span> <span class="n">rewards</span><span class="p">.</span><span class="nf">std</span><span class="p">().</span><span class="nf">expand_as</span><span class="p">(</span><span class="n">rewards</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="sh">"</span><span class="s">Invalid value for scale_rewards: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">scale_rewards</span><span class="si">}</span><span class="s">. Must be one of </span><span class="sh">'</span><span class="s">batch</span><span class="sh">'</span><span class="s">, </span><span class="sh">'</span><span class="s">group</span><span class="sh">'</span><span class="s">, or </span><span class="sh">'</span><span class="s">none</span><span class="sh">'</span><span class="s">.</span><span class="sh">"</span>
+    <span class="p">)</span>
+
+<span class="c1"># get Importance Sample issue: https://github.com/huggingface/trl/issues/2608
+</span><span class="n">old_per_token_logps</span> <span class="o">=</span> <span class="n">per_token_logps</span><span class="p">.</span><span class="nf">detach</span><span class="p">()</span> <span class="k">if</span> <span class="n">old_per_token_logps</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">old_per_token_logps</span>
+<span class="n">log_ratio</span> <span class="o">=</span> <span class="n">per_token_logps</span> <span class="o">-</span> <span class="n">old_per_token_logps</span>
+<span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">importance_sampling_level</span> <span class="o">==</span> <span class="sh">"</span><span class="s">token</span><span class="sh">"</span><span class="p">:</span>      <span class="c1"># for GRPO
+</span>    <span class="n">log_importance_weights</span> <span class="o">=</span> <span class="n">log_ratio</span>
+<span class="k">elif</span> <span class="n">self</span><span class="p">.</span><span class="n">importance_sampling_level</span> <span class="o">==</span> <span class="sh">"</span><span class="s">sequence</span><span class="sh">"</span><span class="p">:</span> <span class="c1"># for GSPO
+</span>    <span class="n">log_importance_weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">log_ratio</span> <span class="o">*</span> <span class="n">completion_mask</span><span class="p">).</span><span class="nf">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">completion_mask</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+		<span class="n">log_importance_weights</span> <span class="o">=</span> <span class="n">log_importance_weights</span><span class="p">.</span><span class="nf">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="sh">"</span><span class="s">Unknown importance sampling level: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">importance_sampling_level</span><span class="si">}</span><span class="s">. Possible values are </span><span class="sh">'</span><span class="s">token</span><span class="sh">'</span><span class="s"> </span><span class="sh">"</span>
+        <span class="sh">"</span><span class="s">and </span><span class="sh">'</span><span class="s">sequence</span><span class="sh">'</span><span class="s">.</span><span class="sh">"</span>
+    <span class="p">)</span>
+
+<span class="c1"># alppy Clip
+</span><span class="n">coef_1</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">exp</span><span class="p">(</span><span class="n">log_importance_weights</span><span class="p">)</span>
+<span class="c1"># From here, log_importance_weights (and all subsequent tensors, coef_1, coef_2, etc.) shape depends on
+</span> 
+<span class="c1"># importance_sampling_level: "token" level: (B, T); "sequence" level: (B, 1)
+</span><span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">loss_type</span> <span class="ow">in</span> <span class="p">[</span><span class="sh">"</span><span class="s">grpo</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">bnpo</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">dr_grpo</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">dapo</span><span class="sh">"</span><span class="p">]:</span>
+    <span class="n">coef_2</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">clamp</span><span class="p">(</span><span class="n">coef_1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">self</span><span class="p">.</span><span class="n">epsilon_low</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">epsilon_high</span><span class="p">)</span>
+    <span class="c1"># Two-sided clipping
+</span>    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">delta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">coef_1</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="nf">clamp</span><span class="p">(</span><span class="n">coef_1</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">self</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">delta</span><span class="p">)</span>
+
+    <span class="n">per_token_loss1</span> <span class="o">=</span> <span class="n">coef_1</span> <span class="o">*</span> <span class="n">advantages</span>
+    <span class="n">per_token_loss2</span> <span class="o">=</span> <span class="n">coef_2</span> <span class="o">*</span> <span class="n">advantages</span>
+    <span class="n">per_token_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="p">.</span><span class="nf">min</span><span class="p">(</span><span class="n">per_token_loss1</span><span class="p">,</span> <span class="n">per_token_loss2</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="nc">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Unknown loss type: </span><span class="si">{</span><span class="n">self</span><span class="p">.</span><span class="n">loss_type</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># add kl
+</span><span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">beta</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+    <span class="n">per_token_loss</span> <span class="o">=</span> <span class="n">per_token_loss</span> <span class="o">+</span> <span class="n">self</span><span class="p">.</span><span class="n">beta</span> <span class="o">*</span> <span class="n">per_token_kl</span>
+  
+<span class="c1"># normalize loss
+</span><span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">loss_type</span> <span class="o">==</span> <span class="sh">"</span><span class="s">grpo</span><span class="sh">"</span><span class="p">:</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="p">((</span><span class="n">per_token_loss</span> <span class="o">*</span> <span class="n">completion_mask</span><span class="p">).</span><span class="nf">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">completion_mask</span><span class="p">.</span><span class="nf">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nf">clamp</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)).</span><span class="nf">mean</span><span class="p">()</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">current_gradient_accumulation_steps</span>
+<span class="k">elif</span> <span class="n">self</span><span class="p">.</span><span class="n">loss_type</span> <span class="ow">in</span> <span class="p">[</span><span class="sh">"</span><span class="s">cispo</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">dapo</span><span class="sh">"</span><span class="p">]:</span>
+    <span class="n">normalizer</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="sh">"</span><span class="s">num_items_in_batch</span><span class="sh">"</span><span class="p">]</span> <span class="o">/</span> <span class="n">self</span><span class="p">.</span><span class="n">accelerator</span><span class="p">.</span><span class="n">num_processes</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="p">(</span><span class="n">per_token_loss</span> <span class="o">*</span> <span class="n">completion_mask</span><span class="p">).</span><span class="nf">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">normalizer</span>
+</code></pre></div></div>
+
+<p>从梯度影响上看</p>
+
+<p>GRPO</p>
+
+\[\mathbb{E}_{x \sim \mathcal{D},\, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^G \hat{A}_i \cdot \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \frac{\pi_\theta(y_{i,t}|x, y_{i,&lt;t})}{\pi_{\theta_{\text{old}}}(y_{i,t}|x, y_{i,&lt;t})} \nabla_\theta \log \pi_\theta(y_{i,t}|x, y_{i,&lt;t}) \right]\]
+
+<p>GSPO</p>
+
+\[\mathbb{E}_{x \sim \mathcal{D},\, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(\cdot|x)} \left[ \frac{1}{G} \sum_{i=1}^G \left( \frac{\pi_\theta(y_i|x)}{\pi_{\theta_{\text{old}}}(y_i|x)} \right)^{\frac{1}{|y_i|}} \hat{A}_i \cdot \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \nabla_\theta \log \pi_\theta(y_{i,t}|x, y_{i,&lt;t}) \right]\]
+
+<p>可以看出来 GRPO 的重要性采样对每一个 token 的梯度都会有影响，这在 long-response 的情况可能会出现不可预测的问题<label for="当错误" class="margin-toggle sidenote-number"></label><input type="checkbox" id="当错误" class="margin-toggle" /><span class="sidenote">当错误的时候，累积过多，可能直接 model collapse </span>。GSPO 更像一个平均策略，这样会更稳一点波动小点，但不一定更精确</p>
+
+<h1 id="番外篇">番外篇</h1>
+
+<p>关于 GRPO 一开始训练 loss 为零的问题，主要是因为最开始 new policy 和 old policy 是一样的，此时重要性采样为 1， KL 为 0，而 advantage 的期望为 0，所以 loss 非常接近 0。loss 为0，参数为啥还能更新呢？有两种说法是：advantage 的期望是 0 但可能不会完全为 0；bf16 计算本来也有误差很难完全为 0。详细讨论可以参考：<a href="https://github.com/huggingface/open-r1/issues/239">Why does the loss start at 0 when I train GRPO, and then possibly increase?</a></p>
+
+<h1 id="reference">Reference</h1>
+
+<p><a href="https://arxiv.org/abs/2502.18699">An Efficient Post-Processing Framework for Mixing Diverse Preference Alignment</a></p>
+
+<p><a href="https://arxiv.org/abs/2402.08925">MaxMin-RLHF</a></p>
+
+<p><a href="https://arxiv.org/abs/2411.10442">Mixed Preference Optimization</a></p>
+
+<p><a href="https://arxiv.org/abs/2305.18290">DPO</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/694381064">不靠谱】有关DPO训练时，为什么chosen和rejected的reward一起下降的猜想</a></p>
+
+<p><a href="https://arxiv.org/abs/2404.04656">BCO</a></p>
+
+<p><a href="https://arxiv.org/abs/2503.14476">DAPO</a></p>
+
+<p><a href="https://arxiv.org/abs/2507.18071">GSPO</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/1893616207791354873">重要性采样与PPO、TRPO</a></p>
+
+<p><a href="https://zhuanlan.zhihu.com/p/41217212">重要性采样（Importance Sampling）</a></p>
+
+<p><a href="https://github.com/huggingface/open-r1/issues/239">Why does the loss start at 0 when I train GRPO, and then possibly increase</a></p>
+
+
+          <p class="subtitle" style="text-align:right"><span class="color-date">November 27, 2025</span></p>
+
+          
+            
+<div class="comments-section">
+  <h1>Comments</h1>
+  <p class="comments-hint">Sign in with GitHub to comment, or click the bottom icon to chat with me.</p>
+  <script>
+    (function() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var theme = 'https://froml77.top/css/giscus-' + (isDark ? 'dark' : 'light') + '.css';
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo', 'FL77N/FL77N.github.io');
+      script.setAttribute('data-repo-id', 'R_kgDOHLjozQ');
+      script.setAttribute('data-category', 'Announcements');
+      script.setAttribute('data-category-id', 'DIC_kwDOHLjozc4C3Y7x');
+      script.setAttribute('data-mapping', 'pathname');
+      script.setAttribute('data-strict', '0');
+      script.setAttribute('data-reactions-enabled', '1');
+      script.setAttribute('data-emit-metadata', '0');
+      script.setAttribute('data-input-position', 'top');
+      script.setAttribute('data-theme', theme);
+      script.setAttribute('data-lang', 'en');
+      script.setAttribute('crossorigin', 'anonymous');
+      script.async = true;
+      document.currentScript.parentElement.appendChild(script);
+    })();
+  </script>
+</div>
+
+
+          
+        </main>
+      </div>
+
+      <script>
+(function() {
+  var toc = document.getElementById('toc');
+  if (!toc) return;
+
+  // Only scan H1 and H2
+  var allHeadings = document.querySelectorAll('article h1, article h2');
+  var filteredHeadings = [];
+  var skippedTitle = false;
+
+  allHeadings.forEach(function(h) {
+    // Skip the page title (first h1)
+    if (!skippedTitle && h.tagName === 'H1') {
+      skippedTitle = true;
+      return;
+    }
+    filteredHeadings.push(h);
+  });
+
+  if (filteredHeadings.length === 0) {
+    toc.style.display = 'none';
+    return;
+  }
+
+  // Check if there are any H1 headings in content
+  var hasH1 = false;
+  filteredHeadings.forEach(function(h) {
+    if (h.tagName === 'H1') hasH1 = true;
+  });
+
+  // Build a map from heading id to toc link for fast lookup
+  var idToLink = {};
+
+  filteredHeadings.forEach(function(heading) {
+    if (!heading.id) {
+      heading.id = encodeURIComponent(
+        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
+      );
+    }
+
+    var link = document.createElement('a');
+    link.href = '#' + encodeURIComponent(heading.id);
+    link.textContent = heading.textContent;
+    link.setAttribute('data-heading-id', heading.id);
+
+    idToLink[heading.id] = link;
+
+    if (!hasH1) {
+      // No H1 in content: all H2 are standalone level-1 items
+      link.classList.add('toc-link', 'level-1');
+
+      var itemDiv = document.createElement('div');
+      itemDiv.className = 'toc-parent';
+
+      var toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-btn';
+      toggleBtn.style.visibility = 'hidden';
+
+      itemDiv.appendChild(toggleBtn);
+      itemDiv.appendChild(link);
+      toc.appendChild(itemDiv);
+    } else if (heading.tagName === 'H1') {
+      // H1 as parent
+      link.classList.add('toc-link', 'level-1');
+
+      var parentDiv = document.createElement('div');
+      parentDiv.className = 'toc-parent';
+
+      var toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-btn';
+      toggleBtn.textContent = '\u2660'; // ♠
+      toggleBtn.addEventListener('click', function() {
+        var child = parentDiv.querySelector('.child-container');
+        child.classList.toggle('open');
+        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
+      });
+
+      var childContainer = document.createElement('div');
+      childContainer.className = 'child-container';
+
+      parentDiv.appendChild(toggleBtn);
+      parentDiv.appendChild(link);
+      parentDiv.appendChild(childContainer);
+      toc.appendChild(parentDiv);
+    } else if (heading.tagName === 'H2') {
+      // H2 as child of last H1 parent
+      link.classList.add('toc-link', 'level-2');
+
+      var parentDiv = toc.lastChild;
+      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
+        parentDiv.querySelector('.child-container').appendChild(link);
+      }
+    }
+  });
+
+  // Scroll highlight
+  window.addEventListener('scroll', function() {
+    var currentSection = '';
+    var scrollY = window.scrollY + 100;
+
+    filteredHeadings.forEach(function(section) {
+      if (section.offsetTop <= scrollY) {
+        currentSection = section.id;
+      }
+    });
+
+    document.querySelectorAll('.toc-parent').forEach(function(parent) {
+      var childContainer = parent.querySelector('.child-container');
+      if (childContainer) {
+        childContainer.classList.remove('open');
+      }
+      var btn = parent.querySelector('.toggle-btn');
+      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
+    });
+
+    document.querySelectorAll('.toc-link').forEach(function(link) {
+      link.classList.remove('active');
+    });
+
+    var activeLink = idToLink[currentSection];
+    if (activeLink) {
+      activeLink.classList.add('active');
+      var parent = activeLink.closest('.toc-parent');
+      if (parent) {
+        var child = parent.querySelector('.child-container');
+        if (child) child.classList.add('open');
+        var btn = parent.querySelector('.toggle-btn');
+        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
+      }
+    }
+  });
+
+  // Smooth scroll on click (offset for sticky header)
+  document.querySelectorAll('.toc-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var targetId = link.getAttribute('data-heading-id');
+      var targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        var headerHeight = document.querySelector('header').offsetHeight + 20;
+        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+</script>
+
+    </article>
+    <span class="print-footer">Policy Optimization MPO DAPO GSPO - November 27, 2025 - clay harmon</span>
+    <footer>
+  <hr class="slender">
+  <ul class="footer-links">
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+    
+  </ul>
+  <div class="credits">
+    <span>&copy; 2025-2026 L77</span><br><br>
+    <span>Powered By Jekyll And Tufte Theme</span>
+  </div>
+</footer>
+
+    <button id="backToTop" class="back-to-top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
+  </svg>
+</button>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 100) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  });
+  backToTop.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
+
+  </body>
+</html>

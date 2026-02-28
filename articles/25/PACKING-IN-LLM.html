@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>让 Packing 加速你的大模型训练</title>
+  <meta name="description" content="这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作">
+
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (!theme) {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/img/site.webmanifest">
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="/articles/25/PACKING-IN-LLM">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and nav template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon-96x96.png" alt="CH"></a>
+	<a href="/blog/">blog</a>
+	<a href="/archive/">Archive</a>
+	<a href="/about/">About</a>
+	<div class="search-wrapper">
+	  <input type="text" id="search-input" class="search-input" placeholder="Search articles..." autocomplete="off">
+	  <div id="search-results" class="search-results" style="display:none;"></div>
+	</div>
+	<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+	  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	</button>
+	</nav>
+</header>
+<script>
+(function() {
+  var searchInput = document.getElementById('search-input');
+  var searchResults = document.getElementById('search-results');
+  var posts = null;
+
+  function loadPosts(callback) {
+    if (posts) { callback(); return; }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/search.json');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        posts = JSON.parse(xhr.responseText);
+        callback();
+      }
+    };
+    xhr.send();
+  }
+
+  function doSearch(query) {
+    if (!query || query.length < 1) {
+      searchResults.style.display = 'none';
+      return;
+    }
+    loadPosts(function() {
+      var q = query.toLowerCase();
+      var matches = [];
+      var seen = {};
+      for (var i = 0; i < posts.length; i++) {
+        var p = posts[i];
+        if (seen[p.url]) continue;
+        if (p.title.toLowerCase().indexOf(q) !== -1) {
+          matches.push(p);
+          seen[p.url] = true;
+        }
+      }
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
+      } else {
+        var html = '';
+        for (var j = 0; j < matches.length; j++) {
+          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
+                  '<span class="search-result-title">' + matches[j].title + '</span>' +
+                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
+        }
+        searchResults.innerHTML = html;
+      }
+      searchResults.style.display = 'block';
+    });
+  }
+
+  var debounceTimer;
+  searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      doSearch(searchInput.value.trim());
+    }, 200);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      searchResults.style.display = 'none';
+    }
+  });
+
+  searchInput.addEventListener('focus', function() {
+    if (searchInput.value.trim().length >= 1) {
+      doSearch(searchInput.value.trim());
+    }
+  });
+})();
+
+// Header shadow on scroll
+(function() {
+  var header = document.querySelector('header');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 10) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+})();
+
+// Theme toggle
+(function() {
+  var toggle = document.getElementById('theme-toggle');
+  var iconMoon = toggle.querySelector('.icon-moon');
+  var iconSun = toggle.querySelector('.icon-sun');
+
+  function updateIcons(theme) {
+    if (theme === 'dark') {
+      iconMoon.style.display = 'none';
+      iconSun.style.display = 'block';
+    } else {
+      iconMoon.style.display = 'block';
+      iconSun.style.display = 'none';
+    }
+  }
+
+  updateIcons(document.documentElement.getAttribute('data-theme'));
+
+  toggle.addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateIcons(next);
+
+    // Sync Giscus theme
+    var giscusFrame = document.querySelector('iframe.giscus-frame');
+    if (giscusFrame) {
+      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
+      giscusFrame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme } } },
+        'https://giscus.app'
+      );
+    }
+  });
+})();
+</script>
+
+    <article>
+      <div class="container">
+        <nav class="toc" id="toc"></nav>
+        <main class="content">
+          <h1 style="text-align: left">让 Packing 加速你的大模型训练</h1>
+          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 3367</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">13min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">Category:</span><span class="color-post-meta-value">&nbsp; AI</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Infra</span></p>
+
+          <p>这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作
+<!--more--></p>
+
+<p>在解读论文之前，先对 Data Packing 进行一个简单的介绍，现在看来它是一种很常见的消除组内 Padding 的方法。如下图所示，左边是我们一般组 batch 的方式，绿色是文本原本的 token，灰色是 Padding 的 token，这样子组 batch 的缺点在于会浪费算力去算灰色的 token（这些token 是原本不需要去计算的）</p>
+
+<p>当我们采用 Packing 的方式去组 batch 时，就不存在这个问题了（如右边）。需要考虑的是怎么样才可以使得组到我们想要的长度（尽量将算力全用到有效的地方）以及会不会给 loss 计算带来问题</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/packing1.png" /><figcaption>Packing 示意图</figcaption></figure>
+
+<h1 id="omnibal">OmniBal</h1>
+
+<p>介绍的第一篇论文是 <a href="https://arxiv.org/pdf/2407.20761">Towards Fast Instruction-Tuning for Vision-Language Models via
+Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。它主要是针对多模态模型训练效率的优化，论文中分别在 DeepSpeed 和 Megatron 上对当时的 Internvl 和 Qwenvl 进行了实验。提出从三个方面来对训练进行优化：data、model 和 memory，接下来我们进行一一介绍</p>
+
+<h2 id="data-imbalance">Data Imbalance</h2>
+
+<p>经过我开头对 Packing 的介绍，很容易知道一般的组 batch 方式很容易造成 token 计算的浪费。其实除了这个问题，如下图所示我们考虑 DP 层面，由于各个 DP 中 mini-batch 数据长度总和不一样，那么各个 DP 的计算量也就不一样，从而致使可能计算量小的 DP 等待计算量大的 DP 的情况<label for="当然你" class="margin-toggle sidenote-number"></label><input type="checkbox" id="当然你" class="margin-toggle" /><span class="sidenote">当然你可以将数据都 Padding 到固定长度，但这样的话就会浪费更多 token 的计算 </span>。假如我们能把每个 DP 的数据 Packing 到一样的长度<label for="这里是" class="margin-toggle sidenote-number"></label><input type="checkbox" id="这里是" class="margin-toggle" /><span class="sidenote">这里是假设计算量和数据总长度大致线性相关时 </span>，就可以解决这个问题</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/packing2.png" /><figcaption>传统组 batch 的劣势</figcaption></figure>
+
+<p>文中使用了一种称之为 Iterative Sampling Filtering 的算法来进行 Packing，具体流程如下伪代码所示，首先是 sampling 阶段：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">sampling</span><span class="p">(</span><span class="n">data_list</span><span class="p">):</span>
+	<span class="n">group</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 当前进行 pack 的组，eg: [data1, data2, ...]
+</span>	<span class="c1"># 存在已经满足条件的组, eg: [[data1, data2, ...], [data4, ...], ...]
+</span>	<span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">vit_len_sum</span><span class="p">,</span> <span class="n">total_len_sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+	<span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">data_list</span><span class="p">:</span>
+		<span class="n">vit_len</span><span class="p">,</span> <span class="n">total_len</span> <span class="o">=</span> <span class="n">data</span>
+		<span class="c1"># 当前的长度满足所设定的最大值 vit_length total_lenth 时，完成该 group 的 packing
+</span>		<span class="k">if</span> <span class="n">vit_len_sum</span> <span class="o">+</span> <span class="n">vit_len</span> <span class="o">&gt;</span> <span class="n">vit_length</span> <span class="ow">or</span> <span class="n">total_len_sum</span> <span class="o">+</span> <span class="n">total_len</span> <span class="o">&gt;</span> <span class="n">total_lenth</span><span class="p">:</span>
+			<span class="n">groups</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+			<span class="n">vit_len_sum</span> <span class="o">=</span> <span class="n">vit_len</span>
+			<span class="n">total_len_sum</span> <span class="o">=</span> <span class="n">total_len</span>
+			<span class="n">group</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1"># 否则直接加入该 group
+</span>			<span class="n">group</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+			<span class="n">vit_len_sum</span> <span class="o">+=</span> <span class="n">vit_len</span>
+			<span class="n">total_len_sum</span> <span class="o">+=</span> <span class="n">total_len</span>
+	<span class="n">groups</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">groups</span>
+</code></pre></div></div>
+
+<p>由上面的代码可是得知，组好的 group （除了最后一个）都是在差一条数据的情况就达到组 group 条件之一：group 的 vit 数量之和大于设定 vit 的最大值 <code class="language-plaintext highlighter-rouge">vit_length</code> ；group 数据长度之和大于设定的长度最大值 <code class="language-plaintext highlighter-rouge">total_lenth</code> 。那么就会存在一个问题，如下图所示黄色部分是阈值长度，group1 和 group2 都差一条数据（灰色部分）达到阈值从而组成了 group，但是他们之间也会存在长度差距</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/packing3.png" /><figcaption>sampling 结果示意图</figcaption></figure>
+
+<p>所以，需要筛出离指定阈值差距较大的 group，如下进行 Filtering 阶段：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">filtering</span><span class="p">(</span><span class="n">groups</span><span class="p">):</span>
+	<span class="n">filter_groups</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 用于存放满足过滤条件的 group
+</span>	<span class="n">need_resampling_data</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 需要再进行 group 的数据
+</span>	<span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+		<span class="n">group_vit_len</span> <span class="o">=</span> <span class="nf">sum_vit_len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+		<span class="n">group_total_len</span> <span class="o">=</span> <span class="nf">sum_total_len</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+		<span class="c1"># total_lenth &gt;= group_total_len &gt; total_length_thresh 满足组好的条件
+</span>		<span class="k">if</span> <span class="n">group_vit_len</span> <span class="o">==</span> <span class="n">vit_length</span> <span class="ow">or</span> <span class="n">group_total_len</span> <span class="o">&gt;=</span> <span class="n">total_length_thresh</span><span class="p">:</span>
+			<span class="n">filter_groups</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">need_resampling_data</span><span class="p">.</span><span class="nf">extend</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+		
+	<span class="k">return</span> <span class="n">filter_groups</span><span class="p">,</span> <span class="n">need_resampling_data</span>
+</code></pre></div></div>
+
+<p>对于需要重新 sample 的数据 <code class="language-plaintext highlighter-rouge">need_resampling_data</code>，我们可以再次放进 <code class="language-plaintext highlighter-rouge">sampling</code> 进行组 group，然后 <code class="language-plaintext highlighter-rouge">filtering</code> ，如此循环，体现出了 Iterative Sampling Filtering 中的 Iterative。经过这样的算法，得到的 Packing 结果的总长度可以控制在一定的范围内，使各个 DP 间得到较好的 balance</p>
+
+<h2 id="model-imbalance--memory-imbalance">Model Imbalance &amp; Memory Imbalance</h2>
+
+<p>这两个优化是建立在 Data Balance 之上，当 DP 拥有了近似计算量的输入时，需要考虑对于 VLM 怎么去设置 PP 划分是更合适的。其原因是 VLM 是一个异构的架构，单纯的参数或者层均分都可以造成 PP 之间的计算量不均衡的情况</p>
+
+<p>论文使用了一种 profile 每一层的 forward 时间，那么就能得到总的 forward 时间。假如要对模型进行 PP 3 的切分，也就是需要找到中间两层作为切分点，由于有 forward 时间信息，很容易找到能均分 PP 时间的两层，假如是 <code class="language-plaintext highlighter-rouge">layer_m</code> 和 <code class="language-plaintext highlighter-rouge">layer_n</code> 。另外论文还会找这两层上下层一起作为候选的切分层，因此对于 PP 切分点1 有 <code class="language-plaintext highlighter-rouge">[layer_m-1 layer_m layer_m+1]</code> 三层，同理对于 PP 切分点2 也有同样的三层，总的切分办法一共是 9 种。那么怎么衡量这 9 种方法哪种更好呢，文中提出了一下指标：</p>
+
+\[\text{VAR}(\text{fwd_time}) = \sum_{i=1}^{N} \left(\text{FWD}(S_i) - \overline{\text{FWD}(S_i)}\right)^2\]
+
+\[\text{SUM}(\text{comm}) = \sum_{i=1}^{N-1} \text{ACTIV}(l_{pi})\]
+
+<p>\(\text{VAR}(\text{fwd_time})\) 是各 PP 的时间与均值时间的差值总和，\(\text{SUM}(\text{comm})\) 是各 PP 之间激活值（应该是每个 PP 中最后一层的输出）通信量的总和。也就是文章考虑了计算和通信两个层面来进行选择</p>
+
+<p>对于 memory 是对于不同长度的输入，来调整 model 需要开启 checkpoint 的层数，本质上是尽量提高显存的利用率，减少重计算的层数，从而提高训练效率</p>
+
+<h2 id="performance">Performance</h2>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image.png" /><figcaption>deepspeed 和 megatron 上的表现</figcaption></figure>
+
+<p>可以看到，在两种后端的提速表现都非常明显，而且保证了精度没有明显损失的情况</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image1.png" /><figcaption>不同 size model 上的表</figcaption></figure>
+
+<p>在不同 size 的模型上也进行了速度验证，最快有超过 3 倍的提速！</p>
+
+<h1 id="hbp">HBP</h1>
+
+<p>HBP 是 Hierarchical Balance Packing 的简称，来自论文 <a href="https://arxiv.org/pdf/2503.07680">Towards Efficient Supervised Fine-tuning for Long-Context LLM</a>。有了上面的基础，比较容易理解 HBP，实际上这篇论文解决的问题很清晰：训练长文本时，难免出现其他长度的数据或者想和其他长度的数据训练（128k 和 32k 8k 混训），那么如果全都 Packing 到 128k，在开 SP 的情况下会存在 all to all 通信浪费</p>
+
+<p>论文的实验都是基于 DeepSpeed 为后端进行的，整体的 Framework 如下图所示</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image2.png" /><figcaption>HBP Framework</figcaption></figure>
+
+<p>在 OmniBal 中我们介绍了可以通过调整开启 checkpoint 的层数来减少重计算从而加速训练，那么现在当开启 SP 时，SP 开得越大，空出来的显存越多，多的显存可以用于减少开启 checkpoint 的层数，但是 SP 越大通信就越耗时，所以这俩需要进行均衡取舍的，上图中的 Hierarchical Groups Auto-Selection 就是干这个事</p>
+
+<p>当对于每个 length 确定了该用什么样的 checkpoint 和 SP 后，就可以进行 Hierarchical Packing 了。由上图可知，对数据按照 length 进行分组后，先 Packing 较长的 length，并用短的数据进行尝试填充，使其尽量 Packing 到指定长度，然后再 Packing 短的</p>
+
+<p>接下来详细介绍这两部分以及为了训练稳定做的课程学习和 Loss 修改部分</p>
+
+<h2 id="hierarchical-groups-auto-selection">Hierarchical Groups Auto-Selection</h2>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image3.png" /><figcaption>Auto-Selection 算法</figcaption></figure>
+
+<p>整个流程，首先对每个 length 在开某个 SP 的条件下，尽量去尝试不开 checkpoint 的最大层数，比如对于 32k 开 SP 为 2 对应不开的 checkpoint 的最大层数为 0（即需要全开），继续 profile SP 为 4、8 不开 checkpoint 的层数（尽量不要超过 8 因为节点间通信慢），最后得到 32k 在 SP 为 8 不开 checkpoint 层数为 24 层是 32k 所有配置中最快的，同理我们可以得出 128k、64k 以及 16k、8k 的最快对应的 SP checkpoint 配置，同时我们也可以得出最快的 length 是哪一个，如下图则是对 LLama 8B profile 的配置结果（注意这里的每个 iter 会调整 gradient accumulation step 来使得每个 iter 过的 token 数量一样）</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image4.png" /><figcaption>各 length 结果</figcaption></figure>
+
+<p>一般来讲，profile 的最大 length 是我们需要训练的最大 length ～ \(l_{max}\)，\(l_{max.sp}\) 为 \(l_{max}\) 最快的 SP 配置，这个 length 一定在我们的训练 config 中。最快的 length（如果不是 max）也是需要加到 config 这里标记为 \(l_{best}\) 和对应 SP \(l_{best.sp}\)，这两个配置是一定有的，另外我们需要考虑长度为 \(l_1=l_{best}/l_{best.sp}\) 以及 \(l_2=l_{max}/l_{max.sp}\) 可以理解为这两个 length 是 max 和 best SP 后每个 rank 跑的 length，对应的 SP 设置为 1（即没有 all to all 通信，一个 rank 是一个 DP）。如果 \(l_2 \lt l_{best}\) 则直接并入 \(l_{best}\)，因此最后最多有四组 Packing length 的设置，最少有三组</p>
+
+<h2 id="balance-packing">Balance Packing</h2>
+
+<p>经过了上述的 profile 后，我们可以根据需要训练的 length 对数据进行分组，从 length 最长的组进行 Packing，由 OmniBal 的 ISF 可知，可能存在一些组未到 <code class="language-plaintext highlighter-rouge">length_thresh</code> 的标准，这个时候 HBP 的做法则是一次从后面的组取出 sample 进行补充 Packing 直到达到 thresh 或者遍历完，如下为伪代码所示：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># packed_samples 为已经用 ISF Packing 过的 groups
+</span><span class="k">for</span> <span class="n">sample_id_l</span><span class="p">,</span> <span class="n">sample_l</span> <span class="ow">in</span> <span class="nf">enumerate</span><span class="p">(</span><span class="n">packed_samples</span><span class="p">):</span>
+    <span class="n">llm_num</span> <span class="o">=</span> <span class="nf">token_sum</span><span class="p">(</span><span class="n">sample_l</span><span class="p">)</span>
+    <span class="c1"># 如果 group 长度达到 thresh，即 pack_thresh &lt; llm_num &lt; pack_length 则略过
+</span>    <span class="k">if</span> <span class="n">llm_num</span> <span class="o">&gt;</span> <span class="n">packed_thresh</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="c1"># g_id 越小，里面的数据长度就越小，比如 grouped_samples[0] 都是还未 Packing 的 8k 以下的数据
+</span>    <span class="k">for</span> <span class="n">sub_g_id</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="n">g_id</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">sample_s</span> <span class="ow">in</span> <span class="n">grouped_samples</span><span class="p">[</span><span class="n">sub_g_id</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">llm_num</span> <span class="o">&gt;</span> <span class="n">packed_thresh</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="c1"># 如果该 sample 用于去 Packing 更长数据组了，则需要改正其 g_id
+</span>            <span class="c1"># 不再加入原长度组的 Packing
+</span>            <span class="k">if</span> <span class="n">sample_s</span><span class="p">[</span><span class="sh">'</span><span class="s">group_id</span><span class="sh">'</span><span class="p">]</span> <span class="o">==</span> <span class="n">sub_g_id</span> <span class="ow">and</span> <span class="n">llm_num</span> <span class="o">+</span> <span class="n">sample_s</span><span class="p">[</span><span class="sh">'</span><span class="s">token_num</span><span class="sh">'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">packed_length</span><span class="p">:</span>
+                <span class="n">sample_s</span><span class="p">[</span><span class="sh">'</span><span class="s">group_id</span><span class="sh">'</span><span class="p">]</span> <span class="o">=</span> <span class="n">g_id</span>
+                <span class="n">packed_samples</span><span class="p">[</span><span class="n">sample_id_l</span><span class="p">].</span><span class="nf">append</span><span class="p">(</span><span class="n">sample_s</span><span class="p">)</span>
+                <span class="n">llm_num</span> <span class="o">+=</span> <span class="n">sample_s</span><span class="p">[</span><span class="sh">'</span><span class="s">token_num</span><span class="sh">'</span><span class="p">]</span>
+
+</code></pre></div></div>
+
+<p>最后 Packing 数据的形式会是怎么样呢，如下图所示：</p>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/packing4.png" /><figcaption>packing 结果</figcaption></figure>
+
+<p>可以看到对于 <code class="language-plaintext highlighter-rouge">g_id=2</code> 会有来自短数据的来进行充分 Packing，对于<code class="language-plaintext highlighter-rouge">g_id=1</code> 是由两个小包组成一个大包，每个 DP 分到一个小包，如果还需要 SP，则每个 rank 实际跑的数据长度会更小</p>
+
+<p>这里有 2 个细节需要处理：</p>
+
+<ul>
+  <li>对于每一个层级需要设置不同的 SP group</li>
+  <li>对于每一个层级的 gradient accumulation step 不同</li>
+</ul>
+
+<h2 id="curriculum-learning--stable-loss-normalizer">Curriculum Learning &amp; Stable Loss Normalizer</h2>
+
+<p>这两个都是为了稳定训练的，前者是通过调整数据训练顺序让短数据先训练一部分，使模型能先适应数据的类型。后者则是为了缓解 Packing 给长短数据带来的影响，比如如果长数据和短数据一起训的时候，由于是长短数据一共的 token 数作为 normalization，那么短数据的 loss 贡献程度必然会被大幅度削减，从而影响较短数据优化。文中使用一个 global batch size 的 token 作为 normalization 实际上使用了一个常数，这样保证梯度不大而且各长度数据 loss 贡献不变</p>
+
+<h2 id="performance-1">Performance</h2>
+
+<figure class="fullwidth"><img src="/assets/packing-summary/image5.png" /><figcaption>HBP 结果</figcaption></figure>
+
+<p>可以看到加速效果非常明显，这里 balance 是指对于有没有按照包总长度平方进行 sort（这里是对 attention 那的计算量做了一个均衡）</p>
+
+<p>以上便是关于两篇论文的全部内容了</p>
+
+
+          <p class="subtitle" style="text-align:right"><span class="color-date">August 20, 2025</span></p>
+
+          
+            
+<div class="comments-section">
+  <h1>Comments</h1>
+  <p class="comments-hint">Sign in with GitHub to comment, or click the bottom icon to chat with me.</p>
+  <script>
+    (function() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var theme = 'https://froml77.top/css/giscus-' + (isDark ? 'dark' : 'light') + '.css';
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo', 'FL77N/FL77N.github.io');
+      script.setAttribute('data-repo-id', 'R_kgDOHLjozQ');
+      script.setAttribute('data-category', 'Announcements');
+      script.setAttribute('data-category-id', 'DIC_kwDOHLjozc4C3Y7x');
+      script.setAttribute('data-mapping', 'pathname');
+      script.setAttribute('data-strict', '0');
+      script.setAttribute('data-reactions-enabled', '1');
+      script.setAttribute('data-emit-metadata', '0');
+      script.setAttribute('data-input-position', 'top');
+      script.setAttribute('data-theme', theme);
+      script.setAttribute('data-lang', 'en');
+      script.setAttribute('crossorigin', 'anonymous');
+      script.async = true;
+      document.currentScript.parentElement.appendChild(script);
+    })();
+  </script>
+</div>
+
+
+          
+        </main>
+      </div>
+
+      <script>
+(function() {
+  var toc = document.getElementById('toc');
+  if (!toc) return;
+
+  // Only scan H1 and H2
+  var allHeadings = document.querySelectorAll('article h1, article h2');
+  var filteredHeadings = [];
+  var skippedTitle = false;
+
+  allHeadings.forEach(function(h) {
+    // Skip the page title (first h1)
+    if (!skippedTitle && h.tagName === 'H1') {
+      skippedTitle = true;
+      return;
+    }
+    filteredHeadings.push(h);
+  });
+
+  if (filteredHeadings.length === 0) {
+    toc.style.display = 'none';
+    return;
+  }
+
+  // Check if there are any H1 headings in content
+  var hasH1 = false;
+  filteredHeadings.forEach(function(h) {
+    if (h.tagName === 'H1') hasH1 = true;
+  });
+
+  // Build a map from heading id to toc link for fast lookup
+  var idToLink = {};
+
+  filteredHeadings.forEach(function(heading) {
+    if (!heading.id) {
+      heading.id = encodeURIComponent(
+        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
+      );
+    }
+
+    var link = document.createElement('a');
+    link.href = '#' + encodeURIComponent(heading.id);
+    link.textContent = heading.textContent;
+    link.setAttribute('data-heading-id', heading.id);
+
+    idToLink[heading.id] = link;
+
+    if (!hasH1) {
+      // No H1 in content: all H2 are standalone level-1 items
+      link.classList.add('toc-link', 'level-1');
+
+      var itemDiv = document.createElement('div');
+      itemDiv.className = 'toc-parent';
+
+      var toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-btn';
+      toggleBtn.style.visibility = 'hidden';
+
+      itemDiv.appendChild(toggleBtn);
+      itemDiv.appendChild(link);
+      toc.appendChild(itemDiv);
+    } else if (heading.tagName === 'H1') {
+      // H1 as parent
+      link.classList.add('toc-link', 'level-1');
+
+      var parentDiv = document.createElement('div');
+      parentDiv.className = 'toc-parent';
+
+      var toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-btn';
+      toggleBtn.textContent = '\u2660'; // ♠
+      toggleBtn.addEventListener('click', function() {
+        var child = parentDiv.querySelector('.child-container');
+        child.classList.toggle('open');
+        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
+      });
+
+      var childContainer = document.createElement('div');
+      childContainer.className = 'child-container';
+
+      parentDiv.appendChild(toggleBtn);
+      parentDiv.appendChild(link);
+      parentDiv.appendChild(childContainer);
+      toc.appendChild(parentDiv);
+    } else if (heading.tagName === 'H2') {
+      // H2 as child of last H1 parent
+      link.classList.add('toc-link', 'level-2');
+
+      var parentDiv = toc.lastChild;
+      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
+        parentDiv.querySelector('.child-container').appendChild(link);
+      }
+    }
+  });
+
+  // Scroll highlight
+  window.addEventListener('scroll', function() {
+    var currentSection = '';
+    var scrollY = window.scrollY + 100;
+
+    filteredHeadings.forEach(function(section) {
+      if (section.offsetTop <= scrollY) {
+        currentSection = section.id;
+      }
+    });
+
+    document.querySelectorAll('.toc-parent').forEach(function(parent) {
+      var childContainer = parent.querySelector('.child-container');
+      if (childContainer) {
+        childContainer.classList.remove('open');
+      }
+      var btn = parent.querySelector('.toggle-btn');
+      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
+    });
+
+    document.querySelectorAll('.toc-link').forEach(function(link) {
+      link.classList.remove('active');
+    });
+
+    var activeLink = idToLink[currentSection];
+    if (activeLink) {
+      activeLink.classList.add('active');
+      var parent = activeLink.closest('.toc-parent');
+      if (parent) {
+        var child = parent.querySelector('.child-container');
+        if (child) child.classList.add('open');
+        var btn = parent.querySelector('.toggle-btn');
+        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
+      }
+    }
+  });
+
+  // Smooth scroll on click (offset for sticky header)
+  document.querySelectorAll('.toc-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var targetId = link.getAttribute('data-heading-id');
+      var targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        var headerHeight = document.querySelector('header').offsetHeight + 20;
+        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+</script>
+
+    </article>
+    <span class="print-footer">让 Packing 加速你的大模型训练 - August 20, 2025 - clay harmon</span>
+    <footer>
+  <hr class="slender">
+  <ul class="footer-links">
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+    
+  </ul>
+  <div class="credits">
+    <span>&copy; 2025-2026 L77</span><br><br>
+    <span>Powered By Jekyll And Tufte Theme</span>
+  </div>
+</footer>
+
+    <button id="backToTop" class="back-to-top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
+  </svg>
+</button>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 100) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  });
+  backToTop.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
+
+  </body>
+</html>

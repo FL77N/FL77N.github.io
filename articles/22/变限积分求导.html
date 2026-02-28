@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>变限积分求导的种种</title>
+  <meta name="description" content="变上限积分求导的理解假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]其中 \(C\) 是常数，可以将其表示为 \(...">
+
+  <script>
+    (function() {
+      var theme = localStorage.getItem('theme');
+      if (!theme) {
+        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
+  
+    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+  
+
+<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
+  
+    <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: [
+      "MathMenu.js",
+      "MathZoom.js",
+      "AssistiveMML.js",
+      "a11y/accessibility-menu.js"
+    ],
+    jax: ["input/TeX", "output/CommonHTML"],
+    TeX: {
+      extensions: [
+        "AMSmath.js",
+        "AMSsymbols.js",
+        "noErrors.js",
+        "noUndefined.js",
+      ]
+    }
+  });
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/img/site.webmanifest">
+
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
+
+  <link rel="canonical" href="/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+</head>
+
+  <body>
+    <!--- Header and nav template site-wide -->
+<header>
+    <nav class="group">
+	<a href="/"><img class="badge" src="/assets/img/favicon-96x96.png" alt="CH"></a>
+	<a href="/blog/">blog</a>
+	<a href="/archive/">Archive</a>
+	<a href="/about/">About</a>
+	<div class="search-wrapper">
+	  <input type="text" id="search-input" class="search-input" placeholder="Search articles..." autocomplete="off">
+	  <div id="search-results" class="search-results" style="display:none;"></div>
+	</div>
+	<button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+	  <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	</button>
+	</nav>
+</header>
+<script>
+(function() {
+  var searchInput = document.getElementById('search-input');
+  var searchResults = document.getElementById('search-results');
+  var posts = null;
+
+  function loadPosts(callback) {
+    if (posts) { callback(); return; }
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/search.json');
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        posts = JSON.parse(xhr.responseText);
+        callback();
+      }
+    };
+    xhr.send();
+  }
+
+  function doSearch(query) {
+    if (!query || query.length < 1) {
+      searchResults.style.display = 'none';
+      return;
+    }
+    loadPosts(function() {
+      var q = query.toLowerCase();
+      var matches = [];
+      var seen = {};
+      for (var i = 0; i < posts.length; i++) {
+        var p = posts[i];
+        if (seen[p.url]) continue;
+        if (p.title.toLowerCase().indexOf(q) !== -1) {
+          matches.push(p);
+          seen[p.url] = true;
+        }
+      }
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
+      } else {
+        var html = '';
+        for (var j = 0; j < matches.length; j++) {
+          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
+                  '<span class="search-result-title">' + matches[j].title + '</span>' +
+                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
+        }
+        searchResults.innerHTML = html;
+      }
+      searchResults.style.display = 'block';
+    });
+  }
+
+  var debounceTimer;
+  searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      doSearch(searchInput.value.trim());
+    }, 200);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      searchResults.style.display = 'none';
+    }
+  });
+
+  searchInput.addEventListener('focus', function() {
+    if (searchInput.value.trim().length >= 1) {
+      doSearch(searchInput.value.trim());
+    }
+  });
+})();
+
+// Header shadow on scroll
+(function() {
+  var header = document.querySelector('header');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 10) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+})();
+
+// Theme toggle
+(function() {
+  var toggle = document.getElementById('theme-toggle');
+  var iconMoon = toggle.querySelector('.icon-moon');
+  var iconSun = toggle.querySelector('.icon-sun');
+
+  function updateIcons(theme) {
+    if (theme === 'dark') {
+      iconMoon.style.display = 'none';
+      iconSun.style.display = 'block';
+    } else {
+      iconMoon.style.display = 'block';
+      iconSun.style.display = 'none';
+    }
+  }
+
+  updateIcons(document.documentElement.getAttribute('data-theme'));
+
+  toggle.addEventListener('click', function() {
+    var current = document.documentElement.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateIcons(next);
+
+    // Sync Giscus theme
+    var giscusFrame = document.querySelector('iframe.giscus-frame');
+    if (giscusFrame) {
+      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
+      giscusFrame.contentWindow.postMessage(
+        { giscus: { setConfig: { theme: giscusTheme } } },
+        'https://giscus.app'
+      );
+    }
+  });
+})();
+</script>
+
+    <article>
+      <div class="container">
+        <nav class="toc" id="toc"></nav>
+        <main class="content">
+          <h1 style="text-align: left">变限积分求导的种种</h1>
+          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 1542</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">6min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">Category:</span><span class="color-post-meta-value">&nbsp; MATH</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> 微积分</span></p>
+
+          <h2 id="变上限积分求导的理解">变上限积分求导的理解</h2>
+
+<p>假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：</p>
+
+\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]
+
+<p>其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对其进行积分：</p>
+
+\[\int_{a}^{x} f(t) dt = \int_{a}^{x} F^{\prime}(t) dt= F(x) - F(a) = F(x) + C\]
+
+<!--more-->
+<p>因此，其中我们称 \(\int_{a}^{x}f(t)dt\) 为 \(f(x)\) 的变上限积的定积分，也算是 \(f(x)\) 的一个原函数。同时我们也可以得到牛顿-莱布尼茨 (Newton-Leibniz) 公式：</p>
+
+\[\int_{a}^{x=b} f(t)dt = F(b) - F(a)\]
+
+<p>以上严谨的推导需要通过积分中值配合导数的定义来进行求证，这里暂时省略一段。对于变上限积分求导有：</p>
+
+\[\frac{d\int_{a}^{x} f(t) dt}{dx} = \frac{d(F(x) - F(a))}{dx} = F^{\prime}(x) = f(x)\]
+
+<p>对于更一般的情况，当上下限是关于 \(x\) 的可导函数时：</p>
+
+\[\begin{aligned}\frac{d\int_{\phi(x)}^{\psi(x)} f(t)dt}{dx} &amp;= \frac{dF(\psi(x)) - F(\phi(x))}{dx} \\ &amp;= F^{\prime}(\psi(x))\psi^{\prime}(x) - F^{\prime}(\phi(x))\phi^{\prime}(x) \\ &amp;=f(\psi(x))\psi^{\prime}(x) - f(\phi(x))\phi^{\prime}(x)\end{aligned}\]
+
+<p>因此对变上下限积分求导有下式：</p>
+
+\[\frac{d\int_{\phi(x)}^{\psi(x)} f(t)dt}{dx} =f(\psi(x))\psi^{\prime}(x) - f(\phi(x))\phi^{\prime}(x)\]
+
+<h2 id="应用示例展示">应用示例展示</h2>
+
+<p>介绍完理论知识，这里进行举例进行应用。其中涉及到变上限积分时，换元操作易出现错误以及被积函数包含积分上限变量的情况。</p>
+
+<p>♣ 换元易错示例：</p>
+
+<ul>
+  <li>问题：</li>
+</ul>
+
+\[\frac{d}{dx}\int_{0}^{x^2}\cos(t^2)dt\]
+
+<ul>
+  <li>常规解法：</li>
+</ul>
+
+\[\frac{d}{dx}\int_{0}^{x^2}\cos(t^{2})dt=2x\cdot \cos(x^4)\]
+
+<ul>
+  <li>学妹的错误解法：</li>
+</ul>
+
+\[\frac{1}{2}\frac{d}{dx}\int_{0}^{x^2}\cos(t^{2})d(t^2)=x\cdot \cos(x^4)\]
+
+<ul>
+  <li>
+    <p>学妹的问题在于没有进行上限的变换以及积分变量的换元替换，因此容易出现失误（不熟悉时不建议这么做），咱们按步骤来：</p>
+
+    <ul>
+      <li>
+        <p>先进行积分变量的替换，令 \(a = t^2\)，有 \(da =d(t^2) \rightarrow da = 2tdt \rightarrow \frac{da}{2t} = dt\)</p>
+      </li>
+      <li>
+        <p>然后进行积分上下限的计算，当 \(t=0\) 时，\(a=0\)；当 \(t=x^2\) 时，\(a=x^4\)。带入有：</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+\[\begin{aligned} &amp;\frac{d}{dx}\int_{0}^{x^4}\cos a\frac{da}{2t} \\ &amp;\because a = t^2 \Rightarrow t = \sqrt{a} \\ &amp;\Rightarrow \frac{d}{dx}\int_{0}^{x^4}\frac{\cos a}{2\sqrt{a}}da \\ &amp;\Rightarrow \frac{\cos(x^4)}{2\sqrt{x^4}}dx^4 = 2x\cdot \cos(x^4) \end{aligned}\]
+
+<p>♠ 被积函数包含积分上限变量示例：</p>
+
+<p>本示例借用一个学长探究 Newton-Leibniz 公式与 Navier-Stokes 方程关系时，示范容易出现变上限积分求导时犯的错误，学长本身的推导没有错，只是觉得可以用来提醒其他同学：</p>
+
+<ul>
+  <li>
+    <p>问题：</p>
+
+    <p>求变上限积分 \(\int_{a(t)}^{b(t)} f(x, t)dx\) 的导数</p>
+
+    <p>将 N-S 方程 \(\frac{\partial \rho}{\partial t}+ \frac{\partial (\rho \mu)}{\partial t} = 0\) 与上式进行联系</p>
+  </li>
+  <li>
+    <p>解答：</p>
+
+    <p>我们将上述式子具象化，使用一维流动假设进行联系，假设下述是一根无限长的水管，在 \(t\) 时刻有一滴水（橙色部分），其密度与时间和空间的函数为： \(\rho(x, t)\) ，如下图所示，水滴的边界为 \(a(t)\) 和 \(b(t)\) 。经过时间 \(\Delta t\) ，水滴位置变为  \(a(t+\Delta t)\) 和 \(b(t+\Delta t)\) ，密度变为 \(\rho(x, t+\Delta t)\)（蓝色部分）。</p>
+
+    <figure class="fullwidth"><img src="/assets/变限积分求导/1.png" /><figcaption></figcaption></figure>
+
+    <p>在这迅速变化的世界，我们应该找寻不变的真理。这里的真理就是质量守恒定律，水滴不可能跑着跑着质量还减少了吧，搁这儿减肥呢？因此水滴的质量可以由\(m(t)=\int_{a(t)}^{b(t)}\rho(x,t)dx\) 求得，由质量守恒定律，即质量对时间的导数为 0，有：</p>
+  </li>
+</ul>
+
+\[\frac{dm}{dt} = \frac{d}{dt}\int_{a(t)}^{b(t)}\rho(x,t)dx = 0\]
+
+<p>这里是不是很眼熟了，不就是变上限积分求导吗？桥豆麻袋，被积函数含有上限变量 \(t\) ，还能使用其之前的方法直接求导吗？我们举个例子试试：</p>
+
+<p>题目：</p>
+
+\[\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt\]
+
+<p>解法一：直接对变上限积分直接求导</p>
+
+\[\frac{d}{dx}\int_{0}^{x^2} xt^{2}dt=2x\cdot x \cdot x^4 = 2x^6\]
+
+<p>解法二：先积分后求导，因为 \(x\) 不是积分变量，因此我们可以直接将其提到积分号的外面</p>
+
+\[\begin{aligned} \frac{d}{dx}\int_{0}^{x^2} xt^{2}dt&amp;=\frac{d}{dx}x\int_{0}^{x^2} t^{2}dt \\ &amp;=\frac{d}{dx}x\cdot \frac{1}{3}t^3 \Bigg|^{x^2}_{0} = \frac{7x^6}{3} \end{aligned}\]
+
+<p>解法三：将 \(x\) 放到积分号外面，对里面的使用变上限积分求导</p>
+
+\[\begin{aligned} \frac{d}{dx}\int_{0}^{x^2} xt^{2}dt&amp;=\frac{d}{dx}x \cdot\int_{0}^{x^2} t^{2}dt \\ &amp;=\int_{0}^{x^2} t^{2}dt + x \cdot 2x \cdot (x^2)^2 = \frac{7x^6}{3} \end{aligned}\]
+
+<p>显然解法二和解法三是正确的。圆规正转，由上可知我们不能直接对 \(\rho(x,t)\) 使用变上限积分求导。可是我们无法直接先积分后求导，也无法将 \(t\) 分出来。所以只能采取最原始的办法，即使用导数定义的方式来求解了：</p>
+
+\[\frac{dm}{dt} = \lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{a(t+\Delta t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx-\int_{a(t)}^{b(t)}\rho(x,t)dx\Bigg)\]
+
+<p>我们可以看到上述分母既有积分上下限的变化，也有被积函数的变化。前者是空间的变化，后者是时间的变化。因此我们得把时空分离开来：</p>
+
+\[\begin{aligned} \frac{dm}{dt} = \lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{b(t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx&amp;+\int_{a(t+\Delta t)}^{a(t)}\rho(x,t+\Delta t)dx \\ + \int_{a(t)}^{b(t)}\rho(x,t+\Delta t)dx &amp;-\int_{a(t)}^{b(t)}\rho(x,t)dx\Bigg) \end{aligned}\]
+
+<p>上式前面两项是左右边界的变化（空间的变化），因为被积函数保持一致。后面两项则是密度场随时间的变化。前两项分别是积分上限和下限变化，因此使用变限积分求导：</p>
+
+\[\begin{aligned} \lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\int_{b(t)}^{b(t+\Delta t)}\rho(x,t+\Delta t)dx &amp;= \rho(b(t),t)\frac{db(t)}{dt}=\rho(b(t),t)\mu(b(t),t) \\ \lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\int_{a(t+\Delta t)}^{a(t)}\rho(x,t+\Delta t)dx &amp;= \rho(a(t),t)\Big(-\frac{da(t)}{dt}\Big)=\rho(b(t),t)\mu(a(t),t) \end{aligned}\]
+
+<p>其中 \(\mu(x,t)\) 为速度场。使用牛顿-莱布尼兹公式将其合并：</p>
+
+\[\rho(b(t),t)\frac{db(t)}{dt}-\rho(a(t),t)\frac{da(t)}{dt} =\int_{a(t)}^{b(t)}\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x}dx\]
+
+<p>后两项积分上下限一致，可见是对密度函数的求导，易得：</p>
+
+\[\lim_{\Delta t\rightarrow 0}\frac{1}{\Delta t}\Bigg(\int_{a(t)}^{b(t)}\rho(x,t+\Delta t)-\rho(x,t)dx\Bigg)=\int_{a(t)}^{b(t)}\frac{\partial \rho(x,t)}{\partial t}dx\]
+
+<p>将上述两个结果整理得到最后求导结果：</p>
+
+\[\frac{dm}{dt} = \int_{a(t)}^{b(t)}\Bigg(\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x}+\frac{\partial \rho(x,t)}{\partial t} \Bigg)dx = 0\]
+
+<p>对于任意成立的 \(a(t)\) 和 \(b(t)\) 位置，有：</p>
+
+\[\frac{\partial \rho(x,t)}{\partial t}+\frac{\partial (\rho(x,t)\mu(x,t))}{\partial x} = 0\]
+
+<p>这便是一维的流动连续性方程，对于动量、动量矩、能量积分，便可得到完整的 NS 方程。</p>
+
+<p>🌸🌸🌸 这段故事完结 🌈🌈🌈</p>
+
+
+          <p class="subtitle" style="text-align:right"><span class="color-date">June 5, 2022</span></p>
+
+          
+            
+<div class="comments-section">
+  <h1>Comments</h1>
+  <p class="comments-hint">Sign in with GitHub to comment, or click the bottom icon to chat with me.</p>
+  <script>
+    (function() {
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var theme = 'https://froml77.top/css/giscus-' + (isDark ? 'dark' : 'light') + '.css';
+      var script = document.createElement('script');
+      script.src = 'https://giscus.app/client.js';
+      script.setAttribute('data-repo', 'FL77N/FL77N.github.io');
+      script.setAttribute('data-repo-id', 'R_kgDOHLjozQ');
+      script.setAttribute('data-category', 'Announcements');
+      script.setAttribute('data-category-id', 'DIC_kwDOHLjozc4C3Y7x');
+      script.setAttribute('data-mapping', 'pathname');
+      script.setAttribute('data-strict', '0');
+      script.setAttribute('data-reactions-enabled', '1');
+      script.setAttribute('data-emit-metadata', '0');
+      script.setAttribute('data-input-position', 'top');
+      script.setAttribute('data-theme', theme);
+      script.setAttribute('data-lang', 'en');
+      script.setAttribute('crossorigin', 'anonymous');
+      script.async = true;
+      document.currentScript.parentElement.appendChild(script);
+    })();
+  </script>
+</div>
+
+
+          
+        </main>
+      </div>
+
+      <script>
+(function() {
+  var toc = document.getElementById('toc');
+  if (!toc) return;
+
+  // Only scan H1 and H2
+  var allHeadings = document.querySelectorAll('article h1, article h2');
+  var filteredHeadings = [];
+  var skippedTitle = false;
+
+  allHeadings.forEach(function(h) {
+    // Skip the page title (first h1)
+    if (!skippedTitle && h.tagName === 'H1') {
+      skippedTitle = true;
+      return;
+    }
+    filteredHeadings.push(h);
+  });
+
+  if (filteredHeadings.length === 0) {
+    toc.style.display = 'none';
+    return;
+  }
+
+  // Check if there are any H1 headings in content
+  var hasH1 = false;
+  filteredHeadings.forEach(function(h) {
+    if (h.tagName === 'H1') hasH1 = true;
+  });
+
+  // Build a map from heading id to toc link for fast lookup
+  var idToLink = {};
+
+  filteredHeadings.forEach(function(heading) {
+    if (!heading.id) {
+      heading.id = encodeURIComponent(
+        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
+      );
+    }
+
+    var link = document.createElement('a');
+    link.href = '#' + encodeURIComponent(heading.id);
+    link.textContent = heading.textContent;
+    link.setAttribute('data-heading-id', heading.id);
+
+    idToLink[heading.id] = link;
+
+    if (!hasH1) {
+      // No H1 in content: all H2 are standalone level-1 items
+      link.classList.add('toc-link', 'level-1');
+
+      var itemDiv = document.createElement('div');
+      itemDiv.className = 'toc-parent';
+
+      var toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-btn';
+      toggleBtn.style.visibility = 'hidden';
+
+      itemDiv.appendChild(toggleBtn);
+      itemDiv.appendChild(link);
+      toc.appendChild(itemDiv);
+    } else if (heading.tagName === 'H1') {
+      // H1 as parent
+      link.classList.add('toc-link', 'level-1');
+
+      var parentDiv = document.createElement('div');
+      parentDiv.className = 'toc-parent';
+
+      var toggleBtn = document.createElement('button');
+      toggleBtn.className = 'toggle-btn';
+      toggleBtn.textContent = '\u2660'; // ♠
+      toggleBtn.addEventListener('click', function() {
+        var child = parentDiv.querySelector('.child-container');
+        child.classList.toggle('open');
+        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
+      });
+
+      var childContainer = document.createElement('div');
+      childContainer.className = 'child-container';
+
+      parentDiv.appendChild(toggleBtn);
+      parentDiv.appendChild(link);
+      parentDiv.appendChild(childContainer);
+      toc.appendChild(parentDiv);
+    } else if (heading.tagName === 'H2') {
+      // H2 as child of last H1 parent
+      link.classList.add('toc-link', 'level-2');
+
+      var parentDiv = toc.lastChild;
+      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
+        parentDiv.querySelector('.child-container').appendChild(link);
+      }
+    }
+  });
+
+  // Scroll highlight
+  window.addEventListener('scroll', function() {
+    var currentSection = '';
+    var scrollY = window.scrollY + 100;
+
+    filteredHeadings.forEach(function(section) {
+      if (section.offsetTop <= scrollY) {
+        currentSection = section.id;
+      }
+    });
+
+    document.querySelectorAll('.toc-parent').forEach(function(parent) {
+      var childContainer = parent.querySelector('.child-container');
+      if (childContainer) {
+        childContainer.classList.remove('open');
+      }
+      var btn = parent.querySelector('.toggle-btn');
+      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
+    });
+
+    document.querySelectorAll('.toc-link').forEach(function(link) {
+      link.classList.remove('active');
+    });
+
+    var activeLink = idToLink[currentSection];
+    if (activeLink) {
+      activeLink.classList.add('active');
+      var parent = activeLink.closest('.toc-parent');
+      if (parent) {
+        var child = parent.querySelector('.child-container');
+        if (child) child.classList.add('open');
+        var btn = parent.querySelector('.toggle-btn');
+        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
+      }
+    }
+  });
+
+  // Smooth scroll on click (offset for sticky header)
+  document.querySelectorAll('.toc-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var targetId = link.getAttribute('data-heading-id');
+      var targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        var headerHeight = document.querySelector('header').offsetHeight + 20;
+        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+      }
+    });
+  });
+})();
+</script>
+
+    </article>
+    <span class="print-footer">变限积分求导的种种 - June 5, 2022 - clay harmon</span>
+    <footer>
+  <hr class="slender">
+  <ul class="footer-links">
+    
+      <li>
+        <a href="//www.add-my-qq.com/2959807018"><span class="icon-QQ"></span></a>
+      </li>
+    
+      <li>
+        <a href="//github.com/FL77N"><span class="icon-github"></span></a>
+      </li>
+    
+      <li>
+        <a href="//www.zhihu.com/people/FromL77"><span class="icon-zhihu"></span></a>
+      </li>
+    
+  </ul>
+  <div class="credits">
+    <span>&copy; 2025-2026 L77</span><br><br>
+    <span>Powered By Jekyll And Tufte Theme</span>
+  </div>
+</footer>
+
+    <button id="backToTop" class="back-to-top">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+    <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
+  </svg>
+</button>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var backToTop = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 100) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  });
+  backToTop.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
+
+  </body>
+</html>
