@@ -1,7 +1,36 @@
-main {
+main, .gsc-main {
   --color-canvas-default: #1a1a2e;
-  --color-canvas-subtle: #23234a;
-  --color-border-default: #c2b5e0;
-  --color-border-muted: #c2b5e0;
+  --color-canvas-subtle: #1a1a2e;
+  --color-canvas-inset: #1a1a2e;
+  --color-canvas-overlay: #1a1a2e;
+  --color-border-default: #3d3d5c;
+  --color-border-muted: #3d3d5c;
+  --color-fg-default: #e0ddd5;
+  --color-fg-muted: #e0ddd5;
+  --color-fg-subtle: #e0ddd5;
+  --color-fg-on-emphasis: #1a1a2e;
+  --color-accent-fg: #e0ddd5;
+  --color-accent-emphasis: #e0ddd5;
+  --color-neutral-muted: rgba(224, 221, 213, 0.2);
+  --color-neutral-emphasis: #e0ddd5;
+  --color-btn-bg: #23234a;
+  --color-btn-border: #3d3d5c;
+  --color-btn-text: #e0ddd5;
+  --color-btn-hover-bg: #2e2e5a;
+  --color-btn-hover-border: #e0ddd5;
+  --color-btn-primary-bg: #e0ddd5;
+  --color-btn-primary-text: #1a1a2e;
+  --color-btn-primary-hover-bg: #c4c1b9;
+  background-color: #1a1a2e;
+  color: #e0ddd5;
   font-family: et-book, "STKAITI", Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+}
+
+main * {
+  color: inherit;
+  font-family: inherit;
+}
+
+main a {
+  color: #e0ddd5;
 }
