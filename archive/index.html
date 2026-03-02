@@ -375,12 +375,59 @@
         
           
         
+
+        <div class="pagination archive-pagination"></div>
       </div>
     </div>
     
     <div class="category-group">
       <input type="checkbox" id="category-2" class="category-toggle">
       <label for="category-2" class="category-header">
+        <h2>
+          <span class="toggle-icon">♠</span>
+          <span class="category-title">JEKYLL</span>
+        </h2>
+      </label>
+      <div class="category-content">
+        
+        
+        
+
+        
+          
+            <div class="tag-group">
+              <h3 id="blog">Blog</h3>
+              <ul class="post-list">
+                
+                
+                  
+                  
+                  <li>
+                    <a href="/articles/20/tufte-style-jekyll-blog">1. Tufte-style Jekyll blog</a>
+                    <br><span class="post-date color-date">2020-04-13</span>
+                    <br><div><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.</p>
+</div></br>
+                  </li>
+                  
+                  
+                
+              </ul>
+            </div>
+          
+        
+
+        
+        
+          
+        
+
+        <div class="pagination archive-pagination"></div>
+      </div>
+    </div>
+    
+    <div class="category-group">
+      <input type="checkbox" id="category-3" class="category-toggle">
+      <label for="category-3" class="category-header">
         <h2>
           <span class="toggle-icon">♠</span>
           <span class="category-title">LIFE</span>
@@ -418,12 +465,14 @@
         
           
         
+
+        <div class="pagination archive-pagination"></div>
       </div>
     </div>
     
     <div class="category-group">
-      <input type="checkbox" id="category-3" class="category-toggle">
-      <label for="category-3" class="category-header">
+      <input type="checkbox" id="category-4" class="category-toggle">
+      <label for="category-4" class="category-header">
         <h2>
           <span class="toggle-icon">♠</span>
           <span class="category-title">MATH</span>
@@ -446,7 +495,7 @@
                   <li>
                     <a href="/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC">1. 变限积分求导的种种</a>
                     <br><span class="post-date color-date">2022-06-05</span>
-                    <br><div><h2 id="变上限积分求导的理解">变上限积分求导的理解</h2>
+                    <br><div><h1 id="变上限积分求导的理解">变上限积分求导的理解</h1>
 
 <p>假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：</p>
 
@@ -470,97 +519,83 @@
         
           
         
-      </div>
-    </div>
-    
-    <div class="category-group">
-      <input type="checkbox" id="category-4" class="category-toggle">
-      <label for="category-4" class="category-header">
-        <h2>
-          <span class="toggle-icon">♠</span>
-          <span class="category-title">jekyll</span>
-        </h2>
-      </label>
-      <div class="category-content">
-        
-        
-        
 
-        
-          
-            <div class="tag-group">
-              <h3 id="css">CSS</h3>
-              <ul class="post-list">
-                
-                
-                  
-                  
-                  <li>
-                    <a href="/articles/20/tufte-style-jekyll-blog">1. Tufte-style Jekyll blog</a>
-                    <br><span class="post-date color-date">2020-04-13</span>
-                    <br><div><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.</p>
-</div></br>
-                  </li>
-                  
-                  
-                
-              </ul>
-            </div>
-          
-        
-          
-            <div class="tag-group">
-              <h3 id="design">Design</h3>
-              <ul class="post-list">
-                
-                
-                  
-                  
-                  <li>
-                    <a href="/articles/20/tufte-style-jekyll-blog">1. Tufte-style Jekyll blog</a>
-                    <br><span class="post-date color-date">2020-04-13</span>
-                    <br><div><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.</p>
-</div></br>
-                  </li>
-                  
-                  
-                
-              </ul>
-            </div>
-          
-        
-          
-            <div class="tag-group">
-              <h3 id="typography">Typography</h3>
-              <ul class="post-list">
-                
-                
-                  
-                  
-                  <li>
-                    <a href="/articles/20/tufte-style-jekyll-blog">1. Tufte-style Jekyll blog</a>
-                    <br><span class="post-date color-date">2020-04-13</span>
-                    <br><div><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.</p>
-</div></br>
-                  </li>
-                  
-                  
-                
-              </ul>
-            </div>
-          
-        
-
-        
-        
-          
-        
+        <div class="pagination archive-pagination"></div>
       </div>
     </div>
     
   
 </div>
 </div>
+
+<script>
+(function() {
+  var perPage = 8;
+
+  document.querySelectorAll('.category-content').forEach(function(content) {
+    // Collect all <li> items across all <ul> lists in this category
+    var allItems = content.querySelectorAll('.post-list li');
+    if (allItems.length <= perPage) return;
+
+    var paginationEl = content.querySelector('.archive-pagination');
+    if (!paginationEl) return;
+
+    var totalPages = Math.ceil(allItems.length / perPage);
+    var currentPage = 1;
+
+    function showPage(page) {
+      currentPage = page;
+      for (var i = 0; i < allItems.length; i++) {
+        allItems[i].style.display = (i >= (page - 1) * perPage && i < page * perPage) ? '' : 'none';
+      }
+      renderPagination();
+    }
+
+    function renderPagination() {
+      var html = '';
+      if (currentPage > 1) {
+        html += '<a class="nav-btn prev" href="javascript:void(0)">&lt;&lt; PREV</a>';
+      }
+      html += '<div class="page-control">';
+      html += '<span class="page-label">PAGE</span>';
+      html += '<input type="number" min="1" max="' + totalPages + '" value="' + currentPage + '" class="page-input archive-page-input">';
+      html += '<span class="page-label">of ' + totalPages + '&nbsp;</span>';
+      html += '<button class="nav-btn page-go archive-page-go">GO</button>';
+      html += '</div>';
+      if (currentPage < totalPages) {
+        html += '<a class="nav-btn next" href="javascript:void(0)">NEXT &gt;&gt;</a>';
+      }
+      paginationEl.innerHTML = html;
+
+      var prevBtn = paginationEl.querySelector('.prev');
+      var nextBtn = paginationEl.querySelector('.next');
+      var goBtn = paginationEl.querySelector('.archive-page-go');
+      var input = paginationEl.querySelector('.archive-page-input');
+
+      if (prevBtn) prevBtn.addEventListener('click', function() { showPage(currentPage - 1); });
+      if (nextBtn) nextBtn.addEventListener('click', function() { showPage(currentPage + 1); });
+      goBtn.addEventListener('click', function() {
+        var val = parseInt(input.value);
+        if (val >= 1 && val <= totalPages) showPage(val);
+      });
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          var val = parseInt(this.value);
+          if (val >= 1 && val <= totalPages) showPage(val);
+        }
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          var val = parseInt(this.value);
+          if (e.key === 'ArrowUp' && val > 1) this.value = val - 1;
+          if (e.key === 'ArrowDown' && val < totalPages) this.value = val + 1;
+        }
+      });
+    }
+
+    showPage(1);
+  });
+})();
+</script>
 
     <span class="print-footer">ARCHIVE - clay harmon</span>
     <footer>

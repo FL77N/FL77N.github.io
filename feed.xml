@@ -5,8 +5,8 @@
     <description>Personal Blog</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 01 Mar 2026 10:07:45 -0500</pubDate>
-    <lastBuildDate>Sun, 01 Mar 2026 10:07:45 -0500</lastBuildDate>
+    <pubDate>Mon, 02 Mar 2026 09:17:21 -0500</pubDate>
+    <lastBuildDate>Mon, 02 Mar 2026 09:17:21 -0500</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
     
       <item>
@@ -709,8 +709,6 @@ r(x, y_i) - \bar{r}(x)
 
 &lt;p&gt;其中  \(r_\theta(x, y) = \beta \log \frac{\pi_\theta(y \mid x)}{\pi_{\text{ref}}(y \mid x)}\)，随着训练进行 BCE 会成为 DPO 严格的上界。由于上式应用了不等式  \(\log \sigma (x) + \log \sigma (y) \lt \log \sigma (x + y)\)，所以比起 DPO 会出来误差项  \(e^{-x} + e^{-y}\)。为了更接近 DPO，文中使用了 reward shift   \(\delta\) 进行缓解&lt;label for=&quot;会使&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;会使&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;会使  \(e^{-x} + e^{-y}\) 变为  \(e^{-(x - \delta)} + e^{-(y - \delta)}\) &lt;/span&gt;，最终 BCO 优化目标为：&lt;/p&gt;
 
-&lt;p&gt;where   \(r_\theta(x, y) = \beta \log \frac{\pi_\theta(y \mid x)}{\pi_{\text{ref}}(y \mid x)}\), and as training progresses, the binary cross-entropy (BCE) becomes a strict upper bound on Direct Preference Optimization (DPO). Because the above derivation employs the inequality  \(log σ(x) + log σ(y) &amp;lt; log σ(x + y)\), where  \(σ(·)\) denotes the sigmoid function, an additional error term  \(e^{-x} + e^{-y}\) arises relative to DPO. To better approximate DPO, the paper introduces a reward shift \(δ\) to mitigate this effect (which turns  \(e^{-x} + e^{-y}\) into  \(e^{-(x − δ)} + e^{-(y − δ)}\)). The resulting BCO optimization objective is:&lt;/p&gt;
-
 \[\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}^+} \left[ -\log \sigma(r_\theta(x, y_w) - \delta) \right] + \mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}^-} \left[ -\log \sigma(-(r_\theta(x, y_l) - \delta)) \right]\]
 
 &lt;p&gt;文中推导了即便减去 reward shift 也不会改变 BCO 为 DPO 上界，reward shift 取值由均值不等式得到  \(\delta = \frac{\mathbb{E}{(x,y) \sim \mathcal{D}^+}[r\theta(x, y)] + \mathbb{E}{(x,y) \sim \mathcal{D}^-}[r\theta(x, y)]}{2}\)，为了训练稳定，使用 EMA 进行计算。BCO 的介绍就完了&lt;/p&gt;
@@ -758,8 +756,6 @@ r(x, y_i) - \bar{r}(x)
 \[\frac{1}{\sum_{i=1}^{G} |o_i|} \sum_{i=1}^{G} \sum_{t=1}^{|o_i|} \min \left( r_{i,t}(\theta) \hat{A}_{i,t},\ \text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon_{\text{low}}, 1 + \varepsilon_{\text{high}}\right) \hat{A}_{i,t} \right)\]
 
 &lt;p&gt;假设单个 sample 的 loss 总和是   \(loss_i\)，token 数量为  \(n_i\)，一共  \(G\) 个 sample，则一个 group loss 计算变化如下：&lt;/p&gt;
-
-&lt;p&gt;Let the total loss for the i-th sample be denoted by  \(loss_i\), and let its token count be  \(n_i\). Suppose there are  \(G\) samples in total. The group loss is computed:&lt;/p&gt;
 
 \[\frac{loss_{0}}{n_{0}G} + \frac{loss_{1}}{n_{1}G} + \frac{loss_{2}}{n_{2}G} + \cdots \rightarrow \frac{loss_{0} + loss_{1} + loss_{2}+ \cdots }{n_{0} + n_{1} + n_{2} + \cdots }\]
 
@@ -2003,7 +1999,7 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
     
       <item>
         <title>变限积分求导的种种</title>
-        <description>&lt;h2 id=&quot;变上限积分求导的理解&quot;&gt;变上限积分求导的理解&lt;/h2&gt;
+        <description>&lt;h1 id=&quot;变上限积分求导的理解&quot;&gt;变上限积分求导的理解&lt;/h1&gt;
 
 &lt;p&gt;假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：&lt;/p&gt;
 
@@ -2030,7 +2026,7 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
 
 \[\frac{d\int_{\phi(x)}^{\psi(x)} f(t)dt}{dx} =f(\psi(x))\psi^{\prime}(x) - f(\phi(x))\phi^{\prime}(x)\]
 
-&lt;h2 id=&quot;应用示例展示&quot;&gt;应用示例展示&lt;/h2&gt;
+&lt;h1 id=&quot;应用示例展示&quot;&gt;应用示例展示&lt;/h1&gt;
 
 &lt;p&gt;介绍完理论知识，这里进行举例进行应用。其中涉及到变上限积分时，换元操作易出现错误以及被积函数包含积分上限变量的情况。&lt;/p&gt;
 
@@ -2612,14 +2608,10 @@ etc...
         <link>/articles/20/tufte-style-jekyll-blog</link>
         <guid isPermaLink="true">/articles/20/tufte-style-jekyll-blog</guid>
         
-        <category>CSS</category>
-        
-        <category>Typography</category>
-        
-        <category>Design</category>
+        <category>Blog</category>
         
         
-        <category>jekyll</category>
+        <category>JEKYLL</category>
         
       </item>
     
