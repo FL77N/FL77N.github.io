@@ -902,7 +902,7 @@ div.table-wrapper, table {
 @media screen and (max-width: 760px) {
   article {
     width: 90%;
-    padding: 2rem 0;
+    padding: 1rem 0;
   }
   figure {
     max-width: 90%;
@@ -1091,27 +1091,62 @@ nav.group {
   overflow: visible;
 }
 
+.nav-links {
+  display: contents;
+}
+
+.theme-toggle {
+  order: 1;
+}
+
 @media (max-width: 768px) {
+  body {
+    padding-top: 4.5rem;
+  }
   nav.group {
     flex-wrap: wrap;
-    white-space: normal;
+    white-space: nowrap;
     gap: 4px;
   }
   header > nav.group {
     padding: 1rem 3%;
   }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
   header > nav a {
     font-size: 1.2rem;
     padding: 4px 8px;
+    white-space: nowrap;
   }
   header > nav a img {
-    height: 3rem;
+    height: 32px;
+    width: 32px;
+    min-width: 32px;
+    min-height: 32px;
   }
   .badge {
-    width: 3rem;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    flex-shrink: 0;
+  }
+  .theme-toggle {
+    order: unset;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
   }
   .search-wrapper {
-    order: 99;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -1122,10 +1157,6 @@ nav.group {
   }
   #search-input:focus {
     width: 90% !important;
-  }
-  .theme-toggle {
-    width: 32px;
-    height: 32px;
   }
 }
 header > nav a {
@@ -1752,12 +1783,12 @@ hr.slender_footer {
   }
   article {
     width: 95%;
-    padding: 2rem 0;
+    padding: 1rem 0;
   }
   body {
     padding-left: 3%;
     padding-right: 3%;
-    padding-top: 14rem;
+    padding-top: 10rem;
   }
   figure.fullwidth img,
   figure.flexwidth img,
@@ -1923,7 +1954,7 @@ hr.slender_footer {
   }
   .archive-page-container {
     padding: 10px;
-    padding-top: 14rem;
+    padding-top: 10rem;
     overflow-x: hidden;
   }
   .archive-container {
@@ -2103,6 +2134,16 @@ hr.slender_footer {
   font-style: inherit;
 }
 
+@media (max-width: 768px) {
+  p.subtitle:has(.post-meta-group) {
+    text-align: left !important;
+    display: flex;
+    flex-direction: column;
+  }
+  .post-meta-group {
+    display: block;
+  }
+}
 .color-text {
   color: var(--color-text);
 }
