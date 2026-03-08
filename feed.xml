@@ -5,8 +5,8 @@
     <description>Personal Blog</description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 07 Mar 2026 21:03:30 -0500</pubDate>
-    <lastBuildDate>Sat, 07 Mar 2026 21:03:30 -0500</lastBuildDate>
+    <pubDate>Sat, 07 Mar 2026 21:32:21 -0500</pubDate>
+    <lastBuildDate>Sat, 07 Mar 2026 21:32:21 -0500</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
     
       <item>
@@ -1660,7 +1660,7 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
     
       <item>
         <title>YoloV7 标签匹配及 loss 计算解析</title>
-        <description>&lt;p&gt;本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的&lt;!--more--&gt;🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分&lt;/p&gt;
+        <description>&lt;p&gt;🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。&lt;!--more--&gt;而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分&lt;/p&gt;
 
 &lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/yolov7/1.png&quot; /&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;/figure&gt;
 
