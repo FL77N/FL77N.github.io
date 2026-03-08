@@ -208,7 +208,7 @@
         <nav class="toc" id="toc"></nav>
         <main class="content">
           <h1 style="text-align: left">变限积分求导的种种</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 1542</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">6min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">Category:</span><span class="color-post-meta-value">&nbsp; MATH</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> 微积分</span></p>
+          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">📖Words:</span><span class="color-post-meta-value">&nbsp; 1542</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;⌛Time: &nbsp;</span><span class="color-post-meta-value">6min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">📌Category:</span><span class="color-post-meta-value">&nbsp; MATH</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;📍Tag: &nbsp;</span><span class="color-post-meta-value"> 微积分</span></p>
 
           <h1 id="变上限积分求导的理解">变上限积分求导的理解</h1>
 
@@ -354,7 +354,7 @@
 <p>🌸🌸🌸 这段故事完结 🌈🌈🌈</p>
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">June 5, 2022</span></p>
+          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 June 5, 2022</span></p>
 
           
             
@@ -539,7 +539,28 @@
 </script>
 
     </article>
-    <span class="print-footer">变限积分求导的种种 - June 5, 2022 - clay harmon</span>
+    <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
+    <script>
+    (function() {
+      var fab = document.getElementById('toc-fab');
+      var toc = document.getElementById('toc');
+      if (!fab || !toc) return;
+      fab.addEventListener('click', function() {
+        toc.classList.toggle('toc-open');
+      });
+      document.addEventListener('click', function(e) {
+        if (!fab.contains(e.target) && !toc.contains(e.target)) {
+          toc.classList.remove('toc-open');
+        }
+      });
+      toc.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          toc.classList.remove('toc-open');
+        });
+      });
+    })();
+    </script>
+    <span class="print-footer">变限积分求导的种种 - 📅 June 5, 2022 - clay harmon</span>
     <footer>
   <hr class="slender">
   <ul class="footer-links">

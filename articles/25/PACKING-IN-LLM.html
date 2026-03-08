@@ -208,7 +208,7 @@
         <nav class="toc" id="toc"></nav>
         <main class="content">
           <h1 style="text-align: left">让 Packing 加速你的大模型训练</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 3367</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">13min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">Category:</span><span class="color-post-meta-value">&nbsp; AI</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Infra</span></p>
+          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">📖Words:</span><span class="color-post-meta-value">&nbsp; 3367</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;⌛Time: &nbsp;</span><span class="color-post-meta-value">13min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">📌Category:</span><span class="color-post-meta-value">&nbsp; AI</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;📍Tag: &nbsp;</span><span class="color-post-meta-value"> Infra</span></p>
 
           <p>这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作
 <!--more--></p>
@@ -375,7 +375,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 <p>以上便是关于两篇论文的全部内容了</p>
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">August 20, 2025</span></p>
+          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 August 20, 2025</span></p>
 
           
             
@@ -560,7 +560,28 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 </script>
 
     </article>
-    <span class="print-footer">让 Packing 加速你的大模型训练 - August 20, 2025 - clay harmon</span>
+    <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
+    <script>
+    (function() {
+      var fab = document.getElementById('toc-fab');
+      var toc = document.getElementById('toc');
+      if (!fab || !toc) return;
+      fab.addEventListener('click', function() {
+        toc.classList.toggle('toc-open');
+      });
+      document.addEventListener('click', function(e) {
+        if (!fab.contains(e.target) && !toc.contains(e.target)) {
+          toc.classList.remove('toc-open');
+        }
+      });
+      toc.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          toc.classList.remove('toc-open');
+        });
+      });
+    })();
+    </script>
+    <span class="print-footer">让 Packing 加速你的大模型训练 - 📅 August 20, 2025 - clay harmon</span>
     <footer>
   <hr class="slender">
   <ul class="footer-links">

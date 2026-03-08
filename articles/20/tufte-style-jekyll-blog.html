@@ -208,7 +208,7 @@
         <nav class="toc" id="toc"></nav>
         <main class="content">
           <h1 style="text-align: left">Tufte-style Jekyll blog</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 3870</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">15min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">Category:</span><span class="color-post-meta-value">&nbsp; JEKYLL</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Blog</span></p>
+          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">📖Words:</span><span class="color-post-meta-value">&nbsp; 3870</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;⌛Time: &nbsp;</span><span class="color-post-meta-value">15min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">📌Category:</span><span class="color-post-meta-value">&nbsp; JEKYLL</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;📍Tag: &nbsp;</span><span class="color-post-meta-value"> Blog</span></p>
 
           <p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.<!--more--> The idea for this project is essentially cribbed wholesale from Tufte and R Markdown’s Tufte Handout format<label for="One" class="margin-toggle sidenote-number"></label><input type="checkbox" id="One" class="margin-toggle" /><span class="sidenote">See <a href="https://tufte-latex.github.io/tufte-latex/">tufte-latex.github.io/tufte-latex/</a> and <a href="http://rmarkdown.rstudio.com/tufte_handout_format.html">rmarkdown.rstudio.com/tufte_handout_format</a> </span> This page is an adaptation of the <a href="http://rmarkdown.rstudio.com/examples/tufte-handout.pdf">Tufte Handout PDF</a>.</p>
 
@@ -660,7 +660,7 @@ etc...
 
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">April 13, 2020</span></p>
+          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 April 13, 2020</span></p>
 
           
             
@@ -845,7 +845,28 @@ etc...
 </script>
 
     </article>
-    <span class="print-footer">Tufte-style Jekyll blog - April 13, 2020 - clay harmon</span>
+    <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
+    <script>
+    (function() {
+      var fab = document.getElementById('toc-fab');
+      var toc = document.getElementById('toc');
+      if (!fab || !toc) return;
+      fab.addEventListener('click', function() {
+        toc.classList.toggle('toc-open');
+      });
+      document.addEventListener('click', function(e) {
+        if (!fab.contains(e.target) && !toc.contains(e.target)) {
+          toc.classList.remove('toc-open');
+        }
+      });
+      toc.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          toc.classList.remove('toc-open');
+        });
+      });
+    })();
+    </script>
+    <span class="print-footer">Tufte-style Jekyll blog - 📅 April 13, 2020 - clay harmon</span>
     <footer>
   <hr class="slender">
   <ul class="footer-links">

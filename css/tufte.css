@@ -458,6 +458,10 @@ html {
   overflow-x: hidden;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 html {
   font-size: 11px;
   -webkit-font-smoothing: antialiased;
@@ -506,6 +510,7 @@ p > a:focus {
 body {
   width: 100%;
   padding-left: 5%;
+  padding-right: 5%;
   padding-top: 6rem;
   max-width: calc(12.5% + 1400px);
   margin: 0 auto;
@@ -542,6 +547,10 @@ h3 {
   margin-top: 2.1777777778rem;
   margin-bottom: 0;
   line-height: 1.0888888889;
+}
+
+h3::before {
+  content: "☘️ ";
 }
 
 p .subtitle {
@@ -602,6 +611,18 @@ blockquote {
   background-color: var(--color-blockquote-bg);
   border-left: 5px solid var(--color-blockquote-border);
   color: var(--color-blockquote-text);
+}
+
+blockquote p:first-of-type::before {
+  content: "「";
+  font-weight: bold;
+  font-size: 0.8em;
+}
+
+blockquote p:last-of-type::after {
+  content: "」";
+  font-weight: bold;
+  font-size: 0.8em;
 }
 
 blockquote p, blockquote footer {
@@ -739,7 +760,7 @@ table tbody tr:nth-child(odd) {
 /* -- End of Table Styling section --*/
 /* Basic Layout stuff --*/
 article {
-  width: 60%;
+  width: 65%;
   position: relative;
   padding: 5rem 0rem;
   margin-left: 0%;
@@ -824,9 +845,9 @@ img {
 .sidenote, .marginnote {
   float: right;
   clear: right;
-  margin-right: -70%;
-  width: 23.0625vw;
-  max-width: 336.875px;
+  margin-right: -65%;
+  width: 22vw;
+  max-width: 320px;
   margin-top: 0;
   margin-bottom: 1.4rem;
   font-size: 1.2rem;
@@ -837,11 +858,15 @@ img {
 }
 
 li .sidenote, li .marginnote {
-  margin-right: -75%;
+  margin-right: -55%;
 }
 
 blockquote .sidenote, blockquote .marginnote {
-  margin-right: -82.35%;
+  margin-right: -60%;
+}
+
+.about-page .sidenote, .about-page .marginnote {
+  margin-right: -50%;
 }
 
 .sidenote-number {
@@ -864,7 +889,7 @@ blockquote .sidenote, blockquote .marginnote {
 }
 
 .sidenote:before {
-  content: counter(sidenote-counter) ". ";
+  content: counter(sidenote-counter) ". 🔖";
   font-size: 1.2rem;
   color: var(--color-sidenote-number);
   top: 0rem;
@@ -876,7 +901,8 @@ div.table-wrapper, table {
 
 @media screen and (max-width: 760px) {
   article {
-    width: 75%;
+    width: 90%;
+    padding: 2rem 0;
   }
   figure {
     max-width: 90%;
@@ -943,7 +969,7 @@ label.margin-toggle:not(.sidenote-number) {
   .margin-toggle:checked + .sidenote,
   .margin-toggle:checked + .marginnote {
     display: block;
-    float: left;
+    float: none;
     left: 1rem;
     clear: both;
     width: 95%;
@@ -1065,6 +1091,43 @@ nav.group {
   overflow: visible;
 }
 
+@media (max-width: 768px) {
+  nav.group {
+    flex-wrap: wrap;
+    white-space: normal;
+    gap: 4px;
+  }
+  header > nav.group {
+    padding: 1rem 3%;
+  }
+  header > nav a {
+    font-size: 1.2rem;
+    padding: 4px 8px;
+  }
+  header > nav a img {
+    height: 3rem;
+  }
+  .badge {
+    width: 3rem;
+  }
+  .search-wrapper {
+    order: 99;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  #search-input {
+    width: 80% !important;
+  }
+  #search-input:focus {
+    width: 90% !important;
+  }
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+  }
+}
 header > nav a {
   font-size: 1.5rem;
   font-family: "Gill Sans", "Gill Sans MT", "Lato", Calibri, sans-serif;
@@ -1550,6 +1613,31 @@ hr.slender_footer {
     width: 200px;
   }
 }
+/* ===== Mobile TOC floating button ===== */
+.toc-fab {
+  display: none;
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--color-back-to-top-start), var(--color-back-to-top-end));
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+.toc-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
 /* ===== Back to top button (matching froml77.top gradient) ===== */
 .back-to-top {
   position: fixed;
@@ -1589,7 +1677,7 @@ hr.slender_footer {
   .back-to-top {
     width: 40px;
     height: 40px;
-    bottom: 1rem;
+    bottom: 2rem;
     right: 1rem;
   }
 }
@@ -1619,8 +1707,68 @@ hr.slender_footer {
 .content {
   width: 75%;
   flex-grow: 1;
+  min-width: 0;
+  overflow: visible;
 }
 
+.content .sidenote, .content .marginnote {
+  float: right;
+  clear: right;
+  margin-right: -80%;
+  width: 65%;
+  max-width: none;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  .toc {
+    position: fixed;
+    bottom: 5rem;
+    left: 1rem;
+    width: 70%;
+    max-width: 300px;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    padding: 1rem;
+    z-index: 9998;
+    display: none;
+  }
+  .toc.toc-open {
+    display: block;
+  }
+  .toc-fab {
+    display: flex;
+    width: 40px;
+    height: 40px;
+  }
+  .content {
+    width: 100%;
+  }
+  article {
+    width: 95%;
+    padding: 2rem 0;
+  }
+  body {
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 14rem;
+  }
+  figure.fullwidth img,
+  figure.flexwidth img,
+  img {
+    max-width: 100%;
+  }
+  .sidenote, .marginnote {
+    margin-right: 0;
+    width: 100%;
+  }
+}
 .toc-parent {
   margin: 10px 0;
 }
@@ -1728,16 +1876,32 @@ hr.slender_footer {
 
 @media (max-width: 768px) {
   .pagination {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
+    gap: 4px;
   }
   .nav-btn {
-    width: 100%;
-    margin: 6px 0;
+    width: auto;
+    margin: 2px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
   }
   .page-control {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    margin: 0 2px;
+  }
+  .page-label {
+    font-size: 0.8rem;
+    margin: 0 2px;
+  }
+  .page-input {
+    width: 40px;
+    padding: 6px 4px;
+    font-size: 0.8rem;
+    margin: 0 2px;
   }
 }
 /* ===== Full-width container (archive page) ===== */
@@ -1752,6 +1916,46 @@ hr.slender_footer {
   box-sizing: border-box;
 }
 
+@media (max-width: 768px) {
+  body.full-width {
+    width: 100%;
+    padding: 0 3%;
+  }
+  .archive-page-container {
+    padding: 10px;
+    padding-top: 14rem;
+    overflow-x: hidden;
+  }
+  .archive-container {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  .category-header {
+    padding: 0.8rem 1rem;
+  }
+  .category-header h2 {
+    font-size: 1.4rem;
+  }
+  .category-content {
+    overflow-x: hidden;
+    word-break: break-word;
+  }
+  .category-content a {
+    word-break: break-word;
+  }
+  .post-list {
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+  }
+  .post-list li {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  .content-listing, ul.content-listing li.listing {
+    width: 100%;
+    padding: 0 2%;
+  }
+}
 /* ===== Archive page styles (matching froml77.top) ===== */
 .archive-container {
   max-width: 800px;

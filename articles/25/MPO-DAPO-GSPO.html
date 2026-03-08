@@ -208,7 +208,7 @@
         <nav class="toc" id="toc"></nav>
         <main class="content">
           <h1 style="text-align: left">Policy Optimization MPO DAPO GSPO</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 4335</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">17min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">Category:</span><span class="color-post-meta-value">&nbsp; AI</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm</span></p>
+          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="color-post-meta-label">📖Words:</span><span class="color-post-meta-value">&nbsp; 4335</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;⌛Time: &nbsp;</span><span class="color-post-meta-value">17min&nbsp;&nbsp;&nbsp;</span><span class="color-post-meta-label">📌Category:</span><span class="color-post-meta-value">&nbsp; AI</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;📍Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm</span></p>
 
           <p>这篇 Blog 主要对 MPO、DAPO、GSPO 进行介绍，这几种强化学习的方法或基于 <a href="https://arxiv.org/abs/2305.18290">DPO</a> 或基于 <a href="https://arxiv.org/pdf/2402.03300">GRPO</a> 改进。因此默认已经有相关知识，这里就不再赘述了
 <!--more--></p>
@@ -474,7 +474,7 @@
 <p><a href="https://github.com/huggingface/open-r1/issues/239">Why does the loss start at 0 when I train GRPO, and then possibly increase</a></p>
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">November 27, 2025</span></p>
+          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 November 27, 2025</span></p>
 
           
             
@@ -659,7 +659,28 @@
 </script>
 
     </article>
-    <span class="print-footer">Policy Optimization MPO DAPO GSPO - November 27, 2025 - clay harmon</span>
+    <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
+    <script>
+    (function() {
+      var fab = document.getElementById('toc-fab');
+      var toc = document.getElementById('toc');
+      if (!fab || !toc) return;
+      fab.addEventListener('click', function() {
+        toc.classList.toggle('toc-open');
+      });
+      document.addEventListener('click', function(e) {
+        if (!fab.contains(e.target) && !toc.contains(e.target)) {
+          toc.classList.remove('toc-open');
+        }
+      });
+      toc.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          toc.classList.remove('toc-open');
+        });
+      });
+    })();
+    </script>
+    <span class="print-footer">Policy Optimization MPO DAPO GSPO - 📅 November 27, 2025 - clay harmon</span>
     <footer>
   <hr class="slender">
   <ul class="footer-links">
