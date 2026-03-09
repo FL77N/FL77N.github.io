@@ -1027,6 +1027,9 @@ mjx-container:not([display=true]) {
 /* Display MathJax: slightly larger than body text */
 mjx-container[display=true] {
   font-size: 1.15em !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
 }
 
 /* -- Jekyll specific styling --*/
@@ -1143,14 +1146,13 @@ nav.group {
   .theme-toggle {
     order: unset;
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
   }
   .search-wrapper {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 4px;
+    margin-top: 2px;
+    margin-bottom: -2px;
   }
   #search-input {
     width: 80% !important;
@@ -2136,9 +2138,10 @@ hr.slender_footer {
 
 @media (max-width: 768px) {
   p.subtitle:has(.post-meta-group) {
-    text-align: left !important;
+    text-align: right !important;
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
   }
   .post-meta-group {
     display: block;
@@ -2178,6 +2181,18 @@ hr.slender_footer {
   color: var(--color-contrast);
 }
 
+@media (max-width: 768px) {
+  .theme-toggle {
+    width: 24px;
+    height: 24px;
+    margin-left: 8px;
+    border-width: 1.5px;
+  }
+  .theme-toggle svg {
+    width: 12px;
+    height: 12px;
+  }
+}
 .comments-section {
   margin-top: 3rem;
 }
