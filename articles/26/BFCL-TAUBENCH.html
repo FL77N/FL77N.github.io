@@ -5,6 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="preconnect" href="https://giscus.app" crossorigin>
+
   <title>BFCL-TauBench</title>
   <meta name="description" content="这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍">
 
@@ -18,36 +20,7 @@
     })();
   </script>
 
-  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
   
-    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
-  
-
-<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
-  
-    <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: [
-      "MathMenu.js",
-      "MathZoom.js",
-      "AssistiveMML.js",
-      "a11y/accessibility-menu.js"
-    ],
-    jax: ["input/TeX", "output/CommonHTML"],
-    TeX: {
-      extensions: [
-        "AMSmath.js",
-        "AMSsymbols.js",
-        "noErrors.js",
-        "noUndefined.js",
-      ]
-    }
-  });
-</script>
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
@@ -55,12 +28,25 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
   <link rel="manifest" href="/assets/img/site.webmanifest">
 
-  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css?v=1779454353">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="/articles/26/BFCL-TAUBENCH">
+  
+  
+  
+  
+  <meta property="og:title" content="BFCL-TauBench">
+  <meta property="og:description" content="这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍">
+  <meta property="og:url" content="https://froml77.top/articles/26/BFCL-TAUBENCH">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="From L77">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="BFCL-TauBench">
+  <meta name="twitter:description" content="这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍">
 
-  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+  <link rel="canonical" href="https://froml77.top/articles/26/BFCL-TAUBENCH">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="https://froml77.top/feed.xml" />
 </head>
 
   <body>
@@ -72,145 +58,25 @@
 	  <a href="/blog/">blog</a>
 	  <a href="/archive/">Archive</a>
 	  <a href="/about/">About</a>
-	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" data-giscus-theme-base="https://froml77.top/css/giscus-">
 	    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
 	  </button>
 	</div>
 	<div class="search-wrapper">
-	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off">
-	  <div id="search-results" class="search-results" style="display:none;"></div>
+	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off" data-search-url="/search.json">
+	  <div id="search-results" class="search-results"></div>
 	</div>
 	</nav>
 </header>
-<script>
-(function() {
-  var searchInput = document.getElementById('search-input');
-  var searchResults = document.getElementById('search-results');
-  var posts = null;
-
-  function loadPosts(callback) {
-    if (posts) { callback(); return; }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search.json');
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        posts = JSON.parse(xhr.responseText);
-        callback();
-      }
-    };
-    xhr.send();
-  }
-
-  function doSearch(query) {
-    if (!query || query.length < 1) {
-      searchResults.style.display = 'none';
-      return;
-    }
-    loadPosts(function() {
-      var q = query.toLowerCase();
-      var matches = [];
-      var seen = {};
-      for (var i = 0; i < posts.length; i++) {
-        var p = posts[i];
-        if (seen[p.url]) continue;
-        if (p.title.toLowerCase().indexOf(q) !== -1) {
-          matches.push(p);
-          seen[p.url] = true;
-        }
-      }
-      if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
-      } else {
-        var html = '';
-        for (var j = 0; j < matches.length; j++) {
-          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
-                  '<span class="search-result-title">' + matches[j].title + '</span>' +
-                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
-        }
-        searchResults.innerHTML = html;
-      }
-      searchResults.style.display = 'block';
-    });
-  }
-
-  var debounceTimer;
-  searchInput.addEventListener('input', function() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function() {
-      doSearch(searchInput.value.trim());
-    }, 200);
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-      searchResults.style.display = 'none';
-    }
-  });
-
-  searchInput.addEventListener('focus', function() {
-    if (searchInput.value.trim().length >= 1) {
-      doSearch(searchInput.value.trim());
-    }
-  });
-})();
-
-// Header shadow on scroll
-(function() {
-  var header = document.querySelector('header');
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 10) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-})();
-
-// Theme toggle
-(function() {
-  var toggle = document.getElementById('theme-toggle');
-  var iconMoon = toggle.querySelector('.icon-moon');
-  var iconSun = toggle.querySelector('.icon-sun');
-
-  function updateIcons(theme) {
-    if (theme === 'dark') {
-      iconMoon.style.display = 'none';
-      iconSun.style.display = 'block';
-    } else {
-      iconMoon.style.display = 'block';
-      iconSun.style.display = 'none';
-    }
-  }
-
-  updateIcons(document.documentElement.getAttribute('data-theme'));
-
-  toggle.addEventListener('click', function() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateIcons(next);
-
-    // Sync Giscus theme
-    var giscusFrame = document.querySelector('iframe.giscus-frame');
-    if (giscusFrame) {
-      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
-      giscusFrame.contentWindow.postMessage(
-        { giscus: { setConfig: { theme: giscusTheme } } },
-        'https://giscus.app'
-      );
-    }
-  });
-})();
-</script>
+<script defer src="/assets/js/header.js?v=1779454353"></script>
 
     <article>
       <div class="container">
         <nav class="toc" id="toc"></nav>
         <main class="content">
-          <h1 style="text-align: left">BFCL-TauBench</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 3923📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">15min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; AI📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm📍</span></span></p>
+          <h1 class="post-title">BFCL-TauBench</h1>
+          <p class="subtitle post-meta"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 3923📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">15min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; AI📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm📍</span></span></p>
 
           <p>这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍
 <!--more--></p>
@@ -223,7 +89,7 @@
 
 <p><strong>Multi Turn</strong> 指的多轮对话，<strong>Multi Step</strong> 指的是每一轮多步的 FC 调用。下图是关于 BFCL 中关于 Single Turn、Multi Turn 和 Multi Step 的示例</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image.png" /><figcaption>multi turn 示意图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image.png" / loading="lazy" decoding="async"><figcaption>multi turn 示意图</figcaption></figure>
 
 <h2 id="multi-turn-的必要性">Multi-Turn 的必要性</h2>
 
@@ -237,7 +103,7 @@
 
 <p>现有数据集现状</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image1.png" /><figcaption>benchmark 现状</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image1.png" / loading="lazy" decoding="async"><figcaption>benchmark 现状</figcaption></figure>
 
 <h3 id="bfcl-中-multi-turn-数据类型组成">BFCL 中 Multi Turn 数据类型组成</h3>
 
@@ -257,11 +123,11 @@
 
 <p>下图是相关的示意图</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image2.png" /><figcaption>不同 multi turn 例子</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image2.png" / loading="lazy" decoding="async"><figcaption>不同 multi turn 例子</figcaption></figure>
 
 <p>关于 turns 和 steps 的统计</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image3.png" /><figcaption>turns 和 steps 的统计</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image3.png" / loading="lazy" decoding="async"><figcaption>turns 和 steps 的统计</figcaption></figure>
 
 <h3 id="数据集构建流程及细节">数据集构建流程及细节</h3>
 
@@ -275,7 +141,7 @@
 
 <p>整体 pipline 如下</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image4.png" /><figcaption>不同 multi turn 例子</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image4.png" / loading="lazy" decoding="async"><figcaption>不同 multi turn 例子</figcaption></figure>
 
 <p><strong>API Codebase Creation</strong></p>
 
@@ -304,7 +170,7 @@
 
 <p><strong>Graph Edge Construction</strong></p>
 
-<p>有了这些 API 便可以根据他们的关系进行搭建图，最后根据图来随机 sample 路径进行构建数据。如图所示，使用 Trading API 时，就存在几个 API 的依赖关系，完成操作过后可能和其他 API，如 Message API 有依赖关系<label for="API 之" class="margin-toggle sidenote-number"></label><input type="checkbox" id="API 之" class="margin-toggle" /><span class="sidenote">API 之间可能由次序的依赖关系<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image5.png" /></span></p>
+<p>有了这些 API 便可以根据他们的关系进行搭建图，最后根据图来随机 sample 路径进行构建数据。如图所示，使用 Trading API 时，就存在几个 API 的依赖关系，完成操作过后可能和其他 API，如 Message API 有依赖关系<label for="API 之" class="margin-toggle sidenote-number"></label><input type="checkbox" id="API 之" class="margin-toggle" /><span class="sidenote">API 之间可能由次序的依赖关系<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image5.png" / loading="lazy" decoding="async"></span></p>
 
 <p><strong>Task Generation</strong></p>
 
@@ -320,7 +186,7 @@
 
 <p>人工对于数据的核验非常重要，可以防止 accuracy 过低以及生成的幻觉数据等</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image6.png" /><figcaption>人工核验示意图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image6.png" / loading="lazy" decoding="async"><figcaption>人工核验示意图</figcaption></figure>
 
 <p>根据上图的示意主要对一下几个部分进行核验</p>
 
@@ -392,7 +258,7 @@
 
 <p>整个过程可以当作马尔可夫决策过程来看待：状态空间 S、行为空间 A、观察空间 O、转换空间 T、指令空间 U 一起组成该过程</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image7.png" /><figcaption>user agent 交流过程</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image7.png" / loading="lazy" decoding="async"><figcaption>user agent 交流过程</figcaption></figure>
 
 <p>根据上图进行简单介绍：</p>
 
@@ -403,8 +269,8 @@
 <p>每一个 domain 的数据构建都需要经历以下几三个阶段：</p>
 
 <ol>
-  <li>以尽量简单的原则来设计 database schemas、APIs 和 policies<label for="因为即" class="margin-toggle sidenote-number"></label><input type="checkbox" id="因为即" class="margin-toggle" /><span class="sidenote">因为即便是一个很小的 domain 都需要至少 10 个 schemas、APIs 和 policies。这对于现存的 agent 已经很有挑战性了<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image8.png" /></span></li>
-  <li>然后可以根据上右图，进行随机采样来完成初始信息来<label for="在构建" class="margin-toggle sidenote-number"></label><input type="checkbox" id="在构建" class="margin-toggle" /><span class="sidenote">在构建的库进行随机搭配<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image9.png" /></span></li>
+  <li>以尽量简单的原则来设计 database schemas、APIs 和 policies<label for="因为即" class="margin-toggle sidenote-number"></label><input type="checkbox" id="因为即" class="margin-toggle" /><span class="sidenote">因为即便是一个很小的 domain 都需要至少 10 个 schemas、APIs 和 policies。这对于现存的 agent 已经很有挑战性了<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image8.png" / loading="lazy" decoding="async"></span></li>
+  <li>然后可以根据上右图，进行随机采样来完成初始信息来<label for="在构建" class="margin-toggle sidenote-number"></label><input type="checkbox" id="在构建" class="margin-toggle" /><span class="sidenote">在构建的库进行随机搭配<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image9.png" / loading="lazy" decoding="async"></span></li>
   <li>最后，最具有挑战性的是保证 user 的 instruction 会对应唯一的结果。比如：如果用户支付方式偏好未指定，那么最后的答案可能不是唯一的。因此通过 GPT4 去多次检验 user 的 instruction 直到不存在多个答案</li>
 </ol>
 
@@ -425,7 +291,7 @@
 
 <h2 id="failure-breakdown-in-version-1">Failure Breakdown In Version 1</h2>
 
-<figure class="flexwidth"><img src="/assets/BFCL-TauBench/image10.png" style="width:50%;height:50%" /><figcaption>Failure Breakdown 比例图</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/BFCL-TauBench/image10.png" style="width:50%;height:50%" / loading="lazy" decoding="async"><figcaption>Failure Breakdown 比例图</figcaption></figure>
 
 <p>从 retail 任务中 sample 了 115 个子任务在 4o 上的表现，其中有 40 个任务失败了：有 4 个是由于用户的 instruction 有 typo 或者表述不清；其余 36 个的具体分类如上</p>
 
@@ -437,11 +303,11 @@
 
 <h2 id="new-in-version-2">New In Version 2</h2>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image11.png" /><figcaption>user 和 agent 可以都使用工具</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image11.png" / loading="lazy" decoding="async"><figcaption>user 和 agent 可以都使用工具</figcaption></figure>
 
 <p>在 τ2-bench 中最重要的是提出 user 和 agent 都可以使用 tools 的思想，只有 agent single-control 的环境中，agent 不能更加完全的了解到 user 的偏好和目标。如上图所示，user 也有自己的 database，可以通过 call tool 来进行查询 database。并且引入了新的 domain 的数据 telecom 并使用 double-control 的方式。交互的示例如下图：</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image12.png" /><figcaption>user 和 agent 可以都使用工具</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image12.png" / loading="lazy" decoding="async"><figcaption>user 和 agent 可以都使用工具</figcaption></figure>
 
 <h2 id="benchmarktelecom-construction-in-version-2">Benchmark(Telecom) Construction In Version 2</h2>
 
@@ -451,7 +317,7 @@
   <li>
     <p><strong>Programmatic task creation</strong>：定义原子任务为某个特定的任务，分别由 init function 初始化状态、solution function 解决问题、assertion function 保证问题解决。多个原子任务可以组成复合任务，只有每个原子任务的 assertion function 通过才可以任务解决了。在 telecom domain 有 15 个原子任务组，共三个意图类别：service_issue，mobile_data_issue and mms_issue，共生成 2285 个任务。最后考虑各个意图的难度均衡 sample 了 114 个任务，如下</p>
 
-    <figure class="fullwidth"><img src="/assets/BFCL-TauBench/image13.png" /><figcaption>各个任务情况</figcaption></figure>
+    <figure class="fullwidth"><img src="/assets/BFCL-TauBench/image13.png" / loading="lazy" decoding="async"><figcaption>各个任务情况</figcaption></figure>
   </li>
   <li><strong>Creating domain-specific agent policy</strong>：这部分也是根据 task 和 solution 去 prompt 生成</li>
   <li><strong>Manual refinement</strong>：除了简单 refine，version 2 还加入了模拟用户的详细信息，并且据此分了三类人群：None，Easy 和 Hard
@@ -465,7 +331,7 @@
 
 <p><strong>Ablation Analysis In Version 2</strong></p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image14.png" /><figcaption>各个任务情况</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image14.png" / loading="lazy" decoding="async"><figcaption>各个任务情况</figcaption></figure>
 
 <p>首先可以看到 telecom domain 的表现是远远比其他 domain 要差的。在 version 2 中，agent 是否 success 主要取决于：怎么和 user 沟通以及合作解决问题的；是否遵循 policy document 中的 domain guidelines。为了更好的评估这两方面，从下面三个 setting 进行 ablation study：</p>
 
@@ -475,7 +341,7 @@
   <li><strong>Oracle Plan</strong>：会提供给 agent 一系列的 tool 供解决问题，包括 user 和 agent 的 actions。这里就不用 agent 去推理需要做的事，完全与 user 交流就行，是一个非常清晰的 plan</li>
 </ol>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image15.png" /><figcaption>关于不同 setting，以及给不给 workflow 提示的实验结果</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image15.png" / loading="lazy" decoding="async"><figcaption>关于不同 setting，以及给不给 workflow 提示的实验结果</figcaption></figure>
 
 <p>从上述结果（左图是默认模式，右图是有提示各个任务的 workflow 模式），可以得出以下结论：</p>
 
@@ -486,19 +352,19 @@
 
 <p><strong>关于 actions 的数量和子任务数量的影响</strong></p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image16.png" /><figcaption>统计图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image16.png" / loading="lazy" decoding="async"><figcaption>统计图</figcaption></figure>
 
 <p>可以看到子任务和步数越多成功率越低</p>
 
 <p><strong>关于不同人群的影响</strong></p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image17.png" /><figcaption>关于设置不同人设的效果图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image17.png" / loading="lazy" decoding="async"><figcaption>关于设置不同人设的效果图</figcaption></figure>
 
 <p>这里可以看出来，什么都不提供比 hard 的人群效果更差</p>
 
 <p>下图为提示给 agent 的 workflow 示意，会全部将其写在 prompt 中</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image18.png" /><figcaption>agent 的 workflow</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image18.png" / loading="lazy" decoding="async"><figcaption>agent 的 workflow</figcaption></figure>
 
 <h1 id="reference">Reference</h1>
 
@@ -509,7 +375,7 @@
 <p><a href="https://arxiv.org/abs/2506.07982">τ2-bench</a></p>
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 January 10, 2026</span></p>
+          <p class="subtitle post-date-line"><span class="color-date">🌸 January 10, 2026</span></p>
 
           
             
@@ -545,176 +411,10 @@
         </main>
       </div>
 
-      <script>
-(function() {
-  var toc = document.getElementById('toc');
-  if (!toc) return;
-
-  // Only scan H1 and H2
-  var allHeadings = document.querySelectorAll('article h1, article h2');
-  var filteredHeadings = [];
-  var skippedTitle = false;
-
-  allHeadings.forEach(function(h) {
-    // Skip the page title (first h1)
-    if (!skippedTitle && h.tagName === 'H1') {
-      skippedTitle = true;
-      return;
-    }
-    filteredHeadings.push(h);
-  });
-
-  if (filteredHeadings.length === 0) {
-    toc.style.display = 'none';
-    return;
-  }
-
-  // Check if there are any H1 headings in content
-  var hasH1 = false;
-  filteredHeadings.forEach(function(h) {
-    if (h.tagName === 'H1') hasH1 = true;
-  });
-
-  // Build a map from heading id to toc link for fast lookup
-  var idToLink = {};
-
-  filteredHeadings.forEach(function(heading) {
-    if (!heading.id) {
-      heading.id = encodeURIComponent(
-        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
-      );
-    }
-
-    var link = document.createElement('a');
-    link.href = '#' + encodeURIComponent(heading.id);
-    link.textContent = heading.textContent;
-    link.setAttribute('data-heading-id', heading.id);
-
-    idToLink[heading.id] = link;
-
-    if (!hasH1) {
-      // No H1 in content: all H2 are standalone level-1 items
-      link.classList.add('toc-link', 'level-1');
-
-      var itemDiv = document.createElement('div');
-      itemDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.style.visibility = 'hidden';
-
-      itemDiv.appendChild(toggleBtn);
-      itemDiv.appendChild(link);
-      toc.appendChild(itemDiv);
-    } else if (heading.tagName === 'H1') {
-      // H1 as parent
-      link.classList.add('toc-link', 'level-1');
-
-      var parentDiv = document.createElement('div');
-      parentDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.textContent = '\u2660'; // ♠
-      toggleBtn.addEventListener('click', function() {
-        var child = parentDiv.querySelector('.child-container');
-        child.classList.toggle('open');
-        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
-      });
-
-      var childContainer = document.createElement('div');
-      childContainer.className = 'child-container';
-
-      parentDiv.appendChild(toggleBtn);
-      parentDiv.appendChild(link);
-      parentDiv.appendChild(childContainer);
-      toc.appendChild(parentDiv);
-    } else if (heading.tagName === 'H2') {
-      // H2 as child of last H1 parent
-      link.classList.add('toc-link', 'level-2');
-
-      var parentDiv = toc.lastChild;
-      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
-        parentDiv.querySelector('.child-container').appendChild(link);
-      }
-    }
-  });
-
-  // Scroll highlight
-  window.addEventListener('scroll', function() {
-    var currentSection = '';
-    var scrollY = window.scrollY + 100;
-
-    filteredHeadings.forEach(function(section) {
-      if (section.offsetTop <= scrollY) {
-        currentSection = section.id;
-      }
-    });
-
-    document.querySelectorAll('.toc-parent').forEach(function(parent) {
-      var childContainer = parent.querySelector('.child-container');
-      if (childContainer) {
-        childContainer.classList.remove('open');
-      }
-      var btn = parent.querySelector('.toggle-btn');
-      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
-    });
-
-    document.querySelectorAll('.toc-link').forEach(function(link) {
-      link.classList.remove('active');
-    });
-
-    var activeLink = idToLink[currentSection];
-    if (activeLink) {
-      activeLink.classList.add('active');
-      var parent = activeLink.closest('.toc-parent');
-      if (parent) {
-        var child = parent.querySelector('.child-container');
-        if (child) child.classList.add('open');
-        var btn = parent.querySelector('.toggle-btn');
-        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
-      }
-    }
-  });
-
-  // Smooth scroll on click (offset for sticky header)
-  document.querySelectorAll('.toc-link').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      var targetId = link.getAttribute('data-heading-id');
-      var targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        var headerHeight = document.querySelector('header').offsetHeight + 20;
-        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-      }
-    });
-  });
-})();
-</script>
+      <script defer src="/assets/js/toc.js?v=1779454353"></script>
 
     </article>
     <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
-    <script>
-    (function() {
-      var fab = document.getElementById('toc-fab');
-      var toc = document.getElementById('toc');
-      if (!fab || !toc) return;
-      fab.addEventListener('click', function() {
-        toc.classList.toggle('toc-open');
-      });
-      document.addEventListener('click', function(e) {
-        if (!fab.contains(e.target) && !toc.contains(e.target)) {
-          toc.classList.remove('toc-open');
-        }
-      });
-      toc.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          toc.classList.remove('toc-open');
-        });
-      });
-    })();
-    </script>
     <span class="print-footer">BFCL-TauBench - 📅 January 10, 2026 - clay harmon</span>
     <footer>
   <hr class="slender">
@@ -744,22 +444,7 @@
     <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
   </svg>
 </button>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var backToTop = document.getElementById('backToTop');
-  window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 100) {
-      backToTop.classList.add('show');
-    } else {
-      backToTop.classList.remove('show');
-    }
-  });
-  backToTop.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
+<script defer src="/assets/js/back-to-top.js?v=1779454353"></script>
 
   </body>
 </html>

@@ -5,6 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="preconnect" href="https://giscus.app" crossorigin>
+
   <title>DETR SERIES</title>
   <meta name="description" content="🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法。">
 
@@ -18,36 +20,7 @@
     })();
   </script>
 
-  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
   
-    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
-  
-
-<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
-  
-    <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: [
-      "MathMenu.js",
-      "MathZoom.js",
-      "AssistiveMML.js",
-      "a11y/accessibility-menu.js"
-    ],
-    jax: ["input/TeX", "output/CommonHTML"],
-    TeX: {
-      extensions: [
-        "AMSmath.js",
-        "AMSsymbols.js",
-        "noErrors.js",
-        "noUndefined.js",
-      ]
-    }
-  });
-</script>
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
@@ -55,12 +28,25 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
   <link rel="manifest" href="/assets/img/site.webmanifest">
 
-  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css?v=1779454353">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="/articles/23/DETR-SERIES">
+  
+  
+  
+  
+  <meta property="og:title" content="DETR SERIES">
+  <meta property="og:description" content="🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法。">
+  <meta property="og:url" content="https://froml77.top/articles/23/DETR-SERIES">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="From L77">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="DETR SERIES">
+  <meta name="twitter:description" content="🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法。">
 
-  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+  <link rel="canonical" href="https://froml77.top/articles/23/DETR-SERIES">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="https://froml77.top/feed.xml" />
 </head>
 
   <body>
@@ -72,145 +58,25 @@
 	  <a href="/blog/">blog</a>
 	  <a href="/archive/">Archive</a>
 	  <a href="/about/">About</a>
-	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" data-giscus-theme-base="https://froml77.top/css/giscus-">
 	    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
 	  </button>
 	</div>
 	<div class="search-wrapper">
-	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off">
-	  <div id="search-results" class="search-results" style="display:none;"></div>
+	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off" data-search-url="/search.json">
+	  <div id="search-results" class="search-results"></div>
 	</div>
 	</nav>
 </header>
-<script>
-(function() {
-  var searchInput = document.getElementById('search-input');
-  var searchResults = document.getElementById('search-results');
-  var posts = null;
-
-  function loadPosts(callback) {
-    if (posts) { callback(); return; }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search.json');
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        posts = JSON.parse(xhr.responseText);
-        callback();
-      }
-    };
-    xhr.send();
-  }
-
-  function doSearch(query) {
-    if (!query || query.length < 1) {
-      searchResults.style.display = 'none';
-      return;
-    }
-    loadPosts(function() {
-      var q = query.toLowerCase();
-      var matches = [];
-      var seen = {};
-      for (var i = 0; i < posts.length; i++) {
-        var p = posts[i];
-        if (seen[p.url]) continue;
-        if (p.title.toLowerCase().indexOf(q) !== -1) {
-          matches.push(p);
-          seen[p.url] = true;
-        }
-      }
-      if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
-      } else {
-        var html = '';
-        for (var j = 0; j < matches.length; j++) {
-          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
-                  '<span class="search-result-title">' + matches[j].title + '</span>' +
-                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
-        }
-        searchResults.innerHTML = html;
-      }
-      searchResults.style.display = 'block';
-    });
-  }
-
-  var debounceTimer;
-  searchInput.addEventListener('input', function() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function() {
-      doSearch(searchInput.value.trim());
-    }, 200);
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-      searchResults.style.display = 'none';
-    }
-  });
-
-  searchInput.addEventListener('focus', function() {
-    if (searchInput.value.trim().length >= 1) {
-      doSearch(searchInput.value.trim());
-    }
-  });
-})();
-
-// Header shadow on scroll
-(function() {
-  var header = document.querySelector('header');
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 10) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-})();
-
-// Theme toggle
-(function() {
-  var toggle = document.getElementById('theme-toggle');
-  var iconMoon = toggle.querySelector('.icon-moon');
-  var iconSun = toggle.querySelector('.icon-sun');
-
-  function updateIcons(theme) {
-    if (theme === 'dark') {
-      iconMoon.style.display = 'none';
-      iconSun.style.display = 'block';
-    } else {
-      iconMoon.style.display = 'block';
-      iconSun.style.display = 'none';
-    }
-  }
-
-  updateIcons(document.documentElement.getAttribute('data-theme'));
-
-  toggle.addEventListener('click', function() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateIcons(next);
-
-    // Sync Giscus theme
-    var giscusFrame = document.querySelector('iframe.giscus-frame');
-    if (giscusFrame) {
-      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
-      giscusFrame.contentWindow.postMessage(
-        { giscus: { setConfig: { theme: giscusTheme } } },
-        'https://giscus.app'
-      );
-    }
-  });
-})();
-</script>
+<script defer src="/assets/js/header.js?v=1779454353"></script>
 
     <article>
       <div class="container">
         <nav class="toc" id="toc"></nav>
         <main class="content">
-          <h1 style="text-align: left">DETR SERIES</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 2973📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">11min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; AI📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm📍</span></span></p>
+          <h1 class="post-title">DETR SERIES</h1>
+          <p class="subtitle post-meta"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 2973📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">11min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; AI📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm📍</span></span></p>
 
           <p>🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法。<!--more--></p>
 
@@ -218,17 +84,17 @@
 
 <h2 id="framework">Framework</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/1.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/1.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测。</p>
 
 <h2 id="transformer">Transformer</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/2.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/2.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder 和多个 decoder 组成。decoder 的第二个多头注意力 (Multi-Head Attention <strong>MHA</strong>) 将 encoder 的输出作为两个输入。实际上 MAH 中主要由点积放缩注意力算子组成，大概可以看到其由 Query、Key 和 Value 三者作为输入，进行一系列矩阵操作得到结果。</p>
 
-<figure class="fullwidth"><img src="/assets/detr-series/3.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/3.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>通过上图可以简单对点积缩放注意力算子进行介绍。每一个 Embedding 可以生成对应的 Q、K、V ，然后每一个 Embedding 的 Q 都会跟 n 个 K （包括自己的）进行向量内积计算，从而得到 n 个 值，再通过 softmax 得到 n 个权重，最后和 n 个 V 相乘得到了最后的结果。这个过程可以通过右边矩阵相乘实现，里面涉及两个矩阵乘法 Q x K，其结果和 V 进行矩阵相乘。而对于 encoder 而言，Embedding 的个数是和 image 的尺寸成正比，那么其矩阵相乘的计算复杂度就和 image 的尺寸就成平方关系了。</p>
 
@@ -240,7 +106,7 @@
 
 <h2 id="framework-1">Framework</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/4.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/4.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>从上图我们可以看出，对于特征图的每一个位置会生成参考点(reference point)，并且通过 Query 来生成相应的 sampling offsets，图中的是每一个点会生成三个 offsets 代表由三个偏移点来生成这个点的特征值，而这三个偏移点的权重也是由 Query 生成的 (Attention Weights)。从这里看到其中没有涉及矩阵乘法，因此和 image 的尺寸是成线性关系的。</p>
 
@@ -269,13 +135,13 @@
 
 <h2 id="motivation-1">Motivation</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/5.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/5.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>文章通过前人的经验得出，导致 DETR 训练速度慢的原因很大可能是因为 decoder 中 cross attention 这个模块，由上面的对比可以看出其与 self attention 的区别主要就在于 query 的不同。文章猜想两个原因：query 比较难学和 query 的位置编码方式不对。</p>
 
 <h2 id="framework-2">Framework</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/6.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/6.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>文章分别进行了实验：1、使用训练好的 query 来进行实验，发现并没有加快收敛；2、对 decoder 的位置编码改为正弦位置编码，并让 query 中的一个 embedding 关注一个位置发现收敛变快。最终得到上述的网络框架，通过编码的 anchor 会和 query、key 结合，当然这种情况仅限与 DETR 的改动，在 Deformable DETR 里面仅仅对位置编码进行重新调整了一下，<a href="https://github.com/IDEA-Research/DAB-DETR/blob/f235284b26ea9715ecd66b2ee4308ff1dfca4924/models/dab_deformable_detr/deformable_transformer.py#L404">源码在这里</a>。</p>
 
@@ -293,13 +159,13 @@
 
 <h2 id="framework-3">Framework</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/7.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/7.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>其实可以看到，与 DAB-DETR 相比，最大的差别仍然在 decoder 处，主要是 query 的输入。DN-DETR 认为我们可以把对 offsets 的学习，看作一种对噪声学习的过程，因此，可以直接在 GT 周围生成一些 noised boxes，这些 boxes 是 GT 进行稍微移动得到的。然后将得到的 noised boxes 转化为高维的 embedding 与原本的 query 进行 cat，同时这些 noised boxes 的类别本应该是 GT 的类别，但是为了学习类别的噪声，因此将其任意翻转到其他类别再进行 embed。最后希望通过模型的学习，将 offsets 学好，同时把类别整对。这里可以看作<strong>增加了很多 good anchor 供模型学习</strong>，而且这些 boxes 最后不用参加匈牙利匹配，因为它们是由某个 GT 演化而来，从出生开始就已经形成了天然的匹配。</p>
 
 <h2 id="focus-2">Focus</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/8.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/8.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>那么还有另外一个问题没有解决，就是生成的 noised boxes 是带有 GT 信息的，不能被由正常 query 预测的 boxes 在进行<strong>注意力计算</strong>的时候学到。因为真正到推理的时候，就没有人给你提供 GT 的信息了。文章通过上图中右边的 attention mask 来对其进行了屏蔽。灰色的是信息不相通的，对于生成的部分 (denoising part) 互相看不见，自己只能跟自己玩，生成的部分可以看见正常预测的部分 (matching part)，但是正常预测的看不见生成的部分。这里很合理，因为正常预测的部分不含有 GT 信息，被不被看到无所谓。（这个 mask 的看法为：group1 横着对出去灰色的是看不见的，彩色的看得见，其余皆是如此。</p>
 
@@ -309,11 +175,11 @@
 
 <p>DINO 则是这个系列的集大成者，代码的话建议看<a href="https://github.com/IDEA-Research/detrex">这个</a>，原 repo 感觉有点乱。DINO 整体的 pipline 没有太大变化，主要基于 DN-DETR 在三个方面上进行了改进。</p>
 
-<figure class="fullwidth"><img src="/assets/detr-series/9.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/9.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <h2 id="contrastive-denoising-training">Contrastive DeNoising Training</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/10.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/10.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>首先动刀的地方在加噪声这个环境，之前 DN-DETR 的噪声实际上只有正样本的噪声没有负样本的，因此 DINO 在生成正样本的同时也生成了高质量的负样本噪声，简单来说就是负样本噪声离 GT 比正样本噪声更远，宽高形变更严重。这样做主要使得小目标检测的效果变化好了，不过论文好像没有研究这个的原因。</p>
 
@@ -323,7 +189,7 @@
 
 <h2 id="mixed-query-selection">Mixed Query Selection</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/11.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/11.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>这里对比了一下 Deformable DETR 和 DINO 进入 decoder 前 query 和 position-embedding 的生成。可以发现 DINO 的 query 并没有由 proposal 来生成，文章是这样说的：</p>
 
@@ -333,7 +199,7 @@
 
 <h2 id="look-forward-twice">Look Forward Twice</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/12.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/12.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>其实差别就在于，上一层的 points 需不需要 detach 后再送入下一层进行 refine，文章是这样说的：</p>
 
@@ -346,7 +212,7 @@
 <p>至此从 DETR 到 DINO 的就讲完啦🍇🍇🍇</p>
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 May 19, 2023</span></p>
+          <p class="subtitle post-date-line"><span class="color-date">🌸 May 19, 2023</span></p>
 
           
             
@@ -382,176 +248,10 @@
         </main>
       </div>
 
-      <script>
-(function() {
-  var toc = document.getElementById('toc');
-  if (!toc) return;
-
-  // Only scan H1 and H2
-  var allHeadings = document.querySelectorAll('article h1, article h2');
-  var filteredHeadings = [];
-  var skippedTitle = false;
-
-  allHeadings.forEach(function(h) {
-    // Skip the page title (first h1)
-    if (!skippedTitle && h.tagName === 'H1') {
-      skippedTitle = true;
-      return;
-    }
-    filteredHeadings.push(h);
-  });
-
-  if (filteredHeadings.length === 0) {
-    toc.style.display = 'none';
-    return;
-  }
-
-  // Check if there are any H1 headings in content
-  var hasH1 = false;
-  filteredHeadings.forEach(function(h) {
-    if (h.tagName === 'H1') hasH1 = true;
-  });
-
-  // Build a map from heading id to toc link for fast lookup
-  var idToLink = {};
-
-  filteredHeadings.forEach(function(heading) {
-    if (!heading.id) {
-      heading.id = encodeURIComponent(
-        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
-      );
-    }
-
-    var link = document.createElement('a');
-    link.href = '#' + encodeURIComponent(heading.id);
-    link.textContent = heading.textContent;
-    link.setAttribute('data-heading-id', heading.id);
-
-    idToLink[heading.id] = link;
-
-    if (!hasH1) {
-      // No H1 in content: all H2 are standalone level-1 items
-      link.classList.add('toc-link', 'level-1');
-
-      var itemDiv = document.createElement('div');
-      itemDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.style.visibility = 'hidden';
-
-      itemDiv.appendChild(toggleBtn);
-      itemDiv.appendChild(link);
-      toc.appendChild(itemDiv);
-    } else if (heading.tagName === 'H1') {
-      // H1 as parent
-      link.classList.add('toc-link', 'level-1');
-
-      var parentDiv = document.createElement('div');
-      parentDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.textContent = '\u2660'; // ♠
-      toggleBtn.addEventListener('click', function() {
-        var child = parentDiv.querySelector('.child-container');
-        child.classList.toggle('open');
-        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
-      });
-
-      var childContainer = document.createElement('div');
-      childContainer.className = 'child-container';
-
-      parentDiv.appendChild(toggleBtn);
-      parentDiv.appendChild(link);
-      parentDiv.appendChild(childContainer);
-      toc.appendChild(parentDiv);
-    } else if (heading.tagName === 'H2') {
-      // H2 as child of last H1 parent
-      link.classList.add('toc-link', 'level-2');
-
-      var parentDiv = toc.lastChild;
-      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
-        parentDiv.querySelector('.child-container').appendChild(link);
-      }
-    }
-  });
-
-  // Scroll highlight
-  window.addEventListener('scroll', function() {
-    var currentSection = '';
-    var scrollY = window.scrollY + 100;
-
-    filteredHeadings.forEach(function(section) {
-      if (section.offsetTop <= scrollY) {
-        currentSection = section.id;
-      }
-    });
-
-    document.querySelectorAll('.toc-parent').forEach(function(parent) {
-      var childContainer = parent.querySelector('.child-container');
-      if (childContainer) {
-        childContainer.classList.remove('open');
-      }
-      var btn = parent.querySelector('.toggle-btn');
-      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
-    });
-
-    document.querySelectorAll('.toc-link').forEach(function(link) {
-      link.classList.remove('active');
-    });
-
-    var activeLink = idToLink[currentSection];
-    if (activeLink) {
-      activeLink.classList.add('active');
-      var parent = activeLink.closest('.toc-parent');
-      if (parent) {
-        var child = parent.querySelector('.child-container');
-        if (child) child.classList.add('open');
-        var btn = parent.querySelector('.toggle-btn');
-        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
-      }
-    }
-  });
-
-  // Smooth scroll on click (offset for sticky header)
-  document.querySelectorAll('.toc-link').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      var targetId = link.getAttribute('data-heading-id');
-      var targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        var headerHeight = document.querySelector('header').offsetHeight + 20;
-        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-      }
-    });
-  });
-})();
-</script>
+      <script defer src="/assets/js/toc.js?v=1779454353"></script>
 
     </article>
     <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
-    <script>
-    (function() {
-      var fab = document.getElementById('toc-fab');
-      var toc = document.getElementById('toc');
-      if (!fab || !toc) return;
-      fab.addEventListener('click', function() {
-        toc.classList.toggle('toc-open');
-      });
-      document.addEventListener('click', function(e) {
-        if (!fab.contains(e.target) && !toc.contains(e.target)) {
-          toc.classList.remove('toc-open');
-        }
-      });
-      toc.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          toc.classList.remove('toc-open');
-        });
-      });
-    })();
-    </script>
     <span class="print-footer">DETR SERIES - 📅 May 19, 2023 - clay harmon</span>
     <footer>
   <hr class="slender">
@@ -581,22 +281,7 @@
     <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
   </svg>
 </button>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var backToTop = document.getElementById('backToTop');
-  window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 100) {
-      backToTop.classList.add('show');
-    } else {
-      backToTop.classList.remove('show');
-    }
-  });
-  backToTop.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
+<script defer src="/assets/js/back-to-top.js?v=1779454353"></script>
 
   </body>
 </html>

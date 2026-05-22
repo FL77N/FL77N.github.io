@@ -5,6 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="preconnect" href="https://giscus.app" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  
+
   <title>BLOG</title>
   <meta name="description" content="Personal Blog">
 
@@ -18,36 +22,18 @@
     })();
   </script>
 
-  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
   
-    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        options: { ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process' }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   
-
-<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
-  
-    <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: [
-      "MathMenu.js",
-      "MathZoom.js",
-      "AssistiveMML.js",
-      "a11y/accessibility-menu.js"
-    ],
-    jax: ["input/TeX", "output/CommonHTML"],
-    TeX: {
-      extensions: [
-        "AMSmath.js",
-        "AMSsymbols.js",
-        "noErrors.js",
-        "noUndefined.js",
-      ]
-    }
-  });
-</script>
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
@@ -55,12 +41,25 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
   <link rel="manifest" href="/assets/img/site.webmanifest">
 
-  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css?v=1779454353">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="/blog/">
+  
+  
+  
+  
+  <meta property="og:title" content="BLOG">
+  <meta property="og:description" content="Personal Blog">
+  <meta property="og:url" content="https://froml77.top/blog/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="From L77">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="BLOG">
+  <meta name="twitter:description" content="Personal Blog">
 
-  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+  <link rel="canonical" href="https://froml77.top/blog/">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="https://froml77.top/feed.xml" />
 </head>
 
   <body>
@@ -72,142 +71,25 @@
 	  <a class="active" href="/blog/">blog</a>
 	  <a href="/archive/">Archive</a>
 	  <a href="/about/">About</a>
-	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" data-giscus-theme-base="https://froml77.top/css/giscus-">
 	    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
 	  </button>
 	</div>
 	<div class="search-wrapper">
-	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off">
-	  <div id="search-results" class="search-results" style="display:none;"></div>
+	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off" data-search-url="/search.json">
+	  <div id="search-results" class="search-results"></div>
 	</div>
 	</nav>
 </header>
-<script>
-(function() {
-  var searchInput = document.getElementById('search-input');
-  var searchResults = document.getElementById('search-results');
-  var posts = null;
-
-  function loadPosts(callback) {
-    if (posts) { callback(); return; }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search.json');
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        posts = JSON.parse(xhr.responseText);
-        callback();
-      }
-    };
-    xhr.send();
-  }
-
-  function doSearch(query) {
-    if (!query || query.length < 1) {
-      searchResults.style.display = 'none';
-      return;
-    }
-    loadPosts(function() {
-      var q = query.toLowerCase();
-      var matches = [];
-      var seen = {};
-      for (var i = 0; i < posts.length; i++) {
-        var p = posts[i];
-        if (seen[p.url]) continue;
-        if (p.title.toLowerCase().indexOf(q) !== -1) {
-          matches.push(p);
-          seen[p.url] = true;
-        }
-      }
-      if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
-      } else {
-        var html = '';
-        for (var j = 0; j < matches.length; j++) {
-          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
-                  '<span class="search-result-title">' + matches[j].title + '</span>' +
-                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
-        }
-        searchResults.innerHTML = html;
-      }
-      searchResults.style.display = 'block';
-    });
-  }
-
-  var debounceTimer;
-  searchInput.addEventListener('input', function() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function() {
-      doSearch(searchInput.value.trim());
-    }, 200);
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-      searchResults.style.display = 'none';
-    }
-  });
-
-  searchInput.addEventListener('focus', function() {
-    if (searchInput.value.trim().length >= 1) {
-      doSearch(searchInput.value.trim());
-    }
-  });
-})();
-
-// Header shadow on scroll
-(function() {
-  var header = document.querySelector('header');
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 10) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-})();
-
-// Theme toggle
-(function() {
-  var toggle = document.getElementById('theme-toggle');
-  var iconMoon = toggle.querySelector('.icon-moon');
-  var iconSun = toggle.querySelector('.icon-sun');
-
-  function updateIcons(theme) {
-    if (theme === 'dark') {
-      iconMoon.style.display = 'none';
-      iconSun.style.display = 'block';
-    } else {
-      iconMoon.style.display = 'block';
-      iconSun.style.display = 'none';
-    }
-  }
-
-  updateIcons(document.documentElement.getAttribute('data-theme'));
-
-  toggle.addEventListener('click', function() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateIcons(next);
-
-    // Sync Giscus theme
-    var giscusFrame = document.querySelector('iframe.giscus-frame');
-    if (giscusFrame) {
-      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
-      giscusFrame.contentWindow.postMessage(
-        { giscus: { setConfig: { theme: giscusTheme } } },
-        'https://giscus.app'
-      );
-    }
-  });
-})();
-</script>
+<script defer src="/assets/js/header.js?v=1779454353"></script>
 
     <article class="group">
         <h1>ARTICLES</h1>
   <ul class="content-listing" id="post-list">
+    
+    
+    
     
         <li class="index post-item">
           <hr class="invisible">
@@ -216,6 +98,10 @@
           </a>
           <br>
           <span class="smaller color-date">📅 February 23, 2026</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-ai">📂 AI</a>
+          
           <br/>
           <div class="post-excerpt"><p>这篇 blog 主要还是从数据上进行解析 GLM-4.6V，结构和训练方面只进行简单提及</p>
 </div>
@@ -241,7 +127,7 @@
   <li><strong>Factual-centered recaptioning</strong>：通过一个训练的 recaption 的 model 来对 caption 进行事实纠正，文本丰富<label for="recaption" class="margin-toggle sidenote-number"></label><input type="checkbox" id="recaption" class="margin-toggle" /><span class="sidenote">recaption model 的数据和训练怎么来的? </span></li>
 </ul>
 
-<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image.png" /><figcaption>recaption 效果展示</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image.png" / loading="lazy" decoding="async"><figcaption>recaption 效果展示</figcaption></figure>
 
 <h3 id="interleaved-image-text-data">Interleaved image-text data</h3>
 
@@ -366,7 +252,7 @@
 
 <p>设计了一个对 RLVR 和 RLHF 都可用的系统。对于 RLVR 来说，<span style="color: #B87070">高精度的 reward</span> 是 outstanding 结果的重要原因。虽然有些研究表明<span style="color: #B87070">随机或者有噪声的 reward</span> 有时候会让model 往着有效的输出 pattern 走，但事实上当在多个领域训练模型的时候，<span style="color: #B87070">任何一个领域中的 reward 出现偏差都能 derail 整个训练</span><label for="注意这" class="margin-toggle sidenote-number"></label><input type="checkbox" id="注意这" class="margin-toggle" /><span class="sidenote">注意这点和 SFT 是不同的 </span>。如下图所示，在 multi-image 中出现了 reward hacking，大概 200 step 的时候其他领域（下方的四个图）出现了 collapse</p>
 
-<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image1.png" /><figcaption>model collapse by one domain</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image1.png" / loading="lazy" decoding="async"><figcaption>model collapse by one domain</figcaption></figure>
 
 <p><strong>The extraction of the final answer</strong></p>
 
@@ -438,7 +324,7 @@
 
 <p>对于 Function Call 而言，在调用工具的时候，目前常用的是 json 格式的。但是这可能需要大量的转义，会给模型学习带来负担。GLM-4.5 则使用 xml 类似的格式，用了一些 special token 将需要调用的函数和参数进行包裹</p>
 
-<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image2.png" /><figcaption>Function Call 数据示例</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image2.png" / loading="lazy" decoding="async"><figcaption>Function Call 数据示例</figcaption></figure>
 
 <h3 id="rejection-sampling">Rejection Sampling</h3>
 
@@ -479,16 +365,16 @@
 
 <ul>
   <li>
-    <p><strong>Difficulty-based Curriculum Learning</strong>：主要还是针对静态的数据无法满足 model 能力不断增长的需求。文中使用两阶段基于难度的<span style="color: #B87070">课程学习</span>方式<label for="对于极" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于极" class="margin-toggle" /><span class="sidenote">对于极难数据的定义：<code class="language-plaintext highlighter-rouge">pass@8 = 0 &amp; pass@512 &gt; 0</code>，两阶段的方式可以使得模型在后期提点更多<br /><img class="fullwidth" src="/assets/GLM-4-6-v/image3.png" /></span></p>
+    <p><strong>Difficulty-based Curriculum Learning</strong>：主要还是针对静态的数据无法满足 model 能力不断增长的需求。文中使用两阶段基于难度的<span style="color: #B87070">课程学习</span>方式<label for="对于极" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于极" class="margin-toggle" /><span class="sidenote">对于极难数据的定义：<code class="language-plaintext highlighter-rouge">pass@8 = 0 &amp; pass@512 &gt; 0</code>，两阶段的方式可以使得模型在后期提点更多<br /><img class="fullwidth" src="/assets/GLM-4-6-v/image3.png" / loading="lazy" decoding="async"></span></p>
   </li>
   <li>
-    <p><strong>Single-Stage RL at 64K Output Length</strong>：对于 RL 的训练长度来说，直接到位比多步提升更明显<label for="对于 SFT" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于 SFT" class="margin-toggle" /><span class="sidenote">对于 SFT 本来就已经在 64K 训练的情况下，如果突然在较短的 context 上进行训练，会有明显且不可逆的的性能 drop<br /><img class="fullwidth" src="/assets/GLM-4-6-v/image4.png" /></span></p>
+    <p><strong>Single-Stage RL at 64K Output Length</strong>：对于 RL 的训练长度来说，直接到位比多步提升更明显<label for="对于 SFT" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于 SFT" class="margin-toggle" /><span class="sidenote">对于 SFT 本来就已经在 64K 训练的情况下，如果突然在较短的 context 上进行训练，会有明显且不可逆的的性能 drop<br /><img class="fullwidth" src="/assets/GLM-4-6-v/image4.png" / loading="lazy" decoding="async"></span></p>
   </li>
   <li><strong>Dynamic Sampling Temperature</strong>：对于温度而言，过低缺乏多样性，多高可能导致模型训练不稳定。使用一个固定的温度往往只能获取到局部最优解。那么文章使用一个动态变化的方式：当 reward 稳定时，认为当前温度已经不太适合当前训练了，需要选择一个更高的温度。这个温度的选择是用一个测试集来检验一系列高的温度，当使用这个温度时，性能 drop 在 1 个点以内则是可选的</li>
   <li>
     <p><strong>Code and Science RL</strong>：对于 code 文中发现使用 token-weighted loss 很重要；science 则是数据本身的质量和类型更重要（通过 the GPQA-Diamond benchmark 发现）如果只使用由专家核验过的选择题（多项选择题）数据，相比使用质量参差不齐或未经核验的数据进行训练，模型性能会显著更好</p>
 
-    <figure class="fullwidth"><img src="/assets/GLM-4-6-v/image5.png" /><figcaption>code 和 science 的发现</figcaption></figure>
+    <figure class="fullwidth"><img src="/assets/GLM-4-6-v/image5.png" / loading="lazy" decoding="async"><figcaption>code 和 science 的发现</figcaption></figure>
   </li>
 </ul>
 
@@ -554,7 +440,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p><a href="https://arxiv.org/abs/2507.01006">GLM-4.5V and GLM-4.1V-Thinking: Towards Versatile Multimodal Reasoning with Scalable Reinforcement Learning</a></p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -564,6 +450,10 @@ r(x, y_i) - \bar{r}(x)
           </a>
           <br>
           <span class="smaller color-date">📅 January 10, 2026</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-ai">📂 AI</a>
+          
           <br/>
           <div class="post-excerpt"><p>这篇 Blog 主要对关于 multi turn 和 function call 相关的 benchmark：The Berkeley Function-Calling Leaderboard 和 τ-Bench 进行介绍</p>
 </div>
@@ -578,7 +468,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p><strong>Multi Turn</strong> 指的多轮对话，<strong>Multi Step</strong> 指的是每一轮多步的 FC 调用。下图是关于 BFCL 中关于 Single Turn、Multi Turn 和 Multi Step 的示例</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image.png" /><figcaption>multi turn 示意图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image.png" / loading="lazy" decoding="async"><figcaption>multi turn 示意图</figcaption></figure>
 
 <h2 id="multi-turn-的必要性">Multi-Turn 的必要性</h2>
 
@@ -592,7 +482,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p>现有数据集现状</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image1.png" /><figcaption>benchmark 现状</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image1.png" / loading="lazy" decoding="async"><figcaption>benchmark 现状</figcaption></figure>
 
 <h3 id="bfcl-中-multi-turn-数据类型组成">BFCL 中 Multi Turn 数据类型组成</h3>
 
@@ -612,11 +502,11 @@ r(x, y_i) - \bar{r}(x)
 
 <p>下图是相关的示意图</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image2.png" /><figcaption>不同 multi turn 例子</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image2.png" / loading="lazy" decoding="async"><figcaption>不同 multi turn 例子</figcaption></figure>
 
 <p>关于 turns 和 steps 的统计</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image3.png" /><figcaption>turns 和 steps 的统计</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image3.png" / loading="lazy" decoding="async"><figcaption>turns 和 steps 的统计</figcaption></figure>
 
 <h3 id="数据集构建流程及细节">数据集构建流程及细节</h3>
 
@@ -630,7 +520,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p>整体 pipline 如下</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image4.png" /><figcaption>不同 multi turn 例子</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image4.png" / loading="lazy" decoding="async"><figcaption>不同 multi turn 例子</figcaption></figure>
 
 <p><strong>API Codebase Creation</strong></p>
 
@@ -659,7 +549,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p><strong>Graph Edge Construction</strong></p>
 
-<p>有了这些 API 便可以根据他们的关系进行搭建图，最后根据图来随机 sample 路径进行构建数据。如图所示，使用 Trading API 时，就存在几个 API 的依赖关系，完成操作过后可能和其他 API，如 Message API 有依赖关系<label for="API 之" class="margin-toggle sidenote-number"></label><input type="checkbox" id="API 之" class="margin-toggle" /><span class="sidenote">API 之间可能由次序的依赖关系<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image5.png" /></span></p>
+<p>有了这些 API 便可以根据他们的关系进行搭建图，最后根据图来随机 sample 路径进行构建数据。如图所示，使用 Trading API 时，就存在几个 API 的依赖关系，完成操作过后可能和其他 API，如 Message API 有依赖关系<label for="API 之" class="margin-toggle sidenote-number"></label><input type="checkbox" id="API 之" class="margin-toggle" /><span class="sidenote">API 之间可能由次序的依赖关系<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image5.png" / loading="lazy" decoding="async"></span></p>
 
 <p><strong>Task Generation</strong></p>
 
@@ -675,7 +565,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p>人工对于数据的核验非常重要，可以防止 accuracy 过低以及生成的幻觉数据等</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image6.png" /><figcaption>人工核验示意图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image6.png" / loading="lazy" decoding="async"><figcaption>人工核验示意图</figcaption></figure>
 
 <p>根据上图的示意主要对一下几个部分进行核验</p>
 
@@ -747,7 +637,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p>整个过程可以当作马尔可夫决策过程来看待：状态空间 S、行为空间 A、观察空间 O、转换空间 T、指令空间 U 一起组成该过程</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image7.png" /><figcaption>user agent 交流过程</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image7.png" / loading="lazy" decoding="async"><figcaption>user agent 交流过程</figcaption></figure>
 
 <p>根据上图进行简单介绍：</p>
 
@@ -758,8 +648,8 @@ r(x, y_i) - \bar{r}(x)
 <p>每一个 domain 的数据构建都需要经历以下几三个阶段：</p>
 
 <ol>
-  <li>以尽量简单的原则来设计 database schemas、APIs 和 policies<label for="因为即" class="margin-toggle sidenote-number"></label><input type="checkbox" id="因为即" class="margin-toggle" /><span class="sidenote">因为即便是一个很小的 domain 都需要至少 10 个 schemas、APIs 和 policies。这对于现存的 agent 已经很有挑战性了<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image8.png" /></span></li>
-  <li>然后可以根据上右图，进行随机采样来完成初始信息来<label for="在构建" class="margin-toggle sidenote-number"></label><input type="checkbox" id="在构建" class="margin-toggle" /><span class="sidenote">在构建的库进行随机搭配<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image9.png" /></span></li>
+  <li>以尽量简单的原则来设计 database schemas、APIs 和 policies<label for="因为即" class="margin-toggle sidenote-number"></label><input type="checkbox" id="因为即" class="margin-toggle" /><span class="sidenote">因为即便是一个很小的 domain 都需要至少 10 个 schemas、APIs 和 policies。这对于现存的 agent 已经很有挑战性了<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image8.png" / loading="lazy" decoding="async"></span></li>
+  <li>然后可以根据上右图，进行随机采样来完成初始信息来<label for="在构建" class="margin-toggle sidenote-number"></label><input type="checkbox" id="在构建" class="margin-toggle" /><span class="sidenote">在构建的库进行随机搭配<br /><img class="fullwidth" src="/assets/BFCL-TauBench/image9.png" / loading="lazy" decoding="async"></span></li>
   <li>最后，最具有挑战性的是保证 user 的 instruction 会对应唯一的结果。比如：如果用户支付方式偏好未指定，那么最后的答案可能不是唯一的。因此通过 GPT4 去多次检验 user 的 instruction 直到不存在多个答案</li>
 </ol>
 
@@ -780,7 +670,7 @@ r(x, y_i) - \bar{r}(x)
 
 <h2 id="failure-breakdown-in-version-1">Failure Breakdown In Version 1</h2>
 
-<figure class="flexwidth"><img src="/assets/BFCL-TauBench/image10.png" style="width:50%;height:50%" /><figcaption>Failure Breakdown 比例图</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/BFCL-TauBench/image10.png" style="width:50%;height:50%" / loading="lazy" decoding="async"><figcaption>Failure Breakdown 比例图</figcaption></figure>
 
 <p>从 retail 任务中 sample 了 115 个子任务在 4o 上的表现，其中有 40 个任务失败了：有 4 个是由于用户的 instruction 有 typo 或者表述不清；其余 36 个的具体分类如上</p>
 
@@ -792,11 +682,11 @@ r(x, y_i) - \bar{r}(x)
 
 <h2 id="new-in-version-2">New In Version 2</h2>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image11.png" /><figcaption>user 和 agent 可以都使用工具</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image11.png" / loading="lazy" decoding="async"><figcaption>user 和 agent 可以都使用工具</figcaption></figure>
 
 <p>在 τ2-bench 中最重要的是提出 user 和 agent 都可以使用 tools 的思想，只有 agent single-control 的环境中，agent 不能更加完全的了解到 user 的偏好和目标。如上图所示，user 也有自己的 database，可以通过 call tool 来进行查询 database。并且引入了新的 domain 的数据 telecom 并使用 double-control 的方式。交互的示例如下图：</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image12.png" /><figcaption>user 和 agent 可以都使用工具</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image12.png" / loading="lazy" decoding="async"><figcaption>user 和 agent 可以都使用工具</figcaption></figure>
 
 <h2 id="benchmarktelecom-construction-in-version-2">Benchmark(Telecom) Construction In Version 2</h2>
 
@@ -806,7 +696,7 @@ r(x, y_i) - \bar{r}(x)
   <li>
     <p><strong>Programmatic task creation</strong>：定义原子任务为某个特定的任务，分别由 init function 初始化状态、solution function 解决问题、assertion function 保证问题解决。多个原子任务可以组成复合任务，只有每个原子任务的 assertion function 通过才可以任务解决了。在 telecom domain 有 15 个原子任务组，共三个意图类别：service_issue，mobile_data_issue and mms_issue，共生成 2285 个任务。最后考虑各个意图的难度均衡 sample 了 114 个任务，如下</p>
 
-    <figure class="fullwidth"><img src="/assets/BFCL-TauBench/image13.png" /><figcaption>各个任务情况</figcaption></figure>
+    <figure class="fullwidth"><img src="/assets/BFCL-TauBench/image13.png" / loading="lazy" decoding="async"><figcaption>各个任务情况</figcaption></figure>
   </li>
   <li><strong>Creating domain-specific agent policy</strong>：这部分也是根据 task 和 solution 去 prompt 生成</li>
   <li><strong>Manual refinement</strong>：除了简单 refine，version 2 还加入了模拟用户的详细信息，并且据此分了三类人群：None，Easy 和 Hard
@@ -820,7 +710,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p><strong>Ablation Analysis In Version 2</strong></p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image14.png" /><figcaption>各个任务情况</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image14.png" / loading="lazy" decoding="async"><figcaption>各个任务情况</figcaption></figure>
 
 <p>首先可以看到 telecom domain 的表现是远远比其他 domain 要差的。在 version 2 中，agent 是否 success 主要取决于：怎么和 user 沟通以及合作解决问题的；是否遵循 policy document 中的 domain guidelines。为了更好的评估这两方面，从下面三个 setting 进行 ablation study：</p>
 
@@ -830,7 +720,7 @@ r(x, y_i) - \bar{r}(x)
   <li><strong>Oracle Plan</strong>：会提供给 agent 一系列的 tool 供解决问题，包括 user 和 agent 的 actions。这里就不用 agent 去推理需要做的事，完全与 user 交流就行，是一个非常清晰的 plan</li>
 </ol>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image15.png" /><figcaption>关于不同 setting，以及给不给 workflow 提示的实验结果</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image15.png" / loading="lazy" decoding="async"><figcaption>关于不同 setting，以及给不给 workflow 提示的实验结果</figcaption></figure>
 
 <p>从上述结果（左图是默认模式，右图是有提示各个任务的 workflow 模式），可以得出以下结论：</p>
 
@@ -841,19 +731,19 @@ r(x, y_i) - \bar{r}(x)
 
 <p><strong>关于 actions 的数量和子任务数量的影响</strong></p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image16.png" /><figcaption>统计图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image16.png" / loading="lazy" decoding="async"><figcaption>统计图</figcaption></figure>
 
 <p>可以看到子任务和步数越多成功率越低</p>
 
 <p><strong>关于不同人群的影响</strong></p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image17.png" /><figcaption>关于设置不同人设的效果图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image17.png" / loading="lazy" decoding="async"><figcaption>关于设置不同人设的效果图</figcaption></figure>
 
 <p>这里可以看出来，什么都不提供比 hard 的人群效果更差</p>
 
 <p>下图为提示给 agent 的 workflow 示意，会全部将其写在 prompt 中</p>
 
-<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image18.png" /><figcaption>agent 的 workflow</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/BFCL-TauBench/image18.png" / loading="lazy" decoding="async"><figcaption>agent 的 workflow</figcaption></figure>
 
 <h1 id="reference">Reference</h1>
 
@@ -863,7 +753,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p><a href="https://arxiv.org/abs/2506.07982">τ2-bench</a></p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -873,6 +763,10 @@ r(x, y_i) - \bar{r}(x)
           </a>
           <br>
           <span class="smaller color-date">📅 November 27, 2025</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-ai">📂 AI</a>
+          
           <br/>
           <div class="post-excerpt"><p>这篇 Blog 主要对 MPO、DAPO、GSPO 进行介绍，这几种强化学习的方法或基于 <a href="https://arxiv.org/abs/2305.18290">DPO</a> 或基于 <a href="https://arxiv.org/pdf/2402.03300">GRPO</a> 改进。因此默认已经有相关知识，这里就不再赘述了</p>
 </div>
@@ -923,7 +817,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p>从 BCO 的介绍可以知道，它可以作为判断生成好坏的标签<label for="从绝对" class="margin-toggle sidenote-number"></label><input type="checkbox" id="从绝对" class="margin-toggle" /><span class="sidenote">从绝对层面进行判断这个 response 的好坏，即 binary 二分 </span>。Generation Loss 其实就是 SFT Loss 主要用于学习偏好回答生成的过程，下面是不同方法的对比结果</p>
 
-<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image.png" style="width:50%;height:50%" /><figcaption>消融实验对比</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image.png" style="width:50%;height:50%" / loading="lazy" decoding="async"><figcaption>消融实验对比</figcaption></figure>
 
 <p>上图中的 <code class="language-plaintext highlighter-rouge">+</code> 是使用了 SFT Loss，如 DPO+ 指的 DPO + SFT Loss</p>
 
@@ -941,11 +835,11 @@ r(x, y_i) - \bar{r}(x)
 
 \[\text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon, 1 + \varepsilon\right) \rightarrow \text{clip}\left(r_{i,t}(\theta), 1 - \varepsilon_{\text{low}}, 1 + \varepsilon_{\text{high}}\right)\]
 
-<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image1.png" style="width:80%;height:80%" /><figcaption>clip 示意图</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image1.png" style="width:80%;height:80%" / loading="lazy" decoding="async"><figcaption>clip 示意图</figcaption></figure>
 
 <p>如图可知当使用了 clip higher 之后，old policy 中的低概率 token 会得到更多的贡献，但实际上是对于优势为正的 token 采取了更加激进的策略，增强了 old policy 中概率小于在  \(1/(1+\varepsilon)\)  的 token 采样几率，在上图表现为增加的粉红采样区域</p>
 
-<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image5.png" style="width:80%;height:80%" /><figcaption>clip 对比实验</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image5.png" style="width:80%;height:80%" / loading="lazy" decoding="async"><figcaption>clip 对比实验</figcaption></figure>
 
 <p>其中 clip 的上限提高了，为了防止低概率 token 容易更低，下限保持没变。效果也很明显， actor 的 entropy collapse 得到了一定程度的解决。文中采取以下配置 ： \(\varepsilon_{\text{low}}\) 为 0.2 和  \(\varepsilon_{\text{high}}\)  为 0.28</p>
 
@@ -969,7 +863,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p>从上式可以看出来，DAPO 的 loss 实际上使用同样的 normalization，从相对数值来说，同样等于没用，这时候长回答的 loss 能够体现他真正的 loss 贡献<label for="GRPO 每" class="margin-toggle sidenote-number"></label><input type="checkbox" id="GRPO 每" class="margin-toggle" /><span class="sidenote">GRPO 每个 sample 在内部做 normalize 被论文称为 sample level，DAPO 是 sample 内部并没有做 normalize 而是所有 token 一起求和后做 normalize 这样每个 token 的权重是一样的，不会因为 sample 的长度而不一样 </span></p>
 
-<figure class="fullwidth"><img src="/assets/MPO-DAPO-GSPO/image2.png" /><figcaption>loss 实验</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/MPO-DAPO-GSPO/image2.png" / loading="lazy" decoding="async"><figcaption>loss 实验</figcaption></figure>
 
 <p>可以看到回答长度没有疯涨了，因为会遏制重复的垃圾话模式</p>
 
@@ -981,11 +875,11 @@ r(x, y_i) - \bar{r}(x)
 
 <p>越长惩罚越大，从下图可以看到整体平稳了很多</p>
 
-<figure class="fullwidth"><img src="/assets/MPO-DAPO-GSPO/image3.png" /><figcaption>长度惩罚对比实验</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/MPO-DAPO-GSPO/image3.png" / loading="lazy" decoding="async"><figcaption>长度惩罚对比实验</figcaption></figure>
 
 <p>最后是每一项提点的表现</p>
 
-<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image4.png" style="width:80%;height:80%" /><figcaption>总体表现</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/MPO-DAPO-GSPO/image4.png" style="width:80%;height:80%" / loading="lazy" decoding="async"><figcaption>总体表现</figcaption></figure>
 
 <h1 id="gspo">GSPO</h1>
 
@@ -1139,7 +1033,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p><a href="https://github.com/huggingface/open-r1/issues/239">Why does the loss start at 0 when I train GRPO, and then possibly increase</a></p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -1149,6 +1043,10 @@ r(x, y_i) - \bar{r}(x)
           </a>
           <br>
           <span class="smaller color-date">📅 August 20, 2025</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-ai">📂 AI</a>
+          
           <br/>
           <div class="post-excerpt"><p>这篇 Blog 介绍一下跟训练效率相关的内容，来自于两篇主要通过 Packing 技术解决 VLM 和 LLM 中 Load Unbalance 的 Paper，都是来自上海交通大学和商汤科技研究院的两项工作</p>
 </div>
@@ -1159,7 +1057,7 @@ r(x, y_i) - \bar{r}(x)
 
 <p>当我们采用 Packing 的方式去组 batch 时，就不存在这个问题了（如右边）。需要考虑的是怎么样才可以使得组到我们想要的长度（尽量将算力全用到有效的地方）以及会不会给 loss 计算带来问题</p>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/packing1.png" /><figcaption>Packing 示意图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/packing1.png" / loading="lazy" decoding="async"><figcaption>Packing 示意图</figcaption></figure>
 
 <h1 id="omnibal">OmniBal</h1>
 
@@ -1170,7 +1068,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>经过我开头对 Packing 的介绍，很容易知道一般的组 batch 方式很容易造成 token 计算的浪费。其实除了这个问题，如下图所示我们考虑 DP 层面，由于各个 DP 中 mini-batch 数据长度总和不一样，那么各个 DP 的计算量也就不一样，从而致使可能计算量小的 DP 等待计算量大的 DP 的情况<label for="当然你" class="margin-toggle sidenote-number"></label><input type="checkbox" id="当然你" class="margin-toggle" /><span class="sidenote">当然你可以将数据都 Padding 到固定长度，但这样的话就会浪费更多 token 的计算 </span>。假如我们能把每个 DP 的数据 Packing 到一样的长度<label for="这里是" class="margin-toggle sidenote-number"></label><input type="checkbox" id="这里是" class="margin-toggle" /><span class="sidenote">这里是假设计算量和数据总长度大致线性相关时 </span>，就可以解决这个问题</p>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/packing2.png" /><figcaption>传统组 batch 的劣势</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/packing2.png" / loading="lazy" decoding="async"><figcaption>传统组 batch 的劣势</figcaption></figure>
 
 <p>文中使用了一种称之为 Iterative Sampling Filtering 的算法来进行 Packing，具体流程如下伪代码所示，首先是 sampling 阶段：</p>
 
@@ -1198,7 +1096,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>由上面的代码可是得知，组好的 group （除了最后一个）都是在差一条数据的情况就达到组 group 条件之一：group 的 vit 数量之和大于设定 vit 的最大值 <code class="language-plaintext highlighter-rouge">vit_length</code> ；group 数据长度之和大于设定的长度最大值 <code class="language-plaintext highlighter-rouge">total_lenth</code> 。那么就会存在一个问题，如下图所示黄色部分是阈值长度，group1 和 group2 都差一条数据（灰色部分）达到阈值从而组成了 group，但是他们之间也会存在长度差距</p>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/packing3.png" /><figcaption>sampling 结果示意图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/packing3.png" / loading="lazy" decoding="async"><figcaption>sampling 结果示意图</figcaption></figure>
 
 <p>所以，需要筛出离指定阈值差距较大的 group，如下进行 Filtering 阶段：</p>
 
@@ -1235,11 +1133,11 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="performance">Performance</h2>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/image.png" /><figcaption>deepspeed 和 megatron 上的表现</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/image.png" / loading="lazy" decoding="async"><figcaption>deepspeed 和 megatron 上的表现</figcaption></figure>
 
 <p>可以看到，在两种后端的提速表现都非常明显，而且保证了精度没有明显损失的情况</p>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/image1.png" /><figcaption>不同 size model 上的表</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/image1.png" / loading="lazy" decoding="async"><figcaption>不同 size model 上的表</figcaption></figure>
 
 <p>在不同 size 的模型上也进行了速度验证，最快有超过 3 倍的提速！</p>
 
@@ -1249,7 +1147,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>论文的实验都是基于 DeepSpeed 为后端进行的，整体的 Framework 如下图所示</p>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/image2.png" /><figcaption>HBP Framework</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/image2.png" / loading="lazy" decoding="async"><figcaption>HBP Framework</figcaption></figure>
 
 <p>在 OmniBal 中我们介绍了可以通过调整开启 checkpoint 的层数来减少重计算从而加速训练，那么现在当开启 SP 时，SP 开得越大，空出来的显存越多，多的显存可以用于减少开启 checkpoint 的层数，但是 SP 越大通信就越耗时，所以这俩需要进行均衡取舍的，上图中的 Hierarchical Groups Auto-Selection 就是干这个事</p>
 
@@ -1259,11 +1157,11 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="hierarchical-groups-auto-selection">Hierarchical Groups Auto-Selection</h2>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/image3.png" /><figcaption>Auto-Selection 算法</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/image3.png" / loading="lazy" decoding="async"><figcaption>Auto-Selection 算法</figcaption></figure>
 
 <p>整个流程，首先对每个 length 在开某个 SP 的条件下，尽量去尝试不开 checkpoint 的最大层数，比如对于 32k 开 SP 为 2 对应不开的 checkpoint 的最大层数为 0（即需要全开），继续 profile SP 为 4、8 不开 checkpoint 的层数（尽量不要超过 8 因为节点间通信慢），最后得到 32k 在 SP 为 8 不开 checkpoint 层数为 24 层是 32k 所有配置中最快的，同理我们可以得出 128k、64k 以及 16k、8k 的最快对应的 SP checkpoint 配置，同时我们也可以得出最快的 length 是哪一个，如下图则是对 LLama 8B profile 的配置结果（注意这里的每个 iter 会调整 gradient accumulation step 来使得每个 iter 过的 token 数量一样）</p>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/image4.png" /><figcaption>各 length 结果</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/image4.png" / loading="lazy" decoding="async"><figcaption>各 length 结果</figcaption></figure>
 
 <p>一般来讲，profile 的最大 length 是我们需要训练的最大 length ～ \(l_{max}\)，\(l_{max.sp}\) 为 \(l_{max}\) 最快的 SP 配置，这个 length 一定在我们的训练 config 中。最快的 length（如果不是 max）也是需要加到 config 这里标记为 \(l_{best}\) 和对应 SP \(l_{best.sp}\)，这两个配置是一定有的，另外我们需要考虑长度为 \(l_1=l_{best}/l_{best.sp}\) 以及 \(l_2=l_{max}/l_{max.sp}\) 可以理解为这两个 length 是 max 和 best SP 后每个 rank 跑的 length，对应的 SP 设置为 1（即没有 all to all 通信，一个 rank 是一个 DP）。如果 \(l_2 \lt l_{best}\) 则直接并入 \(l_{best}\)，因此最后最多有四组 Packing length 的设置，最少有三组</p>
 
@@ -1293,7 +1191,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>最后 Packing 数据的形式会是怎么样呢，如下图所示：</p>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/packing4.png" /><figcaption>packing 结果</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/packing4.png" / loading="lazy" decoding="async"><figcaption>packing 结果</figcaption></figure>
 
 <p>可以看到对于 <code class="language-plaintext highlighter-rouge">g_id=2</code> 会有来自短数据的来进行充分 Packing，对于<code class="language-plaintext highlighter-rouge">g_id=1</code> 是由两个小包组成一个大包，每个 DP 分到一个小包，如果还需要 SP，则每个 rank 实际跑的数据长度会更小</p>
 
@@ -1310,13 +1208,13 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="performance-1">Performance</h2>
 
-<figure class="fullwidth"><img src="/assets/packing-summary/image5.png" /><figcaption>HBP 结果</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/packing-summary/image5.png" / loading="lazy" decoding="async"><figcaption>HBP 结果</figcaption></figure>
 
 <p>可以看到加速效果非常明显，这里 balance 是指对于有没有按照包总长度平方进行 sort（这里是对 attention 那的计算量做了一个均衡）</p>
 
 <p>以上便是关于两篇论文的全部内容了</p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -1326,6 +1224,10 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
           </a>
           <br>
           <span class="smaller color-date">📅 August 15, 2025</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-life">📂 LIFE</a>
+          
           <br/>
           <div class="post-excerpt"><p>这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。</p>
 </div>
@@ -1371,11 +1273,11 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>首先使用 packing 技术解决了 batch 内 padding 浪费的问题与 DP 之间计算量不均衡等待的问题。同时发现了长短文本混训且在使用 SP 时，存在由短文本 packing 组成的长文本被 SP 后，有不必要的 all to all 通信浪费。对此，我们使用了先组成小 group，再由小 group 组成设定长度的大 group，控制 batch collector 与 sampler 让 rank 拿到属于自己 group 以及保证一个 global batch size 内都是同一种类型的数据（要么是纯长文本，要么是短文本组成的长文本）。另外我们还对 Megatron 内 PP 和 CKPT 的设置使用了 profile 的方式求出最佳值。这部分内容我们整理成了<a href="https://arxiv.org/abs/2407.20761">论文</a>发表在了 ICML 2025 上，也是我的第一篇顶会论文</p>
 
-<figure class="flexwidth"><img src="/assets/first-work-summary/image.png" style="width:70%;height:70%" /><figcaption>VLM Packing 算法</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/first-work-summary/image.png" style="width:70%;height:70%" / loading="lazy" decoding="async"><figcaption>VLM Packing 算法</figcaption></figure>
 
 <p>无独有偶，我们在与 LLM 团队合作时，同样对当前的 LLM 中 load unbalance 和 packing 技术进行优化。针对长短文本混训的场景，采用分层级的 packing 策略，首先确定最长训练长度为 128k，通过 profile 得出其最快的 SP 和 CKPT 配置，假设是 SP=8。那么我们还需要一个配置是 16k（128k/8） 的 group，得到 16k 的 SP 为 1 以及 profile 好其最佳的 CKPT 配置，然后我们需要组好 8 个 16k 的 group 给 8 个 rank。另外假如我们 profile 发现 32k SP=4 是最快的配置，那么需要加入一个 32k 的配置，然后去除 16k 的配置（虽然 16k 没 all to all 通信，但是有最快的为啥不用），最后整理一下就是会有两个层级 128k SP8 和 32k SP4，32k 以下的只 packing 到 32k。假如最快的是 8k SP1，那么则有 128k SP8、16k SP1 和 8k SP1，8k 以下的只 packing 到 8k。最后我们通过控制 sampler 做了课程学习以及 loss normalization 的改进，这部分也整理成了<a href="https://arxiv.org/abs/2503.07680">论文</a>处于在投状态</p>
 
-<figure class="fullwidth"><img src="/assets/first-work-summary/image1.png" /><figcaption>Hierarchical Batch Packing 示意图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/first-work-summary/image1.png" / loading="lazy" decoding="async"><figcaption>Hierarchical Batch Packing 示意图</figcaption></figure>
 
 <p>论文这部分工作，我主要的工作在实现算法和处理数据，以及做实验、测验模型精度等</p>
 
@@ -1387,7 +1289,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>可以看到，在 LLM 时代大部分做的事还是以 Infra 为主的，但整体的工作比较上层，不够深入，这是需要改进的地方。之后可能会去做 LLM 算法相关的工作，也是转了一个方向，目前我对 LLM 训练的认识是 LLM 训练中两个最重要的点：数据的生成和筛选和训练的 pipeline。需要学习的地方还有很多，加油吧少年～</p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -1397,6 +1299,10 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
           </a>
           <br>
           <span class="smaller color-date">📅 May 19, 2023</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-ai">📂 AI</a>
+          
           <br/>
           <div class="post-excerpt"><p>🎍本篇文章主要对 DETR 的相关类容进行简单的介绍，内容涉及DETR、Deformable DETR、DAB-DETR、DN-DETR 和 DINO 等 Transformer 在目标检测领域应用的算法。</p>
 </div>
@@ -1406,17 +1312,17 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="framework">Framework</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/1.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/1.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>DETR 算是 Transformer 在视觉领域应用的第一篇文章，至少是我读过的第一篇，即 End-to-End Object Detection with Transformers。可以看出 image 通过 CNN 或者 Transformer 作为 backbone 进行提取 feature，然后经过 Transformer 进行进一步的特征提取，最后送入检测头预测。</p>
 
 <h2 id="transformer">Transformer</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/2.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/2.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>显然在 DETR 中最重要的就是 Transformer 了。其是由多个 encoder 和多个 decoder 组成。decoder 的第二个多头注意力 (Multi-Head Attention <strong>MHA</strong>) 将 encoder 的输出作为两个输入。实际上 MAH 中主要由点积放缩注意力算子组成，大概可以看到其由 Query、Key 和 Value 三者作为输入，进行一系列矩阵操作得到结果。</p>
 
-<figure class="fullwidth"><img src="/assets/detr-series/3.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/3.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>通过上图可以简单对点积缩放注意力算子进行介绍。每一个 Embedding 可以生成对应的 Q、K、V ，然后每一个 Embedding 的 Q 都会跟 n 个 K （包括自己的）进行向量内积计算，从而得到 n 个 值，再通过 softmax 得到 n 个权重，最后和 n 个 V 相乘得到了最后的结果。这个过程可以通过右边矩阵相乘实现，里面涉及两个矩阵乘法 Q x K，其结果和 V 进行矩阵相乘。而对于 encoder 而言，Embedding 的个数是和 image 的尺寸成正比，那么其矩阵相乘的计算复杂度就和 image 的尺寸就成平方关系了。</p>
 
@@ -1428,7 +1334,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="framework-1">Framework</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/4.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/4.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>从上图我们可以看出，对于特征图的每一个位置会生成参考点(reference point)，并且通过 Query 来生成相应的 sampling offsets，图中的是每一个点会生成三个 offsets 代表由三个偏移点来生成这个点的特征值，而这三个偏移点的权重也是由 Query 生成的 (Attention Weights)。从这里看到其中没有涉及矩阵乘法，因此和 image 的尺寸是成线性关系的。</p>
 
@@ -1457,13 +1363,13 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="motivation-1">Motivation</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/5.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/5.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>文章通过前人的经验得出，导致 DETR 训练速度慢的原因很大可能是因为 decoder 中 cross attention 这个模块，由上面的对比可以看出其与 self attention 的区别主要就在于 query 的不同。文章猜想两个原因：query 比较难学和 query 的位置编码方式不对。</p>
 
 <h2 id="framework-2">Framework</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/6.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/6.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>文章分别进行了实验：1、使用训练好的 query 来进行实验，发现并没有加快收敛；2、对 decoder 的位置编码改为正弦位置编码，并让 query 中的一个 embedding 关注一个位置发现收敛变快。最终得到上述的网络框架，通过编码的 anchor 会和 query、key 结合，当然这种情况仅限与 DETR 的改动，在 Deformable DETR 里面仅仅对位置编码进行重新调整了一下，<a href="https://github.com/IDEA-Research/DAB-DETR/blob/f235284b26ea9715ecd66b2ee4308ff1dfca4924/models/dab_deformable_detr/deformable_transformer.py#L404">源码在这里</a>。</p>
 
@@ -1481,13 +1387,13 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="framework-3">Framework</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/7.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/7.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>其实可以看到，与 DAB-DETR 相比，最大的差别仍然在 decoder 处，主要是 query 的输入。DN-DETR 认为我们可以把对 offsets 的学习，看作一种对噪声学习的过程，因此，可以直接在 GT 周围生成一些 noised boxes，这些 boxes 是 GT 进行稍微移动得到的。然后将得到的 noised boxes 转化为高维的 embedding 与原本的 query 进行 cat，同时这些 noised boxes 的类别本应该是 GT 的类别，但是为了学习类别的噪声，因此将其任意翻转到其他类别再进行 embed。最后希望通过模型的学习，将 offsets 学好，同时把类别整对。这里可以看作<strong>增加了很多 good anchor 供模型学习</strong>，而且这些 boxes 最后不用参加匈牙利匹配，因为它们是由某个 GT 演化而来，从出生开始就已经形成了天然的匹配。</p>
 
 <h2 id="focus-2">Focus</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/8.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/8.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>那么还有另外一个问题没有解决，就是生成的 noised boxes 是带有 GT 信息的，不能被由正常 query 预测的 boxes 在进行<strong>注意力计算</strong>的时候学到。因为真正到推理的时候，就没有人给你提供 GT 的信息了。文章通过上图中右边的 attention mask 来对其进行了屏蔽。灰色的是信息不相通的，对于生成的部分 (denoising part) 互相看不见，自己只能跟自己玩，生成的部分可以看见正常预测的部分 (matching part)，但是正常预测的看不见生成的部分。这里很合理，因为正常预测的部分不含有 GT 信息，被不被看到无所谓。（这个 mask 的看法为：group1 横着对出去灰色的是看不见的，彩色的看得见，其余皆是如此。</p>
 
@@ -1497,11 +1403,11 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>DINO 则是这个系列的集大成者，代码的话建议看<a href="https://github.com/IDEA-Research/detrex">这个</a>，原 repo 感觉有点乱。DINO 整体的 pipline 没有太大变化，主要基于 DN-DETR 在三个方面上进行了改进。</p>
 
-<figure class="fullwidth"><img src="/assets/detr-series/9.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/9.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <h2 id="contrastive-denoising-training">Contrastive DeNoising Training</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/10.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/10.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>首先动刀的地方在加噪声这个环境，之前 DN-DETR 的噪声实际上只有正样本的噪声没有负样本的，因此 DINO 在生成正样本的同时也生成了高质量的负样本噪声，简单来说就是负样本噪声离 GT 比正样本噪声更远，宽高形变更严重。这样做主要使得小目标检测的效果变化好了，不过论文好像没有研究这个的原因。</p>
 
@@ -1511,7 +1417,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="mixed-query-selection">Mixed Query Selection</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/11.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/11.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>这里对比了一下 Deformable DETR 和 DINO 进入 decoder 前 query 和 position-embedding 的生成。可以发现 DINO 的 query 并没有由 proposal 来生成，文章是这样说的：</p>
 
@@ -1521,7 +1427,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <h2 id="look-forward-twice">Look Forward Twice</h2>
 
-<figure class="fullwidth"><img src="/assets/detr-series/12.jpg" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/detr-series/12.jpg" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>其实差别就在于，上一层的 points 需不需要 detach 后再送入下一层进行 refine，文章是这样说的：</p>
 
@@ -1533,7 +1439,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>至此从 DETR 到 DINO 的就讲完啦🍇🍇🍇</p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -1543,6 +1449,10 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
           </a>
           <br>
           <span class="smaller color-date">📅 February 9, 2023</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-ai">📂 AI</a>
+          
           <br/>
           <div class="post-excerpt"><p>GEMM 优化本身是一个非常值得讨论的课题，其优化也涉及 GPU 中优化的大多数常用的技巧。这部分以解析知乎大佬有了琦琦的棍子<a href="https://zhuanlan.zhihu.com/p/435908830">文章</a>中的代码进行解读，也作为代码阅读笔记梳理整个思路</p>
 </div>
@@ -1559,19 +1469,19 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>首先如下图，对 C 进行分块：</p>
 
-<figure class="fullwidth"><img src="/assets/cuda2/1.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/cuda2/1.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>由图可知，C 被分为 MxN/BlOCK_SIZE_M/BlOCK_SIZE_N 块，每块的大小为高 BLOCK_SIZE_M，宽 BLOCK_SIZE_N，每一块对应 A 中的相应行，对应 B 中相应列。其中一个块交给一个 block 来计算，在本次示例中，A、B、C 都是 2048 的方阵，每块的大小为 128 的方阵，因此需要 256 个 block。</p>
 
 <p>对于每个 block 而言，实际上是 A 中的某些行形成的矩阵（Ai）和 B 中的某些列形成的矩阵（Bi）进行矩阵乘法得到的。如上图所示，我们可以对 Ai 中的按列进行再一次划分（Aij）和 Bi 中按照相同的规则按行再次进行划分（Bij），其实可以发现 Ai 中的第 i 列只会和 Bi 中的第 i 行进行相应的运算，其实运算结果的矩阵就是 128 的方阵，所以其实 Ai 和 Bi 的矩阵乘法结果也可以看成多个 128 方阵的累加结果。对于一个 block 来说要进行 K/BLOCK_SIZE_K=8 次循环，然后将结果进行点对点叠加得到</p>
 
-<figure class="fullwidth"><img src="/assets/cuda2/2.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/cuda2/2.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>对于每个 Aij 和 Bij 进行矩阵乘法的时候也不是直接按传统的 Aij 的某一行与 Bij 的某一列进行向量相乘得到最终结果的一个元素来算的，我们每次只计算 Aij 中的第 m 列和 Bi 中的第 m 行的运算结果。这实际上是有考虑 shared memory 的 bank conflict，并且虽然我们设定每个线程在每次小迭代中只计算 Aij 中的 8 个元素和 Bij 中的 8 个元素运算的结果，然而这 8 个元素并不是紧挨着的，如上如可知，我们开了 256 个线程来计算这 128x128 的矩阵，每个线程负责 64 个元素。256 个线程一共 8 个 wrap，我们需要使得每个 wrap 内不发生 bank conflict。上图展示了这个 8 个 wrap 负责的位置，以及 wrap 内线程的负责情况。下面先详细介绍一下 bank conflict：</p>
 
 <h2 id="bank-conflict">Bank Conflict</h2>
 
-<figure class="fullwidth"><img src="/assets/cuda2/3.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/cuda2/3.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>在 shared memory 中的连续的内存被放入 32 个 bank 中，通常每 4 Bytes 一个 bank。如上图所示，一个 float 或者一个 int 占某一个 bank 中的一格，因此可以将一个 bank 理解为一个内存块，一个 bank 是一列，32 个 bank 组成 shared memory。一般 shared memory 的大小是 64 KB，也就是说一个 bank 最多有 2000 Bytes（500 行）。当我们给一个 wrap 中线程分配访问 shared memory 的地址时，也就是分配哪一个线程访问哪一个 bank 中的哪一格。<strong>什么是 bank conflict？</strong>当 <strong>同一 wrap 中</strong> 的 <strong>不同线程</strong>，访问 <strong>同一 bank</strong> 中的 <strong>不同地址</strong> ，此时不能并行访问，只能串行，所以会导致速度下降。shared memory 中的访问可能性：</p>
 
@@ -1855,7 +1765,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p><strong>To Be Continued</strong></p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -1865,12 +1775,16 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
           </a>
           <br>
           <span class="smaller color-date">📅 November 6, 2022</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-ai">📂 AI</a>
+          
           <br/>
           <div class="post-excerpt"><p>🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。</p>
 </div>
           <div class="post-full-content"><p>🎍本篇文章主要对 YoloV7 的后处理进行详细讲解，YoloV7 除了结构上，对前后处理都进行了改进，其余包括 scheduler、optimizer 等与 YoloV6 都是保持一致的。<!--more-->而前处理中的多数 trick 也可以由其他，例如 X 中的数据增强方式替代。因此我们着重介绍后处理部分</p>
 
-<figure class="fullwidth"><img src="/assets/yolov7/1.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/yolov7/1.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>如上如所示，YoloV7 同大多数单阶段目标检测算法属于密集检测 (dense detection)。上图是一个 7x7 的特征图红色的点是基于特征图的网格点，进行偏移后的点，然后在其上铺设 anchor box，每个点铺设一定数量的 anchor。当然也有直接在网格点上进行铺设的，一般来讲没有太大差别。下面我们开始介绍 v7 后处理，主要分为两部分：标签匹配和 loss 计算</p>
 
@@ -1882,11 +1796,11 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>📑顾名思义，第一步是找到三个正样本，就是对于每一个 GT 找到上图的三个 anchor 作为正样本。首先我们先大概讲一下匹配的规则</p>
 
-<figure class="fullwidth"><img src="/assets/yolov7/2.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/yolov7/2.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>如上图所示，对于每一个网格，会被分为四个部分，<strong>绿色点</strong>是 GT 中心点，<strong>蓝色点</strong>是匹配给 GT 的正样本点。首先 GT 中心点所在的网格会被定义为正样本，然后根据中心点在网格的位置来找到另外两个正样本。比如在位置 1 是左上的点会被定义为其正样本，位置 2 是右上，位置 3 是左下，位置 4 是右下</p>
 
-<figure class="fullwidth"><img src="/assets/yolov7/3.png" /><figcaption></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/yolov7/3.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
 <p>📚下面是代码的注解和讲解：</p>
 
@@ -2194,7 +2108,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>☕Yolov7 其他部分如 scheduler 和 optimizer 与 Yolov6 保持一致，另外值得一提的是 v7 的隐性层可以提点 0.5 左右，但是也许仅限 v7 同时对隐性层的 lr 等需要特殊设置</p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -2204,6 +2118,10 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
           </a>
           <br>
           <span class="smaller color-date">📅 June 5, 2022</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-math">📂 MATH</a>
+          
           <br/>
           <div class="post-excerpt"><h1 id="变上限积分求导的理解">变上限积分求导的理解</h1>
 
@@ -2301,7 +2219,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
     <p>我们将上述式子具象化，使用一维流动假设进行联系，假设下述是一根无限长的水管，在 \(t\) 时刻有一滴水（橙色部分），其密度与时间和空间的函数为： \(\rho(x, t)\) ，如下图所示，水滴的边界为 \(a(t)\) 和 \(b(t)\) 。经过时间 \(\Delta t\) ，水滴位置变为  \(a(t+\Delta t)\) 和 \(b(t+\Delta t)\) ，密度变为 \(\rho(x, t+\Delta t)\)（蓝色部分）。</p>
 
-    <figure class="fullwidth"><img src="/assets/变限积分求导/1.png" /><figcaption></figcaption></figure>
+    <figure class="fullwidth"><img src="/assets/变限积分求导/1.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
     <p>在这迅速变化的世界，我们应该找寻不变的真理。这里的真理就是质量守恒定律，水滴不可能跑着跑着质量还减少了吧，搁这儿减肥呢？因此水滴的质量可以由\(m(t)=\int_{a(t)}^{b(t)}\rho(x,t)dx\) 求得，由质量守恒定律，即质量对时间的导数为 0，有：</p>
   </li>
@@ -2359,7 +2277,7 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
 
 <p>🌸🌸🌸 这段故事完结 🌈🌈🌈</p>
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
         <li class="index post-item">
@@ -2369,6 +2287,10 @@ Omniverse Computation Balance</a>，OmniBal 是 Omniverse Balance 的简称。�
           </a>
           <br>
           <span class="smaller color-date">📅 April 13, 2020</span>
+          
+          
+          <a class="post-category-link" href="/archive/#category-jekyll">📂 JEKYLL</a>
+          
           <br/>
           <div class="post-excerpt"><p><span class="newthought">The Tufte Jekyll theme</span>  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.</p>
 </div>
@@ -2472,7 +2394,7 @@ $link-style: color; // choices are 'color' or 'underline'. Default is color usin
 
 <h3 id="margin-figures">Margin Figures</h3>
 
-<p><label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/img/rhino.png" /><br />F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” <em>Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice</em> (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s <em>Visual Explanations</em>.</span></p>
+<p><label for="mf-id-1" class="margin-toggle">⊕</label><input type="checkbox" id="mf-id-1" class="margin-toggle" /><span class="marginnote"><img class="fullwidth" src="/assets/img/rhino.png" / loading="lazy" decoding="async"><br />F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” <em>Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice</em> (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s <em>Visual Explanations</em>.</span></p>
 
 <p>Images and graphics play an integral role in Tufte’s work. To place figures in the margin, use the custom margin figure liquid tag included in the <code class="language-plaintext highlighter-rouge">_plugins</code> directory like so:</p>
 
@@ -2490,7 +2412,7 @@ $link-style: color; // choices are 'color' or 'underline'. Default is color usin
 
 <p>Yields this:</p>
 
-<figure class="fullwidth"><img src="/assets/img/napoleons-march.png" /><figcaption>Napoleon’s March <em>(Edward Tufte’s English translation)</em></figcaption></figure>
+<figure class="fullwidth"><img src="/assets/img/napoleons-march.png" / loading="lazy" decoding="async"><figcaption>Napoleon’s March <em>(Edward Tufte’s English translation)</em></figcaption></figure>
 
 <h3 id="main-column-figures">Main Column Figures</h3>
 
@@ -2500,7 +2422,7 @@ $link-style: color; // choices are 'color' or 'underline'. Default is color usin
 
 <p>yields this:</p>
 
-<figure><img src="/assets/img/exports-imports.png" /><figcaption class="maincolumn-figure">From Edward Tufte, <em>Visual Display of Quantitative Information</em>, page 92</figcaption></figure>
+<figure><img src="/assets/img/exports-imports.png" / loading="lazy" decoding="async"><figcaption class="maincolumn-figure">From Edward Tufte, <em>Visual Display of Quantitative Information</em>, page 92</figcaption></figure>
 
 <h2 id="sidenotes-and-margin-notes">Sidenotes and Margin notes</h2>
 
@@ -2821,155 +2743,15 @@ etc...
    ```</code> </pre>
 
 </div>
-          <div style="text-align:right;"><a href="javascript:void(0)" class="more-toggle" onclick="toggleMore(this)">More 🌱</a></div>
+          <div class="more-toggle-wrap"><a href="javascript:void(0)" class="more-toggle">More 🌱</a></div>
         </li>
     
   </ul>
 
   <div class="pagination" id="pagination"></div>
 
-  <style>
-    .more-toggle {
-      color: #8FB8FA;
-      text-decoration: none;
-      font-family: "Gill Sans", "Gill Sans MT", "Lato", Calibri, sans-serif;
-      border: 1px solid #8FB8FA;
-      border-radius: 12px;
-      padding: 2px 12px;
-      transition: background-color 0.2s ease, color 0.2s ease;
-    }
-    @media (hover: hover) {
-      .more-toggle:hover {
-        background-color: #8FB8FA;
-        color: #fff;
-      }
-    }
-    .more-toggle:active {
-      background-color: #8FB8FA;
-      color: #fff;
-    }
-    .post-full-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, opacity 0.3s ease;
-      opacity: 0;
-    }
-    .post-full-content.expanded {
-      opacity: 1;
-    }
-    .post-excerpt {
-      transition: max-height 0.3s ease, opacity 0.3s ease;
-      overflow: hidden;
-      opacity: 1;
-    }
-    .post-excerpt.collapsed {
-      max-height: 0 !important;
-      opacity: 0;
-    }
-  </style>
-
-  <script>
-  function toggleMore(el) {
-    var li = el.closest('.post-item');
-    var full = li.querySelector('.post-full-content');
-    var excerpt = li.querySelector('.post-excerpt');
-    el.blur();
-    if (!full.classList.contains('expanded')) {
-      excerpt.style.maxHeight = excerpt.scrollHeight + 'px';
-      requestAnimationFrame(function() { excerpt.classList.add('collapsed'); });
-      full.style.maxHeight = full.scrollHeight + 'px';
-      full.classList.add('expanded');
-      el.innerHTML = 'Less 🍁';
-      full.addEventListener('transitionend', function handler() {
-        if (full.classList.contains('expanded')) {
-          full.style.overflow = 'visible';
-          full.style.maxHeight = 'none';
-        }
-        full.removeEventListener('transitionend', handler);
-      });
-    } else {
-      full.style.overflow = 'hidden';
-      full.style.maxHeight = full.scrollHeight + 'px';
-      requestAnimationFrame(function() {
-        full.style.maxHeight = '0';
-        full.classList.remove('expanded');
-      });
-      excerpt.classList.remove('collapsed');
-      excerpt.style.maxHeight = excerpt.scrollHeight + 'px';
-      el.innerHTML = 'More 🌱';
-      var headerH = document.querySelector('header').offsetHeight;
-      var targetY = li.getBoundingClientRect().top + window.pageYOffset - headerH - 10;
-      if ('scrollBehavior' in document.documentElement.style) {
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      } else {
-        window.scrollTo(0, targetY);
-      }
-    }
-  }
-  </script>
-
-  <script>
-  (function() {
-    var perPage = 5;
-    var items = document.querySelectorAll('.post-item');
-    var total = items.length;
-    var totalPages = Math.ceil(total / perPage);
-    if (totalPages <= 1) return;
-
-    var currentPage = 1;
-
-    function showPage(page) {
-      currentPage = page;
-      var start = (page - 1) * perPage;
-      var end = start + perPage;
-      for (var i = 0; i < items.length; i++) {
-        items[i].style.display = (i >= start && i < end) ? '' : 'none';
-      }
-      renderPagination();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function renderPagination() {
-      var html = '';
-      if (currentPage > 1) {
-        html += '<a class="nav-btn prev" href="javascript:void(0)" onclick="window._goPage(' + (currentPage - 1) + ')">&lt;&lt; PREV</a>';
-      }
-      html += '<div class="page-control">';
-      html += '<span class="page-label">PAGE</span>';
-      html += '<input type="number" id="currentPage" min="1" max="' + totalPages + '" value="' + currentPage + '" class="page-input">';
-      html += '<span class="page-label">of ' + totalPages + '&nbsp;</span>';
-      html += '<button class="nav-btn page-go" id="pageGoBtn">GO</button>';
-      html += '</div>';
-      if (currentPage < totalPages) {
-        html += '<a class="nav-btn next" href="javascript:void(0)" onclick="window._goPage(' + (currentPage + 1) + ')">NEXT &gt;&gt;</a>';
-      }
-      document.getElementById('pagination').innerHTML = html;
-
-      document.getElementById('pageGoBtn').addEventListener('click', function() {
-        var val = parseInt(document.getElementById('currentPage').value);
-        if (val >= 1 && val <= totalPages) window._goPage(val);
-      });
-      document.getElementById('currentPage').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          var val = parseInt(this.value);
-          if (val >= 1 && val <= totalPages) window._goPage(val);
-        }
-        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-          e.preventDefault();
-          var val = parseInt(this.value);
-          if (e.key === 'ArrowUp' && val > 1) this.value = val - 1;
-          if (e.key === 'ArrowDown' && val < totalPages) this.value = val + 1;
-        }
-      });
-    }
-
-    window._goPage = function(page) {
-      showPage(page);
-    };
-
-    showPage(1);
-  })();
-  </script>
+  <script defer src="/assets/js/pagination.js?v=1779454353"></script>
+  <script defer src="/assets/js/blog-list.js?v=1779454353"></script>
 
     </article>
     <span class="print-footer">BLOG - clay harmon</span>
@@ -3001,22 +2783,7 @@ etc...
     <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
   </svg>
 </button>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var backToTop = document.getElementById('backToTop');
-  window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 100) {
-      backToTop.classList.add('show');
-    } else {
-      backToTop.classList.remove('show');
-    }
-  });
-  backToTop.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
+<script defer src="/assets/js/back-to-top.js?v=1779454353"></script>
 
   </body>
 </html>

@@ -3,10 +3,10 @@
   <channel>
     <title>From L77</title>
     <description>Personal Blog</description>
-    <link>/</link>
-    <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 11 Mar 2026 23:03:38 -0400</pubDate>
-    <lastBuildDate>Wed, 11 Mar 2026 23:03:38 -0400</lastBuildDate>
+    <link>https://froml77.top/</link>
+    <atom:link href="https://froml77.top/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 22 May 2026 08:52:33 -0400</pubDate>
+    <lastBuildDate>Fri, 22 May 2026 08:52:33 -0400</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
     
       <item>
@@ -347,8 +347,8 @@ r(x, y_i) - \bar{r}(x)
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2507.01006&quot;&gt;GLM-4.5V and GLM-4.1V-Thinking: Towards Versatile Multimodal Reasoning with Scalable Reinforcement Learning&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 23 Feb 2026 14:08:08 -0400</pubDate>
-        <link>/articles/26/GLM-4-6-v</link>
-        <guid isPermaLink="true">/articles/26/GLM-4-6-v</guid>
+        <link>https://froml77.top/articles/26/GLM-4-6-v</link>
+        <guid isPermaLink="true">https://froml77.top/articles/26/GLM-4-6-v</guid>
         
         <category>Algorithm</category>
         
@@ -656,8 +656,8 @@ r(x, y_i) - \bar{r}(x)
 &lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/2506.07982&quot;&gt;τ2-bench&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Sat, 10 Jan 2026 14:08:08 -0400</pubDate>
-        <link>/articles/26/BFCL-TAUBENCH</link>
-        <guid isPermaLink="true">/articles/26/BFCL-TAUBENCH</guid>
+        <link>https://froml77.top/articles/26/BFCL-TAUBENCH</link>
+        <guid isPermaLink="true">https://froml77.top/articles/26/BFCL-TAUBENCH</guid>
         
         <category>Algorithm</category>
         
@@ -932,8 +932,8 @@ r(x, y_i) - \bar{r}(x)
 &lt;p&gt;&lt;a href=&quot;https://github.com/huggingface/open-r1/issues/239&quot;&gt;Why does the loss start at 0 when I train GRPO, and then possibly increase&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 27 Nov 2025 14:08:08 -0400</pubDate>
-        <link>/articles/25/MPO-DAPO-GSPO</link>
-        <guid isPermaLink="true">/articles/25/MPO-DAPO-GSPO</guid>
+        <link>https://froml77.top/articles/25/MPO-DAPO-GSPO</link>
+        <guid isPermaLink="true">https://froml77.top/articles/25/MPO-DAPO-GSPO</guid>
         
         <category>Algorithm</category>
         
@@ -1109,8 +1109,8 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
 &lt;p&gt;以上便是关于两篇论文的全部内容了&lt;/p&gt;
 </description>
         <pubDate>Wed, 20 Aug 2025 14:08:08 -0400</pubDate>
-        <link>/articles/25/PACKING-IN-LLM</link>
-        <guid isPermaLink="true">/articles/25/PACKING-IN-LLM</guid>
+        <link>https://froml77.top/articles/25/PACKING-IN-LLM</link>
+        <guid isPermaLink="true">https://froml77.top/articles/25/PACKING-IN-LLM</guid>
         
         <category>Infra</category>
         
@@ -1180,8 +1180,8 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
 &lt;p&gt;可以看到，在 LLM 时代大部分做的事还是以 Infra 为主的，但整体的工作比较上层，不够深入，这是需要改进的地方。之后可能会去做 LLM 算法相关的工作，也是转了一个方向，目前我对 LLM 训练的认识是 LLM 训练中两个最重要的点：数据的生成和筛选和训练的 pipeline。需要学习的地方还有很多，加油吧少年～&lt;/p&gt;
 </description>
         <pubDate>Fri, 15 Aug 2025 14:08:08 -0400</pubDate>
-        <link>/articles/25/FIRST-WORK-SUMMARY</link>
-        <guid isPermaLink="true">/articles/25/FIRST-WORK-SUMMARY</guid>
+        <link>https://froml77.top/articles/25/FIRST-WORK-SUMMARY</link>
+        <guid isPermaLink="true">https://froml77.top/articles/25/FIRST-WORK-SUMMARY</guid>
         
         <category>Summary</category>
         
@@ -1326,8 +1326,8 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
 &lt;p&gt;至此从 DETR 到 DINO 的就讲完啦🍇🍇🍇&lt;/p&gt;
 </description>
         <pubDate>Fri, 19 May 2023 14:08:08 -0400</pubDate>
-        <link>/articles/23/DETR-SERIES</link>
-        <guid isPermaLink="true">/articles/23/DETR-SERIES</guid>
+        <link>https://froml77.top/articles/23/DETR-SERIES</link>
+        <guid isPermaLink="true">https://froml77.top/articles/23/DETR-SERIES</guid>
         
         <category>Algorithm</category>
         
@@ -1648,8 +1648,8 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
 &lt;p&gt;&lt;strong&gt;To Be Continued&lt;/strong&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 09 Feb 2023 14:08:08 -0400</pubDate>
-        <link>/articles/23/cuda2</link>
-        <guid isPermaLink="true">/articles/23/cuda2</guid>
+        <link>https://froml77.top/articles/23/cuda2</link>
+        <guid isPermaLink="true">https://froml77.top/articles/23/cuda2</guid>
         
         <category>Cuda</category>
         
@@ -1987,8 +1987,8 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
 &lt;p&gt;☕Yolov7 其他部分如 scheduler 和 optimizer 与 Yolov6 保持一致，另外值得一提的是 v7 的隐性层可以提点 0.5 左右，但是也许仅限 v7 同时对隐性层的 lr 等需要特殊设置&lt;/p&gt;
 </description>
         <pubDate>Sun, 06 Nov 2022 05:46:04 -0400</pubDate>
-        <link>/articles/22/yolov7</link>
-        <guid isPermaLink="true">/articles/22/yolov7</guid>
+        <link>https://froml77.top/articles/22/yolov7</link>
+        <guid isPermaLink="true">https://froml77.top/articles/22/yolov7</guid>
         
         <category>Algorithm</category>
         
@@ -2143,8 +2143,8 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
 &lt;p&gt;🌸🌸🌸 这段故事完结 🌈🌈🌈&lt;/p&gt;
 </description>
         <pubDate>Sun, 05 Jun 2022 00:00:00 -0400</pubDate>
-        <link>/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC</link>
-        <guid isPermaLink="true">/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC</guid>
+        <link>https://froml77.top/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC</link>
+        <guid isPermaLink="true">https://froml77.top/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC</guid>
         
         <category>微积分</category>
         
@@ -2605,8 +2605,8 @@ etc...
 
 </description>
         <pubDate>Mon, 13 Apr 2020 05:46:04 -0400</pubDate>
-        <link>/articles/20/tufte-style-jekyll-blog</link>
-        <guid isPermaLink="true">/articles/20/tufte-style-jekyll-blog</guid>
+        <link>https://froml77.top/articles/20/tufte-style-jekyll-blog</link>
+        <guid isPermaLink="true">https://froml77.top/articles/20/tufte-style-jekyll-blog</guid>
         
         <category>Blog</category>
         

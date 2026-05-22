@@ -5,6 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="preconnect" href="https://giscus.app" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  
+
   <title>变限积分求导的种种</title>
   <meta name="description" content="变上限积分求导的理解假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]其中 \(C\) 是常数，可以将其表示为 \(...">
 
@@ -18,36 +22,18 @@
     })();
   </script>
 
-  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
   
-    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        options: { ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process' }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   
-
-<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
-  
-    <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: [
-      "MathMenu.js",
-      "MathZoom.js",
-      "AssistiveMML.js",
-      "a11y/accessibility-menu.js"
-    ],
-    jax: ["input/TeX", "output/CommonHTML"],
-    TeX: {
-      extensions: [
-        "AMSmath.js",
-        "AMSsymbols.js",
-        "noErrors.js",
-        "noUndefined.js",
-      ]
-    }
-  });
-</script>
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
@@ -55,12 +41,25 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
   <link rel="manifest" href="/assets/img/site.webmanifest">
 
-  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css?v=1779454353">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC">
+  
+  
+  
+  
+  <meta property="og:title" content="变限积分求导的种种">
+  <meta property="og:description" content="变上限积分求导的理解假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对...">
+  <meta property="og:url" content="https://froml77.top/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="From L77">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="变限积分求导的种种">
+  <meta name="twitter:description" content="变上限积分求导的理解假设 \(F(x)\) 是 \(f(x)\) 的一个原函数，即 \(F^{\prime}(x) = f(x)\)。那么对 \(f(x)\) 积分，有：\[\int f(x) dx = \int F^{\prime}(x) dx= F(x) +C\]其中 \(C\) 是常数，可以将其表示为 \(-F(a)\)。如果 \(f(x)\) 在 \([a, x]\) 上连续，我们对...">
 
-  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+  <link rel="canonical" href="https://froml77.top/articles/22/%E5%8F%98%E9%99%90%E7%A7%AF%E5%88%86%E6%B1%82%E5%AF%BC">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="https://froml77.top/feed.xml" />
 </head>
 
   <body>
@@ -72,145 +71,25 @@
 	  <a href="/blog/">blog</a>
 	  <a href="/archive/">Archive</a>
 	  <a href="/about/">About</a>
-	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" data-giscus-theme-base="https://froml77.top/css/giscus-">
 	    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
 	  </button>
 	</div>
 	<div class="search-wrapper">
-	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off">
-	  <div id="search-results" class="search-results" style="display:none;"></div>
+	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off" data-search-url="/search.json">
+	  <div id="search-results" class="search-results"></div>
 	</div>
 	</nav>
 </header>
-<script>
-(function() {
-  var searchInput = document.getElementById('search-input');
-  var searchResults = document.getElementById('search-results');
-  var posts = null;
-
-  function loadPosts(callback) {
-    if (posts) { callback(); return; }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search.json');
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        posts = JSON.parse(xhr.responseText);
-        callback();
-      }
-    };
-    xhr.send();
-  }
-
-  function doSearch(query) {
-    if (!query || query.length < 1) {
-      searchResults.style.display = 'none';
-      return;
-    }
-    loadPosts(function() {
-      var q = query.toLowerCase();
-      var matches = [];
-      var seen = {};
-      for (var i = 0; i < posts.length; i++) {
-        var p = posts[i];
-        if (seen[p.url]) continue;
-        if (p.title.toLowerCase().indexOf(q) !== -1) {
-          matches.push(p);
-          seen[p.url] = true;
-        }
-      }
-      if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
-      } else {
-        var html = '';
-        for (var j = 0; j < matches.length; j++) {
-          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
-                  '<span class="search-result-title">' + matches[j].title + '</span>' +
-                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
-        }
-        searchResults.innerHTML = html;
-      }
-      searchResults.style.display = 'block';
-    });
-  }
-
-  var debounceTimer;
-  searchInput.addEventListener('input', function() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function() {
-      doSearch(searchInput.value.trim());
-    }, 200);
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-      searchResults.style.display = 'none';
-    }
-  });
-
-  searchInput.addEventListener('focus', function() {
-    if (searchInput.value.trim().length >= 1) {
-      doSearch(searchInput.value.trim());
-    }
-  });
-})();
-
-// Header shadow on scroll
-(function() {
-  var header = document.querySelector('header');
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 10) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-})();
-
-// Theme toggle
-(function() {
-  var toggle = document.getElementById('theme-toggle');
-  var iconMoon = toggle.querySelector('.icon-moon');
-  var iconSun = toggle.querySelector('.icon-sun');
-
-  function updateIcons(theme) {
-    if (theme === 'dark') {
-      iconMoon.style.display = 'none';
-      iconSun.style.display = 'block';
-    } else {
-      iconMoon.style.display = 'block';
-      iconSun.style.display = 'none';
-    }
-  }
-
-  updateIcons(document.documentElement.getAttribute('data-theme'));
-
-  toggle.addEventListener('click', function() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateIcons(next);
-
-    // Sync Giscus theme
-    var giscusFrame = document.querySelector('iframe.giscus-frame');
-    if (giscusFrame) {
-      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
-      giscusFrame.contentWindow.postMessage(
-        { giscus: { setConfig: { theme: giscusTheme } } },
-        'https://giscus.app'
-      );
-    }
-  });
-})();
-</script>
+<script defer src="/assets/js/header.js?v=1779454353"></script>
 
     <article>
       <div class="container">
         <nav class="toc" id="toc"></nav>
         <main class="content">
-          <h1 style="text-align: left">变限积分求导的种种</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 1542📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">6min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; MATH📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> 微积分📍</span></span></p>
+          <h1 class="post-title">变限积分求导的种种</h1>
+          <p class="subtitle post-meta"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 1542📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">6min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; MATH📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> 微积分📍</span></span></p>
 
           <h1 id="变上限积分求导的理解">变上限积分求导的理解</h1>
 
@@ -297,7 +176,7 @@
 
     <p>我们将上述式子具象化，使用一维流动假设进行联系，假设下述是一根无限长的水管，在 \(t\) 时刻有一滴水（橙色部分），其密度与时间和空间的函数为： \(\rho(x, t)\) ，如下图所示，水滴的边界为 \(a(t)\) 和 \(b(t)\) 。经过时间 \(\Delta t\) ，水滴位置变为  \(a(t+\Delta t)\) 和 \(b(t+\Delta t)\) ，密度变为 \(\rho(x, t+\Delta t)\)（蓝色部分）。</p>
 
-    <figure class="fullwidth"><img src="/assets/变限积分求导/1.png" /><figcaption></figcaption></figure>
+    <figure class="fullwidth"><img src="/assets/变限积分求导/1.png" / loading="lazy" decoding="async"><figcaption></figcaption></figure>
 
     <p>在这迅速变化的世界，我们应该找寻不变的真理。这里的真理就是质量守恒定律，水滴不可能跑着跑着质量还减少了吧，搁这儿减肥呢？因此水滴的质量可以由\(m(t)=\int_{a(t)}^{b(t)}\rho(x,t)dx\) 求得，由质量守恒定律，即质量对时间的导数为 0，有：</p>
   </li>
@@ -356,7 +235,7 @@
 <p>🌸🌸🌸 这段故事完结 🌈🌈🌈</p>
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 June 5, 2022</span></p>
+          <p class="subtitle post-date-line"><span class="color-date">🌸 June 5, 2022</span></p>
 
           
             
@@ -392,176 +271,10 @@
         </main>
       </div>
 
-      <script>
-(function() {
-  var toc = document.getElementById('toc');
-  if (!toc) return;
-
-  // Only scan H1 and H2
-  var allHeadings = document.querySelectorAll('article h1, article h2');
-  var filteredHeadings = [];
-  var skippedTitle = false;
-
-  allHeadings.forEach(function(h) {
-    // Skip the page title (first h1)
-    if (!skippedTitle && h.tagName === 'H1') {
-      skippedTitle = true;
-      return;
-    }
-    filteredHeadings.push(h);
-  });
-
-  if (filteredHeadings.length === 0) {
-    toc.style.display = 'none';
-    return;
-  }
-
-  // Check if there are any H1 headings in content
-  var hasH1 = false;
-  filteredHeadings.forEach(function(h) {
-    if (h.tagName === 'H1') hasH1 = true;
-  });
-
-  // Build a map from heading id to toc link for fast lookup
-  var idToLink = {};
-
-  filteredHeadings.forEach(function(heading) {
-    if (!heading.id) {
-      heading.id = encodeURIComponent(
-        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
-      );
-    }
-
-    var link = document.createElement('a');
-    link.href = '#' + encodeURIComponent(heading.id);
-    link.textContent = heading.textContent;
-    link.setAttribute('data-heading-id', heading.id);
-
-    idToLink[heading.id] = link;
-
-    if (!hasH1) {
-      // No H1 in content: all H2 are standalone level-1 items
-      link.classList.add('toc-link', 'level-1');
-
-      var itemDiv = document.createElement('div');
-      itemDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.style.visibility = 'hidden';
-
-      itemDiv.appendChild(toggleBtn);
-      itemDiv.appendChild(link);
-      toc.appendChild(itemDiv);
-    } else if (heading.tagName === 'H1') {
-      // H1 as parent
-      link.classList.add('toc-link', 'level-1');
-
-      var parentDiv = document.createElement('div');
-      parentDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.textContent = '\u2660'; // ♠
-      toggleBtn.addEventListener('click', function() {
-        var child = parentDiv.querySelector('.child-container');
-        child.classList.toggle('open');
-        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
-      });
-
-      var childContainer = document.createElement('div');
-      childContainer.className = 'child-container';
-
-      parentDiv.appendChild(toggleBtn);
-      parentDiv.appendChild(link);
-      parentDiv.appendChild(childContainer);
-      toc.appendChild(parentDiv);
-    } else if (heading.tagName === 'H2') {
-      // H2 as child of last H1 parent
-      link.classList.add('toc-link', 'level-2');
-
-      var parentDiv = toc.lastChild;
-      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
-        parentDiv.querySelector('.child-container').appendChild(link);
-      }
-    }
-  });
-
-  // Scroll highlight
-  window.addEventListener('scroll', function() {
-    var currentSection = '';
-    var scrollY = window.scrollY + 100;
-
-    filteredHeadings.forEach(function(section) {
-      if (section.offsetTop <= scrollY) {
-        currentSection = section.id;
-      }
-    });
-
-    document.querySelectorAll('.toc-parent').forEach(function(parent) {
-      var childContainer = parent.querySelector('.child-container');
-      if (childContainer) {
-        childContainer.classList.remove('open');
-      }
-      var btn = parent.querySelector('.toggle-btn');
-      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
-    });
-
-    document.querySelectorAll('.toc-link').forEach(function(link) {
-      link.classList.remove('active');
-    });
-
-    var activeLink = idToLink[currentSection];
-    if (activeLink) {
-      activeLink.classList.add('active');
-      var parent = activeLink.closest('.toc-parent');
-      if (parent) {
-        var child = parent.querySelector('.child-container');
-        if (child) child.classList.add('open');
-        var btn = parent.querySelector('.toggle-btn');
-        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
-      }
-    }
-  });
-
-  // Smooth scroll on click (offset for sticky header)
-  document.querySelectorAll('.toc-link').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      var targetId = link.getAttribute('data-heading-id');
-      var targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        var headerHeight = document.querySelector('header').offsetHeight + 20;
-        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-      }
-    });
-  });
-})();
-</script>
+      <script defer src="/assets/js/toc.js?v=1779454353"></script>
 
     </article>
     <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
-    <script>
-    (function() {
-      var fab = document.getElementById('toc-fab');
-      var toc = document.getElementById('toc');
-      if (!fab || !toc) return;
-      fab.addEventListener('click', function() {
-        toc.classList.toggle('toc-open');
-      });
-      document.addEventListener('click', function(e) {
-        if (!fab.contains(e.target) && !toc.contains(e.target)) {
-          toc.classList.remove('toc-open');
-        }
-      });
-      toc.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          toc.classList.remove('toc-open');
-        });
-      });
-    })();
-    </script>
     <span class="print-footer">变限积分求导的种种 - 📅 June 5, 2022 - clay harmon</span>
     <footer>
   <hr class="slender">
@@ -591,22 +304,7 @@
     <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
   </svg>
 </button>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var backToTop = document.getElementById('backToTop');
-  window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 100) {
-      backToTop.classList.add('show');
-    } else {
-      backToTop.classList.remove('show');
-    }
-  });
-  backToTop.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
+<script defer src="/assets/js/back-to-top.js?v=1779454353"></script>
 
   </body>
 </html>

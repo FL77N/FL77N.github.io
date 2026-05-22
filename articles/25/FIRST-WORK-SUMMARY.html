@@ -5,6 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="preconnect" href="https://giscus.app" crossorigin>
+
   <title>AI 之旅之从识图到读书</title>
   <meta name="description" content="这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。">
 
@@ -18,36 +20,7 @@
     })();
   </script>
 
-  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
   
-    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
-  
-
-<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
-  
-    <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: [
-      "MathMenu.js",
-      "MathZoom.js",
-      "AssistiveMML.js",
-      "a11y/accessibility-menu.js"
-    ],
-    jax: ["input/TeX", "output/CommonHTML"],
-    TeX: {
-      extensions: [
-        "AMSmath.js",
-        "AMSsymbols.js",
-        "noErrors.js",
-        "noUndefined.js",
-      ]
-    }
-  });
-</script>
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
@@ -55,12 +28,25 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
   <link rel="manifest" href="/assets/img/site.webmanifest">
 
-  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css?v=1779454353">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="/articles/25/FIRST-WORK-SUMMARY">
+  
+  
+  
+  
+  <meta property="og:title" content="AI 之旅之从识图到读书">
+  <meta property="og:description" content="这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。">
+  <meta property="og:url" content="https://froml77.top/articles/25/FIRST-WORK-SUMMARY">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="From L77">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AI 之旅之从识图到读书">
+  <meta name="twitter:description" content="这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。">
 
-  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+  <link rel="canonical" href="https://froml77.top/articles/25/FIRST-WORK-SUMMARY">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="https://froml77.top/feed.xml" />
 </head>
 
   <body>
@@ -72,145 +58,25 @@
 	  <a href="/blog/">blog</a>
 	  <a href="/archive/">Archive</a>
 	  <a href="/about/">About</a>
-	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" data-giscus-theme-base="https://froml77.top/css/giscus-">
 	    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
 	  </button>
 	</div>
 	<div class="search-wrapper">
-	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off">
-	  <div id="search-results" class="search-results" style="display:none;"></div>
+	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off" data-search-url="/search.json">
+	  <div id="search-results" class="search-results"></div>
 	</div>
 	</nav>
 </header>
-<script>
-(function() {
-  var searchInput = document.getElementById('search-input');
-  var searchResults = document.getElementById('search-results');
-  var posts = null;
-
-  function loadPosts(callback) {
-    if (posts) { callback(); return; }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search.json');
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        posts = JSON.parse(xhr.responseText);
-        callback();
-      }
-    };
-    xhr.send();
-  }
-
-  function doSearch(query) {
-    if (!query || query.length < 1) {
-      searchResults.style.display = 'none';
-      return;
-    }
-    loadPosts(function() {
-      var q = query.toLowerCase();
-      var matches = [];
-      var seen = {};
-      for (var i = 0; i < posts.length; i++) {
-        var p = posts[i];
-        if (seen[p.url]) continue;
-        if (p.title.toLowerCase().indexOf(q) !== -1) {
-          matches.push(p);
-          seen[p.url] = true;
-        }
-      }
-      if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
-      } else {
-        var html = '';
-        for (var j = 0; j < matches.length; j++) {
-          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
-                  '<span class="search-result-title">' + matches[j].title + '</span>' +
-                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
-        }
-        searchResults.innerHTML = html;
-      }
-      searchResults.style.display = 'block';
-    });
-  }
-
-  var debounceTimer;
-  searchInput.addEventListener('input', function() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function() {
-      doSearch(searchInput.value.trim());
-    }, 200);
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-      searchResults.style.display = 'none';
-    }
-  });
-
-  searchInput.addEventListener('focus', function() {
-    if (searchInput.value.trim().length >= 1) {
-      doSearch(searchInput.value.trim());
-    }
-  });
-})();
-
-// Header shadow on scroll
-(function() {
-  var header = document.querySelector('header');
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 10) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-})();
-
-// Theme toggle
-(function() {
-  var toggle = document.getElementById('theme-toggle');
-  var iconMoon = toggle.querySelector('.icon-moon');
-  var iconSun = toggle.querySelector('.icon-sun');
-
-  function updateIcons(theme) {
-    if (theme === 'dark') {
-      iconMoon.style.display = 'none';
-      iconSun.style.display = 'block';
-    } else {
-      iconMoon.style.display = 'block';
-      iconSun.style.display = 'none';
-    }
-  }
-
-  updateIcons(document.documentElement.getAttribute('data-theme'));
-
-  toggle.addEventListener('click', function() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateIcons(next);
-
-    // Sync Giscus theme
-    var giscusFrame = document.querySelector('iframe.giscus-frame');
-    if (giscusFrame) {
-      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
-      giscusFrame.contentWindow.postMessage(
-        { giscus: { setConfig: { theme: giscusTheme } } },
-        'https://giscus.app'
-      );
-    }
-  });
-})();
-</script>
+<script defer src="/assets/js/header.js?v=1779454353"></script>
 
     <article>
       <div class="container">
         <nav class="toc" id="toc"></nav>
         <main class="content">
-          <h1 style="text-align: left">AI 之旅之从识图到读书</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 2783📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">11min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; LIFE📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Summary📍</span></span></p>
+          <h1 class="post-title">AI 之旅之从识图到读书</h1>
+          <p class="subtitle post-meta"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 2783📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">11min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; LIFE📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Summary📍</span></span></p>
 
           <p>这是我对过去三年工作的一个小总结。TS 公司是我毕业后加入的第一家公司，所在的部门是公司研究院下所在的部门。<!--more-->部门的整体氛围很好，上下级之间、同事之间都能愉快的相处，这使得我这期间的工作生活很顺心。回到工作内容部分，总体而言可以分为两部分的工作：CV 和 LLM</p>
 
@@ -254,11 +120,11 @@
 
 <p>首先使用 packing 技术解决了 batch 内 padding 浪费的问题与 DP 之间计算量不均衡等待的问题。同时发现了长短文本混训且在使用 SP 时，存在由短文本 packing 组成的长文本被 SP 后，有不必要的 all to all 通信浪费。对此，我们使用了先组成小 group，再由小 group 组成设定长度的大 group，控制 batch collector 与 sampler 让 rank 拿到属于自己 group 以及保证一个 global batch size 内都是同一种类型的数据（要么是纯长文本，要么是短文本组成的长文本）。另外我们还对 Megatron 内 PP 和 CKPT 的设置使用了 profile 的方式求出最佳值。这部分内容我们整理成了<a href="https://arxiv.org/abs/2407.20761">论文</a>发表在了 ICML 2025 上，也是我的第一篇顶会论文</p>
 
-<figure class="flexwidth"><img src="/assets/first-work-summary/image.png" style="width:70%;height:70%" /><figcaption>VLM Packing 算法</figcaption></figure>
+<figure class="flexwidth"><img src="/assets/first-work-summary/image.png" style="width:70%;height:70%" / loading="lazy" decoding="async"><figcaption>VLM Packing 算法</figcaption></figure>
 
 <p>无独有偶，我们在与 LLM 团队合作时，同样对当前的 LLM 中 load unbalance 和 packing 技术进行优化。针对长短文本混训的场景，采用分层级的 packing 策略，首先确定最长训练长度为 128k，通过 profile 得出其最快的 SP 和 CKPT 配置，假设是 SP=8。那么我们还需要一个配置是 16k（128k/8） 的 group，得到 16k 的 SP 为 1 以及 profile 好其最佳的 CKPT 配置，然后我们需要组好 8 个 16k 的 group 给 8 个 rank。另外假如我们 profile 发现 32k SP=4 是最快的配置，那么需要加入一个 32k 的配置，然后去除 16k 的配置（虽然 16k 没 all to all 通信，但是有最快的为啥不用），最后整理一下就是会有两个层级 128k SP8 和 32k SP4，32k 以下的只 packing 到 32k。假如最快的是 8k SP1，那么则有 128k SP8、16k SP1 和 8k SP1，8k 以下的只 packing 到 8k。最后我们通过控制 sampler 做了课程学习以及 loss normalization 的改进，这部分也整理成了<a href="https://arxiv.org/abs/2503.07680">论文</a>处于在投状态</p>
 
-<figure class="fullwidth"><img src="/assets/first-work-summary/image1.png" /><figcaption>Hierarchical Batch Packing 示意图</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/first-work-summary/image1.png" / loading="lazy" decoding="async"><figcaption>Hierarchical Batch Packing 示意图</figcaption></figure>
 
 <p>论文这部分工作，我主要的工作在实现算法和处理数据，以及做实验、测验模型精度等</p>
 
@@ -271,7 +137,7 @@
 <p>可以看到，在 LLM 时代大部分做的事还是以 Infra 为主的，但整体的工作比较上层，不够深入，这是需要改进的地方。之后可能会去做 LLM 算法相关的工作，也是转了一个方向，目前我对 LLM 训练的认识是 LLM 训练中两个最重要的点：数据的生成和筛选和训练的 pipeline。需要学习的地方还有很多，加油吧少年～</p>
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 August 15, 2025</span></p>
+          <p class="subtitle post-date-line"><span class="color-date">🌸 August 15, 2025</span></p>
 
           
             
@@ -307,176 +173,10 @@
         </main>
       </div>
 
-      <script>
-(function() {
-  var toc = document.getElementById('toc');
-  if (!toc) return;
-
-  // Only scan H1 and H2
-  var allHeadings = document.querySelectorAll('article h1, article h2');
-  var filteredHeadings = [];
-  var skippedTitle = false;
-
-  allHeadings.forEach(function(h) {
-    // Skip the page title (first h1)
-    if (!skippedTitle && h.tagName === 'H1') {
-      skippedTitle = true;
-      return;
-    }
-    filteredHeadings.push(h);
-  });
-
-  if (filteredHeadings.length === 0) {
-    toc.style.display = 'none';
-    return;
-  }
-
-  // Check if there are any H1 headings in content
-  var hasH1 = false;
-  filteredHeadings.forEach(function(h) {
-    if (h.tagName === 'H1') hasH1 = true;
-  });
-
-  // Build a map from heading id to toc link for fast lookup
-  var idToLink = {};
-
-  filteredHeadings.forEach(function(heading) {
-    if (!heading.id) {
-      heading.id = encodeURIComponent(
-        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
-      );
-    }
-
-    var link = document.createElement('a');
-    link.href = '#' + encodeURIComponent(heading.id);
-    link.textContent = heading.textContent;
-    link.setAttribute('data-heading-id', heading.id);
-
-    idToLink[heading.id] = link;
-
-    if (!hasH1) {
-      // No H1 in content: all H2 are standalone level-1 items
-      link.classList.add('toc-link', 'level-1');
-
-      var itemDiv = document.createElement('div');
-      itemDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.style.visibility = 'hidden';
-
-      itemDiv.appendChild(toggleBtn);
-      itemDiv.appendChild(link);
-      toc.appendChild(itemDiv);
-    } else if (heading.tagName === 'H1') {
-      // H1 as parent
-      link.classList.add('toc-link', 'level-1');
-
-      var parentDiv = document.createElement('div');
-      parentDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.textContent = '\u2660'; // ♠
-      toggleBtn.addEventListener('click', function() {
-        var child = parentDiv.querySelector('.child-container');
-        child.classList.toggle('open');
-        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
-      });
-
-      var childContainer = document.createElement('div');
-      childContainer.className = 'child-container';
-
-      parentDiv.appendChild(toggleBtn);
-      parentDiv.appendChild(link);
-      parentDiv.appendChild(childContainer);
-      toc.appendChild(parentDiv);
-    } else if (heading.tagName === 'H2') {
-      // H2 as child of last H1 parent
-      link.classList.add('toc-link', 'level-2');
-
-      var parentDiv = toc.lastChild;
-      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
-        parentDiv.querySelector('.child-container').appendChild(link);
-      }
-    }
-  });
-
-  // Scroll highlight
-  window.addEventListener('scroll', function() {
-    var currentSection = '';
-    var scrollY = window.scrollY + 100;
-
-    filteredHeadings.forEach(function(section) {
-      if (section.offsetTop <= scrollY) {
-        currentSection = section.id;
-      }
-    });
-
-    document.querySelectorAll('.toc-parent').forEach(function(parent) {
-      var childContainer = parent.querySelector('.child-container');
-      if (childContainer) {
-        childContainer.classList.remove('open');
-      }
-      var btn = parent.querySelector('.toggle-btn');
-      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
-    });
-
-    document.querySelectorAll('.toc-link').forEach(function(link) {
-      link.classList.remove('active');
-    });
-
-    var activeLink = idToLink[currentSection];
-    if (activeLink) {
-      activeLink.classList.add('active');
-      var parent = activeLink.closest('.toc-parent');
-      if (parent) {
-        var child = parent.querySelector('.child-container');
-        if (child) child.classList.add('open');
-        var btn = parent.querySelector('.toggle-btn');
-        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
-      }
-    }
-  });
-
-  // Smooth scroll on click (offset for sticky header)
-  document.querySelectorAll('.toc-link').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      var targetId = link.getAttribute('data-heading-id');
-      var targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        var headerHeight = document.querySelector('header').offsetHeight + 20;
-        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-      }
-    });
-  });
-})();
-</script>
+      <script defer src="/assets/js/toc.js?v=1779454353"></script>
 
     </article>
     <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
-    <script>
-    (function() {
-      var fab = document.getElementById('toc-fab');
-      var toc = document.getElementById('toc');
-      if (!fab || !toc) return;
-      fab.addEventListener('click', function() {
-        toc.classList.toggle('toc-open');
-      });
-      document.addEventListener('click', function(e) {
-        if (!fab.contains(e.target) && !toc.contains(e.target)) {
-          toc.classList.remove('toc-open');
-        }
-      });
-      toc.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          toc.classList.remove('toc-open');
-        });
-      });
-    })();
-    </script>
     <span class="print-footer">AI 之旅之从识图到读书 - 📅 August 15, 2025 - clay harmon</span>
     <footer>
   <hr class="slender">
@@ -506,22 +206,7 @@
     <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
   </svg>
 </button>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var backToTop = document.getElementById('backToTop');
-  window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 100) {
-      backToTop.classList.add('show');
-    } else {
-      backToTop.classList.remove('show');
-    }
-  });
-  backToTop.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
+<script defer src="/assets/js/back-to-top.js?v=1779454353"></script>
 
   </body>
 </html>

@@ -5,6 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="preconnect" href="https://giscus.app" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  
+
   <title>GLM-4.6V</title>
   <meta name="description" content="这篇 blog 主要还是从数据上进行解析 GLM-4.6V，结构和训练方面只进行简单提及">
 
@@ -18,36 +22,18 @@
     })();
   </script>
 
-  <!-- Google Fonts loaded here depending on setting in _data/options.yml true loads font, blank does not-->
   
-    <link href='//fonts.googleapis.com/css?family=Lato:400,400italic' rel='stylesheet' type='text/css'>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        options: { ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process' }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   
-
-<!-- Load up MathJax script if needed ... specify in /_data/options.yml file-->
-  
-    <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: [
-      "MathMenu.js",
-      "MathZoom.js",
-      "AssistiveMML.js",
-      "a11y/accessibility-menu.js"
-    ],
-    jax: ["input/TeX", "output/CommonHTML"],
-    TeX: {
-      extensions: [
-        "AMSmath.js",
-        "AMSsymbols.js",
-        "noErrors.js",
-        "noUndefined.js",
-      ]
-    }
-  });
-</script>
-
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
 
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
@@ -55,12 +41,25 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
   <link rel="manifest" href="/assets/img/site.webmanifest">
 
-  <link rel="stylesheet" type="text/css" href="/css/tufte.css">
+  <link rel="stylesheet" type="text/css" href="/css/tufte.css?v=1779454353">
   <!-- <link rel="stylesheet" type="text/css" href="/css/print.css" media="print"> -->
 
-  <link rel="canonical" href="/articles/26/GLM-4-6-v">
+  
+  
+  
+  
+  <meta property="og:title" content="GLM-4.6V">
+  <meta property="og:description" content="这篇 blog 主要还是从数据上进行解析 GLM-4.6V，结构和训练方面只进行简单提及">
+  <meta property="og:url" content="https://froml77.top/articles/26/GLM-4-6-v">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="From L77">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GLM-4.6V">
+  <meta name="twitter:description" content="这篇 blog 主要还是从数据上进行解析 GLM-4.6V，结构和训练方面只进行简单提及">
 
-  <link rel="alternate" type="application/rss+xml" title="From L77" href="/feed.xml" />
+  <link rel="canonical" href="https://froml77.top/articles/26/GLM-4-6-v">
+
+  <link rel="alternate" type="application/rss+xml" title="From L77" href="https://froml77.top/feed.xml" />
 </head>
 
   <body>
@@ -72,145 +71,25 @@
 	  <a href="/blog/">blog</a>
 	  <a href="/archive/">Archive</a>
 	  <a href="/about/">About</a>
-	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+	  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" data-giscus-theme-base="https://froml77.top/css/giscus-">
 	    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+	    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
 	  </button>
 	</div>
 	<div class="search-wrapper">
-	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off">
-	  <div id="search-results" class="search-results" style="display:none;"></div>
+	  <input type="text" id="search-input" class="search-input" placeholder="Search Blog..." autocomplete="off" data-search-url="/search.json">
+	  <div id="search-results" class="search-results"></div>
 	</div>
 	</nav>
 </header>
-<script>
-(function() {
-  var searchInput = document.getElementById('search-input');
-  var searchResults = document.getElementById('search-results');
-  var posts = null;
-
-  function loadPosts(callback) {
-    if (posts) { callback(); return; }
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/search.json');
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        posts = JSON.parse(xhr.responseText);
-        callback();
-      }
-    };
-    xhr.send();
-  }
-
-  function doSearch(query) {
-    if (!query || query.length < 1) {
-      searchResults.style.display = 'none';
-      return;
-    }
-    loadPosts(function() {
-      var q = query.toLowerCase();
-      var matches = [];
-      var seen = {};
-      for (var i = 0; i < posts.length; i++) {
-        var p = posts[i];
-        if (seen[p.url]) continue;
-        if (p.title.toLowerCase().indexOf(q) !== -1) {
-          matches.push(p);
-          seen[p.url] = true;
-        }
-      }
-      if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="search-no-results">No results found.</div>';
-      } else {
-        var html = '';
-        for (var j = 0; j < matches.length; j++) {
-          html += '<a class="search-result-item" href="' + matches[j].url + '">' +
-                  '<span class="search-result-title">' + matches[j].title + '</span>' +
-                  '<span class="search-result-date">' + matches[j].date + '</span></a>';
-        }
-        searchResults.innerHTML = html;
-      }
-      searchResults.style.display = 'block';
-    });
-  }
-
-  var debounceTimer;
-  searchInput.addEventListener('input', function() {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function() {
-      doSearch(searchInput.value.trim());
-    }, 200);
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-      searchResults.style.display = 'none';
-    }
-  });
-
-  searchInput.addEventListener('focus', function() {
-    if (searchInput.value.trim().length >= 1) {
-      doSearch(searchInput.value.trim());
-    }
-  });
-})();
-
-// Header shadow on scroll
-(function() {
-  var header = document.querySelector('header');
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 10) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-})();
-
-// Theme toggle
-(function() {
-  var toggle = document.getElementById('theme-toggle');
-  var iconMoon = toggle.querySelector('.icon-moon');
-  var iconSun = toggle.querySelector('.icon-sun');
-
-  function updateIcons(theme) {
-    if (theme === 'dark') {
-      iconMoon.style.display = 'none';
-      iconSun.style.display = 'block';
-    } else {
-      iconMoon.style.display = 'block';
-      iconSun.style.display = 'none';
-    }
-  }
-
-  updateIcons(document.documentElement.getAttribute('data-theme'));
-
-  toggle.addEventListener('click', function() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateIcons(next);
-
-    // Sync Giscus theme
-    var giscusFrame = document.querySelector('iframe.giscus-frame');
-    if (giscusFrame) {
-      var giscusTheme = 'https://froml77.top/css/giscus-' + (next === 'dark' ? 'dark' : 'light') + '.css';
-      giscusFrame.contentWindow.postMessage(
-        { giscus: { setConfig: { theme: giscusTheme } } },
-        'https://giscus.app'
-      );
-    }
-  });
-})();
-</script>
+<script defer src="/assets/js/header.js?v=1779454353"></script>
 
     <article>
       <div class="container">
         <nav class="toc" id="toc"></nav>
         <main class="content">
-          <h1 style="text-align: left">GLM-4.6V</h1>
-          <p class="subtitle" style="text-align:right; font-size: 1rem"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 5749📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">22min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; AI📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm📍</span></span></p>
+          <h1 class="post-title">GLM-4.6V</h1>
+          <p class="subtitle post-meta"><span class="post-meta-group"><span class="color-post-meta-label">Words:</span><span class="color-post-meta-value">&nbsp; 5749📖</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Time: &nbsp;</span><span class="color-post-meta-value">22min⌛</span></span><span class="post-meta-group"><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Category:</span><span class="color-post-meta-value">&nbsp; AI📌</span><span class="color-post-meta-label">&nbsp;&nbsp;&nbsp;Tag: &nbsp;</span><span class="color-post-meta-value"> Algorithm📍</span></span></p>
 
           <p>这篇 blog 主要还是从数据上进行解析 GLM-4.6V，结构和训练方面只进行简单提及
 <!--more--></p>
@@ -234,7 +113,7 @@
   <li><strong>Factual-centered recaptioning</strong>：通过一个训练的 recaption 的 model 来对 caption 进行事实纠正，文本丰富<label for="recaption" class="margin-toggle sidenote-number"></label><input type="checkbox" id="recaption" class="margin-toggle" /><span class="sidenote">recaption model 的数据和训练怎么来的? </span></li>
 </ul>
 
-<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image.png" /><figcaption>recaption 效果展示</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image.png" / loading="lazy" decoding="async"><figcaption>recaption 效果展示</figcaption></figure>
 
 <h3 id="interleaved-image-text-data">Interleaved image-text data</h3>
 
@@ -359,7 +238,7 @@
 
 <p>设计了一个对 RLVR 和 RLHF 都可用的系统。对于 RLVR 来说，<span style="color: #B87070">高精度的 reward</span> 是 outstanding 结果的重要原因。虽然有些研究表明<span style="color: #B87070">随机或者有噪声的 reward</span> 有时候会让model 往着有效的输出 pattern 走，但事实上当在多个领域训练模型的时候，<span style="color: #B87070">任何一个领域中的 reward 出现偏差都能 derail 整个训练</span><label for="注意这" class="margin-toggle sidenote-number"></label><input type="checkbox" id="注意这" class="margin-toggle" /><span class="sidenote">注意这点和 SFT 是不同的 </span>。如下图所示，在 multi-image 中出现了 reward hacking，大概 200 step 的时候其他领域（下方的四个图）出现了 collapse</p>
 
-<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image1.png" /><figcaption>model collapse by one domain</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image1.png" / loading="lazy" decoding="async"><figcaption>model collapse by one domain</figcaption></figure>
 
 <p><strong>The extraction of the final answer</strong></p>
 
@@ -431,7 +310,7 @@
 
 <p>对于 Function Call 而言，在调用工具的时候，目前常用的是 json 格式的。但是这可能需要大量的转义，会给模型学习带来负担。GLM-4.5 则使用 xml 类似的格式，用了一些 special token 将需要调用的函数和参数进行包裹</p>
 
-<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image2.png" /><figcaption>Function Call 数据示例</figcaption></figure>
+<figure class="fullwidth"><img src="/assets/GLM-4-6-v/image2.png" / loading="lazy" decoding="async"><figcaption>Function Call 数据示例</figcaption></figure>
 
 <h3 id="rejection-sampling">Rejection Sampling</h3>
 
@@ -472,16 +351,16 @@
 
 <ul>
   <li>
-    <p><strong>Difficulty-based Curriculum Learning</strong>：主要还是针对静态的数据无法满足 model 能力不断增长的需求。文中使用两阶段基于难度的<span style="color: #B87070">课程学习</span>方式<label for="对于极" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于极" class="margin-toggle" /><span class="sidenote">对于极难数据的定义：<code class="language-plaintext highlighter-rouge">pass@8 = 0 &amp; pass@512 &gt; 0</code>，两阶段的方式可以使得模型在后期提点更多<br /><img class="fullwidth" src="/assets/GLM-4-6-v/image3.png" /></span></p>
+    <p><strong>Difficulty-based Curriculum Learning</strong>：主要还是针对静态的数据无法满足 model 能力不断增长的需求。文中使用两阶段基于难度的<span style="color: #B87070">课程学习</span>方式<label for="对于极" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于极" class="margin-toggle" /><span class="sidenote">对于极难数据的定义：<code class="language-plaintext highlighter-rouge">pass@8 = 0 &amp; pass@512 &gt; 0</code>，两阶段的方式可以使得模型在后期提点更多<br /><img class="fullwidth" src="/assets/GLM-4-6-v/image3.png" / loading="lazy" decoding="async"></span></p>
   </li>
   <li>
-    <p><strong>Single-Stage RL at 64K Output Length</strong>：对于 RL 的训练长度来说，直接到位比多步提升更明显<label for="对于 SFT" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于 SFT" class="margin-toggle" /><span class="sidenote">对于 SFT 本来就已经在 64K 训练的情况下，如果突然在较短的 context 上进行训练，会有明显且不可逆的的性能 drop<br /><img class="fullwidth" src="/assets/GLM-4-6-v/image4.png" /></span></p>
+    <p><strong>Single-Stage RL at 64K Output Length</strong>：对于 RL 的训练长度来说，直接到位比多步提升更明显<label for="对于 SFT" class="margin-toggle sidenote-number"></label><input type="checkbox" id="对于 SFT" class="margin-toggle" /><span class="sidenote">对于 SFT 本来就已经在 64K 训练的情况下，如果突然在较短的 context 上进行训练，会有明显且不可逆的的性能 drop<br /><img class="fullwidth" src="/assets/GLM-4-6-v/image4.png" / loading="lazy" decoding="async"></span></p>
   </li>
   <li><strong>Dynamic Sampling Temperature</strong>：对于温度而言，过低缺乏多样性，多高可能导致模型训练不稳定。使用一个固定的温度往往只能获取到局部最优解。那么文章使用一个动态变化的方式：当 reward 稳定时，认为当前温度已经不太适合当前训练了，需要选择一个更高的温度。这个温度的选择是用一个测试集来检验一系列高的温度，当使用这个温度时，性能 drop 在 1 个点以内则是可选的</li>
   <li>
     <p><strong>Code and Science RL</strong>：对于 code 文中发现使用 token-weighted loss 很重要；science 则是数据本身的质量和类型更重要（通过 the GPQA-Diamond benchmark 发现）如果只使用由专家核验过的选择题（多项选择题）数据，相比使用质量参差不齐或未经核验的数据进行训练，模型性能会显著更好</p>
 
-    <figure class="fullwidth"><img src="/assets/GLM-4-6-v/image5.png" /><figcaption>code 和 science 的发现</figcaption></figure>
+    <figure class="fullwidth"><img src="/assets/GLM-4-6-v/image5.png" / loading="lazy" decoding="async"><figcaption>code 和 science 的发现</figcaption></figure>
   </li>
 </ul>
 
@@ -548,7 +427,7 @@ r(x, y_i) - \bar{r}(x)
 <p><a href="https://arxiv.org/abs/2507.01006">GLM-4.5V and GLM-4.1V-Thinking: Towards Versatile Multimodal Reasoning with Scalable Reinforcement Learning</a></p>
 
 
-          <p class="subtitle" style="text-align:right"><span class="color-date">🌸 February 23, 2026</span></p>
+          <p class="subtitle post-date-line"><span class="color-date">🌸 February 23, 2026</span></p>
 
           
             
@@ -584,176 +463,10 @@ r(x, y_i) - \bar{r}(x)
         </main>
       </div>
 
-      <script>
-(function() {
-  var toc = document.getElementById('toc');
-  if (!toc) return;
-
-  // Only scan H1 and H2
-  var allHeadings = document.querySelectorAll('article h1, article h2');
-  var filteredHeadings = [];
-  var skippedTitle = false;
-
-  allHeadings.forEach(function(h) {
-    // Skip the page title (first h1)
-    if (!skippedTitle && h.tagName === 'H1') {
-      skippedTitle = true;
-      return;
-    }
-    filteredHeadings.push(h);
-  });
-
-  if (filteredHeadings.length === 0) {
-    toc.style.display = 'none';
-    return;
-  }
-
-  // Check if there are any H1 headings in content
-  var hasH1 = false;
-  filteredHeadings.forEach(function(h) {
-    if (h.tagName === 'H1') hasH1 = true;
-  });
-
-  // Build a map from heading id to toc link for fast lookup
-  var idToLink = {};
-
-  filteredHeadings.forEach(function(heading) {
-    if (!heading.id) {
-      heading.id = encodeURIComponent(
-        heading.textContent.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g, '-')
-      );
-    }
-
-    var link = document.createElement('a');
-    link.href = '#' + encodeURIComponent(heading.id);
-    link.textContent = heading.textContent;
-    link.setAttribute('data-heading-id', heading.id);
-
-    idToLink[heading.id] = link;
-
-    if (!hasH1) {
-      // No H1 in content: all H2 are standalone level-1 items
-      link.classList.add('toc-link', 'level-1');
-
-      var itemDiv = document.createElement('div');
-      itemDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.style.visibility = 'hidden';
-
-      itemDiv.appendChild(toggleBtn);
-      itemDiv.appendChild(link);
-      toc.appendChild(itemDiv);
-    } else if (heading.tagName === 'H1') {
-      // H1 as parent
-      link.classList.add('toc-link', 'level-1');
-
-      var parentDiv = document.createElement('div');
-      parentDiv.className = 'toc-parent';
-
-      var toggleBtn = document.createElement('button');
-      toggleBtn.className = 'toggle-btn';
-      toggleBtn.textContent = '\u2660'; // ♠
-      toggleBtn.addEventListener('click', function() {
-        var child = parentDiv.querySelector('.child-container');
-        child.classList.toggle('open');
-        toggleBtn.textContent = child.classList.contains('open') ? '\u2665' : '\u2660';
-      });
-
-      var childContainer = document.createElement('div');
-      childContainer.className = 'child-container';
-
-      parentDiv.appendChild(toggleBtn);
-      parentDiv.appendChild(link);
-      parentDiv.appendChild(childContainer);
-      toc.appendChild(parentDiv);
-    } else if (heading.tagName === 'H2') {
-      // H2 as child of last H1 parent
-      link.classList.add('toc-link', 'level-2');
-
-      var parentDiv = toc.lastChild;
-      if (parentDiv && parentDiv.classList.contains('toc-parent') && parentDiv.querySelector('.child-container')) {
-        parentDiv.querySelector('.child-container').appendChild(link);
-      }
-    }
-  });
-
-  // Scroll highlight
-  window.addEventListener('scroll', function() {
-    var currentSection = '';
-    var scrollY = window.scrollY + 100;
-
-    filteredHeadings.forEach(function(section) {
-      if (section.offsetTop <= scrollY) {
-        currentSection = section.id;
-      }
-    });
-
-    document.querySelectorAll('.toc-parent').forEach(function(parent) {
-      var childContainer = parent.querySelector('.child-container');
-      if (childContainer) {
-        childContainer.classList.remove('open');
-      }
-      var btn = parent.querySelector('.toggle-btn');
-      if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2660';
-    });
-
-    document.querySelectorAll('.toc-link').forEach(function(link) {
-      link.classList.remove('active');
-    });
-
-    var activeLink = idToLink[currentSection];
-    if (activeLink) {
-      activeLink.classList.add('active');
-      var parent = activeLink.closest('.toc-parent');
-      if (parent) {
-        var child = parent.querySelector('.child-container');
-        if (child) child.classList.add('open');
-        var btn = parent.querySelector('.toggle-btn');
-        if (btn && btn.style.visibility !== 'hidden') btn.textContent = '\u2665';
-      }
-    }
-  });
-
-  // Smooth scroll on click (offset for sticky header)
-  document.querySelectorAll('.toc-link').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      var targetId = link.getAttribute('data-heading-id');
-      var targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        var headerHeight = document.querySelector('header').offsetHeight + 20;
-        var targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-      }
-    });
-  });
-})();
-</script>
+      <script defer src="/assets/js/toc.js?v=1779454353"></script>
 
     </article>
     <button class="toc-fab" id="toc-fab" aria-label="Toggle table of contents">📑</button>
-    <script>
-    (function() {
-      var fab = document.getElementById('toc-fab');
-      var toc = document.getElementById('toc');
-      if (!fab || !toc) return;
-      fab.addEventListener('click', function() {
-        toc.classList.toggle('toc-open');
-      });
-      document.addEventListener('click', function(e) {
-        if (!fab.contains(e.target) && !toc.contains(e.target)) {
-          toc.classList.remove('toc-open');
-        }
-      });
-      toc.querySelectorAll('a').forEach(function(link) {
-        link.addEventListener('click', function() {
-          toc.classList.remove('toc-open');
-        });
-      });
-    })();
-    </script>
     <span class="print-footer">GLM-4.6V - 📅 February 23, 2026 - clay harmon</span>
     <footer>
   <hr class="slender">
@@ -783,22 +496,7 @@ r(x, y_i) - \bar{r}(x)
     <path fill="currentColor" d="M12 4l8 8H16v8H8v-8H4l8-8z" style="transform: rotate(0deg); transition: 0.3s;"/>
   </svg>
 </button>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var backToTop = document.getElementById('backToTop');
-  window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 100) {
-      backToTop.classList.add('show');
-    } else {
-      backToTop.classList.remove('show');
-    }
-  });
-  backToTop.addEventListener('click', function(e) {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
+<script defer src="/assets/js/back-to-top.js?v=1779454353"></script>
 
   </body>
 </html>
