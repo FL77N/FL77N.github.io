@@ -148,8 +148,48 @@
   var fab = document.getElementById('toc-fab');
   var toc = document.getElementById('toc');
   if (!fab || !toc) return;
+
+  // On mobile, relocate toc to be a direct child of <body> so its
+  // position: fixed resolves against the viewport instead of any ancestor
+  // that may have become a containing block (compositor layers, animations, etc.).
+  var tocOriginalParent = toc.parentNode;
+  var tocOriginalNext = toc.nextSibling;
+  var mql = window.matchMedia('(max-width: 768px)');
+  function syncTocLocation() {
+    if (mql.matches) {
+      if (toc.parentNode !== document.body) document.body.appendChild(toc);
+    } else {
+      if (toc.parentNode !== tocOriginalParent && tocOriginalParent) {
+        tocOriginalParent.insertBefore(toc, tocOriginalNext);
+      }
+    }
+  }
+  syncTocLocation();
+  if (mql.addEventListener) mql.addEventListener('change', syncTocLocation);
+  else if (mql.addListener) mql.addListener(syncTocLocation);
+
+  function pinDrawerToFab() {
+    if (!mql.matches) return;
+    var fabRect = fab.getBoundingClientRect();
+    var gap = 8;
+    var drawerHeight = toc.offsetHeight || 0;
+    // viewport-relative top so drawer's bottom edge sits 8px above FAB top
+    var topPx = fabRect.top - drawerHeight - gap;
+    toc.style.setProperty('position', 'fixed', 'important');
+    toc.style.setProperty('top', topPx + 'px', 'important');
+    toc.style.setProperty('bottom', 'auto', 'important');
+    toc.style.setProperty('left', '1rem', 'important');
+  }
+
   fab.addEventListener('click', function() {
     toc.classList.toggle('toc-open');
+    if (toc.classList.contains('toc-open')) {
+      // measure after the .toc-open class applies its display:block
+      requestAnimationFrame(pinDrawerToFab);
+    }
+  });
+  window.addEventListener('resize', function() {
+    if (toc.classList.contains('toc-open')) pinDrawerToFab();
   });
   document.addEventListener('click', function(e) {
     if (!fab.contains(e.target) && !toc.contains(e.target)) {

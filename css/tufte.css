@@ -351,22 +351,35 @@
 }
 
 /* ===== Page entrance fade-in ===== */
+/* opacity-only — avoid `transform` so animated element doesn't become a
+   containing block for `position: fixed` descendants (breaks mobile TOC). */
 @keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes page-slide-in {
   from {
     opacity: 0;
     transform: translateY(8px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 body > article,
-body > main,
+body > main {
+  animation: page-fade-in 0.5s ease-out both;
+}
+
 body.full-width > .archive-page-container,
 body.full-width > .full-width-container,
 .page-enter {
-  animation: page-fade-in 0.5s ease-out both;
+  animation: page-slide-in 0.5s ease-out both;
 }
 
 /* ===== Link underline slide-in for body / list links ===== */
@@ -481,6 +494,7 @@ textarea:focus-visible,
   --color-scrolled-box-shadow: rgba(0,0,0,0.1);
   --color-table-wrapper-border: #efefef;
   --color-bg-translucent: rgba(255, 255, 248, 0.72);
+  --color-toc-bg-translucent: rgba(255, 255, 248, 0.40);
   --color-table-hover: #f0e8df;
   --syn-comment: #998;
   --syn-error: #a61717;
@@ -576,6 +590,7 @@ html[data-theme=dark] {
   --color-scrolled-box-shadow: rgba(0,0,0,0.4);
   --color-table-wrapper-border: #2a2a48;
   --color-bg-translucent: rgba(26, 26, 46, 0.72);
+  --color-toc-bg-translucent: rgba(26, 26, 46, 0.40);
   --color-table-hover: #2a2a48;
   color-scheme: dark;
   --syn-comment: #6b8a6b;
@@ -694,6 +709,21 @@ body {
   color: var(--color-text);
   counter-reset: sidenote-counter;
   transition: background-color 0.3s ease, color 0.3s ease;
+  /* Sticky footer: short pages push footer to viewport bottom; long
+     pages let it sit naturally below content. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+body > article,
+body > main {
+  flex: 1 0 auto;
+}
+
+body > footer {
+  flex-shrink: 0;
+  margin-top: auto;
 }
 
 h1 {
@@ -1195,6 +1225,31 @@ label.margin-toggle:not(.sidenote-number) {
   }
   figure.fullwidth figcaption {
     margin-left: 0;
+  }
+}
+/* About page: collapse marginnote/sidenote earlier (no TOC sidebar to constrain
+   layout, so the floated note clips on narrow tablets above the 820px cutoff). */
+@media (max-width: 1024px) {
+  .about-page label.margin-toggle:not(.sidenote-number) {
+    display: inline;
+    color: var(--color-contrast);
+  }
+  .about-page .sidenote, .about-page .marginnote {
+    display: none;
+  }
+  .about-page .margin-toggle:checked + .sidenote,
+  .about-page .margin-toggle:checked + .marginnote {
+    display: block;
+    float: none;
+    left: 1rem;
+    clear: both;
+    width: 95%;
+    margin: 1rem 2.5%;
+    vertical-align: baseline;
+    position: relative;
+  }
+  .about-page label {
+    cursor: pointer;
   }
 }
 /*--- End of Basic Layout stuff from tufte.css ---*/
@@ -1975,13 +2030,16 @@ hr.slender_footer {
   }
   .toc {
     position: fixed;
-    bottom: 5rem;
+    bottom: 4.5rem;
     left: 1rem;
-    width: 70%;
-    max-width: 300px;
+    width: 70vw;
+    height: 60vh;
+    max-width: none;
     max-height: 60vh;
     overflow-y: auto;
-    background: var(--color-bg);
+    background: var(--color-toc-bg-translucent);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
     border: 1px solid var(--color-border);
     border-radius: 10px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
