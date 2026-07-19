@@ -5,9 +5,462 @@
     <description>Personal Blog</description>
     <link>https://froml77.top/</link>
     <atom:link href="https://froml77.top/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 23 May 2026 00:04:29 -0400</pubDate>
-    <lastBuildDate>Sat, 23 May 2026 00:04:29 -0400</lastBuildDate>
+    <pubDate>Sat, 18 Jul 2026 21:38:31 -0400</pubDate>
+    <lastBuildDate>Sat, 18 Jul 2026 21:38:31 -0400</lastBuildDate>
     <generator>Jekyll v4.4.1</generator>
+    
+      <item>
+        <title>《笑傲股市》的记录</title>
+        <description>&lt;p&gt;笑傲股市由威廉-欧奈尔著，主要关注在景气类投资标的的思考，介绍了技术形态、财报指标以及止盈止损的定量建议&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;价值投资需要&lt;span style=&quot;color: #B87070&quot;&gt;忍受不断下跌的痛苦&lt;/span&gt;，而波段操作需要对技术指标运用自如。而如何使用中间态的手段呢&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;我们既不必做买入并持有的价值投资的殉道士，也不必做波段操作的趋势投资的牺牲品，完全可以按照中国人中庸之道的处事方法，从容应对牛市和熊市&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;炒股或者说投资其实是对自己&lt;span style=&quot;color: #B87070&quot;&gt;心性的磨练与对人性的探查&lt;/span&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;学会CAN SLIM法则，不仅有助于在投资领域克服人性的弱点，而且能够在生活领域锻造完美的人格&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;做对的事情和把事情做对。如果发现错了，就应该马上停止，停止这时已经赚了&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;人类真是一种很奇怪的动物，有时候，明明知道自己错了，却仍然执迷不悟，在错误的泥沼中越陷越深，甚至无法自拔，投资者当然也不例外。也许是贪婪使然，股市中总有这样一批人，他们从不对市场进行理性的分析与思考，而是急功近利，试图寻求一条通往成功的捷径，做着一夜暴富的黄粱美梦，最终却要为此付出惨痛的代价，甚至丢了性命&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;书中提到从曾经的犯错中得到的启示：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;右侧交易，并且浮盈加仓。为的是趋势确定&lt;/li&gt;
+  &lt;li&gt;在即将突破年度最高点的时候买入&lt;label for=&quot;zld&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;zld&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;这里的止损应该怎么设置，没有突破怎么办 &lt;/span&gt;，而不是捡垃圾股&lt;/li&gt;
+  &lt;li&gt;迅速止损，不要硬扛&lt;/li&gt;
+  &lt;li&gt;降低对帐面价值、红利或者市盈率的关注，关注收益增长率、股价、成交量的变动&lt;/li&gt;
+  &lt;li&gt;不要过度相信专家的分析，多数也是&lt;span style=&quot;color: #B87070&quot;&gt;个人观点&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;熟练掌握各类线图&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;价格形态的研究&quot;&gt;价格形态的研究&lt;/h1&gt;
+
+&lt;p&gt;书中介绍了不同的线图价格形态，包括：带柄茶杯、双重底、平地价格、方盒子、窄而高旗&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;线图价格形态，这里也称为“基底”，就是指经过前期的上涨之后的一段价格回调并筑底的区域。它们大都（80%～90%）形成于总体市场调整的过程中&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;几个经典的价值形态&quot;&gt;几个经典的价值形态&lt;/h2&gt;
+
+&lt;h3 id=&quot;带柄茶杯形态&quot;&gt;带柄茶杯形态&lt;/h3&gt;
+
+&lt;p&gt;顾名思义就是一个带柄的茶杯，其中杯状形态可以&lt;span style=&quot;color: #B87070&quot;&gt;持续 7 ～ 65 周&lt;/span&gt;，杯的&lt;span style=&quot;color: #B87070&quot;&gt;回调深度为 12% ～ 15%&lt;/span&gt;，一般&lt;span style=&quot;color: #B87070&quot;&gt;不会超过 33%&lt;/span&gt;。一般呈现 U 形，而&lt;span style=&quot;color: #B87070&quot;&gt;非狭窄的 V 形&lt;/span&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/xags/image.png&quot; /&gt;&lt;figcaption&gt;带柄茶杯形态示意图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;对于&lt;span style=&quot;color: #B87070&quot;&gt;茶柄区域至少要经历一两周的时间&lt;/span&gt;，并且价格伴随下行的阶段，一般下跌到较低点的最后阶段，成交量成萎缩状态。杯柄&lt;span style=&quot;color: #B87070&quot;&gt;一般位于 10 周线上方&lt;/span&gt;，如果处于下方可能是比较弱需要注意，&lt;span style=&quot;color: #B87070&quot;&gt;回调深度一般是 8% ～ 12%&lt;/span&gt;，如果超出可能会松散而无规律&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/xags/image1.png&quot; /&gt;&lt;figcaption&gt;带柄茶杯形态实盘图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;一旦某只股票形成了有效的带柄茶杯形态，并且随后股价涨过买入点&lt;label for=&quot;jxlf&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;jxlf&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;杰西·利弗莫尔称之为中轴点或是最小阻力线 &lt;/span&gt;，当天的成交量应该会比平常高出 40%～50%&lt;/p&gt;
+
+&lt;h3 id=&quot;双重底形态&quot;&gt;双重底形态&lt;/h3&gt;
+
+&lt;p&gt;双重底形态很像英文字母 W，&lt;span style=&quot;color: #B87070&quot;&gt;往往第 2 个底部大部分时候会比第 1 个底部低一两个基点&lt;/span&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/xags/image2.png&quot; /&gt;&lt;figcaption&gt;双重底形态示意图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;需要注意几个要点：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第二个底的位置一般要比第一个底低一些&lt;/li&gt;
+  &lt;li&gt;反弹需要过 W 中心点&lt;/li&gt;
+  &lt;li&gt;伴随成交量明显增加&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;平底形态&quot;&gt;平底形态&lt;/h3&gt;
+
+&lt;p&gt;这是在&lt;span style=&quot;color: #B87070&quot;&gt;上述两个形态结束之后至少上涨 20% 后&lt;/span&gt;，才可能形成。往往以窄幅价格波动方式&lt;span style=&quot;color: #B87070&quot;&gt;水平移动最少 5 ～ 6 周&lt;/span&gt;，调整幅度&lt;span style=&quot;color: #B87070&quot;&gt;不超过 10% ～ 15%&lt;/span&gt;。在平底过程中会伴随巨额成交量，在超过进入平底时价格买入，注意后续可能不会立即拉高&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/xags/image3.png&quot; /&gt;&lt;figcaption&gt;平底形态实盘图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;高而窄旗形态&quot;&gt;高而窄旗形态&lt;/h3&gt;
+
+&lt;p&gt;这类形态极其罕见，因此不学习&lt;/p&gt;
+
+&lt;h3 id=&quot;宽松的价格结构导致的失败&quot;&gt;宽松的价格结构导致的失败&lt;/h3&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/xags/image4.png&quot; /&gt;&lt;figcaption&gt;宽松的价格结构实盘图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;p&gt;分析如下：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;A B C D E 来看其和双重底接近，但股价 A 到 D 直跌了 40%，跌幅过大，并且触底时间过长&lt;label for=&quot;jj6&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;jj6&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;接近 6 个月 &lt;/span&gt;。并且在 E 点买入是错误的，因为柄部太短并且没有形成一个挤出区域，其价格沿着较低点楔形上移&lt;label for=&quot;bqky&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;bqky&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;并且可以看到其相对趋势线是呈下跌状的 &lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;而 G 看似一个好的买点，然而短短 3 个月难以扭转劣势&lt;/li&gt;
+  &lt;li&gt;I 看似是茶杯的柄，原因是柄部过于松散&lt;/li&gt;
+  &lt;li&gt;直到 K 点有趋势线明显改善的样子，并且调整周期也到了 11 个月&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;从分析来看，第一处可能性在于主要在于急跌以及实际情况中突破中点 C 时可以买入，需要观察后续情况观察到 E 不对可以适当卖出。E 处下跌时间太长太深且没有量的配合，导致柄部位置松散。其实 J 结束就可以买入了，量也有了体现&lt;/p&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/xags/image5.png&quot; /&gt;&lt;figcaption&gt;宽松的价格结构实盘图2&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;从 A 点到 B 点再到 C 点的区域极为宽松而无规则（跌幅过大）。B 点则没有经过任何价格回调就直接从底部冲上 C 点，C 点和 D 点是试图冲出带有缺陷的价格形态的伪突破点。H 点也是如此，它想要突破松散的杯柄区域。之后，从 H 点到 I 点再到 J 点形成了一个为期 9 周的紧凑形态&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;探究有缺陷的价格形态&quot;&gt;探究有缺陷的价格形态&lt;/h2&gt;
+
+&lt;p&gt;往往价格形态基础过弱是因为根本没有足够的时间或价格进行回调，无论是平底形态还是方盒形态至少需要 4 周以上的时间进行调整，最可靠的价格形态实际上至少需要进行 7 ～ 8 周的价格调整&lt;/p&gt;
+
+&lt;p&gt;而部分价格形态本身容易成为松散、弱势的结构，比如三重底形较于双重底形而言，价格会经过三次调整并大幅回落到最低点，使其更容易转弱&lt;/p&gt;
+
+&lt;h3 id=&quot;保值型供给原则&quot;&gt;保值型供给原则&lt;/h3&gt;
+
+&lt;p&gt;简单点说就是价格的压力位，比如前期集中交易的较高位置，当价格回涨到该区域容易出现源于投资者保值目的的股票供给（俗称抛压）&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;大跌之后，投资者大都希望有机会拿回自己曾经跌去的本钱（人性如此），那么，许多投资者会在股价回升后将股票卖出也就不足为奇了&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;关于熊市的警示&quot;&gt;关于熊市的警示&lt;/h3&gt;
+
+&lt;p&gt;简而言之，对于熊市一切价格形态和技术分析都可能失效&lt;label for=&quot;ssew&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;ssew&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;顺势而为很重要 &lt;/span&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;如果你初涉股市，或第一次听说本书中提到的经实践证明为正确的策略，或者，更重要的是，如果你读本书时，熊市刚刚到来或者尚处于中期，那么，千万不要奢望你自己能够成功应用本书讨论的买入形态。一般来说，在熊市中，大多数价格形态都是绝对有缺陷的，你当然不能轻率地在突破点买入股票，因为它们往往会以失败告终&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;公司指标与股市的一些思考&quot;&gt;公司指标与股市的一些思考&lt;/h1&gt;
+
+&lt;p&gt;公司的销售额、净收益等财报指标往往是多数人看中的，但书中指出这里面可能暗藏着大坑&lt;/p&gt;
+
+&lt;h3 id=&quot;关于当季每股收益的思考&quot;&gt;关于当季每股收益的思考&lt;/h3&gt;
+
+&lt;p&gt;首先&lt;span style=&quot;color: #B87070&quot;&gt;股价和收益比翼双飞&lt;/span&gt;是随处可见的案例。关于销售额和净收益可能是藏在收益报表中的地雷：比如销售额上升，看似不错，但实际上净收益下降了，&lt;span style=&quot;color: #B87070&quot;&gt;实际上成本上升了&lt;/span&gt;；哪怕净收益也上升了，也可能通过额外发行来稀释了普通股，因此&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;为了避免由于季节性导致的扭曲，应该将公司的每股收益与上年同一季度而不是本年前一季度相比。举例来说，为了更准确地评估，应该将第 4 季度的每股收益同上一年的第 4 季度相比，而不是同本年的第 3 季度相比&lt;/p&gt;
+
+  &lt;p&gt;不论你是股市新手还是资深投资者，我绝对不建议投资者买入最近一季度每股收益同比增长幅度不到 18% 或 20% 的股票&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;昙花一现的巨额收益&quot;&gt;昙花一现的巨额收益&lt;/h3&gt;
+
+&lt;p&gt;可能出现某一季度收益额剧增，不要高兴，先看看是不是非经常性利润。这样的收益是一次性的，比如卖楼、卖设备、卖子公司&lt;label for=&quot;nbsm&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;nbsm&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;你不是每个季度都有固定资产可以卖 &lt;/span&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;回避安于现状的老牌大公司&quot;&gt;回避安于现状的老牌大公司&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;实际上，美国很多老牌公司的管理层都碌碌无为，公司收益也一直处于二流水平。我把这些人叫作“墨守成规且安于现状的人”或“类似看门人的管理层”&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;研究对数坐标周线图&quot;&gt;研究对数坐标周线图&lt;/h3&gt;
+
+&lt;p&gt;对数坐标图更能清晰表现股价上升幅度&lt;/p&gt;
+
+&lt;h3 id=&quot;根据年度收益率来选股&quot;&gt;根据年度收益率来选股&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;值得投资的公司，其年度收益增长率应该至少达到 25%～50%，甚至达到 100%&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;span style=&quot;color: #B87070&quot;&gt;股本回报率和每股现金流量&lt;/span&gt;也是需要关注的重点，前者是净收益除以股东的股本，一般至少要达到 17%&lt;/p&gt;
+
+&lt;h3 id=&quot;关于正常的股市周期&quot;&gt;关于正常的股市周期&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;大多数牛市（大盘持续上扬）会在持续2～4年后转为衰退或熊市（大盘持续下跌），接下来又会迎来新的牛市。过去的收益增长并不能说明你选择的是一只强劲的成长股。实际上，一些所谓的成长股近期报出的收益远比之前要低。要知道，某一周期的领军股未必会在下一
+周期也续写辉煌&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;每股收益的上涨百分比相比于股票的市盈率更加重要，需要判断其收益的变化速度是在上升或者下降。对于成长股而言高于每股收益 25 ～ 50 倍买入都是很正常的&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;问题的关键在于，任何人都能以低价买到一件平庸的艺术品，但是最精华的那些却是价格不菲。同这些珍品一样，一般来说，最好的股票，其价格也更高&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;股市中的超级悖论&quot;&gt;股市中的超级悖论&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;那些对绝大多数投资者来说价格过高、风险过大的股票，往往会百尺竿头，更进一步；而那些看似低价、便宜的股票却常常会进一步走低&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;买入股票的正确时机&quot;&gt;买入股票的正确时机&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;价格达到新高，并不代表这是买入股票的正确时机。在此之前，还要应用股票相关线图进行选股的技术分析。如果股价能从有效的价格形态中突破出来，并在这一过程中创造了价格
+新高，这才是你应该投资的股票&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;关于股票的供给量&quot;&gt;关于股票的供给量&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;假设某一公司发行了 50 亿股，供给量如此之大使其价格基本无法变动。只有极大的购买量或是需求，才能推动这些股票强势上涨。相比之下，对于发行量相对较少，如 5000 万股的股票，适量的购买就能带动价格上扬&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;过分拆股的不利影响&quot;&gt;过分拆股的不利影响&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;举例来说，当某只股票以 1：2 的比例进行分拆时，你持有的股票量变为之前的 2 倍，但是新的股价则为之前的一半。一般来说，规模过大的分拆会使股票的供给量大大增多，该公司很快将处于一种发展缓慢、市值较高的情况&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;关注回购的公司&quot;&gt;关注回购的公司&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;当某一公司，尤其是那些符合 CAN SLIM 标准的中小规模成长型公司，在某一时段内持续在
+公开市场上进行回购的话，这往往是一个好的预兆。10% 就属于大规模回购，这一行为会减少股票的数量，而且表明该公司预计其销售额和收益会有所提高&lt;/p&gt;
+
+  &lt;p&gt;投资者还需关注公司的资本结构中是否存在可转换债券；如果存在，那么当债券转换成普通股时，股票收益可能会被稀释&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;供需的评估&quot;&gt;供需的评估&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;当某只股票价格回落时，你应该希望成交量在某一时点有所萎缩，进而说明不再有太多的抛售压力。而当股价上涨时，大多数情况下应该希望成交量上升，因为这通常代表机构投资者而非公众的买入&lt;/p&gt;
+
+  &lt;p&gt;你应该对某只股票的价格形态进行逐周分析，从该股票开始形成有效的价格形态的那一周开始，直到你认为它已经突破价格形态的当周为止&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;买行业中的龙头股票&quot;&gt;买行业中的龙头股票&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;一般来说，强势行业中的前三甲公司往往会涨势惊人，而其他股票则会波澜不惊&lt;/p&gt;
+
+  &lt;p&gt;总之，如下忠告一定要牢记于心：即使看似便宜，投资于滞后股也很少能给你带来回报，必须寻找并且将你的选股范围限定为市场领军股。一旦股价低于买入价的 8%，赶紧卖出那些滞后的“失败者”，以免因冒险让自己伤得更深&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;关于机构认同度&quot;&gt;关于机构认同度&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;一只成功的股票并不需要有大量的机构投资者来关注，但是至少应该有几家。在少数包含小规模或是新兴企业的投资中，机构投资者的合理最小数量可能为 20，尽管大多数股票所拥有的机构投资者要比这多得多&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;在市场低迷时保护自己&quot;&gt;在市场低迷时保护自己&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;当股指已经冲顶并开始形成下跌趋势时，你需要立即以市价卖出股票，至少将 25% 的资本转化为现金&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;如何判断股市顶点&quot;&gt;如何判断股市顶点&lt;/h3&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;在上升趋势的过程中，一般来说，总会有一天的成交量会比前一天增加，但其指数上涨乏力（主要表现是这一天的价格涨幅明显小于前一天）&lt;/p&gt;
+
+  &lt;p&gt;最接近大盘顶点的正常换筹时间通常是在见顶之前 4～5 周中特定的 3～5 天。也就是说，趋势还在上升的时候，股票市场就已经开始出现新的利益分配格局，很少有人注意到这一点。一旦出现明显的3～5个换筹时点（不管出现在见顶之前 4～5 周的哪个时段内），股市大盘多数情况下都是呈现下跌趋势的&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;关注联邦储备委员会的相关利率变动情况&quot;&gt;关注联邦储备委员会的相关利率变动情况&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;利率是基本经济状况最好的确认工具，而其中贴现率和联邦资金利率的变动则更为可信。根据过去的经验，美联储连续3次显著提升利率通常意味着熊市的开始和经济衰退的迫近&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/xags/image6.png&quot; /&gt;&lt;figcaption&gt;利率和指数的实盘对比图&lt;/figcaption&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;防御性股票指标&quot;&gt;防御性股票指标&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;一旦有经验者的资金涌入防御性股票，往往预示着大盘将会日趋衰落。但是，这一指标并非常常有效，毕竟没有一个次要的市场指标跟关键大盘指标一样可靠&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;正如很多技术指标一样，它无法预测未来，只告诉了你过去一段时间发生了什么，当前处于什么状态。多关注市场的供需变化才可能感受到熊市的到来&lt;/p&gt;
+
+&lt;h2 id=&quot;can-slim-法则总结&quot;&gt;CAN SLIM 法则总结&lt;/h2&gt;
+
+&lt;p&gt;C=当季每股收益。至少上涨 18% ～ 20%，保持持续上涨的同时，季度销售额应该有 25% 的涨幅&lt;/p&gt;
+
+&lt;p&gt;A=年度收益增长率。近三年来，每年的年度每股净收益都在 25% 以上，同时股本投资回报率不低于 17%&lt;/p&gt;
+
+&lt;p&gt;N=新公司、新产品、新管理层、股价新高。购买那些从平稳的走势中脱颖而出、价格底部已经完全形成并且股价开始创出新高的股票&lt;/p&gt;
+
+&lt;p&gt;S=供给与需求。兼顾考虑流通股份的供给数量加上大量需求情况&lt;/p&gt;
+
+&lt;p&gt;L=领军股或拖油瓶。买领军股，回避落后股&lt;/p&gt;
+
+&lt;p&gt;I=机构认同度。买近期持续上涨，并且至少有一两家近期投资业绩拔尖的共同基金投资者认同的股票&lt;/p&gt;
+
+&lt;p&gt;M=判断市场走势。你必须顺势而为，不要偏离市场趋势进行投资&lt;/p&gt;
+
+&lt;p&gt;CAN SLIM 总结了需要在投资中注意的 8 个方面，当各种买入或卖出信号共振的时候，成功的概率是最大的。但需要主要一切都是概率，所以接下来做好止损也是非常重要的&lt;/p&gt;
+
+&lt;h1 id=&quot;关于止损以及股市中谨慎注意的事&quot;&gt;关于止损以及股市中谨慎注意的事&lt;/h1&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;这些错误的决定会带来亏损，如果你并非训练有素或小心谨慎的话，损失将非常惨重。聪明与否、智商高低、受教育程度、信息好坏以及分析是否合理都不能改变这样一个事实：投资者不可能在任何时候都是正确的&lt;/p&gt;
+
+  &lt;p&gt;永远要及时收手并将每一种损失降到最低。想要做到这一点，必须要坚持不懈地训练，并拥有足够的勇气&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;书中&lt;span style=&quot;color: #B87070&quot;&gt;建议 3 比 1 的盈亏比&lt;/span&gt;，如果盈利 24% 则止损设置在 8%。发现牛股是小概率事件大概 10% 到 20%，也就是&lt;span style=&quot;color: #B87070&quot;&gt;大部分买的股票可能使你亏钱&lt;/span&gt;，那么需要及时止损。切记 8% 是绝对止损线，&lt;span style=&quot;color: #B87070&quot;&gt;无须任何等待，直接抛出！甚至不需要等到当天收盘&lt;/span&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;如果你对于亏损仍然执迷不悟，就还是过于情绪化而没能厘清思路。你为自己找了一个看似合理的理由：“股价不会再低了。”但是，请记住一点，还有很多别的股票可供选择，而且挽回损失的概率也更大&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;另外&lt;span style=&quot;color: #B87070&quot;&gt;请谨记&lt;/span&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;永远不要违逆股市，健康的身体以及平和的心态永远比任何股票都重要&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;迅速止损缓慢收利&quot;&gt;迅速止损，缓慢收利&lt;/h3&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;股市中的第一笔损失总是最小的。在我看来，做出明智投资决策的方法在于，应该一直（没有任何例外）迅速止损，缓慢收利。但是，大多数投资者却反其道而行之，把利润迅速收回，而止损的步伐却迟迟不至&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;要想成为一名成功的投资者，必须面对现实，而不是自欺欺人、空怀希望。没有人愿意承受损失，但为了增加在股市中成功的概率，你不得不面对很多自己不情愿做的事情。形成一些具体的准则以及严格的卖出规则，这样就可以胜券在握&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;卖出策略&quot;&gt;卖出策略&lt;/h3&gt;
+
+&lt;p&gt;卖在人声鼎沸时&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;3～6个月中赚取 20% 的收益可远比花费 1 年才取得相同的结果要有效得多。一年之内两笔20% 的利润就相当于取得了年利率为 44% 的收益。经验丰富以后，你就可以使用全额保证金来进行投资（保证金账户中的购买力），并把自己的收益率提高到近 100%&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;如何研判大盘走势&quot;&gt;如何研判大盘走势&lt;/h3&gt;
+
+&lt;p&gt;作者在多次试错后，观察到了一个令自己受益匪浅的发现&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;我买入的大多数市场领军股之所以会由涨变跌，是因为大盘开始了跌幅至少为 10% 的下挫&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;顶峰前最后的疯狂&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;最大的每日股价上涨幅度。持续数月显著提高，并且当日的收盘价比之前上涨阶段中任何一天的收盘价都要高出很多&lt;/li&gt;
+  &lt;li&gt;最大的日成交量&lt;/li&gt;
+  &lt;li&gt;消耗性缺口。长期上涨后，如果某一股票当天以50美元的最高价收盘，并且在次日上午以52美元的价格开盘并能保持整天的上涨势头的话，就出现了2美元的跳空缺口。这就是消耗性缺口的含义&lt;/li&gt;
+  &lt;li&gt;顶峰前最后的疯狂表现。如果某一股票近期涨势过于强劲，比如在周线图中已有连续两三周的迅速上涨，或是在日线图上，&lt;span style=&quot;color: #B87070&quot;&gt;连续 8～10 天中有 7～8 天强势上扬，赶紧将其抛出&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;出货行为的信号。长期上涨后，伴随着巨额成交量，股价却毫无起色，这一迹象表明市场出现了出货行为&lt;/li&gt;
+  &lt;li&gt;股票分拆。&lt;span style=&quot;color: #B87070&quot;&gt;卖出那些在股票分拆后的一两周内仍能上涨 25%～50% 的股票&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;连续下跌的天数增加&lt;/li&gt;
+  &lt;li&gt;上轨道线。在股价图中，用一条直线连接低价点，并用另一条直线将过去四五个月中的3个股价最高点连接起来，由此形成的线被称作轨道线&lt;/li&gt;
+  &lt;li&gt;当股票从最高点处开始下跌的时候进行抛售。尽管最初下挫后，有些股票可能会再次反弹&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;跌破价格支撑区域&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;跌破长期上升趋势线&lt;/li&gt;
+  &lt;li&gt;最大的股价日跌幅&lt;/li&gt;
+  &lt;li&gt;大规模周成交量情况下的股价下跌&lt;/li&gt;
+  &lt;li&gt;200 天移动平均线转而下降&lt;/li&gt;
+  &lt;li&gt;&lt;span style=&quot;color: #B87070&quot;&gt;股价在 10 周移动平均线以下徘徊不前&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;资产配置策略问题&quot;&gt;资产配置策略问题&lt;/h3&gt;
+
+&lt;p&gt;&lt;span style=&quot;color: #B87070&quot;&gt;同时持有多只股票未必是一件好事&lt;/span&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+
+  &lt;p&gt;人们常说：“不要把鸡蛋放在一个篮子里。”表面看来，这一建议非常合理，但经验却告诉我，很少有人能同时做好两件以上的事情&lt;/p&gt;
+
+&lt;/blockquote&gt;
+
+&lt;p&gt;如果你的票大于 10 支，你很难去追踪&lt;/p&gt;
+
+&lt;h3 id=&quot;是否应该长期投资&quot;&gt;是否应该长期投资&lt;/h3&gt;
+
+&lt;p&gt;任何管理得当的投资组合，都&lt;span style=&quot;color: #B87070&quot;&gt;不应该容许损失存在6个月以上&lt;/span&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;是否应该做空&quot;&gt;是否应该做空&lt;/h3&gt;
+
+&lt;p&gt;很少有投资者能够理解卖空这一问题，而&lt;span style=&quot;color: #B87070&quot;&gt;成功者更是凤毛麟角&lt;/span&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;可能的关键错误&quot;&gt;可能的关键错误&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;当损失很小并处于合理的范围时，持股不动&lt;label for=&quot;zsdm&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;zsdm&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;这是到目前为止，几乎所有投资者都曾犯过的最严重的错误之一；他们不明白，所有的普通股都是极具有投机性的，并能带来巨大的风险 &lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;在股价&lt;span style=&quot;color: #B87070&quot;&gt;下跌时买进，却越陷越深&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;买入时，向下摊平成本而非向上加码&lt;/li&gt;
+  &lt;li&gt;不学习如何使用线图，而且&lt;span style=&quot;color: #B87070&quot;&gt;不敢买入那些即将在合理的价格形态上创下价格新高的股票&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;由于既不懂得选股标准，也不知道应该具体关注成功企业的哪些方面，所以永远都无法在投资领域中入门&lt;/li&gt;
+  &lt;li&gt;&lt;span style=&quot;color: #B87070&quot;&gt;没有指定具体的市场规则来指引自己&lt;/span&gt;，因此不知道股价调整何时开始，也不知道市场下跌何时会结束以便确定上升趋势&lt;/li&gt;
+  &lt;li&gt;不遵循买卖准则，导致错误频出&lt;/li&gt;
+  &lt;li&gt;将精力完全花费在选择何种股票上，而一旦做出买入决策之后，&lt;span style=&quot;color: #B87070&quot;&gt;却又不知道应该在什么时候、何种情况下卖出&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;没能认识到选择那些受到机构投资者青睐的优质公司股票的重要性，他们更不清楚，学习如何解读线图对于改善选股和择机的重要作用&lt;/li&gt;
+  &lt;li&gt;偏好买进低价股票&lt;/li&gt;
+  &lt;li&gt;&lt;span style=&quot;color: #B87070&quot;&gt;买入股票的依据是小道消息、谣言、股票分拆的宣布以及其他一些信息；咨询服务给出的建议；或是从其他人或是电视上那些所谓专家口中得到的个人观点&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;由于红利较高或是市盈率很低，便&lt;span style=&quot;color: #B87070&quot;&gt;选择了一些二流的股票&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;妄图轻轻松松地赚点快钱&lt;/li&gt;
+  &lt;li&gt;买入那些令你耳熟能详的大公司股票&lt;/li&gt;
+  &lt;li&gt;没能识别并采用有益的信息和建议&lt;/li&gt;
+  &lt;li&gt;&lt;span style=&quot;color: #B87070&quot;&gt;急于卖出那些很容易获利的股票，对于那些赔钱的股票却死守不放&lt;/span&gt;&lt;/li&gt;
+  &lt;li&gt;很少进行市价交易，而是更青睐在买卖委托中设定价格限制&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对于错误可能反而是我们需要更加关注的方面，意味着我们可以从哪些方面优化自己的投资。我自身而言确实有犯书中提到禁忌，在哪怕在选到一只好的股票后，没有仔细思考其卖出的策略应该是怎么样，还处于一种靠感觉，靠即时信息的阶段。可能怎么形成自己的买入卖出策略以及清楚自己的行为模式是第一步需要改进的点&lt;/p&gt;
+</description>
+        <pubDate>Sat, 18 Jul 2026 14:08:08 -0400</pubDate>
+        <link>https://froml77.top/articles/26/xags</link>
+        <guid isPermaLink="true">https://froml77.top/articles/26/xags</guid>
+        
+        <category>Stock</category>
+        
+        
+        <category>INVESTMENT</category>
+        
+      </item>
     
       <item>
         <title>GLM-4.6V</title>
@@ -2150,468 +2603,6 @@ Omniverse Computation Balance&lt;/a&gt;，OmniBal 是 Omniverse Balance 的简�
         
         
         <category>MATH</category>
-        
-      </item>
-    
-      <item>
-        <title>Tufte-style Jekyll blog</title>
-        <description>&lt;p&gt;&lt;span class=&quot;newthought&quot;&gt;The Tufte Jekyll theme&lt;/span&gt;  is an attempt to create a website design with the look and feel of Edward Tufte’s books and handouts. Tufte’s style is known for its extensive use of sidenotes, tight integration of graphics with text, and well-set typography.&lt;!--more--&gt; The idea for this project is essentially cribbed wholesale from Tufte and R Markdown’s Tufte Handout format&lt;label for=&quot;One&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;One&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;See &lt;a href=&quot;https://tufte-latex.github.io/tufte-latex/&quot;&gt;tufte-latex.github.io/tufte-latex/&lt;/a&gt; and &lt;a href=&quot;http://rmarkdown.rstudio.com/tufte_handout_format.html&quot;&gt;rmarkdown.rstudio.com/tufte_handout_format&lt;/a&gt; &lt;/span&gt; This page is an adaptation of the &lt;a href=&quot;http://rmarkdown.rstudio.com/examples/tufte-handout.pdf&quot;&gt;Tufte Handout PDF&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;jekyll-customizations&quot;&gt;Jekyll customizations&lt;/h2&gt;
-
-&lt;p&gt;This Jekyll blog theme is based on the github repository by Edward Tufte &lt;a href=&quot;https://github.com/edwardtufte/tufte-css&quot;&gt;here&lt;/a&gt;, which was orginally created by Dave Leipmann, but is now labeled under Edward Tufte’s moniker. I borrowed freely from the Tufte-CSS repo and have transformed many of the typographic and page-structural features into a set of custom Liquid tags that make creating content using this style much easier than writing straight HTML. Essentially, if you know markdown, and mix in a few custom Liquid tags, you can be creating a website with this document style in short order.&lt;/p&gt;
-
-&lt;p&gt;The remainder of this sample post is a self-documenting survey of the features of the Tufte-Jekyll theme. I have taken almost all of the sample content from the &lt;a href=&quot;https://github.com/edwardtufte/tufte-css&quot;&gt;Tufte-css&lt;/a&gt; repo and embedded it here to illustrate the parity in appearence between the two. The additional verbiage and commentary I have added is to document the custom &lt;em&gt;Liquid&lt;/em&gt; markup tags and other features that are bundled with this theme.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-sass-settings-file&quot;&gt;The SASS settings file&lt;/h3&gt;
-
-&lt;p&gt;I have taken much of the actual &lt;em&gt;Tufte-css&lt;/em&gt; files and modified them as necessary to accomodate the needs inherent in creating a Jekyll theme that has additional writing aids such as the Liquid tags. I have also turned the CSS file into a &lt;a href=&quot;http://sass-lang.com&quot;&gt;SASS&lt;/a&gt; file (the .scss type).  This means that you can alter things like font choices, text color, background color, and underlining style by changing values in this file. When the Jekyll site is built using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll build&lt;/code&gt; the settings in this file will be compiled into the customized CSS file that the site uses. If you don’t use SCSS or SASS, you are missing out on a huge productivity tool.&lt;/p&gt;
-
-&lt;p&gt;This file looks like this:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/* This file contains all the constants for colors and font styles */
-
-$body-font:   ETBembo, Palatino, &quot;Palatino Linotype&quot;, &quot;Palatino LT STD&quot;, &quot;Book Antiqua&quot;, Georgia, serif;
-// Note that Gill Sans is the top of the stack and corresponds to what is used in Tufte&apos;s books
-// However, it is not a free font, so if it is not present on the computer that is viewing the webpage
-// The free Google &apos;Lato&apos; font is used instead. It is similar.
-$sans-font:  &quot;Gill Sans&quot;, &quot;Gill Sans MT&quot;, &quot;Lato&quot;, Calibri, sans-serif;
-$code-font: Consolas, &quot;Liberation Mono&quot;, Menlo, Courier, monospace;
-$url-font: &quot;Lucida Console&quot;, &quot;Lucida Sans Typewriter&quot;, Monaco, &quot;Bitstream Vera Sans Mono&quot;, monospace;
-$text-color: #111;
-$bg-color: #fffff8;
-$contrast-color: #a00000;
-$border-color: #333333;
-$link-style: color; // choices are &apos;color&apos; or &apos;underline&apos;. Default is color using $contrast-color set above
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Any of these values can be changed in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_sass/_settings.scss&lt;/code&gt; file before the site is built. The default values are the ones from &lt;em&gt;tufte-css&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;fundamentals&quot;&gt;Fundamentals&lt;/h2&gt;
-
-&lt;h3 id=&quot;color&quot;&gt;Color&lt;/h3&gt;
-
-&lt;p&gt;Although paper handouts obviously have a pure white background, the web is better served by the use of slightly off-white and off-black colors. I picked &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#fffff8&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#111111&lt;/code&gt; because they are nearly indistinguishable from their ‘pure’ cousins, but dial down the harsh contrast. Tufte’s books are a study in spare, minimalist design. In his book &lt;a href=&quot;http://www.edwardtufte.com/tufte/books_vdqi&quot;&gt;The Visual Display of Quantitative Information&lt;/a&gt;, he uses a red ink to add some visual punctuation to the buff colored paper and dark ink. In that spirit, links are styled using a similar red color.&lt;/p&gt;
-
-&lt;h3 id=&quot;headings&quot;&gt;Headings&lt;/h3&gt;
-
-&lt;p&gt;Tufte CSS uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;h1&amp;gt;&lt;/code&gt; for the document title, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;p&amp;gt;&lt;/code&gt; with class &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;code&lt;/code&gt; for the document subtitle, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;h2&amp;gt;&lt;/code&gt; for section headings, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;h3&amp;gt;&lt;/code&gt; for low-level headings. More specific headings are not encouraged. If you feel the urge to reach for a heading of level 4 or greater, consider redesigning your document:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;[It is] notable that the Feynman lectures (3 volumes) write about all of physics in 1800 pages, using only 2 levels of hierarchical headings: chapters and A-level heads in the text. It also uses the methodology of &lt;em&gt;sentences&lt;/em&gt; which then cumulate sequentially into &lt;em&gt;paragraphs&lt;/em&gt;, rather than the grunts of bullet points. Undergraduate Caltech physics is very complicated material, but it didn’t require an elaborate hierarchy to organize.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;cite&gt;&lt;a href=&quot;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB&quot;&gt;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB&lt;/a&gt;&lt;/cite&gt;&lt;/p&gt;
-
-&lt;p&gt;As a bonus, this excerpt regarding the use of headings provides an example of using block quotes. Markdown does not have a native &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;cite&amp;gt;&lt;/code&gt; shorthand, but real html can be sprinkled in with the Markdown text. In the previous example, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;cite&amp;gt;&lt;/code&gt; was preceded with a single return after the quotation itself. The previous blockquote was written in Markdown thusly:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Liquid&quot;&gt;[It is] notable that the Feynman lectures (3 volumes) write about all of physics in 1800 pages, using only 2 levels of hierarchical headings: chapters and A-level heads in the text. It also uses the methodology of *sentences* which then cumulate sequentially into *paragraphs*, rather than the grunts of bullet points. Undergraduate Caltech physics is very complicated material, but it didn’t require an elaborate hierarchy to organize.
-&amp;lt;cite&amp;gt;[http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB](http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB)&amp;lt;/cite&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;span class=&quot;newthought&quot;&gt;In his later books&lt;/span&gt; &lt;label for=&quot;two&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;two&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;&lt;a href=&quot;http://www.edwardtufte.com/tufte/books_be&quot;&gt;http://www.edwardtufte.com/tufte/books_be&lt;/a&gt; &lt;/span&gt;, Tufte starts each section with a bit of vertical space, a non-indented paragraph, and sets the first few words of the sentence in small caps. To accomplish this using this style, enclose the sentence fragment you want styled with small caps in a custom Liquid tag called ‘newthought’ like so:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Liquid&quot;&gt;{% newthought &apos;In his later books&apos; %}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;text&quot;&gt;Text&lt;/h3&gt;
-
-&lt;p&gt;In print, Tufte uses the proprietary Monotype Bembo&lt;label for=&quot;3&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;3&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;See Tufte’s comment in the &lt;a href=&quot;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt&quot;&gt;Tufte book fonts&lt;/a&gt; thread. &lt;/span&gt; font. A similar effect is achieved in digital formats with the now open-source ETBembo, which Tufte-Jekyll supplies with a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@font-face&lt;/code&gt; reference to a .ttf file. Thanks to &lt;a href=&quot;https://github.com/daveliepmann/tufte-css/commit/0a810a7d5f4707941c6f9fe99a53ec41f50a5c00&quot;&gt;Linjie Ding&lt;/a&gt;, italicized text uses the ETBembo Italic font instead of mechanically skewing the characters. In case ETBembo somehow doesn’t work, Tufte CSS degrades gracefully to other serif fonts like Palatino and Georgia. Notice that Tufte CSS includes separate font files for &lt;strong&gt;bold&lt;/strong&gt; (strong) and &lt;em&gt;italic&lt;/em&gt; (emphasis), instead of relying on the browser to mechanically transform the text. This is typographic best practice. It’s also really important. Thus concludes my unnecessary use of em and strong for the purpose of example.&lt;/p&gt;
-
-&lt;p&gt;Code snippets ape GitHub’s font selection using Microsoft’s &lt;a href=&quot;http://www.microsoft.com/typography/ClearTypeFonts.mspx&quot;&gt;&lt;em&gt;Consolas&lt;/em&gt;&lt;/a&gt; and the sans-serif font uses Tufte’s choice of Gill Sans. Since this is not a free font, and some systems will not have it installed, the free google font &lt;a href=&quot;https://www.google.com/fonts/specimen/Lato&quot;&gt;&lt;em&gt;Lato&lt;/em&gt;&lt;/a&gt; is designated as a fallback.&lt;/p&gt;
-
-&lt;h2 id=&quot;epigraphs&quot;&gt;Epigraphs&lt;/h2&gt;
-
-&lt;div class=&quot;epigraph&quot;&gt;&lt;blockquote&gt;&lt;p&gt;The English language . . . becomes ugly and inaccurate because our thoughts are foolish, but the slovenliness of our language makes it easier for us to have foolish thoughts.&lt;/p&gt;&lt;footer&gt;George Orwell, &lt;cite&gt; &quot;Politics and the English Language&quot; &lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;&lt;/div&gt;
-
-&lt;div class=&quot;epigraph&quot;&gt;&lt;blockquote&gt;&lt;p&gt;For a successful technology, reality must take precedence over public relations, for Nature cannot be fooled.&lt;/p&gt;&lt;footer&gt;Richard P. Feynman, &lt;cite&gt; “What Do You Care What Other People Think?” &lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;&lt;/div&gt;
-
-&lt;p&gt;If you’d like to introduce your page or a section of your page with some quotes, use epigraphs. The two examples above show how they are styled. Epigraph elements are modeled after chapter epigraphs in Tufte’s books (particularly &lt;em&gt;Beautiful Evidence&lt;/em&gt;). The &lt;a href=&quot;https://github.com/edwardtufte/tufte-css&quot;&gt;Tufte-css&lt;/a&gt; gitub repository has detailed instructions on how to achieve this using HTML elements. As an easier alternative, the &lt;em&gt;Tufte-jekyll&lt;/em&gt; theme uses custom &lt;em&gt;Liquid tag&lt;/em&gt; pairs that allow the writer to embed elements such as epigraphs in the middle of the regular Markdown text being edited.&lt;/p&gt;
-
-&lt;p&gt;In order to use an epigraph in a page or section, type this:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{% epigraph &apos;text of citation&apos; &apos;author of citation&apos; &apos;citation source&apos;  %}&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;to produce this:&lt;/p&gt;
-
-&lt;div class=&quot;epigraph&quot;&gt;&lt;blockquote&gt;&lt;p&gt;I do not paint things, I paint only the differences between things.&lt;/p&gt;&lt;footer&gt;Henri Matisse, &lt;cite&gt;Henri Matisse Dessins: thèmes et variations, 1943&lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;&lt;/div&gt;
-
-&lt;div class=&quot;epigraph&quot;&gt;&lt;blockquote&gt;&lt;p&gt; &quot;How did you go bankrupt?&quot; Two ways. Gradually, then suddenly.&lt;/p&gt;&lt;footer&gt;Ernest Hemingway, &lt;cite&gt; &quot;The Sun Also Rises&quot; &lt;/cite&gt;&lt;/footer&gt;&lt;/blockquote&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;lists&quot;&gt;Lists&lt;/h3&gt;
-
-&lt;p&gt;Tufte points out that while lists have valid uses, they tend to promote ineffective writing habits due to their “lack of syntactic and intellectual discipline”. He is particularly critical of hierarchical and bullet-pointed lists. So before reaching for an HTML list element, ask yourself:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Does this list actually have to be represented using an HTML ul or ol element?&lt;/li&gt;
-  &lt;li&gt;Would my idea be better expressed as sentences in paragraphs?&lt;/li&gt;
-  &lt;li&gt;Is my message causally complex enough to warrant a flow diagram instead?&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This is but a small subset of a proper overview of the topic of lists in communication. A better way to understand Tufte’s thoughts on lists would be to read “The Cognitive Style of PowerPoint: Pitching Out Corrupts Within,” a chapter in Tufte’s book &lt;em&gt;Beautiful Evidence&lt;/em&gt;, excerpted at some length by Tufte himself &lt;a href=&quot;http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0002QF&quot;&gt;on his website&lt;/a&gt;. The whole piece is information-dense and therefore difficult to summarize. He speaks to web design specifically, but in terms of examples and principles rather than as a set of simple do-this, don’t-do-that prescriptions. It is well worth reading in full for that reason alone.&lt;/p&gt;
-
-&lt;p&gt;For these reasons, Tufte CSS encourages caution before reaching for a list element, and by default removes the bullet points from unordered lists.&lt;/p&gt;
-
-&lt;h2 id=&quot;figures&quot;&gt;Figures&lt;/h2&gt;
-
-&lt;h3 id=&quot;margin-figures&quot;&gt;Margin Figures&lt;/h3&gt;
-
-&lt;p&gt;&lt;label for=&quot;mf-id-1&quot; class=&quot;margin-toggle&quot;&gt;⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mf-id-1&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;img class=&quot;fullwidth&quot; src=&quot;/assets/img/rhino.png&quot; /&gt;&lt;br /&gt;F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” &lt;em&gt;Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice&lt;/em&gt; (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s &lt;em&gt;Visual Explanations&lt;/em&gt;.&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;Images and graphics play an integral role in Tufte’s work. To place figures in the margin, use the custom margin figure liquid tag included in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_plugins&lt;/code&gt; directory like so:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{% marginfigure &apos;mf-id-whatever&apos; &apos;assets/img/rhino.png&apos; &apos;F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros in Zoological Literature,” *Science, Medicine, and History: Essays on the Evolution of Scientific Thought and Medical Practice* (London, 1953), ed. E. Ashworth Underwood, 337-356. From page 71 of Edward Tufte’s *Visual Explanations*.&apos;  %}&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Note that this tag has &lt;em&gt;three&lt;/em&gt; parameters. The first is an arbitrary id. This parameter can be named anything as long as it is unique to this post. The second parameter is the path to the image. And the final parameter is whatever caption you want to be displayed with the figure.  All parameters &lt;em&gt;must&lt;/em&gt; be enclosed in quotes for this simple liquid tag to work!&lt;/p&gt;
-
-&lt;p&gt;In this example, the &lt;em&gt;Liquid&lt;/em&gt; marginfigure tag was inserted &lt;em&gt;before&lt;/em&gt; the paragraph so that it aligns with the beginning of the paragraph. On small screens, the image will collapse into a small symbol: &lt;span class=&quot;contrast &quot;&gt;⊕&lt;/span&gt; at the location it has been inserted in the manuscript. Clicking on it will open the image.&lt;/p&gt;
-
-&lt;h3 id=&quot;full-width-figures&quot;&gt;Full Width Figures&lt;/h3&gt;
-
-&lt;p&gt;If you need a full-width image or figure, another custom liquid tag is available to use. Oddly enough, it is named ‘fullwidth’, and this markup:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{% fullwidth &apos;assets/img/napoleons-march.png&apos; &apos;Napoleon&apos;s March *(Edward Tufte’s English translation)*&apos;  %}&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Yields this:&lt;/p&gt;
-
-&lt;figure class=&quot;fullwidth&quot;&gt;&lt;img src=&quot;/assets/img/napoleons-march.png&quot; /&gt;&lt;figcaption&gt;Napoleon’s March &lt;em&gt;(Edward Tufte’s English translation)&lt;/em&gt;&lt;/figcaption&gt;&lt;/figure&gt;
-
-&lt;h3 id=&quot;main-column-figures&quot;&gt;Main Column Figures&lt;/h3&gt;
-
-&lt;p&gt;Besides margin and full width figures, you can of course also include figures constrained to the main column. Yes, you guessed it, a custom liquid tag rides to the rescue once again:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{% maincolumn &apos;assets/img/export-imports.png&apos; &apos;From Edward Tufte, *Visual Display of Quantitative Information*, page 92&apos;  %}&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;yields this:&lt;/p&gt;
-
-&lt;figure&gt;&lt;img src=&quot;/assets/img/exports-imports.png&quot; /&gt;&lt;figcaption class=&quot;maincolumn-figure&quot;&gt;From Edward Tufte, &lt;em&gt;Visual Display of Quantitative Information&lt;/em&gt;, page 92&lt;/figcaption&gt;&lt;/figure&gt;
-
-&lt;h2 id=&quot;sidenotes-and-margin-notes&quot;&gt;Sidenotes and Margin notes&lt;/h2&gt;
-
-&lt;p&gt;One of the most prominent and distinctive features of Tufte’s style is the extensive use of sidenotes and margin notes. Perhaps you have noticed their use in this document already. You are very astute.&lt;/p&gt;
-
-&lt;p&gt;There is a wide margin to provide ample room for sidenotes and small figures. There exists a slight semantic distinction between &lt;em&gt;sidenotes&lt;/em&gt; and &lt;em&gt;marginnotes&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;sidenotes&quot;&gt;Sidenotes&lt;/h3&gt;
-
-&lt;p&gt;Sidenotes&lt;label for=&quot;sn-id-whatever&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;sn-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;This is a sidenote and &lt;em&gt;displays a superscript&lt;/em&gt; &lt;/span&gt; display a superscript. The &lt;em&gt;sidenote&lt;/em&gt; Liquid tag contains two components. The first is an identifier allowing the sidenote to be targeted by the twitchy index fingers of mobile device users so that all the yummy sidenote goodness is revealed when the superscript is tapped. The second components is the actual content of the sidenote. Both of these components should be enclosed in single quotes. Note that we are using the CSS ‘counter’ trick to automagically keep track of the number sequence on each page or post. On small screens, the sidenotes disappear and when the superscript is clicked, a side note will open below the content, which can then be closed with a similar click. Here is the markup for the sidenote at the beginning of this paragraph:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{% sidenote &apos;sn-id-whatever&apos; &apos;This is a sidenote and *displays a superscript*&apos;%}&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;margin-notes&quot;&gt;Margin notes&lt;/h3&gt;
-
-&lt;p&gt;Margin notes&lt;label for=&quot;mn-id-whatever&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;mn-id-whatever&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;This is a margin note &lt;em&gt;without&lt;/em&gt; a superscript &lt;/span&gt; are similar to sidenotes, but do not display a superscript. The &lt;em&gt;marginnnote&lt;/em&gt; Liquid tags has the same two components as the &lt;em&gt;sidenote&lt;/em&gt; tag. Anything can be placed in a margin note. Well, anything that is an inline element. Block level elements can make the Kramdown parser do strange things. On small screens, the margin notes disappear and this symbol: &lt;span class=&quot;contrast &quot;&gt;⊕&lt;/span&gt; pops up. When clicked, it will open the margin note below the content, which can then be closed with a similar click. The Markdown content has a similar sort of markup as a sidenote, but without a number involved:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{% marginnote &apos;mn-id-whatever&apos; &apos;This is a margin note *without* a superscript&apos; %}&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;equations&quot;&gt;Equations&lt;/h2&gt;
-
-&lt;p&gt;The Markdown parser being used by this Jekyll theme is Kramdown, which contains some built-in &lt;a href=&quot;//www.mathjax.org&quot;&gt;Mathjax&lt;/a&gt; support. Both inline and block-level mathematical figures can be added to the content.&lt;/p&gt;
-
-&lt;p&gt;For instance, the following inline sequence:&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\)&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;is written by enclosing a Mathjax expression within &lt;em&gt;a matching pair of double dollar signs: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$$&lt;/code&gt;&lt;/em&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;When $$ a \ne 0 $$, there are two solutions to $$ ax^2 + bx + c = 0 $$&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Similarly, this block-level Mathjax expression:&lt;/p&gt;
-
-\[x = {-b \pm \sqrt{b^2-4ac} \over 2a}\]
-
-&lt;p&gt;is written by enclosing the expression within a pair of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$$&lt;/code&gt; with an empty line above and below:&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;You can get pretty fancy, for instance, the wave equation’s nabla is no big thing:&lt;/p&gt;
-
-\[\frac{\partial^2 y}{\partial t^2}= c^2\nabla^2u\]
-
-&lt;p&gt;All of the standard &lt;span class=&quot;latex&quot;&gt;L&lt;sup&gt;a&lt;/sup&gt;T&lt;sub&gt;e&lt;/sub&gt;X&lt;/span&gt; equation markup is available to use inside these block tags.&lt;/p&gt;
-
-&lt;p&gt;Please note that the block-level Mathjax expressions &lt;em&gt;must&lt;/em&gt; be on their own line, separated from content above and below the block by a blank line for the Kramdown parser and the Mathjax javascript to play nicely with one another.&lt;/p&gt;
-
-&lt;p&gt;The Mathjax integration is tricky, and some things such as the inline matrix notation simply do not work well unless allowances are made for using the notation for a small matrix. Bottom line: If you are using this to document mathematics, be super careful to isolate your &lt;span class=&quot;latex&quot;&gt;L&lt;sup&gt;a&lt;/sup&gt;T&lt;sub&gt;e&lt;/sub&gt;X&lt;/span&gt; blocks by blank lines!&lt;/p&gt;
-
-&lt;h2 id=&quot;tables&quot;&gt;Tables&lt;/h2&gt;
-
-&lt;p&gt;Tables are, frankly,  a pain in the ass to create. That said, they often are one of the best methods for presenting data. Tabular data are normally presented with right-aligned numbers, left-aligned text, and minimal grid lines.&lt;/p&gt;
-
-&lt;p&gt;Note that when writing Jekyll Markdown content, there will often be a need to get some dirt under your fingernails and stoop to writing a little honest-to-god html. Yes, all that hideous &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;table&amp;gt;..&amp;lt;thead&amp;gt;..&amp;lt;th&amp;gt;&lt;/code&gt; nonsense. &lt;em&gt;And&lt;/em&gt; you must wrap the unholy mess in a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;div class=&quot;table-wrapper&quot;&amp;gt;&lt;/code&gt; tag to ensure that the table stays centered in the main content column.&lt;/p&gt;
-
-&lt;p&gt;Tables are designed with an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;overflow:scroll&lt;/code&gt; property to create slider bars when the viewport is narrow. This is so that you do not collapse all your beautiful data into a jumble of letters and numbers when you view it on your smartphone.&lt;/p&gt;
-
-&lt;p&gt;&lt;label for=&quot;table-1-id&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;table-1-id&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;em&gt;Table 1&lt;/em&gt;: A table with default style formatting &lt;/span&gt;&lt;/p&gt;
-&lt;div class=&quot;table-wrapper&quot;&gt;
-  &lt;table class=&quot;table-alpha&quot; id=&quot;newspaper-tone&quot;&gt;
-    &lt;thead&gt;
-      &lt;tr&gt;
-        &lt;th class=&quot;left&quot;&gt;Content and tone of front-page articles in 94 U.S. newspapers, October and November, 1974&lt;/th&gt;
-        &lt;th class=&quot;left&quot;&gt;Number of articles&lt;/th&gt;
-        &lt;th&gt;Percent of articles with negative criticism of specific person or policy&lt;/th&gt;&lt;/tr&gt;
-    &lt;/thead&gt;
-    &lt;tbody&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Watergate: defendants and prosecutors, Ford’s pardon of Nixon&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;537&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number&quot;&gt;49%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Inflation, high cost of living&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;415&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number&quot;&gt;28%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Government competence: costs, quality, salaries of public employees&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;322&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number&quot;&gt;30%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Confidence in government: power of special interests, trust in political leaders, dishonesty in politics&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;266&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number&quot;&gt;52%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Government power: regulation of business, secrecy, control of CIA and FBI&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;154&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number&quot;&gt;42%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Crime&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;123&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number r&quot;&gt;30%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Race&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;103&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number&quot;&gt;25%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Unemployment&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;100&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number&quot;&gt;13%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-        &lt;td class=&quot;text&quot;&gt;Shortages: energy, food&lt;/td&gt;
-        &lt;td&gt;&lt;div class=&quot;number&quot;&gt;68&lt;/div&gt;&lt;/td&gt;
-        &lt;td class=&quot;c&quot;&gt;&lt;div class=&quot;number&quot;&gt;16%&lt;/div&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-    &lt;/tbody&gt;
-  &lt;/table&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This is not the One True Table. Such a style does not exist. One must craft each data table with custom care to the narrative one is telling with that specific data. So take this not as “the table style to use”, but rather as “a table style to start from”. From here, use principles to guide you: avoid chartjunk, optimize the data-ink ratio (“within reason”, as Tufte says), and “mobilize every graphical element, perhaps several times over, to show the data.&lt;label for=&quot;table-id&quot; class=&quot;margin-toggle sidenote-number&quot;&gt;&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;table-id&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;sidenote&quot;&gt;Page 139, &lt;em&gt;The Visual Display of Quantitative Information&lt;/em&gt;, Edward Tufte 2001. &lt;/span&gt; Furthermore, one must know when to reach for more complex data presentation tools, like a custom graphic or a JavaScript charting library.&lt;/p&gt;
-
-&lt;p&gt;As an example of alternative table styles, academic publications written in &lt;span class=&quot;latex&quot;&gt;L&lt;sup&gt;a&lt;/sup&gt;T&lt;sub&gt;e&lt;/sub&gt;X&lt;/span&gt; often rely on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;booktabs&lt;/code&gt; package to produce clean, clear tables. Similar results can be achieved in Tufte CSS with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;booktabs&lt;/code&gt; class, as demonstrated in this table:&lt;/p&gt;
-
-&lt;p&gt;&lt;label for=&quot;table-2-id&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;table-2-id&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;&lt;em&gt;Table 2&lt;/em&gt;: A table with booktabs style formatting &lt;/span&gt;&lt;/p&gt;
-&lt;div class=&quot;table-wrapper&quot;&gt;
-&lt;table class=&quot;booktabs&quot;&gt;
-          &lt;thead&gt;
-            &lt;tr&gt;&lt;th colspan=&quot;2&quot; class=&quot;cmid&quot;&gt;Items&lt;/th&gt;&lt;th class=&quot;nocmid&quot;&gt;&lt;/th&gt;&lt;/tr&gt;
-            &lt;tr&gt;&lt;th class=&quot;l&quot;&gt;Animal&lt;/th&gt;&lt;th&gt;Description&lt;/th&gt;&lt;th class=&quot;r&quot;&gt;Price ($)&lt;/th&gt;&lt;/tr&gt;
-          &lt;/thead&gt;
-          &lt;tbody&gt;
-            &lt;tr&gt;&lt;td&gt;Gnat&lt;/td&gt;     &lt;td&gt;per gram&lt;/td&gt;&lt;td class=&quot;r&quot;&gt;13.65&lt;/td&gt;&lt;/tr&gt;
-            &lt;tr&gt;&lt;td&gt;&lt;/td&gt;         &lt;td&gt;each&lt;/td&gt;    &lt;td class=&quot;r&quot;&gt;0.01&lt;/td&gt;&lt;/tr&gt;
-            &lt;tr&gt;&lt;td&gt;Gnu&lt;/td&gt;      &lt;td&gt;stuffed&lt;/td&gt; &lt;td class=&quot;r&quot;&gt;92.50&lt;/td&gt;&lt;/tr&gt;
-            &lt;tr&gt;&lt;td&gt;Emu&lt;/td&gt;      &lt;td&gt;stuffed&lt;/td&gt; &lt;td class=&quot;r&quot;&gt;33.33&lt;/td&gt;&lt;/tr&gt;
-            &lt;tr&gt;&lt;td&gt;Armadillo&lt;/td&gt;&lt;td&gt;frozen&lt;/td&gt;  &lt;td class=&quot;r&quot;&gt;8.99&lt;/td&gt;&lt;/tr&gt;
-          &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The table above was written in HTML as follows:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;div class=&quot;table-wrapper&quot;&amp;gt;
-&amp;lt;table class=&quot;booktabs&quot;&amp;gt;
-          &amp;lt;thead&amp;gt;
-            &amp;lt;tr&amp;gt;&amp;lt;th colspan=&quot;2&quot; class=&quot;cmid&quot;&amp;gt;Items&amp;lt;/th&amp;gt;&amp;lt;th class=&quot;nocmid&quot;&amp;gt;&amp;lt;/th&amp;gt;&amp;lt;/tr&amp;gt;
-            &amp;lt;tr&amp;gt;&amp;lt;th class=&quot;l&quot;&amp;gt;Animal&amp;lt;/th&amp;gt;&amp;lt;th&amp;gt;Description&amp;lt;/th class=&quot;r&quot;&amp;gt;&amp;lt;th&amp;gt;Price ($)&amp;lt;/th&amp;gt;&amp;lt;/tr&amp;gt;
-          &amp;lt;/thead&amp;gt;
-          &amp;lt;tbody&amp;gt;
-            &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Gnat&amp;lt;/td&amp;gt;     &amp;lt;td&amp;gt;per gram&amp;lt;/td&amp;gt;&amp;lt;td class=&quot;r&quot;&amp;gt;13.65&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
-            &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;         &amp;lt;td&amp;gt;each&amp;lt;/td&amp;gt;    &amp;lt;td class=&quot;r&quot;&amp;gt;0.01&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
-            &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Gnu&amp;lt;/td&amp;gt;      &amp;lt;td&amp;gt;stuffed&amp;lt;/td&amp;gt; &amp;lt;td class=&quot;r&quot;&amp;gt;92.50&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
-            &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Emu&amp;lt;/td&amp;gt;      &amp;lt;td&amp;gt;stuffed&amp;lt;/td&amp;gt; &amp;lt;td class=&quot;r&quot;&amp;gt;33.33&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
-            &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;Armadillo&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;frozen&amp;lt;/td&amp;gt;  &amp;lt;td class=&quot;r&quot;&amp;gt;8.99&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
-          &amp;lt;/tbody&amp;gt;
-&amp;lt;/table&amp;gt;
-&amp;lt;/div&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;span class=&quot;newthought&quot;&gt;I like this style of table,&lt;/span&gt;   so I have made it the default for unstyled tables. This allows use of the &lt;a href=&quot;https://michelf.ca/projects/php-markdown/extra/&quot;&gt;&lt;em&gt;Markdown Extra&lt;/em&gt;&lt;/a&gt; features built into the &lt;a href=&quot;http://kramdown.gettalong.org/parser/kramdown.html&quot;&gt;&lt;em&gt;Kramdown&lt;/em&gt;&lt;/a&gt; parser. Here is a table created using the Markdown Extra table syntax to make a nice table which has the side benefit of being human readable in the raw Markdown file:&lt;/p&gt;
-
-&lt;p&gt;&lt;label for=&quot;tableID-3&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;tableID-3&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Table 3: a table created with &lt;em&gt;Markdown Extra&lt;/em&gt; markup using only the default table styling &lt;/span&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt; &lt;/th&gt;
-      &lt;th style=&quot;text-align: right&quot;&gt;mpg&lt;/th&gt;
-      &lt;th style=&quot;text-align: right&quot;&gt;cyl&lt;/th&gt;
-      &lt;th style=&quot;text-align: right&quot;&gt;disp&lt;/th&gt;
-      &lt;th style=&quot;text-align: right&quot;&gt;hp&lt;/th&gt;
-      &lt;th style=&quot;text-align: right&quot;&gt;drat&lt;/th&gt;
-      &lt;th style=&quot;text-align: right&quot;&gt;wt&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Mazda RX4&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;21&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;160&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;110&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;3.90&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;2.62&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Mazda RX4 Wag&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;21&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;160&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;110&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;3.90&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;2.88&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Datsun 710&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;22.8&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;4&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;108&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;93&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;3.85&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;2.32&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Hornet 4 Drive&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;21.4&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;258&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;110&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;3.08&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;3.21&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Hornet Sportabout&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;18.7&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;8&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;360&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;175&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;3.15&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;3.44&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Valiant&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;18.1&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;6&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;160&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;105&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;2.76&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;3.46&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Using the following Markdown formatting:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;|                 |mpg  | cyl  |  disp  |   hp   |  drat  | wt  |
-|:----------------|----:|-----:|-------:|-------:|-------:|----:|
-|Mazda RX4        |21   |6     |160     |110     |3.90    |2.62 |
-|Mazda RX4 Wag    |21   |6     |160     |110     |3.90    |2.88 |
-|Datsun 710       |22.8 |4     |108     |93      |3.85    |2.32 |
-etc...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The following is a more simple table, showing the Markdown-style table markup. Remember to label the table with a &lt;em&gt;marginnote&lt;/em&gt; Liquid tag, and you &lt;em&gt;must&lt;/em&gt; separate the label from the table with a single blank line. This markup:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{% marginnote &apos;Table-ID4&apos; &apos;Table 4: a simple table showing left, center, and right alignment of table headings and data&apos;  %}
-
-|**Left** |**Center**|**Right**|
-|:--------|:--------:|--------:|
- Aardvarks|         1|$3.50
-       Cat|   5      |$4.23
-  Dogs    |3         |$5.29
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Yields this table:&lt;/p&gt;
-
-&lt;p&gt;&lt;label for=&quot;Table-ID4&quot; class=&quot;margin-toggle&quot;&gt; ⊕&lt;/label&gt;&lt;input type=&quot;checkbox&quot; id=&quot;Table-ID4&quot; class=&quot;margin-toggle&quot; /&gt;&lt;span class=&quot;marginnote&quot;&gt;Table 4: a simple table showing left, center, and right alignment of table headings and data &lt;/span&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;&lt;strong&gt;Left&lt;/strong&gt;&lt;/th&gt;
-      &lt;th style=&quot;text-align: center&quot;&gt;&lt;strong&gt;Center&lt;/strong&gt;&lt;/th&gt;
-      &lt;th style=&quot;text-align: right&quot;&gt;&lt;strong&gt;Right&lt;/strong&gt;&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Aardvarks&lt;/td&gt;
-      &lt;td style=&quot;text-align: center&quot;&gt;1&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;$3.50&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Cat&lt;/td&gt;
-      &lt;td style=&quot;text-align: center&quot;&gt;5&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;$4.23&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Dogs&lt;/td&gt;
-      &lt;td style=&quot;text-align: center&quot;&gt;3&lt;/td&gt;
-      &lt;td style=&quot;text-align: right&quot;&gt;$5.29&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h2 id=&quot;code&quot;&gt;Code&lt;/h2&gt;
-
-&lt;p&gt;Code samples use a monospace font using the ‘code’ class. The Kramdown parser has the ‘GFM’ option enabled, which stands for ‘Github Flavored Markdown’, and this means that both inline code such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#include &amp;lt;stdio.h&amp;gt;&lt;/code&gt; and blocks of code can be delimited by surrounding them with 3 backticks:&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;(map tufte-style all-the-things)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;is created by the following markup:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;```(map tufte-style all-the-things)```&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To get the code highlighted in the language of your choice like so:&lt;/p&gt;
-
-&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Jekyll&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RenderFullWidthTag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Liquid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Tag&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;shellwords&quot;&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tag_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;
-      &lt;span class=&quot;vi&quot;&gt;@text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;shellsplit&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;div&amp;gt;&amp;lt;img class=&apos;fullwidth&apos; src=&apos;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&apos;/&amp;gt;&amp;lt;/div&amp;gt; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
-      &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;p&amp;gt;&amp;lt;span class=&apos;marginnote&apos;&amp;gt;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;lt;/span&amp;gt;&amp;lt;/p&amp;gt;&quot;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-
-&lt;span class=&quot;no&quot;&gt;Liquid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Template&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;register_tag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;fullwidth&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Jekyll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;RenderFullWidthTag&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Enclose the code block in three backticks, followed by a space and then the language name, like this:&lt;/p&gt;
-
-&lt;pre&gt; &lt;code&gt;``` ruby
-    module Jekyll
-    blah, blah...
-   ```&lt;/code&gt; &lt;/pre&gt;
-
-</description>
-        <pubDate>Mon, 13 Apr 2020 05:46:04 -0400</pubDate>
-        <link>https://froml77.top/articles/20/tufte-style-jekyll-blog</link>
-        <guid isPermaLink="true">https://froml77.top/articles/20/tufte-style-jekyll-blog</guid>
-        
-        <category>Blog</category>
-        
-        
-        <category>JEKYLL</category>
         
       </item>
     
